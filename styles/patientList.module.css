@@ -1,0 +1,48 @@
+/* styles/patientList.module.css */
+
+.patient-box {
+    overflow: hidden;
+    width: 750px;
+  }
+
+.tab-buttons {
+    display: flex;
+    overflow: hidden;
+  }
+  
+  .patient-button {
+    text-align: center;
+    cursor: pointer;  
+    color: #000;
+    font-weight: bold;
+    width: 100px;
+    height: 30px;
+    border-radius: 3px;
+    background: #f0f0f0;
+    transform: perspective(2px) rotateX(1deg);
+    margin: 0px 6px;
+  }
+  
+  .patient-button:last-child {
+    border-right: 1px solid #ccc;
+  }
+  
+  .patient-button.active {
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
+    z-index: 1;
+  }
+  .list-container {
+    border-radius: 0 5px 5px 5px;
+    background-color: #fff;
+    overflow-y: auto;
+
+  }
+.patient-list-container {
+    overflow: hidden;
+    overflow: auto;
+    padding: 16px;
+    max-height: 500px;
+  }
+  
+  

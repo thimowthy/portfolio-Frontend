@@ -1,0 +1,38 @@
+/* styles/patientCard.module.css */
+
+.patient-card {
+  background-color: #f0f0f0; /* Light gray background */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.patient-info {
+  margin-left: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.patient-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #000;
+
+}
+
+.patient-id {
+  font-size: 14px;
+  color: #000;
+}
+
+.patient-smiley {
+  font-size: 24px;
+}
+
+.patient-button {
+  margin-left: auto;
+  color: #000;
+}
