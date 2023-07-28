@@ -3,4 +3,4 @@ type Paciente = {
   prontuario: string;
   neutropenia: string;
   neutropeniaFebril: boolean;
-}
+};
