@@ -15,6 +15,7 @@ export default function TabDadosPaciente({
     };
     init();
   }, []);
+
   return (
     <>
       {/* TODO: dividir em componentes separados */}

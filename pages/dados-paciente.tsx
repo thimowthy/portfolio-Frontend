@@ -40,6 +40,7 @@ const mockedPatients = [
     neutropeniaFebril: true
   }
 ];
+
 const DadosPacientePage = () => {
   const [selectedPatient, setSelectedPatient] = useState<Paciente>({});
 

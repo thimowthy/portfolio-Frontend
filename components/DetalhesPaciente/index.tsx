@@ -25,6 +25,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
               </a>
             </li>
           </ul>
+
           <div className="flex flex-col gap-x-6 py-5 px-6 bg-white detalhes-paciente">
             <div className="flex gap-x-4 pb-3">
               <Image
