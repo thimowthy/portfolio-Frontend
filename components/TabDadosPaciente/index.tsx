@@ -1,16 +1,16 @@
-'use client';
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import febre from '../../public/termometro.png';
-import medicamento from '../../public/medicamento.png';
+"use client";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import febre from "../../public/termometro.png";
+import medicamento from "../../public/medicamento.png";
 
 export default function TabDadosPaciente({
   pacientes,
-  setSelectedPatient
+  setSelectedPatient,
 }: any) {
   useEffect(() => {
     const init = async () => {
-      const { Tab, initTE } = await import('tw-elements');
+      const { Tab, initTE } = await import("tw-elements");
       initTE({ Tab });
     };
     init();
