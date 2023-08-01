@@ -56,7 +56,26 @@ body {
 }
 
 .lista-pacientes_tab-content,
-.detalhes-pacientes {
+.detalhes-paciente {
   max-height: 70vh;
   height: 70vh;
+}
+
+.lista-pacientes ::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+.lista-pacientes ::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.lista-pacientes ::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+.lista-pacientes ::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

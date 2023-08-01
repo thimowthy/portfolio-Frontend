@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
-import VerDadosPaciente from "../components/VerDadosPaciente/index";
+import DetalhesPaciente from "../components/DetalhesPaciente";
+import { useState } from "react";
 
 const DynamicTabComponent = dynamic(
   () => import("../components/TabDadosPaciente"),
@@ -39,15 +40,21 @@ const mockedPatients = [
     neutropeniaFebril: true,
   },
 ];
+
 const DadosPacientePage = () => {
+  const [selectedPatient, setSelectedPatient] = useState<Paciente>({});
+
   return (
     <>
       <section className="flex min-h-full flex items-center">
-        <div className="flex-1">
-          <DynamicTabComponent pacientes={mockedPatients} />
+        <div className="flex-1 mr-2">
+          <DynamicTabComponent
+            pacientes={mockedPatients}
+            setSelectedPatient={setSelectedPatient}
+          />
         </div>
-        <div className="flex-1">
-          <VerDadosPaciente />
+        <div className="flex-1 ml-2">
+          <DetalhesPaciente paciente={selectedPatient} />
         </div>
       </section>
     </>

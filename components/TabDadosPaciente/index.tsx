@@ -1,10 +1,13 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import febre from "../../public/termometro.png";
 import medicamento from "../../public/medicamento.png";
 
-export default function TabDadosPaciente({ pacientes }: any) {
+export default function TabDadosPaciente({
+  pacientes,
+  setSelectedPatient,
+}: any) {
   useEffect(() => {
     const init = async () => {
       const { Tab, initTE } = await import("tw-elements");
@@ -64,7 +67,7 @@ export default function TabDadosPaciente({ pacientes }: any) {
           </li>
         </ul>
 
-        <div className="mb-6 px-6 bg-white lista-pacientes_tab-content overflow-auto">
+        <div className="px-6 bg-white lista-pacientes_tab-content overflow-auto">
           <div
             className="hidden opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
             id="tabs-todos"
@@ -103,7 +106,10 @@ export default function TabDadosPaciente({ pacientes }: any) {
                       width="50"
                       height="50"
                     />
-                    <button className="bg-blue-700 hover:bg-blue-900 px-5 mt-4 py-1 text-sm leading-5 rounded-full font-semibold text-white">
+                    <button
+                      className="bg-blue-700 hover:bg-blue-900 px-5 mt-4 py-1 text-sm leading-5 rounded-full font-semibold text-white"
+                      onClick={() => setSelectedPatient(paciente)}
+                    >
                       Ver paciente
                     </button>
                   </div>
