@@ -12,6 +12,7 @@
   }
   .logoname {
     font-family: "Trebuchet MS";
+    font-weight: 100;
     margin-left: 20px;
     font-size: 36px;
   }
@@ -29,7 +30,7 @@
     border-right: 1px solid #000;
   }
   .nav li {
-    font-weight: bold;
+    font-weight: 200;
     font-family: "Trebuchet MS";
     font-size: 18px;
     margin-right: 18px;

@@ -4,24 +4,25 @@ import React from "react";
 import styles from "@/styles/Header.module.css";
 import Image from "next/image";
 import logo from "@/public/logo.png";
+import Link from "next/link";
 
 const Header = () => {
   return (
     <header className={styles.header}>
-      <a className={styles.logo} href="/">
+      <Link className={styles.logo} href="/">
         <Image className="logo-img" src={logo} alt="" width="75" height="75" />
         <span className={styles.logoname}>OncoCareSystem</span>
-      </a>
+      </Link>
       <nav className={styles.nav}>
         <ul>
           <li>
-            <a href="/">Home</a>
+            <Link href="/">Home</Link>
           </li>
           <li>
-            <a href="/login">Acesso ao Sistema</a>
+            <Link href="/login">Acesso ao Sistema</Link>
           </li>
           <li>
-            <a href="/about">Sobre o OncoCare</a>
+            <Link href="/about">Sobre o OncoCare</Link>
           </li>
         </ul>
       </nav>
