@@ -1,10 +1,10 @@
 // components/PatientList.tsx
 
-import React, { useState } from 'react';
-import PatientCard from './PatientCard';
-import { Patient } from '../../types/patient';
-import styles from '../../styles/patientList.module.css';
-import TabButtonList from './TabButtonList'; // Import the TabButtonList component
+import React, { useState } from "react";
+import PatientCard from "@/components/atoms/PatientCard";
+import { Patient } from "@/types/patient";
+import styles from "@/styles/patientList.module.css";
+import TabButtonList from "./TabButtonList";
 
 type PatientListProps = {
   patients: Patient[];
@@ -33,10 +33,10 @@ const PatientList: React.FC<PatientListProps> = ({ patients }) => {
   };
 
   return (
-    <div className={styles['patient-box']}>
+    <div className={styles["patient-box"]}>
       <TabButtonList activeTab={activeTab} onTabChange={setActiveTab} />
-      <div className={styles['list-container']}>
-        <div className={styles['patient-list-container']}>
+      <div className={styles["list-container"]}>
+        <div className={styles["patient-list-container"]}>
           {filterPatients(activeTab).map((patient) => (
             <PatientCard key={patient.id} patient={patient} />
           ))}

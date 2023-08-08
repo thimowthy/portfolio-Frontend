@@ -1,9 +1,18 @@
-// pages/YourPage.tsx (or any other page)
+import dynamic from "next/dynamic";
 
-import React from "react";
+import DetalhesPaciente from "../components/DetalhesPaciente";
+import Header from "@/components/Header";
 import PatientList from "@/components/molecules/PatientList";
-import { Patient } from "@/types/patient";
 
+import { Patient } from "@/types/patient";
+import { useState } from "react";
+
+const DynamicTabComponent = dynamic(
+  () => import("../components/TabDadosPaciente"),
+  {
+    ssr: false,
+  },
+);
 const patients: Patient[] = [
   { id: 1, name: "John Doe", risk: "low", pending: true, diagnosed: false },
   { id: 2, name: "Jane Smith", risk: "medium", pending: true, diagnosed: true },
@@ -116,18 +125,21 @@ const patients: Patient[] = [
     diagnosed: true,
   },
 ];
-const tabs: string[] = ["Todos", "Pendentes", "Diagnosed"];
-const YourPage: React.FC = () => {
+
+const DadosPacientePage = () => {
+  const [selectedPatient, setSelectedPatient] = useState<Paciente>({});
+
   return (
     <>
-      <h1 style={{ fontSize: 32 }}>OncoCare</h1>
-      <div style={{ display: "flex", gap: "10px", margin: "10px" }}>
+      <Header />
+      <section className="flex min-h-full flex items-center">
         <PatientList patients={patients} />
-        <PatientList patients={patients} />
-        {/* Additional content for your page */}
-      </div>
+        <div className="flex-1 ml-2">
+          <DetalhesPaciente paciente={selectedPatient} />
+        </div>
+      </section>
     </>
   );
 };
 
-export default YourPage;
+export default DadosPacientePage;

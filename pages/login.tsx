@@ -1,13 +1,16 @@
 import SeoConfig from "@/components/SeoConfig";
-import Login from "@/components/SeoConfig/Login";
-
+import Login from "@/components/Login";
+import Header from "@/components/Header";
 
 const LoginPage: React.FC = () => {
   return (
-    <div>
-      <h1>Login Page</h1>
-      <Login />
-    </div>
+    <>
+      <div>
+        <SeoConfig title="Login" />
+        <Header />
+        <Login />
+      </div>
+    </>
   );
 };
 
