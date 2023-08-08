@@ -1,16 +1,8 @@
 {
-  "extends": ["next/core-web-vitals", "prettier"],
-  "plugins": ["prettier"],
+  "extends": ["next/core-web-vitals"],
   "rules": {
     "semi": ["error", "always"],
     "quotes": ["error", "double"],
-    "prettier/prettier": [
-      "warn",
-      "error",
-      {
-        "endOfLine": "auto"
-      }
-    ],
     "no-console": "warn"
   }
 }
