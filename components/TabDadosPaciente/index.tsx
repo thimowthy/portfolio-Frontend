@@ -3,40 +3,61 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import febre from "../../public/termometro.png";
 import medicamento from "../../public/medicamento.png";
+import ErrorToast from "../toasts/errorToast";
+import fetcher from "@/api/fetcher";
 
 export default function TabDadosPaciente({
   pacientes,
   setSelectedPatient,
 }: any) {
+  const [error, setError] = useState(false);
   useEffect(() => {
     const init = async () => {
       const { Tab, initTE } = await import("tw-elements");
       initTE({ Tab });
     };
     init();
+
+    const fetchTest = async () => {
+      try {
+        const result = await fetcher(
+          "https://api.publicapis.org/entries",
+          "GET",
+          "{'teste': 'teste'}",
+          "",
+        );
+        console.log(result);
+      } catch (error) {
+        //TODO: adicionar lógica para o erro de acordo com o tipo de erro ou página
+        console.log(error);
+      }
+    };
+    fetchTest();
   }, []);
 
   return (
     <>
       {/* TODO: dividir em componentes separados */}
       <div className="lista-pacientes">
+        <button onClick={() => setError(true)}>Toggle toast</button>
+        {error ? (
+          <ErrorToast
+            title="Login error"
+            message="Erro ao realizar login, credenciais inválidas"
+          />
+        ) : (
+          ""
+        )}
+        <div className="flex justify-center space-x-2"></div>
         <ul
           className="flex list-none flex-row flex-wrap border-b-0 pl-0"
           role="tablist"
           data-te-nav-ref
         >
-          <li role="presentation" className="bg-white">
+          <li role="presentation" className="bg-gray-100">
             <a
               href="#tabs-todos"
-              className="
-              my-2 block border-x-0 border-b-2 border-t-0 border-transparent
-              px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight
-              text-neutral-500 hover:isolate hover:border-transparent
-              hover:bg-neutral-100 focus:isolate focus:border-transparent
-              data-[te-nav-active]:border-primary data-[te-nav-active]:
-              text-primary dark:text-neutral-400 dark:hover:bg-transparent
-              dark:data-[te-nav-active]:border-primary-400
-              dark:data-[te-nav-active]:text-primary-400"
+              className="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
               data-te-toggle="pill"
               data-te-target="#tabs-todos"
               data-te-nav-active
@@ -47,18 +68,10 @@ export default function TabDadosPaciente({
               Todos
             </a>
           </li>
-          <li role="presentation" className="bg-white">
+          <li role="presentation" className="bg-gray-100">
             <a
               href="#tabs-pendentes"
-              className="
-              focus:border-transparent my-2 block border-x-0 border-b-2 border-t-0
-              border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase
-              leading-tight text-neutral-500 hover:isolate hover:border-transparent
-              hover:bg-neutral-100 focus:isolate
-              data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary
-              dark:text-neutral-400 dark:hover:bg-transparent
-              dark:data-[te-nav-active]:border-primary-400
-              dark:data-[te-nav-active]:text-primary-400"
+              className="focus:border-transparen my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
               data-te-toggle="pill"
               data-te-target="#tabs-pendentes"
               role="tab"
@@ -68,18 +81,10 @@ export default function TabDadosPaciente({
               Pendentes
             </a>
           </li>
-          <li role="presentation" className="bg-white">
+          <li role="presentation" className="bg-gray-100">
             <a
               href="#tabs-NF"
-              className="
-              my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7
-              pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500
-              hover:isolate hover:border-transparent hover:bg-neutral-100
-              focus:isolate focus:border-transparent
-              data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary
-              dark:text-neutral-400 dark:hover:bg-transparent
-              dark:data-[te-nav-active]:border-primary-400
-              dark:data-[te-nav-active]:text-primary-400"
+              className="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
               data-te-toggle="pill"
               data-te-target="#tabs-NF"
               role="tab"
@@ -91,11 +96,9 @@ export default function TabDadosPaciente({
           </li>
         </ul>
 
-        <div className="px-6 bg-white lista-pacientes_tab-content overflow-auto">
+        <div className="px-6 bg-gray-100 lista-pacientes_tab-content overflow-auto">
           <div
-            className="
-            hidden opacity-100 transition-opacity duration-150 ease-linear
-            data-[te-tab-active]:block"
+            className="hidden opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
             id="tabs-todos"
             role="tabpanel"
             aria-labelledby="tabs-todos-tab"
@@ -110,9 +113,7 @@ export default function TabDadosPaciente({
                   <div className="flex gap-x-4">
                     <Image
                       className="h-24 w-24 flex-none rounded-full bg-gray-50"
-                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=
-                      rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=
-                      256&h=256&q=80"
+                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                       width="250"
                       height="250"
                       alt="Estado do paciente"
@@ -135,9 +136,7 @@ export default function TabDadosPaciente({
                       height="50"
                     />
                     <button
-                      className="
-                      bg-blue-700 hover:bg-blue-900 px-5 mt-4 py-1 text-sm leading-5
-                      rounded-full font-semibold text-white"
+                      className="bg-blue-700 hover:bg-blue-900 px-5 mt-4 py-1 text-sm leading-5 rounded-full font-semibold text-white"
                       onClick={() => setSelectedPatient(paciente)}
                     >
                       Ver paciente
@@ -148,9 +147,7 @@ export default function TabDadosPaciente({
             </ul>
           </div>
           <div
-            className="
-            hidden opacity-0 transition-opacity duration-150 ease-linear
-            data-[te-tab-active]:block"
+            className="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
             id="tabs-pendentes"
             role="tabpanel"
             aria-labelledby="tabs-pendentes-tab"
@@ -158,8 +155,7 @@ export default function TabDadosPaciente({
             Conteúdo
           </div>
           <div
-            className="hidden opacity-0 transition-opacity duration-150
-            ease-linear data-[te-tab-active]:block"
+            className="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
             id="tabs-NF"
             role="tabpanel"
             aria-labelledby="tabs-NF-tab"

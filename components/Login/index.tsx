@@ -1,5 +1,5 @@
 import { useState, FormEvent } from "react";
-import styles from "@/styles/Login.module.css";
+import styles from "./Login.module.css";
 import Image from "next/image";
 import logo from "@/public/logo.png";
 
