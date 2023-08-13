@@ -1,12 +1,15 @@
 import SeoConfig from "@/components/SeoConfig";
+import Login from "@/components/Login";
+import Header from "@/components/Header";
 
-const LoginPage = () => {
+const LoginPage: React.FC = () => {
   return (
     <>
-      <SeoConfig title="Login" />
-      <h1 className="font-bold px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">
-        Teste de rota d elogin
-      </h1>
+      <div>
+        <SeoConfig title="Login" />
+        <Header />
+        <Login />
+      </div>
     </>
   );
 };
