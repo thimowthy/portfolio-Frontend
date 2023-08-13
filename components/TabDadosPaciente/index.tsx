@@ -1,16 +1,22 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import fetcher from "@/api/fetcher";
+import ErrorToast from "../toasts/errorToast";
+import styles from "./styles.module.css";
 import febre from "../../public/termometro.png";
 import medicamento from "../../public/medicamento.png";
-import ErrorToast from "../toasts/errorToast";
-import fetcher from "@/api/fetcher";
+import good from "../../public/good.png";
+import neutral from "../../public/neutral.png";
+import bad from "../../public/bad.png";
+import veryBad from "../../public/very_bad.png";
 
 export default function TabDadosPaciente({
   pacientes,
   setSelectedPatient,
 }: any) {
   const [error, setError] = useState(false);
+  const [prontuarioAtivo, setProntuarioAtivo] = useState("");
   useEffect(() => {
     const init = async () => {
       const { Tab, initTE } = await import("tw-elements");
@@ -26,20 +32,78 @@ export default function TabDadosPaciente({
           "{'teste': 'teste'}",
           "",
         );
-        console.log(result);
       } catch (error) {
         //TODO: adicionar lógica para o erro de acordo com o tipo de erro ou página
-        console.log(error);
       }
     };
     fetchTest();
   }, []);
 
+  const selectPatient = (paciente: Paciente) => {
+    setProntuarioAtivo(paciente?.prontuario || "");
+    setSelectedPatient(paciente);
+  };
+
+  const mostrarIcone = (paciente: Paciente) => {
+    if (paciente.neutropenia && paciente.neutropeniaFebril) {
+      return (
+        <div className="flex">
+          <Image
+            className="h-12 w-auto flex-none rounded-full"
+            src={febre}
+            alt=""
+            width="50"
+            height="50"
+          />
+          <Image
+            className="h-12 w-auto flex-none rounded-full ml-4"
+            src={medicamento}
+            alt=""
+            width="50"
+            height="50"
+          />
+        </div>
+      );
+    } else if (paciente.neutropenia) {
+      return (
+        <Image
+          className="h-12 w-auto flex-none rounded-full"
+          src={medicamento}
+          alt=""
+          width="50"
+          height="50"
+        />
+      );
+    } else if (paciente.neutropeniaFebril) {
+      return (
+        <Image
+          className="h-12 w-auto flex-none rounded-full"
+          src={febre}
+          alt=""
+          width="50"
+          height="50"
+        />
+      );
+    }
+    return;
+  };
+
+  const imageURL = (paciente: Paciente) => {
+    if (paciente.neutropenia && paciente.neutropeniaFebril) {
+      return veryBad;
+    } else if (paciente.neutropeniaFebril) {
+      return bad;
+    } else if (paciente.neutropenia) {
+      return neutral;
+    }
+    return good;
+  };
+
   return (
     <>
       {/* TODO: dividir em componentes separados */}
       <div className="lista-pacientes">
-        <button onClick={() => setError(true)}>Toggle toast</button>
+        {/* <button onClick={() => setError(true)}>Toggle toast</button> */}
         {error ? (
           <ErrorToast
             title="Login error"
@@ -54,10 +118,10 @@ export default function TabDadosPaciente({
           role="tablist"
           data-te-nav-ref
         >
-          <li role="presentation" className="bg-gray-100">
+          <li role="presentation" className="bg-[#DADADA]">
             <a
               href="#tabs-todos"
-              className="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
+              className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent  dark:text-neutral-400 default-tab"
               data-te-toggle="pill"
               data-te-target="#tabs-todos"
               data-te-nav-active
@@ -68,10 +132,10 @@ export default function TabDadosPaciente({
               Todos
             </a>
           </li>
-          <li role="presentation" className="bg-gray-100">
+          <li role="presentation" className="bg-[#DADADA]">
             <a
               href="#tabs-pendentes"
-              className="focus:border-transparen my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
+              className="focus:border-transparent block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate  dark:text-neutral-400 default-tab disabled"
               data-te-toggle="pill"
               data-te-target="#tabs-pendentes"
               role="tab"
@@ -81,10 +145,10 @@ export default function TabDadosPaciente({
               Pendentes
             </a>
           </li>
-          <li role="presentation" className="bg-gray-100">
+          <li role="presentation" className="bg-[#DADADA]">
             <a
               href="#tabs-NF"
-              className="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
+              className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent  dark:text-neutral-400 default-tab disabled"
               data-te-toggle="pill"
               data-te-target="#tabs-NF"
               role="tab"
@@ -96,7 +160,7 @@ export default function TabDadosPaciente({
           </li>
         </ul>
 
-        <div className="px-6 bg-gray-100 lista-pacientes_tab-content overflow-auto">
+        <div className="bg-[#DADADA] lista-pacientes_tab-content overflow-auto px-2 ">
           <div
             className="hidden opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
             id="tabs-todos"
@@ -108,16 +172,22 @@ export default function TabDadosPaciente({
               {pacientes.map((paciente: Paciente) => (
                 <li
                   key={paciente.prontuario}
-                  className="flex justify-between gap-x-6 py-5"
+                  className={`flex justify-between gap-x-6 py-5 px-4 my-2 bg-[#E1ECEA] ${
+                    paciente?.prontuario == prontuarioAtivo
+                      ? styles.card_prontuario_ativo
+                      : ""
+                  }`}
                 >
                   <div className="flex gap-x-4">
-                    <Image
-                      className="h-24 w-24 flex-none rounded-full bg-gray-50"
-                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      width="250"
-                      height="250"
-                      alt="Estado do paciente"
-                    />
+                    {
+                      <Image
+                        className="h-24 w-24 flex-none rounded-full"
+                        src={imageURL(paciente)}
+                        width="250"
+                        height="250"
+                        alt="Estado do paciente"
+                      />
+                    }
                     <div className="min-w-0 flex-auto">
                       <p className="text-sm font-semibold leading-6 text-gray-900 text-2xl">
                         {paciente.name}
@@ -127,17 +197,11 @@ export default function TabDadosPaciente({
                       </p>
                     </div>
                   </div>
-                  <div className="hidden sm:flex sm:flex-col sm:items-center">
-                    <Image
-                      className="h-12 w-auto flex-none rounded-full"
-                      src={paciente?.neutropeniaFebril ? febre : medicamento}
-                      alt=""
-                      width="50"
-                      height="50"
-                    />
+                  <div className="hidden sm:flex sm:flex-col sm:items-center justify-end">
+                    {mostrarIcone(paciente)}
                     <button
-                      className="bg-blue-700 hover:bg-blue-900 px-5 mt-4 py-1 text-sm leading-5 rounded-full font-semibold text-white"
-                      onClick={() => setSelectedPatient(paciente)}
+                      className="bg-blue-700 hover:bg-blue-900 px-5 mt-4 py-1 text-sm leading-5 rounded-lg font-semibold text-white"
+                      onClick={() => selectPatient(paciente)}
                     >
                       Ver paciente
                     </button>
