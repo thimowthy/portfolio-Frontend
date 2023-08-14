@@ -1,7 +1,7 @@
 import { useState, FormEvent } from "react";
 import styles from "./Login.module.css";
 import Image from "next/image";
-import logo from "@/public/logo.png";
+import logo from "@/public/logo1.png";
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
