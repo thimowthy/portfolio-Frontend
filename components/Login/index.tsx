@@ -1,11 +1,15 @@
 import { useState, FormEvent } from "react";
-import styles from "./Login.module.css";
 import Image from "next/image";
-import logo from "@/public/logo1.png";
+import Router from 'next/router';
+import logo from "@/public/logo.png";
+import ErrorToast from "@/components/toasts/errorToast";
+import styles from "./Login.module.css";
 
 const Login: React.FC = () => {
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -15,33 +19,58 @@ const Login: React.FC = () => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const credentials = {
-      username: username,
-      password: password,
-    };
+/**
+ * Manipula o envio do formulário de login.
+ * @param {FormEvent<HTMLFormElement>} e - O evento de envio do formulário.
+ * @returns {Promise<void>} Uma promessa que é resolvida após o processamento do envio do formulário.
+ */
+const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:3001/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-      });
-
-      if (response.ok) {
-        console.log("Login successful!");
-      } else {
-        console.log("Login failed!");
-      }
-    } catch (error) {
-      console.error("Error occurred during login:", error);
-    }
-
-    console.log("Login credentials:", { username, password });
+  /**
+   * As credenciais de login do usuário.
+   * @type {Object}
+   * @property {string} username - O nome de usuário.
+   * @property {string} password - A senha do usuário.
+   */
+  const credentials = {
+    username: username,
+    password: password,
   };
+
+  try {
+    /**
+     * A resposta da solicitação de envio do formulário.
+     * @type {Response}
+     */
+    const response = await fetch("http://localhost:3001/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    });
+
+    if (response.ok)
+      Router.push('/dados-paciente');
+    else {
+      if (response.status === 401)
+        setError(true);
+      else
+        console.error("Login failed!", error);
+    }
+  } catch (error) {
+    console.error("Error occurred during login:", error);
+  }
+
+  /**
+   * Imprime as credenciais de login no console.
+   * @type {Object}
+   * @property {string} username - O nome de usuário.
+   * @property {string} password - A senha do usuário.
+   */
+  console.log("Login credentials:", { username, password });
+};
 
   return (
     <div className={styles.loginContainer}>
@@ -57,7 +86,7 @@ const Login: React.FC = () => {
         </div>
         <h1 className={styles.headerText}>Acesse o sistema</h1>
         <div className={styles.sep}></div>
-        <div className={styles.textInput}>
+        <div className={styles.dataInput}>
           <input
             type="text"
             id="username"
@@ -67,7 +96,7 @@ const Login: React.FC = () => {
             onChange={handleUsernameChange}
           />
         </div>
-        <div className={styles.textInput}>
+        <div className={styles.dataInput}>
           <input
             type="password"
             id="password"
@@ -77,7 +106,7 @@ const Login: React.FC = () => {
             onChange={handlePasswordChange}
           />
         </div>
-        <div className={styles.textInput}>
+        <div className={styles.dataInput}>
           <button type="submit" className={styles.button}>
             Login
           </button>
@@ -93,6 +122,15 @@ const Login: React.FC = () => {
           </p>
         </div>
       </form>
+      <div className="loginError">
+        {error && (
+          <ErrorToast
+            title="Erro de login"
+            message="Erro ao realizar login, credenciais inválidas"
+            onClose={() => { setError(false) } }
+          />
+        )}
+      </div>
     </div>
   );
 };

@@ -34,7 +34,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.textInput {
+.dataInput {
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
@@ -44,7 +44,7 @@
   font-size: 14px;
   font-weight: bold;
   margin-bottom: 5px;
-  color: black;
+  color: black; /* Change font color to black */
 }
 
 .input {
@@ -54,7 +54,7 @@
   border-radius: 5px;
   min-width: 250px;
   font-size: 16px;
-  color: black;
+  color: black; /* Change font color to black */
 }
 
 .button {
@@ -64,16 +64,16 @@
   font-size: 16px;
   font-weight: bold;
   color: #fff;
-  background-color: #4E7A70;
+  background-color: #C55A11;
   cursor: pointer;
 }
 
 .button:hover {
-  background-color: #689F92;
+  background-color: #D66B22;
 }
 
 .button:active {
-  background-color: #89C1B3;
+  background-color: #f18740;
 }
 .infoText {
   font-size: 12px;

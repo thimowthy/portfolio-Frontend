@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import febre from "../../public/termometro.png";
 import medicamento from "../../public/medicamento.png";
-import ErrorToast from "../toasts/errorToast";
 import fetcher from "@/api/fetcher";
 
 export default function TabDadosPaciente({
@@ -39,15 +38,6 @@ export default function TabDadosPaciente({
     <>
       {/* TODO: dividir em componentes separados */}
       <div className="lista-pacientes">
-        <button onClick={() => setError(true)}>Toggle toast</button>
-        {error ? (
-          <ErrorToast
-            title="Login error"
-            message="Erro ao realizar login, credenciais inválidas"
-          />
-        ) : (
-          ""
-        )}
         <div className="flex justify-center space-x-2"></div>
         <ul
           className="flex list-none flex-row flex-wrap border-b-0 pl-0"
