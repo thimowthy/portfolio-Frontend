@@ -9,6 +9,11 @@ import febreImg from "../../public/termometro.png";
 import moment from "moment";
 
 export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
+  const quantidadeNeutrofilos =
+    paciente?.situacoesPaciente?.length > 0 &&
+    paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
+      ? paciente?.situacoesPaciente[0]?.diagnosticos[0]?.neutrofilos
+      : null;
   const neutropenico =
     paciente?.situacoesPaciente?.length > 0 &&
     paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
@@ -19,6 +24,16 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
       ? paciente?.situacoesPaciente[0]?.diagnosticos[0].febre
       : false;
+
+  const selectLabelNeutrofilos = (quantidadeNeutrofilos: number) => {
+    if (quantidadeNeutrofilos > 1000) {
+      return styles.low;
+    } else if (quantidadeNeutrofilos > 500) {
+      return styles.medium;
+    } else {
+      return styles.grave;
+    }
+  };
 
   const imageURL = (paciente: Paciente) => {
     if (neutropenico && febre) {
@@ -188,14 +203,18 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                       <div>
                         <p className="text-center">Neutrófilos:</p>
                         <p className="text-red-500">
-                          {" "}
                           {
                             paciente?.situacoesPaciente[0]?.diagnosticos[0]
                               ?.neutrofilos
-                          }{" "}
+                          }
+                          /mm3
                         </p>
                         <div className="flex justify-center">
-                          <div className={styles.grave}></div>
+                          <div
+                            className={selectLabelNeutrofilos(
+                              quantidadeNeutrofilos,
+                            )}
+                          ></div>
                         </div>
 
                         <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
