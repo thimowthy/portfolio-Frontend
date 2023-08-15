@@ -1,6 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-const ErrorToast = ({ title, message }: { title: string; message: string }) => {
+const ErrorToast = ({
+  title,
+  message,
+  onClose,
+}: {
+  title: string;
+  message: string;
+  onClose: () => void;
+}) => {
+  const [isToastVisible, setToastVisible] = useState(true);
+
   useEffect(() => {
     const init = async () => {
       const { Tab, initTE, Toast } = await import("tw-elements");
@@ -8,6 +18,15 @@ const ErrorToast = ({ title, message }: { title: string; message: string }) => {
     };
     init();
   }, []);
+
+  const handleToastClose = () => {
+    setToastVisible(false);
+    onClose();
+  };
+
+  if (!isToastVisible) {
+    return null;
+  }
   return (
     <div
       className="pointer-events-auto mx-auto mb-4 hidden w-96 max-w-full rounded-lg bg-danger-100 bg-clip-padding text-sm text-danger-700 shadow-lg shadow-black/5 data-[te-toast-show]:block data-[te-toast-hide]:hidden"
@@ -39,12 +58,12 @@ const ErrorToast = ({ title, message }: { title: string; message: string }) => {
           {title}
         </p>
         <div className="flex items-center">
-          <p className="text-xs text-danger-700">11 mins ago</p>
           <button
             type="button"
             className="ml-2 box-content rounded-none border-none opacity-80 hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
             data-te-toast-dismiss
             aria-label="Close"
+            onClick={handleToastClose}
           >
             <span className="w-[1em] focus:opacity-100 disabled:pointer-events-none disabled:select-none disabled:opacity-25 [&.disabled]:pointer-events-none [&.disabled]:select-none [&.disabled]:opacity-25">
               <svg
