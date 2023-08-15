@@ -24,6 +24,7 @@
     "tw-elements": "^1.0.0-beta2"
   },
   "devDependencies": {
+    "@microsoft/tsdoc": "^0.14.2",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "eslint": "^8.46.0",
     "eslint-config-standard-with-typescript": "^37.0.0",
@@ -32,6 +33,7 @@
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-promise": "^6.1.1",
     "husky": "^8.0.3",
+    "jsdoc": "^4.0.2",
     "lint-staged": "^13.2.3",
     "typedoc": "^0.24.8",
     "typescript": "^5.1.6"
