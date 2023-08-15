@@ -1,5 +1,6 @@
 {
   "extends": ["next/core-web-vitals"],
+  "ignorePatterns": ["**/docs"],
   "rules": {
     "semi": ["error", "always"],
     "quotes": ["error", "double"],

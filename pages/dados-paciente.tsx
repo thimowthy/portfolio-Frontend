@@ -1,6 +1,8 @@
 import dynamic from "next/dynamic";
 import DetalhesPaciente from "../components/DetalhesPaciente";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import SeoConfig from "../components/SeoConfig/index";
+import fetcher from "@/api/fetcher";
 
 const DynamicTabComponent = dynamic(
   () => import("../components/TabDadosPaciente"),
@@ -43,13 +45,30 @@ const mockedPatients = [
 
 const DadosPacientePage = () => {
   const [selectedPatient, setSelectedPatient] = useState<Paciente>({});
-
+  const [patients, setPatients] = useState<Paciente>();
+  useEffect(() => {
+    const fetchTest = async () => {
+      try {
+        const result = await fetcher(
+          "https://localhost:7091/Paciente/GetListPatients",
+          "GET",
+          "",
+          "",
+        );
+        setPatients(result);
+      } catch (error) {
+        console.log(error);
+        //TODO: adicionar lógica para o erro de acordo com o tipo de erro ou página
+      }
+    };
+    fetchTest();
+  }, []);
   return (
     <>
       <section className="flex min-h-full flex items-center">
         <div className="flex-1 mr-2">
           <DynamicTabComponent
-            pacientes={mockedPatients}
+            pacientes={patients || []}
             setSelectedPatient={setSelectedPatient}
           />
         </div>
