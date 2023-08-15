@@ -2,8 +2,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import fetcher from "@/api/fetcher";
-import ErrorToast from "../toasts/errorToast";
-import styles from "./styles.module.css";
 import febreImg from "../../public/termometro.png";
 import medicamento from "../../public/medicamento.png";
 import good from "../../public/good.png";
@@ -123,15 +121,6 @@ export default function TabDadosPaciente({
     <>
       {/* TODO: dividir em componentes separados */}
       <div className="lista-pacientes">
-        {/* <button onClick={() => setError(true)}>Toggle toast</button> */}
-        {error ? (
-          <ErrorToast
-            title="Login error"
-            message="Erro ao realizar login, credenciais inválidas"
-          />
-        ) : (
-          ""
-        )}
         <div className="flex justify-center space-x-2"></div>
         <ul
           className="flex list-none flex-row flex-wrap border-b-0 pl-0"
@@ -192,9 +181,11 @@ export default function TabDadosPaciente({
               {pacientes?.map((paciente: Paciente) => (
                 <li
                   key={paciente.id}
-                  className={`flex justify-between gap-x-6 py-5 px-4 my-2 bg-[#E1ECEA] ${
-                    paciente?.id == idAtivo ? styles.card_prontuario_ativo : ""
-                  }`}
+                  className={`flex justify-between gap-x-6 py-5 px-4 my-2 bg-[#E1ECEA] 
+                  `}
+                  // ${
+                  //   paciente?.id == idAtivo ? styles.card_prontuario_ativo : ""
+                  // }
                 >
                   <div className="flex gap-x-4">
                     {
