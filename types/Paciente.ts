@@ -1,5 +1,6 @@
 type Paciente = {
-  name?: string;
+  id?: number;
+  nome?: string;
   prontuario?: string;
   neutropenia?: string;
   neutropeniaFebril?: boolean;
@@ -9,7 +10,9 @@ type Paciente = {
   dataNascimento?: string;
   leito?: string;
   dataAdmissao?: string;
-  comorbidades?: string;
+  comorbidades?: any;
   prescricao?: any;
   neutrofilos?: string;
+  alergias?: any;
+  situacoesPaciente?: any;
 };

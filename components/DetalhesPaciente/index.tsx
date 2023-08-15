@@ -5,15 +5,27 @@ import good from "../../public/good.png";
 import neutral from "../../public/neutral.png";
 import bad from "../../public/bad.png";
 import veryBad from "../../public/very_bad.png";
-import febre from "../../public/termometro.png";
+import febreImg from "../../public/termometro.png";
+import moment from "moment";
 
 export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
+  const neutropenico =
+    paciente?.situacoesPaciente?.length > 0 &&
+    paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
+      ? paciente?.situacoesPaciente[0]?.diagnosticos[0].neutropenico
+      : false;
+  const febre =
+    paciente?.situacoesPaciente?.length > 0 &&
+    paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
+      ? paciente?.situacoesPaciente[0]?.diagnosticos[0].febre
+      : false;
+
   const imageURL = (paciente: Paciente) => {
-    if (paciente.neutropenia && paciente.neutropeniaFebril) {
+    if (neutropenico && febre) {
       return veryBad;
-    } else if (paciente.neutropeniaFebril) {
+    } else if (neutropenico) {
       return bad;
-    } else if (paciente.neutropenia) {
+    } else if (febre) {
       return neutral;
     }
     return good;
@@ -49,7 +61,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
           </li>
         </ul>
         <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
-          {paciente.prontuario && (
+          {paciente.id && (
             <>
               <div className="flex gap-x-4 pb-3">
                 <Image
@@ -61,7 +73,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                 />
                 <div className="min-w-0 flex-auto">
                   <p className="text-xl font-semibold leading-6 text-gray-900 align-middle">
-                    {paciente.name}
+                    {paciente.nome}
                   </p>
                   {/* <p className="mt-1 truncate text-xs leading-5 text-gray-500">
                   Prontuário: {paciente.prontuario}
@@ -72,29 +84,43 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
               <div className="pt-2">
                 <h1 className="text-2xl">
                   Dados do paciente{" "}
-                  {paciente.neutropeniaFebril && (
-                    <span className="float-right text-danger flex">
-                      Neutropenia Febril{" "}
-                      <Image
-                        className="w-4 ml-4"
-                        src={febre}
-                        alt="Termômetro - Febre"
-                      />
-                    </span>
-                  )}
+                  {paciente?.situacoesPaciente[0] &&
+                    paciente?.situacoesPaciente[0].diagnosticos[0] &&
+                    paciente?.situacoesPaciente[0].diagnosticos[0]
+                      .neutropenico &&
+                    paciente?.situacoesPaciente[0].diagnosticos[0].febre && (
+                      <span className="float-right text-danger flex">
+                        Neutropenia Febril{" "}
+                        <Image
+                          className="w-4 ml-4"
+                          src={febreImg}
+                          alt="Termômetro - Febre"
+                        />
+                      </span>
+                    )}
                 </h1>
               </div>
               <div className="flex gap-x-4 pt-4 pb-4">
                 <div>
                   <p>CPF: {paciente.cpf}</p>
-                  <p>Data de nascimento: {paciente.dataNascimento}</p>
-                  <p>Cartão SUS: {paciente.cartaoSus}</p>
+                  <p>
+                    Data de nascimento:{" "}
+                    {paciente?.dataNascimento
+                      ? moment(paciente?.dataNascimento).format("DD/MM/YYYY")
+                      : ""}
+                  </p>
+                  {/* <p>Cartão SUS: {paciente.cartaoSus}</p> */}
                 </div>
 
                 <div>
-                  <p>Prontuário: {paciente.prontuario}</p>
-                  <p>Leito: {paciente.leito}</p>
-                  <p>Unidade: {paciente.unidade}</p>
+                  {/* <p>Prontuário: {paciente.prontuario}</p> */}
+                  <p>
+                    Leito:{" "}
+                    {paciente?.situacoesPaciente[0]
+                      ? paciente?.situacoesPaciente[0].leito
+                      : ""}
+                  </p>
+                  {/* <p>Unidade: {paciente.unidade}</p> */}
                 </div>
               </div>
               <hr />
@@ -110,13 +136,29 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                     <p>Data de admissão: {paciente.dataAdmissao}</p>
                     <div className="rounded-md bg-green-200 p-2 mt-4">
                       <p className="text-xl">
-                        Prontuário {paciente.prontuario}
+                        {/* Prontuário {paciente.prontuario} */}
                       </p>
-                      <div className="py-2">
+                      <div className="py-1">
                         <p className="text-lg pl-2">Comorbidades:</p>
-                        <p className="text-sm pl-4">{paciente.comorbidades}</p>
+                        {paciente?.comorbidades?.map((comorbidade: any) => {
+                          return (
+                            <p key={comorbidade.nome} className="text-sm pl-4">
+                              {comorbidade?.nome}
+                            </p>
+                          );
+                        })}
                       </div>
-                      <div className="py-2">
+                      <div className="py-1">
+                        <p className="text-lg pl-2">Alergias:</p>
+                        {paciente?.alergias?.map((alergia: any) => {
+                          return (
+                            <p key={alergia.nome} className="text-sm pl-4">
+                              {alergia?.nome}
+                            </p>
+                          );
+                        })}
+                      </div>
+                      {/* <div className="py-1">
                         <p className="text-lg pl-2">
                           Última prescrição: {paciente.prescricao?.data}
                         </p>
@@ -132,7 +174,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                             </p>
                           ),
                         )}
-                      </div>
+                      </div> */}
                       <div className="flex justify-end">
                         <a href="#" className="text-right text-sm">
                           Ver prontuário completo
@@ -145,7 +187,13 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                     <div className="flex justify-center flex-col items-end text-center">
                       <div>
                         <p className="text-center">Neutrófilos:</p>
-                        <p className="text-red-500"> {"< 500cells/mm3"} </p>
+                        <p className="text-red-500">
+                          {" "}
+                          {
+                            paciente?.situacoesPaciente[0]?.diagnosticos[0]
+                              ?.neutrofilos
+                          }{" "}
+                        </p>
                         <div className="flex justify-center">
                           <div className={styles.grave}></div>
                         </div>
@@ -165,7 +213,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                           data-te-html="true"
                           data-te-ripple-init
                           data-te-ripple-color="light"
-                          title="Texto de teste"
+                          title=">38,3°C medida única, OU >38°C por mais de 1h"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"

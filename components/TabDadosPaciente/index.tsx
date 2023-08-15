@@ -4,7 +4,7 @@ import Image from "next/image";
 import fetcher from "@/api/fetcher";
 import ErrorToast from "../toasts/errorToast";
 import styles from "./styles.module.css";
-import febre from "../../public/termometro.png";
+import febreImg from "../../public/termometro.png";
 import medicamento from "../../public/medicamento.png";
 import good from "../../public/good.png";
 import neutral from "../../public/neutral.png";
@@ -16,7 +16,7 @@ export default function TabDadosPaciente({
   setSelectedPatient,
 }: any) {
   const [error, setError] = useState(false);
-  const [prontuarioAtivo, setProntuarioAtivo] = useState("");
+  const [idAtivo, setIdAtivo] = useState(0);
   useEffect(() => {
     const init = async () => {
       const { Tab, initTE } = await import("tw-elements");
@@ -40,17 +40,27 @@ export default function TabDadosPaciente({
   }, []);
 
   const selectPatient = (paciente: Paciente) => {
-    setProntuarioAtivo(paciente?.prontuario || "");
+    setIdAtivo(paciente?.id || 0);
     setSelectedPatient(paciente);
   };
 
   const mostrarIcone = (paciente: Paciente) => {
-    if (paciente.neutropenia && paciente.neutropeniaFebril) {
+    const neutropenico =
+      paciente?.situacoesPaciente?.length > 0 &&
+      paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
+        ? paciente?.situacoesPaciente[0]?.diagnosticos[0].neutropenico
+        : false;
+    const febre =
+      paciente?.situacoesPaciente?.length > 0 &&
+      paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
+        ? paciente?.situacoesPaciente[0]?.diagnosticos[0].febre
+        : false;
+    if (neutropenico && febre) {
       return (
         <div className="flex">
           <Image
             className="h-12 w-auto flex-none rounded-full"
-            src={febre}
+            src={febreImg}
             alt=""
             width="50"
             height="50"
@@ -64,7 +74,7 @@ export default function TabDadosPaciente({
           />
         </div>
       );
-    } else if (paciente.neutropenia) {
+    } else if (neutropenico) {
       return (
         <Image
           className="h-12 w-auto flex-none rounded-full"
@@ -74,11 +84,11 @@ export default function TabDadosPaciente({
           height="50"
         />
       );
-    } else if (paciente.neutropeniaFebril) {
+    } else if (febre) {
       return (
         <Image
           className="h-12 w-auto flex-none rounded-full"
-          src={febre}
+          src={febreImg}
           alt=""
           width="50"
           height="50"
@@ -89,11 +99,21 @@ export default function TabDadosPaciente({
   };
 
   const imageURL = (paciente: Paciente) => {
-    if (paciente.neutropenia && paciente.neutropeniaFebril) {
+    const neutropenico =
+      paciente?.situacoesPaciente?.length > 0 &&
+      paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
+        ? paciente?.situacoesPaciente[0]?.diagnosticos[0].neutropenico
+        : false;
+    const febre =
+      paciente?.situacoesPaciente?.length > 0 &&
+      paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
+        ? paciente?.situacoesPaciente[0]?.diagnosticos[0].febre
+        : false;
+    if (neutropenico && febre) {
       return veryBad;
-    } else if (paciente.neutropeniaFebril) {
+    } else if (neutropenico) {
       return bad;
-    } else if (paciente.neutropenia) {
+    } else if (febre) {
       return neutral;
     }
     return good;
@@ -169,13 +189,11 @@ export default function TabDadosPaciente({
             data-te-tab-active
           >
             <ul role="list" className="divide-y divide-gray-100">
-              {pacientes.map((paciente: Paciente) => (
+              {pacientes?.map((paciente: Paciente) => (
                 <li
-                  key={paciente.prontuario}
+                  key={paciente.id}
                   className={`flex justify-between gap-x-6 py-5 px-4 my-2 bg-[#E1ECEA] ${
-                    paciente?.prontuario == prontuarioAtivo
-                      ? styles.card_prontuario_ativo
-                      : ""
+                    paciente?.id == idAtivo ? styles.card_prontuario_ativo : ""
                   }`}
                 >
                   <div className="flex gap-x-4">
@@ -189,11 +207,11 @@ export default function TabDadosPaciente({
                       />
                     }
                     <div className="min-w-0 flex-auto">
-                      <p className="text-sm font-semibold leading-6 text-gray-900 text-2xl">
-                        {paciente.name}
+                      <p className="text-xl font-semibold leading-6 text-gray-900 text-2xl">
+                        {paciente.nome}
                       </p>
                       <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-base">
-                        Prontuário: {paciente.prontuario}
+                        {/* Prontuário: {paciente.id} */}
                       </p>
                     </div>
                   </div>
