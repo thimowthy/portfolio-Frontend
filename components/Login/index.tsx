@@ -33,43 +33,45 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
    * @property {string} username - O nome de usuário.
    * @property {string} password - A senha do usuário.
    */
-  const credentials = {
-    username: username,
-    password: password,
-  };
+    e.preventDefault();
+    const credentials = {
+      userName: username,
+      senha: password,
+    };
 
-  try {
-    /**
-     * A resposta da solicitação de envio do formulário.
-     * @type {Response}
-     */
-    const response = await fetch("http://localhost:3001/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(credentials),
-    });
+    try {
+      /**
+       * A resposta da solicitação de envio do formulário.
+       * @type {Response}
+       */
+      const response = await fetch("https://localhost:7091/api/v1/autenticacao", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(credentials),
+        });
 
-    if (response.ok)
-      Router.push('/dados-paciente');
-    else {
-      if (response.status === 401)
-        setError(true);
-      else
-        console.error("Login failed!", error);
+        if (response.ok) {
+          const data = await response.json();
+          localStorage.setItem("Authorization", "Bearer " + data.value);
+          Router.push('/dados-paciente')
+          console.log("Login successful!");
+        } else {
+          setError(true);
+          console.log("Login failed!");
+        }
+    } catch (error) {
+      console.error("Error occurred during login:", error);
     }
-  } catch (error) {
-    console.error("Error occurred during login:", error);
-  }
 
-  /**
-   * Imprime as credenciais de login no console.
-   * @type {Object}
-   * @property {string} username - O nome de usuário.
-   * @property {string} password - A senha do usuário.
-   */
-  console.log("Login credentials:", { username, password });
+    /**
+     * Imprime as credenciais de login no console.
+     * @type {Object}
+     * @property {string} username - O nome de usuário.
+     * @property {string} password - A senha do usuário.
+     */
+    console.log("Login credentials:", { username, password });
 };
 
   return (
