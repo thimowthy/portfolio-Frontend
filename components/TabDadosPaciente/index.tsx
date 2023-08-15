@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import fetcher from "@/api/fetcher";
+import styles from "./styles.module.css";
 import febreImg from "../../public/termometro.png";
 import medicamento from "../../public/medicamento.png";
 import good from "../../public/good.png";
@@ -181,11 +182,10 @@ export default function TabDadosPaciente({
               {pacientes?.map((paciente: Paciente) => (
                 <li
                   key={paciente.id}
-                  className={`flex justify-between gap-x-6 py-5 px-4 my-2 bg-[#E1ECEA] 
+                  className={`flex justify-between gap-x-6 py-5 px-4 my-2 bg-[#E1ECEA]   ${
+                    paciente?.id == idAtivo ? styles.card_prontuario_ativo : ""
+                  }
                   `}
-                  // ${
-                  //   paciente?.id == idAtivo ? styles.card_prontuario_ativo : ""
-                  // }
                 >
                   <div className="flex gap-x-4">
                     {
