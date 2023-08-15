@@ -1,6 +1,6 @@
 import { useState, FormEvent } from "react";
 import Image from "next/image";
-import Router from "next/router";
+import Router from 'next/router';
 import logo from "@/public/logo.png";
 import ErrorToast from "@/components/toasts/errorToast";
 import styles from "./Login.module.css";
@@ -52,7 +52,7 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     });
 
     if (response.ok)
-      Router.push("/dados-paciente");
+      Router.push('/dados-paciente');
     else {
       if (response.status === 401)
         setError(true);
@@ -127,7 +127,7 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
           <ErrorToast
             title="Erro de login"
             message="Erro ao realizar login, credenciais inválidas"
-            onClose={() => { setError(false); } }
+            onClose={() => { setError(false) } }
           />
         )}
       </div>
