@@ -1,0 +1,8 @@
+{
+    "out": "./docs",
+    "entryPoints": ["./**/*.ts","./**/*.tsx"],
+    "exclude": ["**/__tests__/**/*"],
+    "name": "Front - OncoCareSystem",
+    "theme": "default",
+  }
+  
