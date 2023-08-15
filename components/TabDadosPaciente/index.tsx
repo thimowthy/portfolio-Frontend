@@ -14,8 +14,8 @@ export default function TabDadosPaciente({
   pacientes,
   setSelectedPatient,
 }: any) {
-  const [ error, setError ] = useState(false);
-  const [ prontuarioAtivo, setProntuarioAtivo ] = useState("");
+  const [error, setError] = useState(false);
+  const [prontuarioAtivo, setProntuarioAtivo] = useState("");
   useEffect(() => {
     const init = async () => {
       const { Tab, initTE } = await import("tw-elements");
