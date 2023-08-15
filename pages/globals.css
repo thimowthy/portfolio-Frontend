@@ -57,8 +57,8 @@ body {
 
 .lista-pacientes_tab-content,
 .detalhes-paciente {
-  max-height: 80vh;
-  height: 80vh;
+  max-height: 70vh;
+  height: 70vh;
 }
 
 .lista-pacientes ::-webkit-scrollbar {
@@ -78,17 +78,4 @@ body {
 /* Handle on hover */
 .lista-pacientes ::-webkit-scrollbar-thumb:hover {
   background: #555;
-}
-
-.default-tab {
-  color: #16161D !important;
-  background: #AFAFAF;
-}
-
-.default-tab:hover {
-  background: #c4bfbf !important;
-}
-
-[data-te-nav-active] {
-  background: #DADADA !important;
 }
