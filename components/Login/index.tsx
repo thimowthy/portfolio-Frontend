@@ -6,9 +6,11 @@ import ErrorToast from "@/components/toasts/errorToast";
 import styles from "./Login.module.css";
 
 const Login: React.FC = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+
+  const [ username, setUsername ] = useState("");
+  const [ password, setPassword ] = useState("");
+  const [ LoginError, setLoginError ] = useState(false);
+  const [ error, setError ] = useState(false);
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -60,10 +62,11 @@ const Login: React.FC = () => {
         Router.push("/dados-paciente");
         console.log("Login successful!");
       } else {
-        setError(true);
+        setLoginError(true);
         console.log("Login failed!");
       }
     } catch (error) {
+      setError(true);
       console.error("Error occurred during login:", error);
     }
 
@@ -98,6 +101,7 @@ const Login: React.FC = () => {
             className={styles.input}
             value={username}
             onChange={handleUsernameChange}
+            required
           />
         </div>
         <div className={styles.dataInput}>
@@ -108,6 +112,7 @@ const Login: React.FC = () => {
             className={styles.input}
             value={password}
             onChange={handlePasswordChange}
+            required
           />
         </div>
         <div className={styles.dataInput}>
@@ -126,11 +131,18 @@ const Login: React.FC = () => {
           </p>
         </div>
       </form>
-      <div className="loginError">
-        {error && (
+      <div className={styles.loginError}>
+        {LoginError && (
           <ErrorToast
             title="Erro de login"
             message="Erro ao realizar login, credenciais inválidas"
+            onClose={() => { setLoginError(false); } }
+          />
+        )}
+        {error && (
+          <ErrorToast
+            title="Ops, algo deu errado"
+            message="Ocorreu um problema ao tentar efetuar o login. Tente novamente mais tarde"
             onClose={() => { setError(false); } }
           />
         )}
