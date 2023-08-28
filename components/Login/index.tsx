@@ -5,7 +5,7 @@ import logo from "@/public/logo.png";
 import ErrorToast from "@/components/toasts/errorToast";
 import styles from "./Login.module.css";
 
-const Login: React.FC = () => {
+const Login = () => {
 
   const [ username, setUsername ] = useState("");
   const [ password, setPassword ] = useState("");
@@ -25,7 +25,7 @@ const Login: React.FC = () => {
    * @param {FormEvent<HTMLFormElement>} e - O evento de envio do formulário.
    * @returns {Promise<void>} Uma promessa que é resolvida após o processamento do envio do formulário.
    */
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     /**
