@@ -1,12 +1,11 @@
 .header {
   height: 70px
 }
-
-.container {
+.menuHeader {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 630px;
+  margin-top: 30px;
+  font-size: 36px;
+  font-weight: 600;
 }
 .menuForm {
   width: 1200px;
@@ -16,16 +15,6 @@
   background-color: #eee;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.backButton {
-  cursor: pointer;
-}
-
-.menuHeader {
-  display: flex;
-  margin-top: 30px;
-  font-size: 36px;
-  font-weight: 600;
-}
 
 .sep {
   border-top: 2px solid #AAAAAA40;
@@ -34,4 +23,19 @@
 
 .headerTitle {
   margin-left: 15px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 630px;
+}
+.backButton {
+  cursor: pointer;
+}
+.titleBar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 }

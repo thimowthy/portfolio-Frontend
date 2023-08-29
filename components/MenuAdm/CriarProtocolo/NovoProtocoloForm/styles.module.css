@@ -1,0 +1,55 @@
+.formContainer {
+    margin-bottom: 20px;
+  }
+  .label {
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  .inputDiv {
+    display: grid;
+    grid-template-columns: repeat(3, 80px );
+    grid-template-rows: repeat(1, 40px);
+  }
+  .nameInput {
+    grid-column: 1 / span 2;
+    grid-row: 1;
+  }
+  .versionInput {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .inputField {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  .buttonColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .actionButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+    cursor: pointer;
+  }
+  .buttonInfo {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .saveButton {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+  }

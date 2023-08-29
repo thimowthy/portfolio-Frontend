@@ -1,14 +1,32 @@
 import SeoConfig from "@/components/SeoConfig";
-import Menu from "@/components/MenuAdm";
+import MenuForm from "@/components/MenuAdm/MenuForm/index";
+import NovoProtForm from "@/components/MenuAdm/CriarProtocolo/index";
+
 import Header from "@/components/Header";
+import { useState } from "react";
 
 const MenuAdm = () => {
+
+  const [ winCriarProt, setWinCriarProt ] = useState(false);
+  const [ formVisibility, setFormVisibility ] = useState(true);
+
     return (
       <>
         <div>
           <SeoConfig title="Menu" />
           <Header />
-          <Menu />
+          
+          {formVisibility &&
+          <MenuForm 
+            setFormVisibility={setFormVisibility}
+            setWinCriarProt={setWinCriarProt}
+          />}
+          {winCriarProt &&
+          <NovoProtForm 
+            setFormVisibility={setFormVisibility}
+            setWinCriarProt={setWinCriarProt}
+          />}
+
         </div>
       </>
     );
