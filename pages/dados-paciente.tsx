@@ -1,8 +1,9 @@
+import { useState } from "react";
 import dynamic from "next/dynamic";
-import DetalhesPaciente from "../components/DetalhesPaciente";
-import { useEffect, useState } from "react";
-import SeoConfig from "../components/SeoConfig/index";
 import fetcher from "@/api/fetcher";
+import SeoConfig from "../components/SeoConfig/index";
+import toast, { Toaster } from "react-hot-toast";
+import DetalhesPaciente from "../components/DetalhesPaciente";
 
 const DynamicTabComponent = dynamic(
   () => import("../components/TabDadosPaciente"),
@@ -10,69 +11,36 @@ const DynamicTabComponent = dynamic(
     ssr: false,
   },
 );
-const mockedPatients = [
-  {
-    name: "Paciente teste 1",
-    prontuario: "188182388",
-    neutropenia: true,
-    neutropeniaFebril: true,
-  },
-  {
-    name: "Paciente teste 2",
-    prontuario: "498789",
-    neutropenia: true,
-    neutropeniaFebril: true,
-  },
-  {
-    name: "Paciente teste 3",
-    prontuario: "2222",
-    neutropenia: true,
-    neutropeniaFebril: false,
-  },
-  {
-    name: "Paciente teste 4",
-    prontuario: "23424",
-    neutropenia: false,
-    neutropeniaFebril: false,
-  },
-  {
-    name: "Paciente teste 5",
-    prontuario: "34444",
-    neutropenia: true,
-    neutropeniaFebril: true,
-  },
-];
 
-const DadosPacientePage = () => {
+const DadosPacientePage = ({ pacientes }: any) => {
   const [selectedPatient, setSelectedPatient] = useState<Paciente>({});
-  const [patients, setPatients] = useState<Paciente>();
-  useEffect(() => {
-    const fetchTest = async () => {
-      try {
-        const result = await fetcher(
-          "https://localhost:7091/Paciente/GetListPatients",
-          "GET",
-          "",
-          "",
-        );
-        setPatients(result);
-      } catch (error) {
-        console.log(error);
-        //TODO: adicionar lógica para o erro de acordo com o tipo de erro ou página
+  if (typeof window !== "undefined") {
+    if (!("Notification" in window)) {
+      console.log("Browser does not support desktop notification");
+    } else {
+      if (Notification.permission) {
+        if (Notification.permission !== "granted") {
+          Notification.requestPermission();
+        }
+        Notification.requestPermission();
+        console.log(Notification.permission);
       }
-    };
-    fetchTest();
-  }, []);
+    }
+  }
+  const notify = () => toast("Here is your toast.", {});
   return (
     <>
+      <SeoConfig title="Lista de pacientes" />
+      <button onClick={notify}>Toggle notification</button>
+      <Toaster />
       <section className="flex min-h-full flex items-center">
-        <div className="flex-1 mr-2">
+        <div className="basis-2/5 mr-2">
           <DynamicTabComponent
-            pacientes={patients || []}
+            pacientes={pacientes || []}
             setSelectedPatient={setSelectedPatient}
           />
         </div>
-        <div className="flex-1 ml-2">
+        <div className="basis-3/5 ml-2">
           <DetalhesPaciente paciente={selectedPatient} />
         </div>
       </section>
@@ -81,3 +49,15 @@ const DadosPacientePage = () => {
 };
 
 export default DadosPacientePage;
+
+export async function getStaticProps<GetStaticProps>() {
+  const pacientes = await fetcher({
+    metodo: "GET",
+    rota: "https://localhost:7091/Paciente/GetListPatients",
+  });
+  return {
+    props: {
+      pacientes,
+    },
+  };
+}
