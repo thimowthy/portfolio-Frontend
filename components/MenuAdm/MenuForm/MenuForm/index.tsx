@@ -10,13 +10,13 @@ const mockedData = [
   ];
 
 interface MenuFormSectionProps {
-  setWinCriarProt: React.Dispatch<React.SetStateAction<boolean>>;
-  setFormVisibility: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
+  setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const MenuFormContent: React.FC<MenuFormSectionProps> = ({
-    setWinCriarProt,
-    setFormVisibility
+  setOpenWindow,
+  setCloseWindow
   }) => {
 
     const [ listData, setListData ] = useState(mockedData);
@@ -46,13 +46,14 @@ const MenuFormContent: React.FC<MenuFormSectionProps> = ({
       <div className={styles.buttons}>
       <button
         className={styles.button}
+        type="button"
         onClick={() => {
-          setWinCriarProt(true);
-          setFormVisibility(false);
+          setOpenWindow("novo_prot");
+          setCloseWindow("menu");
         }}
       >Novo Protocolo</button>
-      <button className={styles.button}>Editar Protocolo</button>
-      <button className={styles.button}>Efetivar Protocolo</button>
+      <button className={styles.button} type="button">Editar Protocolo</button>
+      <button className={styles.button} type="button">Efetivar Protocolo</button>
       <input
         type="file"
         accept=".pdf,.doc,.docx"
@@ -62,7 +63,7 @@ const MenuFormContent: React.FC<MenuFormSectionProps> = ({
       />
       <label htmlFor="fileInput" className={styles.button}>Importar Protocolo</label>
       <button className={styles.button}>
-          <Link href="/crud-usuarios">Gerenciar Usuários</Link>
+        <Link href="/crud-usuarios">Gerenciar Usuários</Link>
       </button>
       </div>
       <div className={styles.textDiv}>

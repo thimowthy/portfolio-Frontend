@@ -3,23 +3,30 @@ import FormBox from "../FormBox";
 import MenuFormContent from "./MenuForm/index";
 
 interface MenuFormSectionProps {
-  setWinCriarProt: React.Dispatch<React.SetStateAction<boolean>>;
-  setFormVisibility: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
+  setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
+  windowName: string;
 }
 
 const Menu: React.FC<MenuFormSectionProps> = ({
-  setWinCriarProt,
-  setFormVisibility
+  setOpenWindow,
+  setCloseWindow,
+  windowName
   }) => {
     return (
       <FormBox
         title="PROTOCOLOS"
-        content={<MenuFormContent
-                    setWinCriarProt={setWinCriarProt}
-                    setFormVisibility={setFormVisibility}/>}
+        content={
+          <MenuFormContent
+            setOpenWindow={setOpenWindow}
+            setCloseWindow={setCloseWindow}
+          />
+        }
         showButton={false}
-        setWinCriarProt={setWinCriarProt}
-        setFormVisibility={setFormVisibility}
+        setOpenWindow={setOpenWindow}
+        setCloseWindow={setCloseWindow}
+        openWin=""
+        closeWin=""
       />
     );
   };

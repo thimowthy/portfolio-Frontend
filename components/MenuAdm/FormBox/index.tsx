@@ -6,11 +6,13 @@ interface FormBoxProps {
     title: string;
     content: React.ReactNode;
     showButton: boolean;
-    setWinCriarProt: React.Dispatch<React.SetStateAction<boolean>>;
-    setFormVisibility: React.Dispatch<React.SetStateAction<boolean>>;
+    openWin: string;
+    closeWin: string;
+    setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
+    setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
   }
   
-const FormBox: React.FC<FormBoxProps> = ({ title, content, showButton, setWinCriarProt, setFormVisibility }) => {
+const FormBox: React.FC<FormBoxProps> = ({ title, content, showButton, openWin, closeWin, setOpenWindow, setCloseWindow}) => {
   return (
     <>
       <div className={styles.header}></div>
@@ -22,9 +24,10 @@ const FormBox: React.FC<FormBoxProps> = ({ title, content, showButton, setWinCri
                 <button
                   id="backBtn"
                   style={{ display: "none" }}
+                  type="button"
                   onClick={() => {
-                    setWinCriarProt(false);
-                    setFormVisibility(true);
+                    setOpenWindow(openWin);
+                    setCloseWindow(closeWin);
                   }}/>
                 <label htmlFor="backBtn" className={styles.backButton}>
                   <BackIcon width={40} height={40} color="#333"/>
