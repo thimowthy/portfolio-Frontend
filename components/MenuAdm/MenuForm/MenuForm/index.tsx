@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import Link from "next/link";
+import Router from "next/router";
 
 const mockedData = [
     { id: 1, name: "Protocolo Neutropenia 2022 V1.0" },
@@ -9,15 +10,8 @@ const mockedData = [
     { id: 4, name: "Protocolo Neutropenia 2023 V1.0" },
   ];
 
-interface MenuFormSectionProps {
-  setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
-  setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
-}
 
-const MenuFormContent: React.FC<MenuFormSectionProps> = ({
-  setOpenWindow,
-  setCloseWindow
-  }) => {
+const MenuFormContent = () => {
 
     const [ listData, setListData ] = useState(mockedData);
     const [ selectedItemId, setSelectedItemId ] = useState<number | null>(null);
@@ -48,8 +42,7 @@ const MenuFormContent: React.FC<MenuFormSectionProps> = ({
         className={styles.button}
         type="button"
         onClick={() => {
-          setOpenWindow("novo_prot");
-          setCloseWindow("menu");
+          Router.push("/criar-protocolo");
         }}
       >Novo Protocolo</button>
       <button className={styles.button} type="button">Editar Protocolo</button>

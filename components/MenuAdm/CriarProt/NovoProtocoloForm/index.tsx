@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
 
-const ProtocolFormContent: React.FC = () => {
+interface ProtocolFormContentProps {
+  setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
+  setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
+  setOpenWindow,
+  setCloseWindow
+  }) => {
 
   const [ showDiagText, setShowDiagText ] = useState(false);
   const [ showTratText, setShowTratText ] = useState(false);
@@ -23,6 +31,11 @@ const ProtocolFormContent: React.FC = () => {
       <div className = {styles.btn} id={styles.diagBtn}>
         <button
           className={styles.actionButton}
+          type="button"
+          onClick={() => {
+            setOpenWindow("novo_diag");
+            setCloseWindow("menu_prot");
+          }}
           onMouseEnter={() => setShowTratText(true)}
           onMouseLeave={() => setShowTratText(false)}
         >Criar Diagnóstico</button>
@@ -30,12 +43,20 @@ const ProtocolFormContent: React.FC = () => {
       <div className= {styles.btn} id={styles.tratBtn}>
         <button
           className={styles.actionButton}
+          type="button"
+          onClick={() => {
+            setOpenWindow("novo_trat");
+            setCloseWindow("menu_prot");
+          }}
           onMouseEnter={() => setShowDiagText(true)}
           onMouseLeave={() => setShowDiagText(false)}
         >Criar Tratamento</button>
       </div>
       <div className= {styles.btn} id={styles.saveBtn}>
-        <button className={styles.saveButton}>Salvar Protocolo</button>
+        <button
+          className={styles.saveButton}
+          type="button"
+        >Salvar Protocolo</button>
       </div>
       <div className={styles.textDiv}>
         {showDiagText && (

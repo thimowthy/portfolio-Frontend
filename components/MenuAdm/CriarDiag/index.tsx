@@ -1,24 +1,27 @@
 import React from "react";
-import styles from "./styles.module.css";
 import FormBox from "../FormBox/index";
 import DiagFormContent from "./NovoDiagForm/index";
 
 interface CreateDiagProps {
-  closeWindow: React.Dispatch<React.SetStateAction<string>>;
-  openWindow: React.Dispatch<React.SetStateAction<string>>;
+  setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
+  setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
+  windowName: string;
 }
 
 const CreateDiag: React.FC<CreateDiagProps> = ({
-  closeWindow,
-  openWindow
+  setOpenWindow,
+  setCloseWindow,
+  windowName
   }) => {
     return (
       <FormBox
         title="Criar Diagnóstico"
         content={<DiagFormContent />}
         showButton={true}
-        closeWindow={closeWindow}
-        openWindow={openWindow}
+        setOpenWindow={setOpenWindow}
+        setCloseWindow={setCloseWindow}
+        openWin="menu_prot"
+        closeWin={windowName}
       />
     );
   };

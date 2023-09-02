@@ -1,33 +1,23 @@
-import React, { useState, useEffect } from "react";
-import FormBox from "../FormBox";
 import MenuFormContent from "./MenuForm/index";
+import styles from "./styles.module.css";
 
-interface MenuFormSectionProps {
-  setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
-  setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
-  windowName: string;
-}
 
-const Menu: React.FC<MenuFormSectionProps> = ({
-  setOpenWindow,
-  setCloseWindow,
-  windowName
-  }) => {
+const Menu = () => {
     return (
-      <FormBox
-        title="PROTOCOLOS"
-        content={
-          <MenuFormContent
-            setOpenWindow={setOpenWindow}
-            setCloseWindow={setCloseWindow}
-          />
-        }
-        showButton={false}
-        setOpenWindow={setOpenWindow}
-        setCloseWindow={setCloseWindow}
-        openWin=""
-        closeWin=""
-      />
+      <>
+        <div className={styles.header}></div>
+        <div className={styles.container}>
+          <form className={styles.menuForm}>
+            <div className={styles.menuHeader}>
+              <h1 className={styles.headerTitle}>PROTOCOLOS</h1>
+            </div>
+            <div className={styles.sep}></div>
+            <div className={styles.content}>
+              {<MenuFormContent />}
+            </div>
+          </form>
+        </div>
+      </>
     );
   };
 

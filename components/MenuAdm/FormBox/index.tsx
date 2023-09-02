@@ -12,7 +12,7 @@ interface FormBoxProps {
     setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
   }
   
-const FormBox: React.FC<FormBoxProps> = ({ title, content, showButton, openWin, closeWin, setOpenWindow, setCloseWindow}) => {
+const FormBox: React.FC<FormBoxProps> = ({ title, content, showButton, openWin, closeWin, setOpenWindow, setCloseWindow }) => {
   return (
     <>
       <div className={styles.header}></div>
@@ -26,8 +26,10 @@ const FormBox: React.FC<FormBoxProps> = ({ title, content, showButton, openWin, 
                   style={{ display: "none" }}
                   type="button"
                   onClick={() => {
+                    console.log(openWin, closeWin);
                     setOpenWindow(openWin);
                     setCloseWindow(closeWin);
+
                   }}/>
                 <label htmlFor="backBtn" className={styles.backButton}>
                   <BackIcon width={40} height={40} color="#333"/>
