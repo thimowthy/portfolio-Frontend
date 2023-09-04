@@ -43,10 +43,7 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
-    console.log("ABRIR ------>", openWin);
     openWindow(openWin);
-  
-    console.log("FECHAR ------>", closeWin);
     closeWindow(closeWin);
 
   }, [ openWin, closeWin ]);

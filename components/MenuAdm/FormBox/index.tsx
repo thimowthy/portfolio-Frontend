@@ -26,7 +26,6 @@ const FormBox: React.FC<FormBoxProps> = ({ title, content, showButton, openWin, 
                   style={{ display: "none" }}
                   type="button"
                   onClick={() => {
-                    console.log(openWin, closeWin);
                     setOpenWindow(openWin);
                     setCloseWindow(closeWin);
 

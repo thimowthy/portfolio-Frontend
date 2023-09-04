@@ -16,7 +16,6 @@ const CreateProtocol: React.FC<CreateProtocolProps> = ({
   windowName
   }) => {
     return (
-
       <>
       <div className={styles.header}></div>
       <div className={styles.container}>
@@ -43,21 +42,8 @@ const CreateProtocol: React.FC<CreateProtocolProps> = ({
             />}
           </div>
         </form>
-      </div>
-      {/* <FormBox
-          title="Criar Protocolo"
-          content={<ProtocolFormContent
-            setOpenWindow={setOpenWindow}
-            setCloseWindow={setCloseWindow} />}
-          showButton={true}
-          setOpenWindow={setOpenWindow}
-          setCloseWindow={setCloseWindow}
-          openWin="menu"
-          closeWin={windowName}
-          />
-        */}
-          
-        </>
+      </div>          
+      </>
     );
   };
 

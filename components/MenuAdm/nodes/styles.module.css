@@ -1,0 +1,11 @@
+.nodeStyle {
+    background: #C9DDD8;
+    color: #2A423C;
+    border: 1px solid #689F92;
+    border-radius: 10px;
+  }
+  
+  .edgeStyle {
+    stroke: #a4c5bd;
+  }
+  
