@@ -1,4 +1,4 @@
-type DadosCadastro = {
+type DadosCadastroUsuario = {
   nome: string
   cpf: string
   codigo: number
