@@ -2,9 +2,23 @@ import React, { useState } from "react";
 import ReactFlow, { Node, Edge, MarkerType, Position } from "reactflow";
 import "reactflow/dist/style.css";
 import styles from "./styles.module.css";
-import nodeStyle from "./styles.module.css";
-import edgeStyle from "./styles.module.css";
+//import nodeStyle from "./styles.module.css";
+//import edgeStyle from "./styles.module.css";
 import DiagnosticoNode from "@/types/diagNode";
+
+const nodeStyle: React.CSSProperties = {
+  background: "#C9DDD8",
+  color: "#2A423C",
+  border: "1px solid #689F92",
+  borderRadius: "10px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+};
+
+const edgeStyle: React.CSSProperties = {
+  stroke: "#a4c5bd",
+};
 
 const initialDiagnostico: Record<string, DiagnosticoNode> = {
   node1: {
@@ -89,11 +103,12 @@ const initialNodes: Node[] = [
   },
 ];
 
-const initialEdges = [ { id: "e0-1", source: "0", target: "1", type: "step", style: edgeStyle, color: "#689f92", markerEnd: { type: MarkerType.Arrow, color: "#689f92", width: 25, height: 25 }, },
-                       { id: "e1-2", source: "1", target: "2", type: "step", style: edgeStyle, color: "#689f92", markerEnd: { type: MarkerType.Arrow, color: "#689f92", width: 25, height: 25 }, },
-                       { id: "e1-3", source: "1", target: "3", type: "step", style: edgeStyle, color: "#689f92", markerEnd: { type: MarkerType.Arrow, color: "#689f92", width: 25, height: 25 }, },
-                       { id: "e2-n", source: "2", target: "n", type: "step", style: edgeStyle, color: "#689f92", markerEnd: { type: MarkerType.Arrow, color: "#689f92", width: 25, height: 25 }, },
-                       { id: "e3-n", source: "3", target: "n", type: "step", style: edgeStyle, color: "#689f92", markerEnd: { type: MarkerType.Arrow, color: "#689f92", width: 25, height: 25 }, }, ];
+
+const initialEdges = [ { id: "e0-1", source: "0", target: "1", type: "step", style: edgeStyle, markerEnd: { type: MarkerType.Arrow, color: "#689f92", width: 25, height: 25 }, },
+                       { id: "e1-2", source: "1", target: "2", type: "step", style: edgeStyle, markerEnd: { type: MarkerType.Arrow, color: "#689f92", width: 25, height: 25 }, },
+                       { id: "e1-3", source: "1", target: "3", type: "step", style: edgeStyle, markerEnd: { type: MarkerType.Arrow, color: "#689f92", width: 25, height: 25 }, },
+                       { id: "e2-n", source: "2", target: "n", type: "step", style: edgeStyle, markerEnd: { type: MarkerType.Arrow, color: "#689f92", width: 25, height: 25 }, },
+                       { id: "e3-n", source: "3", target: "n", type: "step", style: edgeStyle, markerEnd: { type: MarkerType.Arrow, color: "#689f92", width: 25, height: 25 }, }, ];
 
 const DiagFormContent: React.FC = () => {
   
@@ -145,43 +160,45 @@ const DiagFormContent: React.FC = () => {
         </div>
       </div>
       <div className={styles.editDiv}>
-        <div className={styles.nameInput}>
-          <label className={styles.label}>Nome</label>
-          <input
-            className={styles.input}
-            id="name"
-            type="text"
-            placeholder="Febre"
-            value={selectedNodeData?.nome}
-            disabled={true} 
-          />
+        <div className={styles.inputDiv}>
+          <div className={styles.nameInput}>
+            <label className={styles.label}>Nome</label>
+            <input
+              className={styles.input}
+              id="name"
+              type="text"
+              placeholder="Febre"
+              value={selectedNodeData?.nome}
+              disabled={true} 
+            />
+          </div>
+          <div className={styles.varInput}>
+            <label className={styles.label}>Variável</label>
+            <input
+              className={styles.input}
+              id="var"
+              type="text"
+              placeholder="febre"
+              value={selectedNodeData?.variavel}
+              disabled={true} 
+            />
+          </div>
+          <div className={styles.condInput}>
+            <label className={styles.label}>Restrição</label>
+            <input
+              className={styles.input}
+              id="condition"
+              type="text"
+              placeholder="febre > 38"
+              value={selectedNodeData?.condicao}
+              onChange={(e) => {
+                const novoValor = e.target.value;
+                handleFieldChange(selectedNode, novoValor);
+              }}
+            />
+          </div>
         </div>
-        <div className={styles.varInput}>
-          <label className={styles.label}>Variável</label>
-          <input
-            className={styles.input}
-            id="var"
-            type="text"
-            placeholder="febre"
-            value={selectedNodeData?.variavel}
-            disabled={true} 
-          />
-        </div>
-        <div className={styles.condInput}>
-          <label className={styles.label}>Restrição</label>
-          <input
-            className={styles.input}
-            id="condition"
-            type="text"
-            placeholder="febre > 38"
-            value={selectedNodeData?.condicao}
-            onChange={(e) => {
-              const novoValor = e.target.value;
-              handleFieldChange(selectedNode, novoValor);
-            }}
-          />
-        </div>
-        <div className={styles.saveDiv}>
+      <div className={styles.saveDiv}>
           <button
             className={styles.saveBtn}
             type="button"
@@ -189,8 +206,9 @@ const DiagFormContent: React.FC = () => {
           >
             Salvar
           </button>
-        </div>
       </div>
+      </div>
+
     </div>
   );
 };

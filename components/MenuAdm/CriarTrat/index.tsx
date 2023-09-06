@@ -2,13 +2,13 @@ import React from "react";
 import FormBox from "../FormBox/index";
 import TratFormContent from "./NovoTratForm/index";
 
-interface CreateTratProps {
+interface CreateDiagProps {
   setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
   setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
   windowName: string;
 }
 
-const CreateTrat: React.FC<CreateTratProps> = ({
+const CreateDiag: React.FC<CreateDiagProps> = ({
   setOpenWindow,
   setCloseWindow,
   windowName
@@ -26,4 +26,4 @@ const CreateTrat: React.FC<CreateTratProps> = ({
     );
   };
 
-export default CreateTrat;
+export default CreateDiag;
