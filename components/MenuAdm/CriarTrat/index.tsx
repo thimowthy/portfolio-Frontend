@@ -1,22 +1,28 @@
 import React from "react";
 import FormBox from "../FormBox/index";
 import TratFormContent from "./NovoTratForm/index";
+import Tratamento from "@/types/Tratamento";
 
-interface CreateDiagProps {
+interface CreateTratProps {
   setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
   setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
   windowName: string;
+  onTratamentoSubmit: React.Dispatch<React.SetStateAction<Tratamento>>;
 }
 
-const CreateDiag: React.FC<CreateDiagProps> = ({
+const CreateTrat: React.FC<CreateTratProps> = ({
   setOpenWindow,
   setCloseWindow,
-  windowName
+  windowName,
+  onTratamentoSubmit
   }) => {
     return (
       <FormBox
         title="Criar Tratamento"
-        content={<TratFormContent />}
+        content={
+        <TratFormContent 
+          onTratamentoSubmit={onTratamentoSubmit}
+        />}
         showButton={true}
         setOpenWindow={setOpenWindow}
         setCloseWindow={setCloseWindow}
@@ -26,4 +32,4 @@ const CreateDiag: React.FC<CreateDiagProps> = ({
     );
   };
 
-export default CreateDiag;
+export default CreateTrat;

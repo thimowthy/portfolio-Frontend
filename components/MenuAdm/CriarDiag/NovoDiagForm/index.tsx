@@ -2,55 +2,20 @@ import React, { useState } from "react";
 import ReactFlow, { Node, Edge, MarkerType, Position } from "reactflow";
 import "reactflow/dist/style.css";
 import styles from "./styles.module.css";
-//import nodeStyle from "./styles.module.css";
-//import edgeStyle from "./styles.module.css";
+import { nodeStyle } from "@/components/MenuAdm/nodes/nodeStyles";
 import DiagnosticoNode from "@/types/diagNode";
+import graphDiagnostico from "../initialDiagnostico";
+import initialEdges from "../../nodes/diagEdges";
+import Diagnostico from "@/types/Diagnostico";
+import SuccessToast from "@/components/toasts/successToast";
 
-const nodeStyle: React.CSSProperties = {
-  background: "#C9DDD8",
-  color: "#2A423C",
-  border: "1px solid #689F92",
-  borderRadius: "10px",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-};
+interface DiagFormContentProps {
+  onDiagnosticoSubmit: (diagnostico: Diagnostico) => void;
+}
 
-const edgeStyle: React.CSSProperties = {
-  stroke: "#a4c5bd",
-};
+const initialDiagnostico: Record<string, DiagnosticoNode> = graphDiagnostico;
 
-const initialDiagnostico: Record<string, DiagnosticoNode> = {
-  node1: {
-    id: 1,
-    ordem: 2,
-    nome: "Neutropenia",
-    variavel: "contagem",
-    condicao: "contagem > 500",
-    posicao: [ 150, 10 ],
-    dest: [ 2 ],
-  },
-  node2: {
-    id: 2,
-    ordem: 2,
-    nome: "Febre",
-    variavel: "temperatura",
-    condicao: "temperatura > 38.3",
-    posicao: [ 400, 10 ],
-    dest: [ -1 ],
-  },
-  node3: {
-    id: 3,
-    ordem: 2,
-    nome: "Febre Ascendente",
-    variavel: "horas_temp_maior_38",
-    condicao: "horas_temp_maior_38 > 1",
-    posicao: [ 400, 110 ],
-    dest: [ -1 ],
-  },
-};
-
-const initialNodes: Node[] = [
+const nodes: Node[] = [
   ...Object.keys(initialDiagnostico).map((key) => {
     const node = initialDiagnostico[key];
     return {
@@ -80,7 +45,7 @@ const initialNodes: Node[] = [
       backgroundColor: "#477167",
       color: "white",
     },
-    position: { x: 20, y: 19 },
+    position: { x: 20, y: 25 },
     sourcePosition: Position.Right,
     targetPosition: Position.Right,
     selectable: false
@@ -103,27 +68,28 @@ const initialNodes: Node[] = [
   },
 ];
 
+const edges: Edge[] = initialEdges;
 
-const initialEdges = [ { id: "e0-1", source: "0", target: "1", type: "step", style: edgeStyle, markerEnd: { type: MarkerType.Arrow, color: "#689f92", width: 25, height: 25 }, },
-                       { id: "e1-2", source: "1", target: "2", type: "step", style: edgeStyle, markerEnd: { type: MarkerType.Arrow, color: "#689f92", width: 25, height: 25 }, },
-                       { id: "e1-3", source: "1", target: "3", type: "step", style: edgeStyle, markerEnd: { type: MarkerType.Arrow, color: "#689f92", width: 25, height: 25 }, },
-                       { id: "e2-n", source: "2", target: "n", type: "step", style: edgeStyle, markerEnd: { type: MarkerType.Arrow, color: "#689f92", width: 25, height: 25 }, },
-                       { id: "e3-n", source: "3", target: "n", type: "step", style: edgeStyle, markerEnd: { type: MarkerType.Arrow, color: "#689f92", width: 25, height: 25 }, }, ];
-
-const DiagFormContent: React.FC = () => {
-  
-  const [ nodes, setNodes ] = useState<Node[]>(initialNodes);
-  const [ edges, setEdges ] = useState<Edge[]>(initialEdges);
-  
+const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }) => {
+    
   const [ diagnostico, setDiagnostico ] = useState(initialDiagnostico);
 
   const [ selectedNode, setSelectedNode ] = useState("");
 
+  const [ toastVisible, setToastVisible ] = useState(false);
+
   const handleNodeClick = (_: React.MouseEvent, node: Node) => {
     setSelectedNode("node" + node.id.toString());
   };
-  
-  const handleFieldChange = (node:string, value:string) => {
+  const handleDiagnoticoSubmit = () => {
+    const novoDiagnostico: Diagnostico = {
+      nodes: diagnostico
+    };
+    onDiagnosticoSubmit(novoDiagnostico);
+    setToastVisible(true);
+  };
+
+  const handleConditionChange = (node:string, value:string) => {
     setDiagnostico((prevDiagnostico) => ({
       ...prevDiagnostico,
       [node]: {
@@ -140,76 +106,84 @@ const DiagFormContent: React.FC = () => {
   const selectedNodeData = getSelectedNodeData();
 
   return (
-    <div className={styles.formContainer}>
-      <div className={styles.chartDiv}>
-        <div style={{ width: "720px", height: "320px" }}>
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            elementsSelectable={true}
-            nodesDraggable={false}
-            panOnDrag={false}
-            panOnScroll={false}
-            preventScrolling={false}
-            zoomOnScroll={false}
-            zoomOnPinch={false}
-            zoomOnDoubleClick={false}
-            nodesConnectable={false}
-            onNodeClick={handleNodeClick}
-          />
-        </div>
-      </div>
-      <div className={styles.editDiv}>
-        <div className={styles.inputDiv}>
-          <div className={styles.nameInput}>
-            <label className={styles.label}>Nome</label>
-            <input
-              className={styles.input}
-              id="name"
-              type="text"
-              placeholder="Febre"
-              value={selectedNodeData?.nome}
-              disabled={true} 
-            />
-          </div>
-          <div className={styles.varInput}>
-            <label className={styles.label}>Variável</label>
-            <input
-              className={styles.input}
-              id="var"
-              type="text"
-              placeholder="febre"
-              value={selectedNodeData?.variavel}
-              disabled={true} 
-            />
-          </div>
-          <div className={styles.condInput}>
-            <label className={styles.label}>Restrição</label>
-            <input
-              className={styles.input}
-              id="condition"
-              type="text"
-              placeholder="febre > 38"
-              value={selectedNodeData?.condicao}
-              onChange={(e) => {
-                const novoValor = e.target.value;
-                handleFieldChange(selectedNode, novoValor);
-              }}
-            />
+    <>
+      <div className={styles.formContainer}>
+        <div className={styles.chartDiv}>
+          <div style={{ width: "720px", height: "320px" }}>
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              elementsSelectable={true}
+              nodesDraggable={false}
+              panOnDrag={false}
+              panOnScroll={false}
+              preventScrolling={false}
+              zoomOnScroll={false}
+              zoomOnPinch={false}
+              zoomOnDoubleClick={false}
+              nodesConnectable={false}
+              onNodeClick={handleNodeClick} />
           </div>
         </div>
-      <div className={styles.saveDiv}>
-          <button
-            className={styles.saveBtn}
-            type="button"
-            onClick={() => {console.log(diagnostico);}}
-          >
-            Salvar
-          </button>
+        <div className={styles.editDiv}>
+          <div className={styles.inputDiv}>
+            <div className={styles.nameInput}>
+              <label className={styles.label}>Nome</label>
+              <input
+                className={styles.input}
+                id="name"
+                type="text"
+                placeholder="Febre"
+                value={selectedNodeData?.nome || ""}
+                disabled={true} />
+            </div>
+            <div className={styles.varInput}>
+              <label className={styles.label}>Variável</label>
+              <input
+                className={styles.input}
+                id="var"
+                type="text"
+                placeholder="febre"
+                value={selectedNodeData?.variavel || ""}
+                disabled={true} />
+            </div>
+            <div className={styles.condInput}>
+              <label className={styles.label}>Condição</label>
+              <input
+                className={styles.input}
+                id="condition"
+                type="text"
+                placeholder="febre > 38"
+                value={selectedNodeData?.condicao || ""}
+                onChange={(e) => {
+                  const novoValor = e.target.value;
+                  handleConditionChange(selectedNode, novoValor);
+                } } />
+            </div>
+          </div>
+          <div className={styles.saveDiv}>
+            <button
+              className={styles.saveBtn}
+              type="button"
+              onClick={() => {
+                //console.log(diagnostico);
+                handleDiagnoticoSubmit();
+              } }
+            >
+              Salvar
+            </button>
+          </div>
+        </div>
       </div>
+      <div className={styles.successToast}>
+          {toastVisible && (
+            <SuccessToast
+              title="Sucesso"
+              message="Diagnóstico salvo com sucesso"
+              onClose={() => { setToastVisible(false); } } />
+          )}
       </div>
-
-    </div>
+    </>
   );
 };
 

@@ -49,7 +49,7 @@ const MenuFormContent = () => {
       <button className={styles.button} type="button">Efetivar Protocolo</button>
       <input
         type="file"
-        accept=".pdf,.doc,.docx"
+        accept=".json"
         onChange={handleFileUpload}
         style={{ display: "none" }}
         id="fileInput"

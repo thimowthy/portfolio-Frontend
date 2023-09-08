@@ -26,6 +26,7 @@
   .inputDiv {
     flex: 1;
     background-color: white;
+    overflow: auto;
     border-radius: 10px;
     padding: 20px;
     height: 280px;
@@ -82,4 +83,8 @@
   .input::placeholder {
     color: #888;
   }
-  
+  .successToast {
+    position: absolute;
+    bottom: 2%;
+    left: 2%;
+  }

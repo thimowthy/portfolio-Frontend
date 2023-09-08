@@ -1,20 +1,31 @@
 import React from "react";
-import ProtocolFormContent from "./NovoProtocoloForm";
+import NovoProtocolForm from "./NovoProtocoloForm";
 import styles from "./styles.module.css";
 import BackIcon from "@/components/backIcon";
 import Router from "next/router";
+import Diagnostico from "@/types/Diagnostico";
+import Tratamento from "@/types/Tratamento";
+import Protocolo from "@/types/Protocolo";
 
 interface CreateProtocolProps {
   setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
   setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
   windowName: string;
+  diagnostico: Diagnostico;
+  tratamento: Tratamento;
+  protocolo: Protocolo;
+  setProtocolo: React.Dispatch<React.SetStateAction<Protocolo>>;
 }
 
 const CreateProtocol: React.FC<CreateProtocolProps> = ({
   setOpenWindow,
   setCloseWindow,
-  windowName
-  }) => {
+  diagnostico,
+  tratamento,
+  protocolo,
+  setProtocolo
+}) => {
+
     return (
       <>
       <div className={styles.header}></div>
@@ -36,10 +47,14 @@ const CreateProtocol: React.FC<CreateProtocolProps> = ({
           </div>
           <div className={styles.sep}></div>
           <div className={styles.content}>
-            {<ProtocolFormContent
+            <NovoProtocolForm
               setOpenWindow={setOpenWindow}
               setCloseWindow={setCloseWindow}
-            />}
+              diagnostico={diagnostico}
+              tratamento={tratamento}
+              prot={protocolo}
+              onSave={setProtocolo}
+            />
           </div>
         </form>
       </div>          

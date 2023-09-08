@@ -1,4 +1,4 @@
-import MenuFormContent from "./MenuForm/index";
+import MenuForm from "./MenuForm/index";
 import styles from "./styles.module.css";
 
 
@@ -13,7 +13,7 @@ const Menu = () => {
             </div>
             <div className={styles.sep}></div>
             <div className={styles.content}>
-              {<MenuFormContent />}
+              {<MenuForm />}
             </div>
           </form>
         </div>

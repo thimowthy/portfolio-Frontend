@@ -1,5 +1,5 @@
 import SeoConfig from "@/components/SeoConfig";
-import MenuForm from "@/components/MenuAdm/MenuForm/index";
+import Menu from "@/components/MenuAdm/MenuForm/index";
 import Header from "@/components/Header";
 
 const MenuAdm = () => {
@@ -8,7 +8,7 @@ const MenuAdm = () => {
     <>
       <SeoConfig title="Menu" />
       <Header />
-      <MenuForm />
+      <Menu />
     </>
   );
 };
