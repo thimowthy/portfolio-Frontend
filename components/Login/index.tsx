@@ -5,11 +5,12 @@ import logo from "@/public/logo.png";
 import ErrorToast from "@/components/toasts/errorToast";
 import styles from "./Login.module.css";
 
-const Login: React.FC = () => {
+const Login = () => {
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+  const [ username, setUsername ] = useState("");
+  const [ password, setPassword ] = useState("");
+  const [ LoginError, setLoginError ] = useState(false);
+  const [ error, setError ] = useState(false);
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -19,20 +20,20 @@ const Login: React.FC = () => {
     setPassword(e.target.value);
   };
 
-/**
- * Manipula o envio do formulário de login.
- * @param {FormEvent<HTMLFormElement>} e - O evento de envio do formulário.
- * @returns {Promise<void>} Uma promessa que é resolvida após o processamento do envio do formulário.
- */
-const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-
   /**
-   * As credenciais de login do usuário.
-   * @type {Object}
-   * @property {string} username - O nome de usuário.
-   * @property {string} password - A senha do usuário.
+   * Manipula o envio do formulário de login.
+   * @param {FormEvent<HTMLFormElement>} e - O evento de envio do formulário.
+   * @returns {Promise<void>} Uma promessa que é resolvida após o processamento do envio do formulário.
    */
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
+
+    /**
+     * As credenciais de login do usuário.
+     * @type {Object}
+     * @property {string} username - O nome de usuário.
+     * @property {string} password - A senha do usuário.
+     */
     e.preventDefault();
     const credentials = {
       userName: username,
@@ -44,24 +45,28 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
        * A resposta da solicitação de envio do formulário.
        * @type {Response}
        */
-      const response = await fetch("https://localhost:7091/api/v1/autenticacao", {
+      const response = await fetch(
+        "https://localhost:7091/api/v1/autenticacao",
+        {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(credentials),
-        });
+        },
+      );
 
-        if (response.ok) {
-          const data = await response.json();
-          localStorage.setItem("Authorization", "Bearer " + data.value);
-          Router.push("/dados-paciente");
-          console.log("Login successful!");
-        } else {
-          setError(true);
-          console.log("Login failed!");
-        }
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("Authorization", "Bearer " + data.value);
+        Router.push("/dados-paciente");
+        console.log("Login successful!");
+      } else {
+        setLoginError(true);
+        console.log("Login failed!");
+      }
     } catch (error) {
+      setError(true);
       console.error("Error occurred during login:", error);
     }
 
@@ -72,7 +77,7 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
      * @property {string} password - A senha do usuário.
      */
     console.log("Login credentials:", { username, password });
-};
+  };
 
   return (
     <div className={styles.loginContainer}>
@@ -96,6 +101,7 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
             className={styles.input}
             value={username}
             onChange={handleUsernameChange}
+            required
           />
         </div>
         <div className={styles.dataInput}>
@@ -106,6 +112,7 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
             className={styles.input}
             value={password}
             onChange={handlePasswordChange}
+            required
           />
         </div>
         <div className={styles.dataInput}>
@@ -124,11 +131,18 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
           </p>
         </div>
       </form>
-      <div className="loginError">
-        {error && (
+      <div className={styles.loginError}>
+        {LoginError && (
           <ErrorToast
             title="Erro de login"
             message="Erro ao realizar login, credenciais inválidas"
+            onClose={() => { setLoginError(false); } }
+          />
+        )}
+        {error && (
+          <ErrorToast
+            title="Ops, algo deu errado"
+            message="Ocorreu um problema ao tentar efetuar o login. Tente novamente mais tarde"
             onClose={() => { setError(false); } }
           />
         )}

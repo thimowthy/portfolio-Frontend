@@ -1,0 +1,20 @@
+.menuWin.visible {
+    display: block;
+}
+.menuWin.hidden {
+    display: none;
+}
+
+.novoProt.visible {
+    display: block;
+}
+.novoProt.hidden {
+    display: none;
+}
+
+.novoDiag.visible {
+    display: block;
+}
+.novoDiag.hidden {
+    display: none;
+}

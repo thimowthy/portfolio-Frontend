@@ -9,7 +9,7 @@ const ErrorToast = ({
   message: string;
   onClose: () => void;
 }) => {
-  const [isToastVisible, setToastVisible] = useState(true);
+  const [ isToastVisible, setToastVisible ] = useState(true);
 
   useEffect(() => {
     const init = async () => {
