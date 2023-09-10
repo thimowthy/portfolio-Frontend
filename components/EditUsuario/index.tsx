@@ -1,5 +1,4 @@
 import { useState, FormEvent } from "react";
-import { useRouter } from "next/navigation";
 import ArrowLeft from "../../public/arrow_left.svg";
 import Image from "next/image";
 
@@ -7,7 +6,7 @@ export default function EditUsuario({ setListUsers, setUpdateUser, user }: any) 
 
   const [ nome, setNome ] = useState(user.nome);
   const [ cpf, setCpf ] = useState(user.cpf);
-  //const [ certificado, setCertificado ] = useState(""); ADD
+  //const [ certificado, setCertificado ] = useState(user.certificado);
   const [ userName, setUserName ] = useState(user.userName);
   const [ ativo, setAtivo ] = useState(true);
   const [ error, setError ] = useState(false);
@@ -19,6 +18,8 @@ export default function EditUsuario({ setListUsers, setUpdateUser, user }: any) 
         nome,
         userName,
         cpf,
+        senha: user.senha,
+        ativo
       };
 
       const response = await fetch(`https://localhost:7091/Usuario/PutUser/${user.id}`, {
@@ -32,6 +33,7 @@ export default function EditUsuario({ setListUsers, setUpdateUser, user }: any) 
       if(response.ok){
         alert("Usuário atualizado com sucesso");
       } else {
+        //console.error()
         setError(true);
       }
 

@@ -54,22 +54,26 @@ export default function ListUsuarios({ setCreateUser, setListUsers, setUpdateUse
           {!users.length ? <p className="text-center pt-16">Nenhum usuário cadastrado.</p> : 
             <>
               <section className="bg-[#dddddd] w-full rounded-lg flex justify-around items-center px-7 py-3">
-                <p style={{ width: "20%" }}>Nome</p>
-                <p style={{ width: "20%" }}>Nome de usuário</p>
-                <p style={{ width: "20%" }}>CPF</p>
-                <p style={{ width: "20%" }}>Ativo</p>
-                <p style={{ width: "10%" }}>Editar</p>
-                <p style={{ width: "10%" }}>Excluir</p>
+                <p style={{ width: "15%" }}>Nome</p>
+                <p style={{ width: "15%" }}>Nome de usuário</p>
+                <p style={{ width: "15%" }}>CPF</p>
+                <p style={{ width: "10%" }}>Cargo</p>
+                <p style={{ width: "10%" }}>Certificado</p>
+                <p style={{ width: "10%" }}>Ativo</p>
+                <p style={{ width: "5%" }}>Editar</p>
+                <p style={{ width: "5%" }}>Excluir</p>
               </section>
             
               <ul>
                 {users.map((user: Usuario) => <li key={user.id} className="w-full h-14 rounded-lg flex justify-around items-center px-7">
-                  <p style={{ width: "20%" }}>{user.nome}</p>
-                  <p style={{ width: "20%" }}>{user.userName}</p>
-                  <p style={{ width: "20%" }}>{user.cpf}</p>
-                  <p style={{ width: "20%" }}>{user.ativo ? "Sim" : "Não"}</p>
-                  <p style={{ width: "10%" }} onClick={() => handleEditUser(user)}><Image className="cursor-pointer" src={EditUser} alt="Editar Usuário"/></p>
-                  <p style={{ width: "10%" }} onClick={() => handleDeleteUser(user)}><Image className="cursor-pointer" src={DeleteUser} alt="Deletar Usuário" width={30} height={30}/></p>
+                  <p style={{ width: "15%" }}>{user.nome}</p>
+                  <p style={{ width: "15%" }}>{user.userName}</p>
+                  <p style={{ width: "15%" }}>{user.cpf}</p>
+                  <p style={{ width: "10%" }}>{user.profissao}</p>
+                  <p style={{ width: "10%" }}>{user.certificado}</p>
+                  <p style={{ width: "10%" }}>{user.ativo ? "Sim" : "Não"}</p>
+                  <p style={{ width: "5%" }} onClick={() => handleEditUser(user)}><Image className="cursor-pointer" src={EditUser} alt="Editar Usuário"/></p>
+                  <p style={{ width: "5%" }} onClick={() => handleDeleteUser(user)}><Image className="cursor-pointer" src={DeleteUser} alt="Deletar Usuário" width={30} height={30}/></p>
                 </li>)}
               </ul>
             </>

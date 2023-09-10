@@ -4,5 +4,6 @@ type Usuario = {
   userName: string
   cpf: string
   ativo: boolean
-  //certificado: string FALTANDO TRAZER DA API -> certificado e qual é o cargo
+  certificado: string
+  profissao: string
 };

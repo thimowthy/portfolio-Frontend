@@ -43,7 +43,7 @@ const CrudUsuario = () => {
       />}
       {createUser && <FormUsuario cargo={selectedRole} setListUsers={setListUsers} setCreateUser={setCreateUser}/>}
       {updateUser && <EditUsuario setListUsers={setListUsers} setUpdateUser={setUpdateUser} user={user}/>}
-      {deleteUser && <DeleteUsuario user={user}/>}
+      {deleteUser && <DeleteUsuario user={user} open={true} setDeleteUser={setDeleteUser}/>}
     </>
   );
 };
