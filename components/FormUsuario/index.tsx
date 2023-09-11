@@ -29,7 +29,8 @@ export default function FormUsuario({ cargo, setCreateUser, setListUsers }: any)
         userName,
         cpf,
         profissao: cargo.valor,
-        certificado
+        certificado,
+        ativo
       };
 
       const response = await fetch("https://localhost:7091/Usuario/Create", {

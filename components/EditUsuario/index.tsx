@@ -34,6 +34,7 @@ export default function EditUsuario({ setListUsers, setUpdateUser, user }: any) 
         alert("Usuário atualizado com sucesso");
       } else {
         //console.error()
+        alert("Erro ao atualizar usuário");
         setError(true);
       }
 

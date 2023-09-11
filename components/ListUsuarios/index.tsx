@@ -17,14 +17,15 @@ export default function ListUsuarios({ setCreateUser, setListUsers, setUpdateUse
           ""
         );
         
-        console.log(usersList);
+        //const filteredList = usersList.filter((u: Usuario) => u.ativo); ESPERAR CORREÇÃO DO BACK -> TRAZER "ATIVO" NO GET
+
         setUsers(usersList);
       } catch (error) {
         console.error(error);
       }
     };
     fetchUsers();
-  }, []);
+  }, [ users ]);
 
   function handleAddUser(){
     setListUsers(false);
@@ -59,7 +60,7 @@ export default function ListUsuarios({ setCreateUser, setListUsers, setUpdateUse
                 <p style={{ width: "15%" }}>CPF</p>
                 <p style={{ width: "10%" }}>Cargo</p>
                 <p style={{ width: "10%" }}>Certificado</p>
-                <p style={{ width: "10%" }}>Ativo</p>
+                <p style={{ width: "10%" }}>Ativo</p> {/*  LEMBRAR DE REMOVER "ATIVO" -> SÓ SERÃO LISTADOS USUÁRIOS ATIVOS */}
                 <p style={{ width: "5%" }}>Editar</p>
                 <p style={{ width: "5%" }}>Excluir</p>
               </section>

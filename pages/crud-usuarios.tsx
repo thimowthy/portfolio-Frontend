@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import { useState } from "react";
 import Header from "@/components/Header";
 import { useEffect } from "react";
+import SeoConfig from "@/components/SeoConfig";
 
 const SelectCargos = dynamic(() => import("../components/SelectUsuario"), {
   ssr: false
@@ -34,6 +35,7 @@ const CrudUsuario = () => {
 
   return (
     <>
+      <SeoConfig title="Usuários"/>
       <Header />
       {listUsers && <ListUsuario setCreateUser={setCreateUser} setListUsers={setListUsers} setUpdateUser={setUpdateUser} setDeleteUser={setDeleteUser} setUser={setUser}/>}
       {createUser && <SelectCargos
