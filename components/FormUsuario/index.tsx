@@ -15,7 +15,7 @@ export default function FormUsuario({ cargo, setCreateUser, setListUsers, setLoa
   const [ ativo, setAtivo ] = useState(true);
   const [ error, setError ] = useState(false);
 
-  function backToList(){
+  function backToList() {
     setCreateUser(false);
     setListUsers(true);
   }
@@ -55,6 +55,17 @@ export default function FormUsuario({ cargo, setCreateUser, setListUsers, setLoa
         }
       }, 1500);
 
+      setTimeout(() => {
+        setLoading(false);
+        if (response.ok) {
+          alert("Usuário criado com sucesso");
+          setCreateUser(false);
+          setListUsers(true);
+        } else {
+          alert("Erro ao atualizar usuário");
+          //setError(true);
+        }
+      }, 1500);
     } catch (error) {
       console.error(error);
     }
@@ -70,7 +81,6 @@ export default function FormUsuario({ cargo, setCreateUser, setListUsers, setLoa
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col px-8">
           <div className="flex items-center w-full">
-            
             <div className="flex flex-col p-2 rounded-lg w-[50%]">
               <label htmlFor="nome" className="ml-1">
                 Nome
@@ -86,7 +96,7 @@ export default function FormUsuario({ cargo, setCreateUser, setListUsers, setLoa
                 required
               />
             </div>
-           
+
             <div className="flex flex-col p-2 rounded-lg w-[50%]">
               <label htmlFor="nome" className="ml-1">
                 Usuário
@@ -150,7 +160,6 @@ export default function FormUsuario({ cargo, setCreateUser, setListUsers, setLoa
             />
           </div>
           <div className="flex items-center">
-
             {/* <div className="flex flex-col p-2 rounded-lg">
               <label htmlFor="codigo" className="ml-1">
                 Código

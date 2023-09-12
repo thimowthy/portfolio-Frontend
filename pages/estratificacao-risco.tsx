@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Header from "@/components/Header";
 import FormEstratificacao from "@/components/FormEstratificacao";
@@ -6,9 +5,8 @@ import SeoConfig from "@/components/SeoConfig";
 import Router, { useRouter } from "next/router";
 import Loader from "@/components/Loader";
 
-
 const EstratificacaoRisco = () => {
-  const [ loading, setLoading ] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
   const data = router.query;
@@ -18,7 +16,7 @@ const EstratificacaoRisco = () => {
       <SeoConfig title="Estratificação de Risco" />
       {loading && <Loader />}
       <Header />
-      <FormEstratificacao paciente={data} setLoading={setLoading}/>
+      <FormEstratificacao paciente={data} setLoading={setLoading} />
     </>
   );
 };

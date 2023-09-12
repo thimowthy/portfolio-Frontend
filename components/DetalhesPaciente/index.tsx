@@ -11,16 +11,19 @@ import Link from "next/link";
 
 export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   const quantidadeNeutrofilos =
+    paciente?.situacoesPaciente !== undefined &&
     paciente?.situacoesPaciente?.length > 0 &&
     paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
       ? paciente?.situacoesPaciente[0]?.diagnosticos[0]?.neutrofilos
       : null;
   const neutropenico =
+    paciente?.situacoesPaciente !== undefined &&
     paciente?.situacoesPaciente?.length > 0 &&
     paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
       ? paciente?.situacoesPaciente[0]?.diagnosticos[0].neutropenico
       : false;
   const febre =
+    paciente?.situacoesPaciente !== undefined &&
     paciente?.situacoesPaciente?.length > 0 &&
     paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
       ? paciente?.situacoesPaciente[0]?.diagnosticos[0].febre
@@ -101,7 +104,8 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
               <div className="pt-2">
                 <h1 className="text-2xl">
                   Dados do paciente{" "}
-                  {paciente?.situacoesPaciente[0] &&
+                  {paciente?.situacoesPaciente !== undefined &&
+                    paciente?.situacoesPaciente[0] &&
                     paciente?.situacoesPaciente[0].diagnosticos[0] &&
                     paciente?.situacoesPaciente[0].diagnosticos[0]
                       .neutropenico &&
@@ -133,7 +137,8 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                   {/* <p>Prontuário: {paciente.prontuario}</p> */}
                   <p>
                     Leito:{" "}
-                    {paciente?.situacoesPaciente[0]
+                    {paciente?.situacoesPaciente !== undefined &&
+                    paciente?.situacoesPaciente[0]
                       ? paciente?.situacoesPaciente[0].leito
                       : ""}
                   </p>
@@ -157,13 +162,18 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                       </p>
                       <div className="py-1">
                         <p className="text-lg pl-2">Comorbidades:</p>
-                        {paciente?.comorbidades?.map((comorbidade: any) => {
-                          return (
-                            <p key={comorbidade.nome} className="text-sm pl-4">
-                              {comorbidade?.nome}
-                            </p>
-                          );
-                        })}
+                        {paciente?.comorbidades?.map(
+                          (comorbidade: any, index: number) => {
+                            return (
+                              <p
+                                key={`${comorbidade.nome}${index}`}
+                                className="text-sm pl-4"
+                              >
+                                {comorbidade?.nome}
+                              </p>
+                            );
+                          },
+                        )}
                       </div>
                       <div className="py-1">
                         <p className="text-lg pl-2">Alergias:</p>
@@ -205,16 +215,15 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                       <div>
                         <p className="text-center">Neutrófilos:</p>
                         <p className="text-red-500">
-                          {
+                          {paciente?.situacoesPaciente !== undefined &&
                             paciente?.situacoesPaciente[0]?.diagnosticos[0]
-                              ?.neutrofilos
-                          }
+                              ?.neutrofilos}
                           /mm3
                         </p>
                         <div className="flex justify-center">
                           <div
                             className={selectLabelNeutrofilos(
-                              quantidadeNeutrofilos,
+                              quantidadeNeutrofilos || 0,
                             )}
                           ></div>
                         </div>
@@ -257,19 +266,22 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                           Não
                         </button>
 
-                        <Link href={{
-                          pathname: "/estratificacao-risco",
-                          query: {
-                            id: paciente.id,
-                            leito: paciente.leito,
-                            dataNascimento: paciente.dataNascimento,
-                            admissao: paciente.dataAdmissao,
-                            nome: paciente.nome,
-                            cpf: paciente.cpf,
-                            prontuario: paciente.prontuario,
-                            cartaoSus: paciente.cartaoSus
-                          }
-                        }} className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10">
+                        <Link
+                          href={{
+                            pathname: "/estratificacao-risco",
+                            query: {
+                              id: paciente.id,
+                              leito: paciente.leito,
+                              dataNascimento: paciente.dataNascimento,
+                              admissao: paciente.dataAdmissao,
+                              nome: paciente.nome,
+                              cpf: paciente.cpf,
+                              prontuario: paciente.prontuario,
+                              cartaoSus: paciente.cartaoSus,
+                            },
+                          }}
+                          className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10"
+                        >
                           Sim
                         </Link>
                       </div>
