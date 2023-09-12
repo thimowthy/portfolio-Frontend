@@ -44,13 +44,13 @@ const mockedPatients = [
 ];
 
 const DadosPacientePage = () => {
-  const [selectedPatient, setSelectedPatient] = useState<Paciente>({});
-  const [patients, setPatients] = useState<Paciente>();
+  const [ selectedPatient, setSelectedPatient ] = useState<Paciente>({});
+  const [ patients, setPatients ] = useState<Paciente>();
   useEffect(() => {
     const fetchTest = async () => {
       try {
         const result = await fetcher(
-          "https://localhost:7091/Paciente/GetListPatients",
+          "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatients",
           "GET",
           "",
           "",

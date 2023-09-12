@@ -12,9 +12,15 @@ const SelectCargos = dynamic(() => import("../components/SelectUsuario"), {
 const FormUsuario = dynamic(() => import("../components/FormUsuario"), {
   ssr: false
 });
-const ListUsuario = dynamic(() => import("../components/ListUsuarios"));
-const EditUsuario = dynamic(() => import("../components/EditUsuario"));
-const DeleteUsuario = dynamic(() => import("../components/DeleteUsuario"));
+const ListUsuario = dynamic(() => import("../components/ListUsuarios"), {
+  ssr: false
+});
+const EditUsuario = dynamic(() => import("../components/EditUsuario"), {
+  ssr: false
+});
+const DeleteUsuario = dynamic(() => import("../components/DeleteUsuario"), {
+  ssr: false
+});
 
 const CrudUsuario = () => {
   const [ user, setUser ] = useState({});
@@ -39,7 +45,6 @@ const CrudUsuario = () => {
 
   const fetchUsers = async () => {
     try {
-      // Realize a solicitação de busca de usuários aqui
       setLoading(true);
       const usersList = await fetcher("https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/GetListUsers", "GET", "Content-Type: application/json", "");
       const filteredList = usersList.filter((u: Usuario) => u.ativo);
@@ -55,7 +60,6 @@ const CrudUsuario = () => {
     <>
       <SeoConfig title="Usuários"/>
       <Header />
-      {loading && <Loader />}
       {listUsers && <ListUsuario setCreateUser={setCreateUser} setListUsers={setListUsers} setUpdateUser={setUpdateUser} setDeleteUser={setDeleteUser} setUser={setUser} setLoading={setLoading} loading={loading} fetchUsers={fetchUsers} users={users}/>}
       {createUser && <SelectCargos
         cargoSelecionado={selectedRole}
@@ -65,6 +69,7 @@ const CrudUsuario = () => {
       {createUser && <FormUsuario cargo={selectedRole} setListUsers={setListUsers} setCreateUser={setCreateUser} setLoading={setLoading}/>}
       {updateUser && <EditUsuario setListUsers={setListUsers} setUpdateUser={setUpdateUser} user={user} setLoading={setLoading}/>}
       {deleteUser && <DeleteUsuario user={user} open={true} setDeleteUser={setDeleteUser} setLoading={setLoading} fetchUsers={fetchUsers}/>}
+      {loading && <Loader />}
     </>
   );
 };

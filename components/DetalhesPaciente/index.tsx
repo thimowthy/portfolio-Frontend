@@ -7,6 +7,7 @@ import bad from "../../public/bad.png";
 import veryBad from "../../public/very_bad.png";
 import febreImg from "../../public/termometro.png";
 import moment from "moment";
+import Link from "next/link";
 
 export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   const quantidadeNeutrofilos =
@@ -52,6 +53,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     };
     init();
   }, []);
+
   return (
     <div>
       <>
@@ -255,9 +257,21 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                           Não
                         </button>
 
-                        <button className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10">
+                        <Link href={{
+                          pathname: "/estratificacao-risco",
+                          query: {
+                            id: paciente.id,
+                            leito: paciente.leito,
+                            dataNascimento: paciente.dataNascimento,
+                            admissao: paciente.dataAdmissao,
+                            nome: paciente.nome,
+                            cpf: paciente.cpf,
+                            prontuario: paciente.prontuario,
+                            cartaoSus: paciente.cartaoSus
+                          }
+                        }} className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10">
                           Sim
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </div>
