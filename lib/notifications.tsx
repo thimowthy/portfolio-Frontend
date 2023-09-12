@@ -7,7 +7,7 @@ import { useToasterStore } from "react-hot-toast/headless";
 import exclamationImg from "../public/exclamation.svg";
 import browserNotification from "../utils/browserNotification";
 import syncNotification from "./syncNotifications";
-import api from "@/api";
+import api from "@/helpers";
 /**
  * Component that show the notifications in the layout.
  * @component
