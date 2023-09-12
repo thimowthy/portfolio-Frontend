@@ -35,7 +35,7 @@ export default function Notifications() {
       {notifications?.map((notification: Notificacao) => {
         if (notification.id) {
           browserNotification.browserNotify({
-            title: notification.title || "Atenção!!",
+            title: notification.titulo || "Atenção!!",
             body: notification.mensagem,
           });
           toast.custom(
@@ -56,7 +56,7 @@ export default function Notifications() {
                     </div>
                     <div className="ml-3 flex-1">
                       <p className="text-sm font-medium text-gray-900">
-                        {notification.title}
+                        {notification.titulo}
                       </p>
                       <p className="mt-1 text-sm text-gray-500">
                         {notification.mensagem}

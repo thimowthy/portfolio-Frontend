@@ -1,8 +1,7 @@
 interface Notificacao {
   id: number;
-  title: string;
-  leito: string;
+  titulo: string;
   mensagem: string;
   idPaciente: number;
-  lida: boolean;
+  isLida: boolean;
 }

@@ -25,7 +25,7 @@ export default function Notification({
             </div>
             <div className="ml-3 flex-1">
               <p className="text-sm font-medium text-gray-900">
-                {notification.title}
+                {notification.titulo}
               </p>
               <p className="mt-1 text-sm text-gray-500">
                 {notification.mensagem}
