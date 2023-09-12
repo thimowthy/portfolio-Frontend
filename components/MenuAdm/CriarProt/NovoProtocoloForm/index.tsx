@@ -39,18 +39,17 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
 
   const sendProtocolo = async (protocolo: Protocolo) => {
     try {
-      // ATUALIZAR URL
-      const response = await fetch("http://localhost:3001/protocolos", {
+      const response = await fetch("https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/CadastrarProtocolo", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(protocolo),
+        body: JSON.stringify(JSON.stringify(protocolo)),
       });
-  
+      //console.log("'"+JSON.stringify(protocolo)+"'");
       if (response.ok) {
-        const responseData = await response.json();
-        console.log("Protocolo saved successfully:", responseData);
+        //const responseData = await response.json();
+        //console.log("Protocolo saved successfully:", responseData);
         setSendToast(true);
         Router.push("/menu");
       } else {
