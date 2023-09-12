@@ -33,7 +33,10 @@ export default function Notifications() {
     <>
       {notifications.map((notification: Notificacao) => {
         if (!notification.lida) {
-          // browserNotification.browserNotify({ title: notification.title, body: notification.mensagem });
+          browserNotification.browserNotify({
+            title: notification.title,
+            body: notification.mensagem,
+          });
           toast.custom(
             (t) => (
               <div
