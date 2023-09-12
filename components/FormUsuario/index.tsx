@@ -7,20 +7,15 @@ import Image from "next/image";
 export default function FormUsuario({ cargo, setCreateUser, setListUsers, setLoading }: any) {
   const router = useRouter();
 
-  const [nome, setNome] = useState("");
-  const [cpf, setCpf] = useState("");
-  const [senha, setSenha] = useState("");
-  const [certificado, setCertificado] = useState("");
-  const [userName, setUserName] = useState("");
-  const [ativo, setAtivo] = useState(true);
-  const [error, setError] = useState(false);
+  const [ nome, setNome ] = useState("");
+  const [ cpf, setCpf ] = useState("");
+  const [ senha, setSenha ] = useState("");
+  const [ certificado, setCertificado ] = useState("");
+  const [ userName, setUserName ] = useState("");
+  const [ ativo, setAtivo ] = useState(true);
+  const [ error, setError ] = useState(false);
 
   function backToList() {
-    setCreateUser(false);
-    setListUsers(true);
-  }
-
-  function backToList(){
     setCreateUser(false);
     setListUsers(true);
   }
