@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import ArrowLeft from "../../public/arrow_left.svg";
 import Image from "next/image";
 
-export default function FormUsuario({ cargo, setCreateUser, setListUsers }: any) {
+export default function FormUsuario({ cargo, setCreateUser, setListUsers, setLoading }: any) {
   const router = useRouter();
 
   const [ nome, setNome ] = useState("");
@@ -23,6 +23,8 @@ export default function FormUsuario({ cargo, setCreateUser, setListUsers }: any)
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
+      setLoading(true);
+
       const formData = {
         nome,
         senha,
@@ -30,10 +32,10 @@ export default function FormUsuario({ cargo, setCreateUser, setListUsers }: any)
         cpf,
         profissao: cargo.valor,
         certificado,
-        ativo
+        ativo: true
       };
 
-      const response = await fetch("https://localhost:7091/Usuario/Create", {
+      const response = await fetch("https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/Create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -41,11 +43,17 @@ export default function FormUsuario({ cargo, setCreateUser, setListUsers }: any)
         body: JSON.stringify(formData)
       });
 
-      if(response.ok){
-        alert("Usuário criado com sucesso");
-      } else {
-        setError(true);
-      }
+      setTimeout(() => {
+        setLoading(false);
+        if(response.ok){
+          alert("Usuário criado com sucesso");
+          setCreateUser(false);
+          setListUsers(true);
+        } else {
+          alert("Erro ao atualizar usuário");
+          //setError(true);
+        }
+      }, 1500);
 
     } catch (error) {
       console.error(error);
@@ -159,7 +167,7 @@ export default function FormUsuario({ cargo, setCreateUser, setListUsers }: any)
             </div> */}
           </div>
 
-          <div className="flex p-2 rounded-lg items-center">
+          {/* <div className="flex p-2 rounded-lg items-center">
             <label htmlFor="ativo" className="ml-1">
               Ativo
             </label>
@@ -171,7 +179,7 @@ export default function FormUsuario({ cargo, setCreateUser, setListUsers }: any)
               checked={ativo}
               onChange={() => setAtivo(!ativo)}
             />
-          </div>
+          </div> */}
         </div>
         <div className="flex w-full items-center mt-3">
           <button

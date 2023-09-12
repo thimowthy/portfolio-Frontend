@@ -1,15 +1,34 @@
-import { useState, useEffect } from "react";
-
-export default function DeleteUsuario({ user, onDelete, setDeleteUser }: any) {
+export default function DeleteUsuario({ user, setDeleteUser, setLoading, fetchUsers }: any) {
 
   const closeModal = () => {
     //setIsModalOpen(false);
     setDeleteUser(false);
   };
 
-  const handleDelete = () => {
-    onDelete(user.id); // Substitua com a lógica real de exclusão
+  const handleDelete = async () => {
     closeModal();
+    setLoading(true);
+    const response = await fetch(`https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/DeleteUser/${user.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+      
+      setTimeout(() => {
+        setLoading(false);
+        if(response.ok){
+          alert("Usuário removido com sucesso");
+          setDeleteUser(false);
+        } else {
+          alert("Erro ao remover usuário");
+        }
+      }, 1000);
+
+      setTimeout(async () => {
+        await fetchUsers();
+      }, 1000);
+
   };
   return (
       <div className="fixed inset-0 flex items-center justify-center z-50">
