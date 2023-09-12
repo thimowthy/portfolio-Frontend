@@ -1,7 +1,7 @@
 import Image from "next/image";
 import toast, { Toaster } from "react-hot-toast";
 import exclamationImg from "../public/exclamation.svg";
-// TODO: documentação do typdoc
+
 export default function Notification({
   notification,
 }: {

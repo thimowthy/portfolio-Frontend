@@ -8,7 +8,10 @@ import { useEffect, useState } from "react";
 import browserNotification from "../utils/browserNotification";
 import syncNotification from "./syncNotifications";
 import { useRouter } from "next/router";
-
+/**
+ * Component that show the notifications in the layout.
+ * @component
+ */
 export default function Notifications() {
   const router = useRouter();
   browserNotification.requestPermission();

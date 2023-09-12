@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import dynamic from "next/dynamic";
 import fetcher from "@/api/fetcher";
 import SeoConfig from "../../../components/SeoConfig/index";
 import toast, { Toaster } from "react-hot-toast";
 import DetalhesPaciente from "../../../components/DetalhesPaciente";
-import exclamationImg from "../../../public/exclamation.svg";
 
 const DynamicTabComponent = dynamic(
   () => import("../../../components/TabDadosPaciente"),

@@ -1,4 +1,7 @@
-// TODO: documentação do typdoc
+/**
+ * Requer a permissão para as notificações do sistema.
+ * @returns {void}.
+ */
 const requestPermission = () => {
   if (typeof window !== "undefined") {
     if (!("Notification" in window)) {
@@ -17,7 +20,12 @@ const requestPermission = () => {
     }
   }
 };
-// TODO: documentação do typdoc
+/**
+ * Método para mostrar a notificação nativa do browser baseada em um título e um corpo da mensagem.
+ * @param {title} string - Título da notificação.
+ * @param {body} string - Corpo da notificação.
+ * @returns {void}.
+ */
 const browserNotify = ({ title, body }: { title: string; body: string }) => {
   if (!("Notification" in window)) {
     console.log("Browser does not support desktop notification");

@@ -1,5 +1,8 @@
 import fetcher from "@/api/fetcher";
-
+/**
+ * função para sincronizar as notificações com o back.
+ * @returns {object[]} array com o objeto de notificações.
+ */
 export default async function syncNotification() {
   const notificacions = await fetcher({
     rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Notificacao/GetAllNotSent",
