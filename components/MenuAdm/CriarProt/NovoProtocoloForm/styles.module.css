@@ -1,0 +1,96 @@
+.formContainer {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 80px repeat(2, 60px) 10px 30px;
+  gap: 16px;
+}
+
+.inputField {
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  border: 2px solid #fff;
+  transition: border-color 0.7s;
+}
+
+.inputField:focus {
+  border: 2px solid #689f92;
+  outline: none;
+}
+.nameInput {
+  grid-column: 1 / span 3;
+}
+.versionInput {
+  grid-column: 4;
+}
+.yearInput {
+  grid-column: 5;
+}
+
+#diagBtn {
+  grid-row: 2;
+  grid-column: 4 / span 2;
+}
+#tratBtn {
+  grid-row: 3;
+  grid-column: 4 / span 2;
+}
+#saveBtn {
+  grid-row: 5;
+  grid-column: 4 / span 2;
+}
+
+.textDiv {
+  grid-row: 2 / span 7;
+  grid-column: 1 / span 3;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 16px;
+}
+.textInfo {
+  text-align: justify;
+  font-size: 20px;
+  padding: 0 30px;
+}
+.btn {
+  display: flex;
+  justify-content: center;
+}
+.actionButton, .saveButton {
+  display: flex;
+  height: 50px;
+  padding: 5px 80px;
+  border-radius: 20px;
+  margin: 10px 0;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 10px;
+  background-color: #fff;
+  color: #444;
+  font-size: 22px;
+  font-weight: bold;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.saveButton {
+  padding: 5px 50px;
+  border-radius: 30px;
+  margin-top: 15px;
+  background-color: #C55A11;
+  color: #fff;
+}
+.saveButton:hover {
+  background-color: #D66B22;
+}
+
+.actionButton:hover, .saveButton:hover {
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.5);
+}
+.toasts {
+  position: absolute;
+  left: 2%;
+  bottom: 2%;
+}
