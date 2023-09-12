@@ -39,7 +39,7 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
 
   const sendProtocolo = async (protocolo: Protocolo) => {
     try {
-      const response = await fetch("https://localhost:7091/Protocolo/CadastrarProtocolo", {
+      const response = await fetch("https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/CadastrarProtocolo", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
