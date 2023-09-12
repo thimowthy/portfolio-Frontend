@@ -4,7 +4,7 @@ import fetcher from "@/api/fetcher";
  * @returns {object[]} array com o objeto de notificações.
  */
 export default async function syncNotification() {
-  const notificacions = await fetcher({
+  const notifications = await fetcher({
     rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Notificacao/GetAllNotSent",
     metodo: "GET",
   });
@@ -14,7 +14,7 @@ export default async function syncNotification() {
   let existingNotificationIds = existingNotifications?.map(
     (notification: Notificacao) => notification.id,
   );
-  notificacions.map((notification: Notificacao) => {
+  notifications.map((notification: Notificacao) => {
     if (existingNotificationIds.indexOf(notification.id) < 0) {
       existingNotifications.push(notification);
     }

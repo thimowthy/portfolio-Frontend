@@ -39,7 +39,6 @@ const DadosPacientePage = ({ pacientes }: any) => {
   return (
     <>
       <SeoConfig title="Lista de pacientes" />
-      <Toaster />
       <section className="flex min-h-full flex items-center">
         <div className="basis-2/5 mr-2">
           <DynamicTabComponent

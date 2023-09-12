@@ -1,13 +1,13 @@
 "use client";
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { useToasterStore } from "react-hot-toast/headless";
 import exclamationImg from "../public/exclamation.svg";
-// useToasterStore
-import { useEffect, useState } from "react";
 import browserNotification from "../utils/browserNotification";
 import syncNotification from "./syncNotifications";
-import { useRouter } from "next/router";
+import api from "@/api";
 /**
  * Component that show the notifications in the layout.
  * @component
@@ -20,6 +20,7 @@ export default function Notifications() {
   useEffect(() => {
     const getAllNotifications = async () => {
       const allNotifications = await syncNotification();
+      console.log(allNotifications);
       setNotifications(allNotifications);
     };
     getAllNotifications();
@@ -31,10 +32,10 @@ export default function Notifications() {
 
   return (
     <>
-      {notifications.map((notification: Notificacao) => {
-        if (!notification.lida) {
+      {notifications?.map((notification: Notificacao) => {
+        if (notification.id) {
           browserNotification.browserNotify({
-            title: notification.title,
+            title: notification.title || "Atenção!!",
             body: notification.mensagem,
           });
           toast.custom(
@@ -65,10 +66,14 @@ export default function Notifications() {
                 </div>
                 <div className="flex border-l border-gray-200 flex-col">
                   <button
-                    onClick={() => toast.dismiss(t.id)}
+                    onClick={() =>
+                      api.confirmNotification(`${notification.id}`).then(() => {
+                        toast.dismiss(t.id);
+                      })
+                    }
                     className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >
-                    Fechar
+                    Confirmar leitura
                   </button>
 
                   <button
