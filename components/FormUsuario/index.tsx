@@ -1,8 +1,10 @@
 import { useState, FormEvent } from "react";
 import ErrorToast from "../toasts/errorToast";
 import { useRouter } from "next/navigation";
+import ArrowLeft from "../../public/arrow_left.svg";
+import Image from "next/image";
 
-export default function FormUsuario({ cargo }: any) {
+export default function FormUsuario({ cargo, setCreateUser, setListUsers, setLoading }: any) {
   const router = useRouter();
 
   const [ nome, setNome ] = useState("");
@@ -13,19 +15,27 @@ export default function FormUsuario({ cargo }: any) {
   const [ ativo, setAtivo ] = useState(true);
   const [ error, setError ] = useState(false);
 
+  function backToList(){
+    setCreateUser(false);
+    setListUsers(true);
+  }
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
+      setLoading(true);
+
       const formData = {
         nome,
         senha,
         userName,
         cpf,
         profissao: cargo.valor,
-        certificado
+        certificado,
+        ativo: true
       };
 
-      const response = await fetch("https://localhost:7091/api/v1/usuario", {
+      const response = await fetch("https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/Create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,11 +43,17 @@ export default function FormUsuario({ cargo }: any) {
         body: JSON.stringify(formData)
       });
 
-      if(response.ok){
-        alert("Usuário criado com sucesso");
-      } else {
-        setError(true);
-      }
+      setTimeout(() => {
+        setLoading(false);
+        if(response.ok){
+          alert("Usuário criado com sucesso");
+          setCreateUser(false);
+          setListUsers(true);
+        } else {
+          alert("Erro ao atualizar usuário");
+          //setError(true);
+        }
+      }, 1500);
 
     } catch (error) {
       console.error(error);
@@ -47,7 +63,8 @@ export default function FormUsuario({ cargo }: any) {
   return (
     <div className="flex flex-col w-[40%] h-[60%] mx-auto mt-7 bg-[#fff] rounded-lg">
       {error && <ErrorToast title="Erro no cadastro" message="Erro ao cadastrar usuário" onClose={() => setError(false)}/>}
-      <div className="flex items-center justify-center w-full h-12 gap-3 p-2 border-b-2">
+      <div className="flex items-center justify-center w-full h-12 gap-3 p-2 border-b-2 relative" onClick={() => backToList()}>
+        <Image className="absolute left-4 cursor-pointer" src={ArrowLeft} alt="Voltar"/>
         <h3 className="text-xl">Cadastro de {cargo.nome}</h3>
       </div>
       <form onSubmit={handleSubmit}>
@@ -150,7 +167,7 @@ export default function FormUsuario({ cargo }: any) {
             </div> */}
           </div>
 
-          <div className="flex p-2 rounded-lg items-center">
+          {/* <div className="flex p-2 rounded-lg items-center">
             <label htmlFor="ativo" className="ml-1">
               Ativo
             </label>
@@ -162,7 +179,7 @@ export default function FormUsuario({ cargo }: any) {
               checked={ativo}
               onChange={() => setAtivo(!ativo)}
             />
-          </div>
+          </div> */}
         </div>
         <div className="flex w-full items-center mt-3">
           <button
