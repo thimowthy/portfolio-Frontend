@@ -41,7 +41,7 @@ const CrudUsuario = () => {
     try {
       // Realize a solicitação de busca de usuários aqui
       setLoading(true);
-      const usersList = await fetcher("https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/GetListUsers", "GET", "Content-Type: application/json", "");
+      const usersList = await fetcher({ rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/GetListUsers", metodo: "GET", cabecalho: "Content-Type: application/json" });
       const filteredList = usersList.filter((u: Usuario) => u.ativo);
       setUsers(filteredList);
     } catch (error) {
@@ -53,18 +53,18 @@ const CrudUsuario = () => {
 
   return (
     <>
-      <SeoConfig title="Usuários"/>
+      <SeoConfig title="Usuários" />
       <Header />
       {loading && <Loader />}
-      {listUsers && <ListUsuario setCreateUser={setCreateUser} setListUsers={setListUsers} setUpdateUser={setUpdateUser} setDeleteUser={setDeleteUser} setUser={setUser} setLoading={setLoading} loading={loading} fetchUsers={fetchUsers} users={users}/>}
+      {listUsers && <ListUsuario setCreateUser={setCreateUser} setListUsers={setListUsers} setUpdateUser={setUpdateUser} setDeleteUser={setDeleteUser} setUser={setUser} setLoading={setLoading} loading={loading} fetchUsers={fetchUsers} users={users} />}
       {createUser && <SelectCargos
         cargoSelecionado={selectedRole}
         cargos={cargos}
         setSelectedRole={setSelectedRole}
       />}
-      {createUser && <FormUsuario cargo={selectedRole} setListUsers={setListUsers} setCreateUser={setCreateUser} setLoading={setLoading}/>}
-      {updateUser && <EditUsuario setListUsers={setListUsers} setUpdateUser={setUpdateUser} user={user} setLoading={setLoading}/>}
-      {deleteUser && <DeleteUsuario user={user} open={true} setDeleteUser={setDeleteUser} setLoading={setLoading} fetchUsers={fetchUsers}/>}
+      {createUser && <FormUsuario cargo={selectedRole} setListUsers={setListUsers} setCreateUser={setCreateUser} setLoading={setLoading} />}
+      {updateUser && <EditUsuario setListUsers={setListUsers} setUpdateUser={setUpdateUser} user={user} setLoading={setLoading} />}
+      {deleteUser && <DeleteUsuario user={user} open={true} setDeleteUser={setDeleteUser} setLoading={setLoading} fetchUsers={fetchUsers} />}
     </>
   );
 };
