@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Image from "next/image";
-import fetcher from "@/api/fetcher";
 import AddUser from "../../public/add_user.svg";
 import EditUser from "../../public/pencil.svg";
 import DeleteUser from "../../public/trash.svg";
