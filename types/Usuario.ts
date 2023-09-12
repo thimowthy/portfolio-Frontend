@@ -1,8 +1,9 @@
-type DadosCadastro = {
+type Usuario = {
+  id: number
   nome: string
+  userName: string
   cpf: string
-  codigo: number
   ativo: boolean
   certificado: string
-  senha: string
+  profissao: string
 };

@@ -57,8 +57,8 @@ body {
 
 .lista-pacientes_tab-content,
 .detalhes-paciente {
-  max-height: 70vh;
-  height: 70vh;
+  max-height: 80vh;
+  height: 80vh;
 }
 
 .lista-pacientes ::-webkit-scrollbar {
