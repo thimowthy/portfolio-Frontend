@@ -79,3 +79,7 @@ body {
 .lista-pacientes ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.default-tab {
+  background: #AFAFAF;
+}

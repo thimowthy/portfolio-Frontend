@@ -1,17 +1,31 @@
-const TabItem = ({ href, className, title }: any) => {
+const TabItem = ({
+  href,
+  className,
+  title,
+  active,
+  children,
+  liClassName,
+}: {
+  href: string;
+  className?: string;
+  title?: string;
+  active?: boolean;
+  children?: any;
+  liClassName?: string;
+}) => {
   return (
-    <li role="presentation" className="bg-[#DADADA]">
+    <li role="presentation" className={liClassName}>
       <a
-        href={href}
+        href={`#${href}`}
         className={className}
         data-te-toggle="pill"
-        data-te-target={href}
-        data-te-nav-active
+        data-te-target={`#${href}`}
+        data-te-nav-active={active}
         role="tab"
         aria-controls={href}
-        aria-selected="true"
+        aria-selected={active || undefined}
       >
-        {title}
+        {title || children}
       </a>
     </li>
   );

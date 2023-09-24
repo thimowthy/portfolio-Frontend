@@ -18,7 +18,7 @@ type EstratificacaoProps = {
   dataNascimento?: string;
   nome?: string;
   cpf?: string;
-  prontuario?: string;
+  numeroProntuario?: string;
   cartaoSus?: string;
   leito?: string;
 };
@@ -192,8 +192,8 @@ export default function FormEstratificacao({ paciente, setLoading }: any) {
               <ul className="pt-5">
                 <li>
                   Prontuário:{" "}
-                  {paciente.prontuario != ""
-                    ? paciente.prontuario
+                  {paciente.numeroProntuario != ""
+                    ? paciente.numeroProntuario
                     : "0982633/0"}
                 </li>
                 <li>Leito: {paciente.leito !== "" ? paciente.leito : "3C"}</li>

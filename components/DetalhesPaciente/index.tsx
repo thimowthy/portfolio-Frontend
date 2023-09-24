@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./styles.module.css";
 import good from "../../public/good.png";
@@ -8,6 +8,12 @@ import veryBad from "../../public/very_bad.png";
 import febreImg from "../../public/termometro.png";
 import moment from "moment";
 import Link from "next/link";
+import TabList from "../TabList";
+import TabItem from "../TabItem";
+import TabContents from "../TabContents/index";
+import api from "@/helpers";
+import ErrorToast from "../toasts/errorToast";
+import SuccessToast from "../toasts/successToast";
 
 export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   const quantidadeNeutrofilos =
@@ -60,26 +66,22 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   return (
     <div>
       <>
-        <ul
-          className="flex list-none flex-row flex-wrap border-b-0 pl-0"
-          role="tablist"
-          data-te-nav-ref
-        >
-          <li role="presentation" className="bg-[#DADADA]">
+        <TabList className="flex list-none flex-row flex-wrap border-b-0 pl-0">
+          <li role="presentation">
             <a
-              href="#tabs-todos"
-              className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent dark:text-neutral-400 default-tab"
+              href="#tabs-neutral"
+              className="disabled block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
               data-te-toggle="pill"
-              data-te-target="#tabs-todos"
-              data-te-nav-active
+              data-te-target="#tabs-neutral"
               role="tab"
-              aria-controls="tabs-todos"
+              aria-controls="tabs-neutral"
               aria-selected="true"
+              data-te-nav-active
             >
               Paciente
             </a>
           </li>
-        </ul>
+        </TabList>
         <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
           {paciente.id && (
             <>
@@ -121,7 +123,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                     )}
                 </h1>
               </div>
-              <div className="flex gap-x-4 pt-4 pb-4">
+              <div className="flex gap-x-4 pt-4 pb-2">
                 <div>
                   <p>CPF: {paciente.cpf}</p>
                   <p>
@@ -130,11 +132,11 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                       ? moment(paciente?.dataNascimento).format("DD/MM/YYYY")
                       : ""}
                   </p>
-                  {/* <p>Cartão SUS: {paciente.cartaoSus}</p> */}
+                  <p>Cartão SUS: {paciente.cartaoSus}</p>
                 </div>
 
                 <div>
-                  {/* <p>Prontuário: {paciente.prontuario}</p> */}
+                  <p>Prontuário: {paciente.numeroProntuario}</p>
                   <p>
                     Leito:{" "}
                     {paciente?.situacoesPaciente !== undefined &&
@@ -145,21 +147,14 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                   {/* <p>Unidade: {paciente.unidade}</p> */}
                 </div>
               </div>
-              <hr />
-              <div className="pt-2">
-                <h1 className="text-2xl">Progresso do tratamento</h1>
-                <div className="flex flex-row rounded-full bg-white mt-4">
-                  <div className="basis-1/4 bg-yellow-800 py-2 pl-2 rounded-bl-full rounded-tl-full">
-                    <p className="text-white">D0: 10/07/2023</p>
-                  </div>
-                </div>
-                <div className="pt-2 flex flex-row gap-x-2">
-                  <div className="basis-1/2">
-                    <p>Data de admissão: {paciente.dataAdmissao}</p>
-                    <div className="rounded-md bg-green-200 p-2 mt-4">
-                      <p className="text-xl">
-                        {/* Prontuário {paciente.prontuario} */}
-                      </p>
+
+              <div>
+                <div className="rounded-md bg-green-200 p-2 w-100">
+                  <p className="text-xl">
+                    Prontuário {paciente.numeroProntuario}
+                  </p>
+                  {paciente?.comorbidades &&
+                    paciente?.comorbidades?.length > 0 && (
                       <div className="py-1">
                         <p className="text-lg pl-2">Comorbidades:</p>
                         {paciente?.comorbidades?.map(
@@ -175,24 +170,25 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                           },
                         )}
                       </div>
-                      <div className="py-1">
-                        <p className="text-lg pl-2">Alergias:</p>
-                        {paciente?.alergias?.map((alergia: any) => {
-                          return (
-                            <p key={alergia.nome} className="text-sm pl-4">
-                              {alergia?.nome}
-                            </p>
-                          );
-                        })}
-                      </div>
-                      {/* <div className="py-1">
+                    )}
+                  <div className="py-1">
+                    <p className="text-lg pl-2">Alergias:</p>
+                    {paciente?.alergias?.map((alergia: any) => {
+                      return (
+                        <p key={alergia.nome} className="text-sm pl-4">
+                          {alergia?.nome}
+                        </p>
+                      );
+                    })}
+                  </div>
+                  {/* <div className="py-1">
                         <p className="text-lg pl-2">
                           Última prescrição: {paciente.prescricao?.data}
                         </p>
                         {paciente.prescricao?.medicamentos.map(
                           (prescricao: any) => (
                             <p
-                              key={prescricao.prontuario}
+                              key={prescricao.numeroProntuario}
                               className="text-sm pl-4"
                             >
                               {prescricao.medicacao +
@@ -202,90 +198,263 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                           ),
                         )}
                       </div> */}
-                      <div className="flex justify-end">
-                        <a href="#" className="text-right text-sm">
-                          Ver prontuário completo
-                        </a>
+                  <div className="flex justify-end">
+                    <a href="#" className="text-right text-sm">
+                      Ver prontuário completo
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <hr />
+              <div className="pt-2">
+                <h1 className="text-2xl">Progresso do tratamento</h1>
+
+                {/* TODO: for (paciente.situacoesPaciente as situacao) */}
+
+                <TabList className="flex flex-row rounded-full bg-white mt-4">
+                  <TabItem
+                    href="D0"
+                    liClassName="basis-1/5 bg-orange-900 py-2 pl-2 rounded-bl-full rounded-tl-full"
+                    active={true}
+                  >
+                    <p className="text-white">D0: 10/07/2023</p>
+                  </TabItem>
+                  <TabItem
+                    href="D1"
+                    liClassName="basis-1/5 bg-yellow-800 py-2 pl-2"
+                  >
+                    <p className="text-white">D1: 11/07/2023</p>
+                  </TabItem>
+                  <TabItem
+                    href="D3"
+                    liClassName="basis-1/5 bg-yellow-700 py-2 pl-2"
+                  >
+                    <p className="text-white">D3: 13/07/2023</p>
+                  </TabItem>
+                  <TabItem
+                    href="D5"
+                    liClassName="basis-1/5 bg-amber-600 py-2 pl-2"
+                  >
+                    <p className="text-white">D5: 15/07/2023</p>
+                  </TabItem>
+                  <TabItem
+                    href="last"
+                    liClassName="basis-1/5 bg-amber-500 py-2 pl-2 rounded-br-full rounded-tr-full"
+                  >
+                    <p className="text-white">Atual: 17/07/2023</p>
+                  </TabItem>
+                </TabList>
+                {/* TODO: ENDFOR */}
+                <TabContents tabId="D0" active={true}>
+                  <div className="pt-2 flex flex-row gap-x-2">
+                    <div className="basis-1/2">
+                      <p>Data de admissão: {paciente.dataAdmissao} D0 TAB </p>
+                    </div>
+                    <div className="basis-1/2">
+                      <div className="flex justify-center flex-col items-end text-center">
+                        <div>
+                          <p className="text-center">Neutrófilos:</p>
+                          <p className="text-red-500">
+                            {paciente?.situacoesPaciente !== undefined &&
+                              paciente?.situacoesPaciente[0]?.diagnosticos[0]
+                                ?.neutrofilos}
+                            /mm3
+                          </p>
+                          <div className="flex justify-center">
+                            <div
+                              className={selectLabelNeutrofilos(
+                                quantidadeNeutrofilos || 0,
+                              )}
+                            ></div>
+                          </div>
+
+                          <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
+                            Acessar +exames
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
+                </TabContents>
 
-                  <div className="basis-1/2">
-                    <div className="flex justify-center flex-col items-end text-center">
-                      <div>
-                        <p className="text-center">Neutrófilos:</p>
-                        <p className="text-red-500">
-                          {paciente?.situacoesPaciente !== undefined &&
-                            paciente?.situacoesPaciente[0]?.diagnosticos[0]
-                              ?.neutrofilos}
-                          /mm3
-                        </p>
-                        <div className="flex justify-center">
-                          <div
-                            className={selectLabelNeutrofilos(
-                              quantidadeNeutrofilos || 0,
-                            )}
-                          ></div>
+                <TabContents tabId="D1" active={false}>
+                  <div className="pt-2 flex flex-row gap-x-2">
+                    <div className="basis-1/2">
+                      <p>Data de admissão: {paciente.dataAdmissao} D1 TAB</p>
+                    </div>
+                    <div className="basis-1/2">
+                      <div className="flex justify-center flex-col items-end text-center">
+                        <div>
+                          <p className="text-center">Neutrófilos:</p>
+                          <p className="text-red-500">
+                            {paciente?.situacoesPaciente !== undefined &&
+                              paciente?.situacoesPaciente[0]?.diagnosticos[0]
+                                ?.neutrofilos}
+                            /mm3
+                          </p>
+                          <div className="flex justify-center">
+                            <div
+                              className={selectLabelNeutrofilos(
+                                quantidadeNeutrofilos || 0,
+                              )}
+                            ></div>
+                          </div>
+
+                          <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
+                            Acessar +exames
+                          </button>
                         </div>
-
-                        <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
-                          Acessar +exames
-                        </button>
                       </div>
                     </div>
+                  </div>
+                </TabContents>
 
-                    <div>
-                      <h1 className="text-xl flex">
-                        Febre?{" "}
-                        <span
-                          className="text-xl"
-                          data-te-toggle="tooltip"
-                          data-te-html="true"
-                          data-te-ripple-init
-                          data-te-ripple-color="light"
-                          title=">38,3°C medida única, OU >38°C por mais de 1h"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="#3FB8FC"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-4 h-4"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
-                            />
-                          </svg>
-                        </span>
-                      </h1>
-                      <div className="flex mt-2">
-                        <button className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10">
-                          Não
-                        </button>
+                <TabContents tabId="D3" active={false}>
+                  <div className="pt-2 flex flex-row gap-x-2">
+                    <div className="basis-1/2">
+                      <p>Data de admissão: {paciente.dataAdmissao} D3 TAB</p>
+                    </div>
+                    <div className="basis-1/2">
+                      <div className="flex justify-center flex-col items-end text-center">
+                        <div>
+                          <p className="text-center">Neutrófilos:</p>
+                          <p className="text-red-500">
+                            {paciente?.situacoesPaciente !== undefined &&
+                              paciente?.situacoesPaciente[0]?.diagnosticos[0]
+                                ?.neutrofilos}
+                            /mm3
+                          </p>
+                          <div className="flex justify-center">
+                            <div
+                              className={selectLabelNeutrofilos(
+                                quantidadeNeutrofilos || 0,
+                              )}
+                            ></div>
+                          </div>
 
-                        <Link
-                          href={{
-                            pathname: "/estratificacao-risco",
-                            query: {
-                              id: paciente.id,
-                              leito: paciente.leito,
-                              dataNascimento: paciente.dataNascimento,
-                              admissao: paciente.dataAdmissao,
-                              nome: paciente.nome,
-                              cpf: paciente.cpf,
-                              prontuario: paciente.prontuario,
-                              cartaoSus: paciente.cartaoSus,
-                            },
-                          }}
-                          className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10"
-                        >
-                          Sim
-                        </Link>
+                          <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
+                            Acessar +exames
+                          </button>
+                        </div>
                       </div>
                     </div>
+                  </div>
+                </TabContents>
+
+                <TabContents tabId="D5" active={false}>
+                  <div className="pt-2 flex flex-row gap-x-2">
+                    <div className="basis-1/2">
+                      <p>Data de admissão: {paciente.dataAdmissao} D4 TAB</p>
+                    </div>
+                    <div className="basis-1/2">
+                      <div className="flex justify-center flex-col items-end text-center">
+                        <div>
+                          <p className="text-center">Neutrófilos:</p>
+                          <p className="text-red-500">
+                            {paciente?.situacoesPaciente !== undefined &&
+                              paciente?.situacoesPaciente[0]?.diagnosticos[0]
+                                ?.neutrofilos}
+                            /mm3
+                          </p>
+                          <div className="flex justify-center">
+                            <div
+                              className={selectLabelNeutrofilos(
+                                quantidadeNeutrofilos || 0,
+                              )}
+                            ></div>
+                          </div>
+
+                          <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
+                            Acessar +exames
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </TabContents>
+
+                <TabContents tabId="last" active={false}>
+                  <div className="pt-2 flex flex-row gap-x-2">
+                    <div className="basis-1/2">
+                      <p>Data de admissão: {paciente.dataAdmissao} LAST TAB</p>
+                    </div>
+                    <div className="basis-1/2">
+                      <div className="flex justify-center flex-col items-end text-center">
+                        <div>
+                          <p className="text-center">Neutrófilos:</p>
+                          <p className="text-red-500">
+                            {paciente?.situacoesPaciente !== undefined &&
+                              paciente?.situacoesPaciente[0]?.diagnosticos[0]
+                                ?.neutrofilos}
+                            /mm3
+                          </p>
+                          <div className="flex justify-center">
+                            <div
+                              className={selectLabelNeutrofilos(
+                                quantidadeNeutrofilos || 0,
+                              )}
+                            ></div>
+                          </div>
+
+                          <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
+                            Acessar +exames
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </TabContents>
+
+                <div>
+                  <h1 className="text-xl flex">
+                    Febre?{" "}
+                    <span
+                      className="text-xl"
+                      data-te-toggle="tooltip"
+                      data-te-html="true"
+                      data-te-ripple-init
+                      data-te-ripple-color="light"
+                      title=">38,3°C medida única, OU >38°C por mais de 1h"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="#3FB8FC"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
+                        />
+                      </svg>
+                    </span>
+                  </h1>
+                  <div className="flex mt-2">
+                    <button className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10">
+                      Não
+                    </button>
+
+                    <Link
+                      href={{
+                        pathname: "/estratificacao-risco",
+                        query: {
+                          id: paciente.id,
+                          dataNascimento: paciente.dataNascimento,
+                          admissao: paciente.dataAdmissao,
+                          nome: paciente.nome,
+                          cpf: paciente.cpf,
+                          prontuario: paciente.numeroProntuario,
+                          cartaoSus: paciente.cartaoSus,
+                        },
+                      }}
+                      className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10"
+                    >
+                      Sim
+                    </Link>
                   </div>
                 </div>
               </div>

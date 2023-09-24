@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import fetcher from "@/api/fetcher";
@@ -13,9 +13,18 @@ const DynamicTabComponent = dynamic(
   },
 );
 
-const DadosPacientePage = ({ pacientes }: any) => {
+const DadosPacientePage = ({
+  pacientes,
+  nf,
+} //  pendentes,
+: any) => {
   const router = useRouter();
-  const slug = router.query.slug;
+  useEffect(() => {
+    let pacienteAtivo =
+      pacientes?.find((paciente: Paciente) => paciente.id == router.query.id) ||
+      {};
+    setSelectedPatient(pacienteAtivo);
+  }, [router]);
   const [selectedPatient, setSelectedPatient] = useState<Paciente>({});
   return (
     <>
@@ -24,6 +33,7 @@ const DadosPacientePage = ({ pacientes }: any) => {
         <div className="basis-2/5 mr-2">
           <DynamicTabComponent
             pacientes={pacientes || []}
+            nf={nf}
             setSelectedPatient={setSelectedPatient}
           />
         </div>
@@ -42,9 +52,37 @@ export async function getStaticProps<GetStaticProps>() {
     metodo: "GET",
     rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatients",
   });
+
+  // const nf = await fetcher({
+  //   metodo: "GET",
+  //   rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetNFPatients",
+  // });
+
+  // const pendentes = await fetcher({
+  //   metodo: "GET",
+  //   rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPending",
+  // });
+  const isNeutropenico = (paciente: Paciente) =>
+    paciente?.situacoesPaciente !== undefined &&
+    paciente?.situacoesPaciente?.length > 0 &&
+    paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
+      ? paciente?.situacoesPaciente[0]?.diagnosticos[0].neutropenico
+      : false;
+  const febre = (paciente: Paciente) =>
+    paciente?.situacoesPaciente !== undefined &&
+    paciente?.situacoesPaciente?.length > 0 &&
+    paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
+      ? paciente?.situacoesPaciente[0]?.diagnosticos[0].febre
+      : false;
+  const nf = pacientes.filter(
+    (paciente: Paciente) => febre(paciente) && isNeutropenico(paciente),
+  );
+
   return {
     props: {
       pacientes,
+      nf,
+      // pendentes,
     },
   };
 }
