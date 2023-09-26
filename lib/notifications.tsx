@@ -8,6 +8,7 @@ import exclamationImg from "../public/exclamation.svg";
 import browserNotification from "../utils/browserNotification";
 import syncNotification from "./syncNotifications";
 import api from "@/helpers";
+import Link from "next/link";
 /**
  * Component that show the notifications in the layout.
  * @component
@@ -20,24 +21,17 @@ export default function Notifications() {
   useEffect(() => {
     const getAllNotifications = async () => {
       const allNotifications = await syncNotification();
-      console.log(allNotifications);
       setNotifications(allNotifications);
     };
-    getAllNotifications();
-    // if (typeof window !== undefined) {
+    setInterval(getAllNotifications, 30000);
 
-    //   // localStorage.setItem("notifications", JSON.stringify(mockedNotifications));
-    // }
+    getAllNotifications();
   }, []);
 
   return (
     <>
       {notifications?.map((notification: Notificacao) => {
-        if (notification.id) {
-          browserNotification.browserNotify({
-            title: notification.titulo || "Atenção!!",
-            body: notification.mensagem,
-          });
+        if (notification.id && !notification.isLida) {
           toast.custom(
             (t) => (
               <div
@@ -76,14 +70,15 @@ export default function Notifications() {
                     Confirmar leitura
                   </button>
 
-                  <button
-                    onClick={() =>
-                      router.push(`/dados-paciente/${notification.idPaciente}`)
-                    }
+                  <Link
+                    href={{
+                      pathname: "/dados-paciente",
+                      query: { id: notification?.idPaciente },
+                    }}
                     className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >
                     Visualizar
-                  </button>
+                  </Link>
                 </div>
               </div>
             ),

@@ -1,4 +1,5 @@
 import fetcher from "@/api/fetcher";
+import browserNotification from "@/utils/browserNotification";
 /**
  * função para sincronizar as notificações com o back.
  * @returns {object[]} array com o objeto de notificações.
@@ -15,9 +16,17 @@ export default async function syncNotification() {
     (notification: Notificacao) => notification.id,
   );
   notifications.map((notification: Notificacao) => {
-    if (existingNotificationIds.indexOf(notification.id) < 0) {
+    if (
+      existingNotificationIds.indexOf(notification.id) < 0 &&
+      !notification.isLida
+    ) {
       existingNotifications.push(notification);
+      browserNotification.browserNotify({
+        title: notification.titulo || "Atenção!!",
+        body: notification.mensagem,
+      });
     }
   });
+  localStorage.setItem("notifications", JSON.stringify(existingNotifications));
   return existingNotifications;
 }
