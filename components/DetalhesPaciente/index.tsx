@@ -62,9 +62,40 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     };
     init();
   }, []);
+  const [dischargeError, setDischargeError] = useState(false);
+  const [sucessDischarge, setSucessDischarge] = useState(false);
+  const handleDischargePatient = async (pacienteId: number) => {
+    const result = await api.setDischargePatient(pacienteId as number);
+    if (!result) {
+      setDischargeError(true);
+      return;
+    }
+    setSucessDischarge(true);
+    return;
+  };
 
   return (
     <div>
+      {dischargeError && (
+        <ErrorToast
+          className="toast-error"
+          title="Ocorreu um erro ao dar alta ao paciente"
+          message="Ocorreu um erro no sistema ao tentar dar alta ao paciente, por favor tente mais tarde ou contate um administrador."
+          onClose={() => {
+            setDischargeError(false);
+          }}
+        />
+      )}
+      {sucessDischarge && (
+        <SuccessToast
+          className="toast-error"
+          title="A alta do paciente foi realizada com sucesso!"
+          message="A alta para o paciente foi registrada no sistema com sucesso."
+          onClose={() => {
+            setSucessDischarge(false);
+          }}
+        />
+      )}
       <>
         <TabList className="flex list-none flex-row flex-wrap border-b-0 pl-0">
           <li role="presentation">
@@ -94,12 +125,22 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                   alt=""
                 />
                 <div className="min-w-0 flex-auto">
-                  <p className="text-xl font-semibold leading-6 text-gray-900 align-middle">
-                    {paciente.nome}
+                  <div className="flex justify-between">
+                    <p className="text-xl font-semibold leading-6 text-gray-900 align-middle">
+                      {paciente.nome}
+                    </p>
+                    <button
+                      className="bg-green-500 hover:bg-green-700 text-white py-2 px-6 rounded"
+                      onClick={() =>
+                        handleDischargePatient(paciente.id as number)
+                      }
+                    >
+                      Dar alta
+                    </button>
+                  </div>
+                  <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                    Prontuário: {paciente.numeroProntuario}
                   </p>
-                  {/* <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                  Prontuário: {paciente.prontuario}
-                </p> */}
                 </div>
               </div>
               <hr />

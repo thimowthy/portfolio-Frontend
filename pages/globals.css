@@ -41,18 +41,15 @@ body {
 }
 
 div#__next,
-div#__next > div {
+div#__next>div {
   height: 100%;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
+  background: linear-gradient(to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
 .lista-pacientes_tab-content,
@@ -82,4 +79,10 @@ body {
 
 .default-tab {
   background: #AFAFAF;
+}
+
+.toast-error {
+  position: absolute;
+  right: 23px;
+  bottom: 0;
 }
