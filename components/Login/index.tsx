@@ -32,12 +32,12 @@ const Login = () => {
     /**
      * As credenciais de login do usuário.
      * @type {Object}
-     * @property {string} username - O nome de usuário.
+     * @property {string} login - O nome de usuário.
      * @property {string} password - A senha do usuário.
      */
     e.preventDefault();
     const credentials = {
-      userName: username,
+      login: username,
       senha: password,
     };
 
