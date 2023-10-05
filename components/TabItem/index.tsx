@@ -1,3 +1,7 @@
+/**
+ * Renderiza um item de uma tablist. (renderiza apenas um item e deve estar dentro de um {@link: TabList})
+ * @category Component
+ */
 const TabItem = ({
   href,
   className,

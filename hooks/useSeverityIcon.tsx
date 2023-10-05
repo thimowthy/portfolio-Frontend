@@ -4,7 +4,7 @@ import bad from "../public/bad.png";
 import veryBad from "../public/very_bad.png";
 /**
  * Seleciona a URL da imagem de acordo com o estado do paciente em uma escala com 4 níveis.
- * @param {Paciente} paciente - O evento de envio do formulário.
+ * @param {Paciente} paciente - Paciente.
  * @returns {string} string com a URL da imagem.
  */
 const useServerityIcon = (paciente: Paciente) => {

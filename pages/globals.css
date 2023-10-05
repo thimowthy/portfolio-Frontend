@@ -61,22 +61,30 @@ body {
   height: 80vh;
 }
 
-.lista-pacientes ::-webkit-scrollbar {
-  width: 10px;
+.detalhes-paciente {
+  overflow-y: scroll;
+}
+
+.lista-pacientes ::-webkit-scrollbar,
+.detalhes-paciente ::-webkit-scrollbar {
+  width: 13px;
 }
 
 /* Track */
-.lista-pacientes ::-webkit-scrollbar-track {
+.lista-pacientes ::-webkit-scrollbar-track, .detalhes-paciente ::-webkit-scrollbar-track {
   background: #f1f1f1;
+  margin-top: 10px;
+  border-radius: 10px;
 }
 
 /* Handle */
-.lista-pacientes ::-webkit-scrollbar-thumb {
+.lista-pacientes ::-webkit-scrollbar-thumb, .detalhes-paciente ::-webkit-scrollbar-thumb {
   background: #888;
+  border-radius: 10px;
 }
 
 /* Handle on hover */
-.lista-pacientes ::-webkit-scrollbar-thumb:hover {
+.lista-pacientes ::-webkit-scrollbar-thumb:hover, .detalhes-paciente ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
 

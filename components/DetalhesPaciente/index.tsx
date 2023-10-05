@@ -14,7 +14,10 @@ import TabContents from "../TabContents/index";
 import api from "@/helpers";
 import ErrorToast from "../toasts/errorToast";
 import SuccessToast from "../toasts/successToast";
-
+/**
+ * Renderiza o a página de detalhes do paciente.
+ * @category Component
+ */
 export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   const quantidadeNeutrofilos =
     paciente?.situacoesPaciente !== undefined &&
@@ -62,25 +65,45 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     };
     init();
   }, []);
+  const [dischargeError, setDischargeError] = useState(false);
+  const [sucessDischarge, setSucessDischarge] = useState(false);
+  /**
+   * Seta alta no paciente
+   * @param {Number} pacienteId - Id do paciente
+   * @returns {void}.
+   */
+  const handleDischargePatient = async (pacienteId: number) => {
+    const result = await api.setDischargePatient(pacienteId as number);
+    if (!result) {
+      setDischargeError(true);
+      return;
+    }
+    setSucessDischarge(true);
+    return;
+  };
 
   return (
     <div>
       <>
         <TabList className="flex list-none flex-row flex-wrap border-b-0 pl-0">
-          <li role="presentation">
-            <a
-              href="#tabs-neutral"
-              className="disabled block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
-              data-te-toggle="pill"
-              data-te-target="#tabs-neutral"
-              role="tab"
-              aria-controls="tabs-neutral"
-              aria-selected="true"
-              data-te-nav-active
-            >
-              Paciente
-            </a>
-          </li>
+          <TabItem
+            href="tabs-neutral"
+            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
+            title="Paciente"
+            active={true}
+          />
+
+          <TabItem
+            href="tabs-exames"
+            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
+            title="Exames 📝"
+          />
+
+          <TabItem
+            href="tabs-medicamentos"
+            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
+            title=" Medicamentos 💊"
+          />
         </TabList>
         <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
           {paciente.id && (
@@ -250,6 +273,8 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                   <div className="pt-2 flex flex-row gap-x-2">
                     <div className="basis-1/2">
                       <p>Data de admissão: {paciente.dataAdmissao} D0 TAB </p>
+                      <p>Data internação: 21/10/2023</p>
+                      <p>Febre: 37.5</p>
                     </div>
                     <div className="basis-1/2">
                       <div className="flex justify-center flex-col items-end text-center">
@@ -282,6 +307,8 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                   <div className="pt-2 flex flex-row gap-x-2">
                     <div className="basis-1/2">
                       <p>Data de admissão: {paciente.dataAdmissao} D1 TAB</p>
+                      <p>Data internação: 21/10/2023</p>
+                      <p>Febre: 38.5</p>
                     </div>
                     <div className="basis-1/2">
                       <div className="flex justify-center flex-col items-end text-center">

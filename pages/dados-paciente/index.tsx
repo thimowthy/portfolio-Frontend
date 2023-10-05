@@ -15,9 +15,8 @@ const DynamicTabComponent = dynamic(
 
 const DadosPacientePage = ({
   pacientes,
-  nf,
-} //  pendentes,
-: any) => {
+  nf, //  pendentes,
+}: any) => {
   const router = useRouter();
   useEffect(() => {
     let pacienteAtivo =

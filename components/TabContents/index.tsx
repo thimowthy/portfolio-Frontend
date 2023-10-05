@@ -1,5 +1,7 @@
-import ItemListaPaciente from "../ItemListaPaciente";
-
+/**
+ * Renderiza o container do conteúdo relacionado ao TabItem.
+ * @category Component
+ */
 const TabContents = ({
   tabId,
   className,
