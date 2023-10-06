@@ -1,7 +1,10 @@
 interface Notificacao {
   id: number;
-  titulo: string;
-  mensagem: string;
-  idPaciente: number;
+  idTipoNotificacao?: number;
+  horaEnvio?: string;
+  horaVisualizacao?: string;
+  lidaPor?: string;
+  idPaciente?: number;
   isLida: boolean;
+  tipoNotificacao: TipoNotificacao;
 }

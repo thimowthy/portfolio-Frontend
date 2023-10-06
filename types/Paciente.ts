@@ -4,7 +4,7 @@ type Paciente = {
   numeroProntuario?: string;
   cpf?: string;
   unidade?: string;
-  cartaoSus?: string;
+  cns?: string;
   dataNascimento?: string;
   dataAdmissao?: string;
   comorbidades?: Comorbidades[];
