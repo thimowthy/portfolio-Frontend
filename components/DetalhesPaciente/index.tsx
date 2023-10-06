@@ -84,6 +84,26 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
 
   return (
     <div>
+      {dischargeError && (
+        <ErrorToast
+          className="toast-error"
+          title="Ocorreu um erro ao dar alta ao paciente"
+          message="Ocorreu um erro no sistema ao tentar dar alta ao paciente, por favor tente mais tarde ou contate um administrador."
+          onClose={() => {
+            setDischargeError(false);
+          }}
+        />
+      )}
+      {sucessDischarge && (
+        <SuccessToast
+          className="toast-error"
+          title="A alta do paciente foi realizada com sucesso!"
+          message="A alta para o paciente foi registrada no sistema com sucesso."
+          onClose={() => {
+            setSucessDischarge(false);
+          }}
+        />
+      )}
       <>
         <TabList className="flex list-none flex-row flex-wrap border-b-0 pl-0">
           <TabItem
