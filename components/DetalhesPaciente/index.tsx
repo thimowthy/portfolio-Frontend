@@ -142,12 +142,22 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                       alt=""
                     />
                     <div className="min-w-0 flex-auto">
-                      <p className="text-xl font-semibold leading-6 text-gray-900 align-middle">
-                        {paciente.nome}
+                      <div className="flex justify-between">
+                        <p className="text-xl font-semibold leading-6 text-gray-900 align-middle">
+                          {paciente.nome}
+                        </p>
+                        <button
+                          className="bg-green-500 hover:bg-green-700 text-white py-2 px-6 rounded"
+                          onClick={() =>
+                            handleDischargePatient(paciente.id as number)
+                          }
+                        >
+                          Dar alta
+                        </button>
+                      </div>
+                      <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                        Prontuário: {paciente.numeroProntuario}
                       </p>
-                      {/* <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                  Prontuário: {paciente.prontuario}
-                </p> */}
                     </div>
                   </div>
                   <hr />
