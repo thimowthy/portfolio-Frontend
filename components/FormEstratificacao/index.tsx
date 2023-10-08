@@ -4,6 +4,7 @@ import Bad from "@/public/bad.png";
 import Good from "@/public/good.png";
 import Image from "next/image";
 import LeftArrow from "@/public/arrow_left.svg";
+import moment from "moment";
 
 type CheckBoxInfo = {
   id: number;
@@ -86,7 +87,7 @@ export default function FormEstratificacao({ paciente, setLoading }: any) {
     },
     {
       id: 9,
-      text: "Idade > 60 anos",
+      text: "Idade < 60 anos",
       valor: 2,
       nome: "idade-superior-60",
       ativo: false,
@@ -112,7 +113,7 @@ export default function FormEstratificacao({ paciente, setLoading }: any) {
         setLoading(false);
         if (response.ok) {
           alert("Escore MASCC armazenado com sucesso");
-          router.push("/dados-paciente");
+          router.push("/sintomas");
         } else {
           //console.error()
           alert("Erro ao armazenar Escore MASCC");
@@ -178,7 +179,7 @@ export default function FormEstratificacao({ paciente, setLoading }: any) {
                   <li>
                     Data de nascimento:{" "}
                     {paciente.dataNascimento != ""
-                      ? paciente.dataNascimento
+                      ? moment(paciente?.dataNascimento).format("DD/MM/YYYY")
                       : "12/09/1975"}
                   </li>
                   <li>

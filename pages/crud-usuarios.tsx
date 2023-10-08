@@ -23,14 +23,14 @@ const DeleteUsuario = dynamic(() => import("../components/DeleteUsuario"), {
 });
 
 const CrudUsuario = () => {
-  const [user, setUser] = useState({});
-  const [selectedRole, setSelectedRole] = useState({});
-  const [listUsers, setListUsers] = useState(true);
-  const [createUser, setCreateUser] = useState(false);
-  const [updateUser, setUpdateUser] = useState(false);
-  const [deleteUser, setDeleteUser] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [users, setUsers] = useState([]);
+  const [ user, setUser ] = useState({});
+  const [ selectedRole, setSelectedRole ] = useState({});
+  const [ listUsers, setListUsers ] = useState(true);
+  const [ createUser, setCreateUser ] = useState(false);
+  const [ updateUser, setUpdateUser ] = useState(false);
+  const [ deleteUser, setDeleteUser ] = useState(false);
+  const [ loading, setLoading ] = useState(false);
+  const [ users, setUsers ] = useState([]);
   const cargos = [
     { nome: "Médico", valor: "medico", codigo: 35 },
     { nome: "Enfermeiro", valor: "enfermeiro", codigo: 42 },
