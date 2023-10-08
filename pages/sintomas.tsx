@@ -16,8 +16,8 @@ const Sintomas = () => {
       <Header />
       {loading && <Loader />}
       {formInicial && <Form01Sintomas setInstabilidadeH={setInstabilidadeH} setFormInicial={setFormInicial} />}
-      {instabilidadeH && <Form02Sintomas />}
-      {!instabilidadeH && <Form02Sintomas />}
+      {instabilidadeH && <Form02Sintomas instabilidadeH={instabilidadeH} />}
+      {!instabilidadeH && <Form02Sintomas instabilidadeH={instabilidadeH} />}
     </>
   );
 };

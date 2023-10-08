@@ -2,14 +2,18 @@ import LeftArrow from "@/public/arrow_left.svg";
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import Link from "next/link";
 
 export default function Form01Sintomas({ setInstabilidadeH, setFormInicial }: any) {
   const router = useRouter();
 
-  const handleChangeForm = () => {
+  const handleChangeFormComInstabilidade = () => {
     setFormInicial(false);
     setInstabilidadeH(true);
+  };
+
+  const handleChangeFormSemInstabilidade = () => {
+    setFormInicial(false);
+    setInstabilidadeH(false);
   };
 
   return (
@@ -27,12 +31,12 @@ export default function Form01Sintomas({ setInstabilidadeH, setFormInicial }: an
         <div className="flex flex-col w-full items-center py-4">
           <p>Paciente com instabilidade hemodinâmica ? </p>
           <div className="flex gap-2 py-4">
-            <button className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded mr-3">
+            <button className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded mr-3" onClick={handleChangeFormSemInstabilidade}>
               Não
             </button>
             <button
               className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mr-3 "
-              onClick={handleChangeForm}
+              onClick={handleChangeFormComInstabilidade}
             >
               Sim
             </button>
