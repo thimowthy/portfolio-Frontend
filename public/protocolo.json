@@ -1,5 +1,5 @@
 {
-    "id": 0,
+  "id": 0,
 	"nome": "Neutropenia Febril",
 	"ano": "2023",
 	"versao": "1.1",
@@ -500,7 +500,11 @@
 							"intervalo": "dias"
 						}
 					],
-					"cuidados": []
+					"cuidados": [
+						"Solicitar TC de Tórax",
+						"Considerar Tratamento de Pneumocistose em pacientes com hipoxemia grave e uso prolongado de corticoides ou QTX com análogos da purina",
+						"Considerar Influenza, em particular nos meses de inverno"
+					]
 				},
 				"mensagem": "- Solicitar TC de tórax - Adicionar Azitromicina 500mg EV/VO 1x/dia - Considerar tratamento de Pneumocistose (SMT/TMP 15 a 20mg de TMP/kg/dia ÷3/4) em pacientes com hipoxemia grave e uso prolongado de corticoides ou QTX com análogos da purina - Considerar Influenza, em particular nos meses de inverno ",
 				"dest": 18
@@ -593,17 +597,52 @@
 				"mensagem": "",
 				"dest": {
 					"true":23,
-					"false":"n"
+					"false":24
 				}
 			},
 			"node23": {
 				"id": 23,
 				"tipo":1,
-				"nome": "Infecção cateter",
+				"nome": "Nova prescrição",
 				"variavel": "",
 				"condicao": "",
+				"prescricao": {
+					"medicacao": [],
+					"cuidados": [
+						"Solicitar coprocultura, pesquisa de toxina A e B e leucócitos fecais",
+						"se sintomas de colite: Adicionar Metronidazol 500mg VO 8/8h"
+					]
+				},
+				"mensagem": "Solicitar coprocultura, pesquisa de toxina A e B e leucócitos fecais se sintomas de colite: Adicionar Metronidazol 500mg VO 8/8h",
+				"dest": 24
+			},
+			"node24": {
+				"id": 24,
+				"tipo": 0,
+				"nome": "Infecção cateter",
+				"variavel": "infeccao_cateter",
+				"condicao": "infeccao_cateter",
+				"mensagem": "",
+				"dest": {
+					"true":25,
+					"false":-1
+				}
+			},
+			"node25": {
+				"id": 25,
+				"tipo": 1,
+				"nome": "Nova prescrição",
+				"variavel": "",
+				"condicao": "",
+				"prescricao": {
+					"medicacao": [],
+					"cuidados": [
+						"Remover o cateter se houver suspeita de infecção relacionada ao cateter E choque séptico refratário aos antibióticos",
+						"Coletar culturas e amostra de secreção do sítio de saída se houver secreção purulenta"
+					]
+				},
 				"mensagem": "Remover o cateter se houver suspeita de infecção relacionada ao cateter E choque séptico refratário aos antibióticos - Coletar culturas e amostra de secreção do sítio de saída se houver secreção purulenta ",
-				"dest": "n"
+				"dest": -1
 			}
 		}
 	}
