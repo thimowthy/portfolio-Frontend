@@ -5,7 +5,7 @@ import jwt_decode from "jwt-decode";
  * @returns {boolean} Retorna verdadeiro se o usuário estiver autenticado; caso contrário, retorna falso.
  */
 const checkAuthentication = (): boolean => {
-  const token = localStorage.getItem('Authorization');
+  const token = localStorage.getItem("Authorization");
 
   if (!token) {
     return false;
@@ -25,4 +25,3 @@ const checkAuthentication = (): boolean => {
 };
 
 export default checkAuthentication;
-
