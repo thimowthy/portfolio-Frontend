@@ -1,4 +1,5 @@
 import { useState, FormEvent } from "react";
+import jwt_decode from "jwt-decode";
 import Image from "next/image";
 import Router from "next/router";
 import logo from "@/public/logo.png";
@@ -31,12 +32,12 @@ const Login = () => {
     /**
      * As credenciais de login do usuário.
      * @type {Object}
-     * @property {string} username - O nome de usuário.
+     * @property {string} login - O nome de usuário.
      * @property {string} password - A senha do usuário.
      */
     e.preventDefault();
     const credentials = {
-      userName: username,
+      login: username,
       senha: password,
     };
 
@@ -58,8 +59,24 @@ const Login = () => {
 
       if (response.ok) {
         const data = await response.json();
+
         localStorage.setItem("Authorization", "Bearer " + data.value);
-        Router.push("/dados-paciente");
+
+        const decodedToken: JwtPayload = jwt_decode(data.value);
+
+        switch (decodedToken.cargo) {
+          case "ADMINISTRADOR":
+            Router.push("/menu");
+            break;
+          case "MEDICO":
+            Router.push("/dados-paciente");
+            break;
+          case "ENFERMEIRO":
+            Router.push("/dados-paciente");
+            break;
+          default:
+            Router.push("/dashboard");
+        }
         console.log("Login successful!");
       } else {
         setLoginError(true);
@@ -70,12 +87,6 @@ const Login = () => {
       console.error("Error occurred during login:", error);
     }
 
-    /**
-     * Imprime as credenciais de login no console.
-     * @type {Object}
-     * @property {string} username - O nome de usuário.
-     * @property {string} password - A senha do usuário.
-     */
     console.log("Login credentials:", { username, password });
   };
 
