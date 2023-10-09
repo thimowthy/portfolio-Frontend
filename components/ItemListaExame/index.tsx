@@ -2,13 +2,12 @@ import Image from "next/image";
 import exameIcon from "@/public/medical-report.png";
 import { format, parseISO } from "date-fns";
 
-const ItemListaExame: React.FC<Exame> = (
-  {
-    nome,
-    dataSolicitacao,
-    dataResultado,
-    solicitante,
-  }) => {
+const ItemListaExame: React.FC<Exame> = ({
+  nome,
+  dataSolicitacao,
+  dataResultado,
+  solicitante,
+}) => {
   return (
     <li
       key={1}
@@ -16,14 +15,17 @@ const ItemListaExame: React.FC<Exame> = (
     >
       <div className="flex gap-x-4">
         {
-          <a href="https://www.flaticon.com/free-icons/medical" title="medical icons">
-          <Image
-            className="h-24 w-24 flex-none"
-            src={exameIcon}
-            width="250"
-            height="250"
-            alt="Exame"
-          />
+          <a
+            href="https://www.flaticon.com/free-icons/medical"
+            title="medical icons"
+          >
+            <Image
+              className="h-24 w-24 flex-none"
+              src={exameIcon}
+              width="250"
+              height="250"
+              alt="Exame"
+            />
           </a>
         }
         <div className="min-w-0 flex-auto">
@@ -31,10 +33,12 @@ const ItemListaExame: React.FC<Exame> = (
             {"Hemograma"}
           </p>
           <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-base">
-            {"Data da solicitação: " + format(parseISO(dataSolicitacao),"dd/mm/yyyy")}
+            {"Data da solicitação: " +
+              format(parseISO(dataSolicitacao), "dd/mm/yyyy")}
           </p>
           <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-base">
-            {"Data do resultado: " + format(parseISO(dataResultado),"dd/mm/yyyy")}
+            {"Data do resultado: " +
+              format(parseISO(dataResultado), "dd/mm/yyyy")}
           </p>
         </div>
       </div>
@@ -47,7 +51,6 @@ const ItemListaExame: React.FC<Exame> = (
         >
           Ver Exame
         </a>
-
       </div>
     </li>
   );

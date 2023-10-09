@@ -22,8 +22,8 @@ export default async function syncNotification() {
     ) {
       existingNotifications.push(notification);
       browserNotification.browserNotify({
-        title: notification.titulo || "Atenção!!",
-        body: notification.mensagem,
+        title: "Atenção!!",
+        body: notification.tipoNotificacao.mensagem || "",
       });
     }
   });

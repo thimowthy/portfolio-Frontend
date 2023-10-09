@@ -50,10 +50,10 @@ export default function Notifications() {
                     </div>
                     <div className="ml-3 flex-1">
                       <p className="text-sm font-medium text-gray-900">
-                        {notification.titulo}
+                        Nova notificação!
                       </p>
                       <p className="mt-1 text-sm text-gray-500">
-                        {notification.mensagem}
+                        {notification.tipoNotificacao.mensagem}
                       </p>
                     </div>
                   </div>

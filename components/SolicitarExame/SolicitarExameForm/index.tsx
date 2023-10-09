@@ -17,24 +17,27 @@ const tipos = [
 const timeZone = "America/Sao_Paulo";
 const currentDate = format(new Date(), "yyyy-MM-dd", { timeZone });
 
-const ExameForm: React.FC<ExameProps> = ({ id, paciente, leito, prontuario }) => {
-
-  const [ unidade, setUnidade ] = useState("");
-  const [ tipo, setTipo ] = useState("");
-  const [ dataSolicitacao, setDataSolicitacao ] = useState(currentDate);
-  const [ nome, setNome ] = useState("");
-  const [ nomePaciente, setPaciente ] = useState(paciente);
-  const [ numProntuario, setProntuario ] = useState(prontuario);
-  const [ numLeito, setLeito ] = useState(leito);
-  const [ quarto, setQuarto ] = useState("");
-  const [ solicitadoPor, setSolicitadoPor ] = useState("");
+const ExameForm: React.FC<ExameProps> = ({
+  id,
+  paciente,
+  leito,
+  prontuario,
+}) => {
+  const [unidade, setUnidade] = useState("");
+  const [tipo, setTipo] = useState("");
+  const [dataSolicitacao, setDataSolicitacao] = useState(currentDate);
+  const [nome, setNome] = useState("");
+  const [nomePaciente, setPaciente] = useState(paciente);
+  const [numProntuario, setProntuario] = useState(prontuario);
+  const [numLeito, setLeito] = useState(leito);
+  const [quarto, setQuarto] = useState("");
+  const [solicitadoPor, setSolicitadoPor] = useState("");
 
   useEffect(() => {
     setSolicitadoPor(getId(localStorage.getItem("Authorization")));
   }, []);
 
   const handleSubmit = async (): Promise<void> => {
-
     const exameData = {
       idPaciente: id,
       idSolicitante: solicitadoPor,
@@ -70,7 +73,12 @@ const ExameForm: React.FC<ExameProps> = ({ id, paciente, leito, prontuario }) =>
           <label>Unidade</label>
           <select onChange={(e) => setUnidade(e.target.value)} value={unidade}>
             {unidades.map((unidadeOption) => (
-              <option key={unidadeOption.id} value={unidadeOption.id.toString()}>{unidadeOption.nome}</option>
+              <option
+                key={unidadeOption.id}
+                value={unidadeOption.id.toString()}
+              >
+                {unidadeOption.nome}
+              </option>
             ))}
           </select>
         </div>
@@ -78,10 +86,12 @@ const ExameForm: React.FC<ExameProps> = ({ id, paciente, leito, prontuario }) =>
           <label>Tipo</label>
           <select onChange={(e) => setTipo(e.target.value)} value={tipo}>
             {tipos.map((tipoOption) => (
-              <option key={tipoOption.id} value={tipoOption.id.toString()}>{tipoOption.nome}</option>
+              <option key={tipoOption.id} value={tipoOption.id.toString()}>
+                {tipoOption.nome}
+              </option>
             ))}
-          </select>  
-        </div>         
+          </select>
+        </div>
         <div className={styles.data}>
           <label>Data de solicitação</label>
           <input
@@ -134,11 +144,7 @@ const ExameForm: React.FC<ExameProps> = ({ id, paciente, leito, prontuario }) =>
       </div>
       <div>
         <label>Solicitado Por</label>
-        <input
-          disabled
-          type="text"
-          value={solicitadoPor}
-        />
+        <input disabled type="text" value={solicitadoPor} />
       </div>
       <div className={styles.btnDiv}>
         <button
