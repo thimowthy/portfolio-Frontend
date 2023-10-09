@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./styles.module.css";
 import good from "../../public/good.png";
@@ -8,6 +8,7 @@ import veryBad from "../../public/very_bad.png";
 import febreImg from "../../public/termometro.png";
 import moment from "moment";
 import Link from "next/link";
+import ExamesList from "../ExameList";
 
 export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   const quantidadeNeutrofilos =
@@ -57,6 +58,19 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     init();
   }, []);
 
+
+  const [showPatientContent, setShowPatientContent] = useState(true);
+  const [showExamsContent, setShowExamsContent] = useState(false);
+
+  const showPatient = () => {
+    setShowExamsContent(false);
+    setShowPatientContent(true);
+  };
+  const showExams = () => {
+    setShowExamsContent(true);
+    setShowPatientContent(false);
+  }
+
   return (
     <div>
       <>
@@ -65,7 +79,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
           role="tablist"
           data-te-nav-ref
         >
-          <li role="presentation" className="bg-[#DADADA]">
+          <li role="presentation" className="bg-[#DADADA]" onClick={showPatient}>
             <a
               href="#tabs-todos"
               className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent dark:text-neutral-400 default-tab"
@@ -77,6 +91,20 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
               aria-selected="true"
             >
               Paciente
+            </a>
+          </li>
+          <li role="presentation" className="bg-[#DADADA]" onClick={showExams}>
+            <a
+              href="#tabs-todos"
+              className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent dark:text-neutral-400 default-tab"
+              data-te-toggle="pill"
+              data-te-target="#tabs-todos"
+              data-te-nav-active
+              role="tab"
+              aria-controls="tabs-todos"
+              aria-selected="true"
+            >
+              Exames
             </a>
           </li>
         </ul>
@@ -101,194 +129,198 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                 </div>
               </div>
               <hr />
-              <div className="pt-2">
-                <h1 className="text-2xl">
-                  Dados do paciente{" "}
-                  {paciente?.situacoesPaciente !== undefined &&
-                    paciente?.situacoesPaciente[0] &&
-                    paciente?.situacoesPaciente[0].diagnosticos[0] &&
-                    paciente?.situacoesPaciente[0].diagnosticos[0]
-                      .neutropenico &&
-                    paciente?.situacoesPaciente[0].diagnosticos[0].febre && (
-                      <span className="float-right text-danger flex">
-                        Neutropenia Febril{" "}
-                        <Image
-                          className="w-4 ml-4"
-                          src={febreImg}
-                          alt="Termômetro - Febre"
-                        />
-                      </span>
-                    )}
-                </h1>
-              </div>
-              <div className="flex gap-x-4 pt-4 pb-4">
-                <div>
-                  <p>CPF: {paciente.cpf}</p>
-                  <p>
-                    Data de nascimento:{" "}
-                    {paciente?.dataNascimento
-                      ? moment(paciente?.dataNascimento).format("DD/MM/YYYY")
-                      : ""}
-                  </p>
-                  {/* <p>Cartão SUS: {paciente.cartaoSus}</p> */}
-                </div>
-
-                <div>
-                  {/* <p>Prontuário: {paciente.prontuario}</p> */}
-                  <p>
-                    Leito:{" "}
+              {showPatientContent && (
+              <>
+                <div className="pt-2">
+                  <h1 className="text-2xl">
+                    Dados do paciente{" "}
                     {paciente?.situacoesPaciente !== undefined &&
-                    paciente?.situacoesPaciente[0]
-                      ? paciente?.situacoesPaciente[0].leito
-                      : ""}
-                  </p>
-                  {/* <p>Unidade: {paciente.unidade}</p> */}
-                </div>
-              </div>
-              <hr />
-              <div className="pt-2">
-                <h1 className="text-2xl">Progresso do tratamento</h1>
-                <div className="flex flex-row rounded-full bg-white mt-4">
-                  <div className="basis-1/4 bg-yellow-800 py-2 pl-2 rounded-bl-full rounded-tl-full">
-                    <p className="text-white">D0: 10/07/2023</p>
-                  </div>
-                </div>
-                <div className="pt-2 flex flex-row gap-x-2">
-                  <div className="basis-1/2">
-                    <p>Data de admissão: {paciente.dataAdmissao}</p>
-                    <div className="rounded-md bg-green-200 p-2 mt-4">
-                      <p className="text-xl">
-                        {/* Prontuário {paciente.prontuario} */}
+                      paciente?.situacoesPaciente[0] &&
+                      paciente?.situacoesPaciente[0].diagnosticos[0] &&
+                      paciente?.situacoesPaciente[0].diagnosticos[0]
+                        .neutropenico &&
+                      paciente?.situacoesPaciente[0].diagnosticos[0].febre && (
+                        <span className="float-right text-danger flex">
+                          Neutropenia Febril{" "}
+                          <Image
+                            className="w-4 ml-4"
+                            src={febreImg}
+                            alt="Termômetro - Febre" />
+                        </span>
+                      )}
+                  </h1>
+                </div><div className="flex gap-x-4 pt-4 pb-4">
+                    <div>
+                      <p>CPF: {paciente.cpf}</p>
+                      <p>
+                        Data de nascimento:{" "}
+                        {paciente?.dataNascimento
+                          ? moment(paciente?.dataNascimento).format("DD/MM/YYYY")
+                          : ""}
                       </p>
-                      <div className="py-1">
-                        <p className="text-lg pl-2">Comorbidades:</p>
-                        {paciente?.comorbidades?.map(
-                          (comorbidade: any, index: number) => {
-                            return (
-                              <p
-                                key={`${comorbidade.nome}${index}`}
-                                className="text-sm pl-4"
-                              >
-                                {comorbidade?.nome}
-                              </p>
-                            );
-                          },
-                        )}
-                      </div>
-                      <div className="py-1">
-                        <p className="text-lg pl-2">Alergias:</p>
-                        {paciente?.alergias?.map((alergia: any) => {
-                          return (
-                            <p key={alergia.nome} className="text-sm pl-4">
-                              {alergia?.nome}
-                            </p>
-                          );
-                        })}
-                      </div>
-                      {/* <div className="py-1">
-                        <p className="text-lg pl-2">
-                          Última prescrição: {paciente.prescricao?.data}
-                        </p>
-                        {paciente.prescricao?.medicamentos.map(
-                          (prescricao: any) => (
-                            <p
-                              key={prescricao.prontuario}
-                              className="text-sm pl-4"
-                            >
-                              {prescricao.medicacao +
-                                prescricao.dosagem +
-                                prescricao.periodo}
-                            </p>
-                          ),
-                        )}
-                      </div> */}
-                      <div className="flex justify-end">
-                        <a href="#" className="text-right text-sm">
-                          Ver prontuário completo
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="basis-1/2">
-                    <div className="flex justify-center flex-col items-end text-center">
-                      <div>
-                        <p className="text-center">Neutrófilos:</p>
-                        <p className="text-red-500">
-                          {paciente?.situacoesPaciente !== undefined &&
-                            paciente?.situacoesPaciente[0]?.diagnosticos[0]
-                              ?.neutrofilos}
-                          /mm3
-                        </p>
-                        <div className="flex justify-center">
-                          <div
-                            className={selectLabelNeutrofilos(
-                              quantidadeNeutrofilos || 0,
-                            )}
-                          ></div>
-                        </div>
-
-                        <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
-                          Acessar +exames
-                        </button>
-                      </div>
+                      {/* <p>Cartão SUS: {paciente.cartaoSus}</p> */}
                     </div>
 
                     <div>
-                      <h1 className="text-xl flex">
-                        Febre?{" "}
-                        <span
-                          className="text-xl"
-                          data-te-toggle="tooltip"
-                          data-te-html="true"
-                          data-te-ripple-init
-                          data-te-ripple-color="light"
-                          title=">38,3°C medida única, OU >38°C por mais de 1h"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="#3FB8FC"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-4 h-4"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
-                            />
-                          </svg>
-                        </span>
-                      </h1>
-                      <div className="flex mt-2">
-                        <button className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10">
-                          Não
-                        </button>
+                      {/* <p>Prontuário: {paciente.prontuario}</p> */}
+                      <p>
+                        Leito:{" "}
+                        {paciente?.situacoesPaciente !== undefined &&
+                          paciente?.situacoesPaciente[0]
+                          ? paciente?.situacoesPaciente[0].leito
+                          : ""}
+                      </p>
+                      {/* <p>Unidade: {paciente.unidade}</p> */}
+                    </div>
+                  </div><hr /><div className="pt-2">
+                    <h1 className="text-2xl">Progresso do tratamento</h1>
+                    <div className="flex flex-row rounded-full bg-white mt-4">
+                      <div className="basis-1/4 bg-yellow-800 py-2 pl-2 rounded-bl-full rounded-tl-full">
+                        <p className="text-white">D0: 10/07/2023</p>
+                      </div>
+                    </div>
+                    <div className="pt-2 flex flex-row gap-x-2">
+                      <div className="basis-1/2">
+                        <p>Data de admissão: {paciente.dataAdmissao}</p>
+                        <div className="rounded-md bg-green-200 p-2 mt-4">
+                          <p className="text-xl">
+                            {/* Prontuário {paciente.prontuario} */}
+                          </p>
+                          <div className="py-1">
+                            <p className="text-lg pl-2">Comorbidades:</p>
+                            {paciente?.comorbidades?.map(
+                              (comorbidade: any, index: number) => {
+                                return (
+                                  <p
+                                    key={`${comorbidade.nome}${index}`}
+                                    className="text-sm pl-4"
+                                  >
+                                    {comorbidade?.nome}
+                                  </p>
+                                );
+                              }
+                            )}
+                          </div>
+                          <div className="py-1">
+                            <p className="text-lg pl-2">Alergias:</p>
+                            {paciente?.alergias?.map((alergia: any) => {
+                              return (
+                                <p key={alergia.nome} className="text-sm pl-4">
+                                  {alergia?.nome}
+                                </p>
+                              );
+                            })}
+                          </div>
+                          {/* <div className="py-1">
+                                <p className="text-lg pl-2">
+                                  Última prescrição: {paciente.prescricao?.data}
+                                </p>
+                                {paciente.prescricao?.medicamentos.map(
+                                  (prescricao: any) => (
+                                    <p
+                                      key={prescricao.prontuario}
+                                      className="text-sm pl-4"
+                                    >
+                                      {prescricao.medicacao +
+                                        prescricao.dosagem +
+                                        prescricao.periodo}
+                                    </p>
+                                  ),
+                                )}
+                              </div> */}
+                          <div className="flex justify-end">
+                            <a href="#" className="text-right text-sm">
+                              Ver prontuário completo
+                            </a>
+                          </div>
+                        </div>
+                      </div>
 
-                        <Link
-                          href={{
-                            pathname: "/estratificacao-risco",
-                            query: {
-                              id: paciente.id,
-                              leito: paciente.leito,
-                              dataNascimento: paciente.dataNascimento,
-                              admissao: paciente.dataAdmissao,
-                              nome: paciente.nome,
-                              cpf: paciente.cpf,
-                              prontuario: paciente.prontuario,
-                              cartaoSus: paciente.cartaoSus,
-                            },
-                          }}
-                          className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10"
-                        >
-                          Sim
-                        </Link>
+                      <div className="basis-1/2">
+                        <div className="flex justify-center flex-col items-end text-center">
+                          <div>
+                            <p className="text-center">Neutrófilos:</p>
+                            <p className="text-red-500">
+                              {paciente?.situacoesPaciente !== undefined &&
+                                paciente?.situacoesPaciente[0]?.diagnosticos[0]
+                                  ?.neutrofilos}
+                              /mm3
+                            </p>
+                            <div className="flex justify-center">
+                              <div
+                                className={selectLabelNeutrofilos(
+                                  quantidadeNeutrofilos || 0
+                                )}
+                              ></div>
+                            </div>
+
+                            <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
+                              Acessar +exames
+                            </button>
+                          </div>
+                        </div>
+
+                        <div>
+                          <h1 className="text-xl flex">
+                            Febre?{" "}
+                            <span
+                              className="text-xl"
+                              data-te-toggle="tooltip"
+                              data-te-html="true"
+                              data-te-ripple-init
+                              data-te-ripple-color="light"
+                              title="temperatura axilar > 38,3°C"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="#3FB8FC"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="w-4 h-4"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+                              </svg>
+                            </span>
+                          </h1>
+                          <div className="flex mt-2">
+                            <button className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10">
+                              Não
+                            </button>
+
+                            <Link
+                              href={{
+                                pathname: "/estratificacao-risco",
+                                query: {
+                                  id: paciente.id,
+                                  leito: paciente.leito,
+                                  dataNascimento: paciente.dataNascimento,
+                                  admissao: paciente.dataAdmissao,
+                                  nome: paciente.nome,
+                                  cpf: paciente.cpf,
+                                  prontuario: paciente.prontuario,
+                                  cartaoSus: paciente.cartaoSus,
+                                },
+                              }}
+                              className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10"
+                            >
+                              Sim
+                            </Link>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                </>
+              )}
+              {showExamsContent && (
+                <ExamesList
+                  id={paciente.id.toString()}
+                /> 
+              )}
             </>
           )}
         </div>

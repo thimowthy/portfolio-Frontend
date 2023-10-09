@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./styles.module.css";
-import BackIcon from "@/components/backIcon";
+import BackIcon from "@/components/buttons/backIcon";
 
 interface FormBoxProps {
     title: string;

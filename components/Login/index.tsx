@@ -47,7 +47,7 @@ const Login = () => {
        * @type {Response}
        */
       const response = await fetch(
-        "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Auth/Auth",
+        "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Auth/Autenticacao",
         {
           method: "POST",
           headers: {
@@ -59,10 +59,10 @@ const Login = () => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
+        localStorage.setItem("Authorization", data.token);
 
-        localStorage.setItem("Authorization", "Bearer " + data.value);
-
-        const decodedToken: JwtPayload = jwt_decode(data.value);
+        const decodedToken: JwtPayload = jwt_decode(data.token);
 
         switch (decodedToken.cargo) {
           case "ADMINISTRADOR":
