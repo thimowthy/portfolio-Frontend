@@ -4,12 +4,14 @@ const ErrorToast = ({
   title,
   message,
   onClose,
+  className,
 }: {
   title: string;
   message: string;
+  className?: string;
   onClose: () => void;
 }) => {
-  const [ isToastVisible, setToastVisible ] = useState(true);
+  const [isToastVisible, setToastVisible] = useState(true);
 
   useEffect(() => {
     const init = async () => {
@@ -29,7 +31,7 @@ const ErrorToast = ({
   }
   return (
     <div
-      className="pointer-events-auto mx-auto mb-4 hidden w-96 max-w-full rounded-lg bg-danger-100 bg-clip-padding text-sm text-danger-700 shadow-lg shadow-black/5 data-[te-toast-show]:block data-[te-toast-hide]:hidden"
+      className={`pointer-events-auto mx-auto mb-4 hidden w-96 max-w-full rounded-lg bg-danger-100 bg-clip-padding text-sm text-danger-700 shadow-lg shadow-black/5 data-[te-toast-show]:block data-[te-toast-hide]:hidden ${className}`}
       id="myToast"
       role="alert"
       aria-live="assertive"

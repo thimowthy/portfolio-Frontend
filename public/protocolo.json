@@ -1,649 +1,648 @@
 {
   "id": 0,
-	"nome": "Neutropenia Febril",
-	"ano": "2023",
-	"versao": "1.1",
-	"diagnostico": {
-		"nodes": {
-			"node1": {
-				"id": 1,
-				"ordem": 1,
-				"nome": "Neutropenia",
-				"variavel": "neutrofilos",
-				"condicao": "Contagem de Neutrofilos <",
-				"valor": 1000,
-				"dest": [2, 3]
-			},
-			"node2": {
-				"id": 2,
-				"ordem": 2,
-				"nome": "Febre",
-				"variavel": "temperatura",
-				"condicao": "Temperatura >",
-				"valor": 38.3,
-				"dest": [-1]
-			},
-			"node3": {
-				"id": 3,
-				"ordem": 2,
-				"nome": "Febre Ascendente",
-				"variavel": "horas_temp_maior_38",
-				"condicao": "Horas com temperatura maior que 38°C >",
-				"valor": 1,
-				"dest": [-1]
-			}
-		}
-	},
-	"tratamento": {
-		"nodes": {
-			"node1": {
-				"id": 1,
-				"tipo":0,
-				"nome": "Instabilidade Hemodinâmica",
-				"variavel": "instabilidade_hemodinamica",
-				"condicao": "instabilidade_hemodinamica",
-				"mensagem": "",
-				"dest": {
-					"sim":2,
-					"nao":3
-				}
-			},
-			"node2": {
-				"id": 2,
-				"tipo":0,
-				"nome": "Infecção Prévia",
-				"variavel": "infeccao",
-				"condicao": "infeccao",
-				"mensagem": "",
-				"dest": {
-					"nao":4,
-					"esbl":5,
-					"mrsa":6,
-					"epc":7,
-					"vre":8
-				}
-			},
-			"node3": {
-				"id": 3,
-				"tipo":0,
-				"nome": "Infecção Prévia",
-				"variavel": "infeccao",
-				"condicao": "infeccao",
-				"mensagem": "",
-				"dest": {
-					"nao":9,
-					"esbl":10,
-					"mrsa":11,
-					"epc":12,
-					"vre":13
-				}
-			
-			},
-			"node4": {
-				"id": 4,
-				"tipo":1,
-				"nome": "Notificar Prescrição",
-				"variavel": "",
-				"condicao": "",
-				"prescricao": {
-					"medicacao": [
-						{
-							"id": 0,
-							"acao": "+",
-							"opcao": 1,
-							"dose": 2,
-							"dosagem": "g",
-							"tempo": 8,
-							"intervalo": "horas"
-						},
-						{
-							"id": 1,
-							"acao": "+",
-							"opcao":2,
-							"dose": 4.5,
-							"dosagem": "g",
-							"tempo": 6,
-							"intervalo":"horas"
-						}
-					],
-					"cuidados": []
-				},
-				"mensagem": "Cefepime 2g 8/8h 2ª opção - Pipe-Tazo 4,5g 6/6h",
-				"dest": 14
-			},
-			"node5": {
-				"id": 5,
-				"tipo":1,
-				"nome": "Notificar Prescrição",
-				"variavel": "",
-				"condicao": "",
-				"prescricao": {
-					"medicacao": [
-						{
-							"id": 0,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 2,
-							"dosagem": "g",
-							"tempo": 8,
-							"intervalo": "horas"
-						},
-						{
-							"id": 2,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 15,
-							"dosagem": "mg/kg",
-							"tempo": 1,
-							"intervalo": "dias"
-						},
-						{
-							"id": 3,
-							"acao": "*",
-							"opcao": 0,
-							"dose": 1,
-							"dosagem": "g",
-							"tempo": 8,
-							"intervalo": "horas"
-						}
-					],
-					"cuidados": []
-				},
-				"mensagem": "Cefepime 2g 8/8h + Amicacina 15mg/kg/dia 2ª opção (pacientes com disfunção renal) - Meropenem 1g 8/8h",
-				"dest": 14
-			},
-			"node6": {
-				"id": 6,
-				"tipo":1,
-				"nome": "Notificar Prescrição",
-				"variavel": "",
-				"condicao": "",
-				"prescricao": {
-					"medicacao": [
-						{
-							"id": 4,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 15,
-							"dosagem": "mg/kg",
-							"tempo": 12,
-							"intervalo":"horas"
-						},
-						{
-							"id": 0,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 2,
-							"dosagem":"g",
-							"tempo": 8,
-							"intervalo":"horas"
-						}
-					],
-					"cuidados": []
-				},
-				"mensagem": "Vancomicina 15mg/kg 12/12h + Cefepime 2g 8/8h",
-				"dest": 14
-			},
-			"node7": {
-				"id": 7,
-				"tipo":1,
-				"nome": "Notificar Prescrição",
-				"variavel": "",
-				"condicao": "",
-				"prescricao": {
-					"medicacao": [
-						{
-							"id": 3,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 2,
-							"dosagem": "g",
-							"tempo": 8,
-							"intervalo":"horas"
-						},
-						{
-							"id": 2,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 15,
-							"dosagem": "mg/kg",
-							"tempo": 1,
-							"intervalo":"dias"
-						},
-						{
-							"id": 3,
-							"acao": "+",
-							"opcao": 1,
-							"dose": 2,
-							"dosagem": "g",
-							"tempo": 8,
-							"intervalo":"horas"
-						},
-						{
-							"id": 5,
-							"acao": "+",
-							"opcao": 1,
-							"dose": 25000,
-							"dosagem": "UI/kg",
-							"tempo": 1,
-							"intervalo":"dias"
-						}
-					],
-					"cuidados": []
-				},
-				"mensagem": "Meropenem 2g 8/8h + Amicacina 15mg/kg/dia 2ª opção - Meropenem 2g 8/8h + Polimixina B 25.000UI/Kg/dia (÷ 2 ou 3)",
-				"dest": 14
-			},
-			"node8": {
-				"id": 8,
-				"tipo":1,
-				"nome": "Notificar Prescrição",
-				"variavel": "",
-				"condicao": "",
-				"prescricao": {
-					"medicacao": [
-						{
-							"id": 0,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 2,
-							"dosagem": "g",
-							"tempo": 8,
-							"intervalo":"horas"
-						},
-						{
-							"id": 6,
-							"acao": "+",
-							"opcao": 1,
-							"dose": 2,
-							"dosagem":"g",
-							"tempo":8,
-							"intervalo":"horas"
-						}
-					],
-					"cuidados": []
-				},
-				"mensagem": "Cefepime 2g 8/8h (adicionar Linezolida 600mg 12/12h se infecção por VRE nos últimos 30 dias) ",
-				"dest": 14
-			},
-			"node9": {
-				"id": 9,
-				"tipo":1,
-				"nome": "Notificar Prescrição",
-				"variavel": "",
-				"condicao": "",
-				"prescricao": {
-					"medicacao": [
-						{
-							"id": 4,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 15,
-							"dosagem": "mg/kg",
-							"tempo": 12,
-							"intervalo":"horas"
-						},
-						{
-							"id": 3,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 1,
-							"dosagem": "g",
-							"tempo": 8,
-							"intervalo": "horas"
-						}
-					],
-					"cuidados": []
-				},
-				"mensagem": "Vancomicina 15mg/kg 12/12h + Meropenem 1g 8/8h ",
-				"dest": 14
-			},
-			"node10": {
-				"id": 10,
-				"tipo":1,
-				"nome": "Notificar Prescrição",
-				"variavel": "",
-				"condicao": "",
-				"prescricao": {
-					"medicacao": [
-						{
-							"id": 4,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 15,
-							"dosagem": "mg/kg",
-							"tempo": 12,
-							"intervalo":"horas"
-						},
-						{
-							"id": 3,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 1,
-							"dosagem": "g",
-							"tempo": 8,
-							"intervalo": "horas"
-						}
-					],
-					"cuidados": []
-				},
-				"mensagem": "Vancomicina 15mg/kg 12/12h + Meropenem 1g 8/8h ",
-				"dest": 14
-			},
-			"node11": {
-				"id": 11,
-				"tipo":1,
-				"nome": "Notificar Prescrição",
-				"variavel": "",
-				"condicao": "",
-				"prescricao": {
-					"medicacao": [
-						{
-							"id": 4,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 15,
-							"dosagem": "mg/kg",
-							"tempo": 12,
-							"intervalo":"horas"
-						},
-						{
-							"id": 3,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 1,
-							"dosagem": "g",
-							"tempo": 8,
-							"intervalo": "horas"
-						}
-					],
-					"cuidados": []
-				},
-				"mensagem": "Vancomicina 15mg/kg 12/12h + Meropenem 1g 8/8h ",
-				"dest": 14
-			},
-			"node12": {
-				"id": 12,
-				"tipo":1,
-				"nome": "Notificar Prescrição",
-				"variavel": "",
-				"condicao": "",
-				"prescricao": {
-					"medicacao": [
-						{
-							"id": 4,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 1,
-							"dosagem": "g",
-							"tempo": 12,
-							"intervalo":"horas"
-						},
-						{
-							"id": 3,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 1,
-							"dosagem": "g",
-							"tempo": 8,
-							"intervalo": "horas"
-						},
-						{
-							"id": 2,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 15,
-							"dosagem": "mg/kg",
-							"tempo": 1,
-							"intervalo": "dias"
-						}
-					],
-					"cuidados": []
-				},
-				"mensagem": "Vancomicina 1g 12/12h + Meropenem 2g 8/8h + Amicacina 15mg/kg/dia ",
-				"dest": 14
-			},
-			"node13": {
-				"id": 13,
-				"tipo":1,
-				"nome": "Notificar Prescrição",
-				"variavel": "",
-				"condicao": "",
-				"prescricao": {
-					"medicacao": [
-						{
-							"id": 6,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 600,
-							"dosagem": "mg",
-							"tempo": 12,
-							"intervalo":"horas"
-						},
-						{
-							"id": 3,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 1,
-							"dosagem": "g",
-							"tempo": 8,
-							"intervalo": "horas"
-						}
-					],
-					"cuidados": []
-				},
-				"mensagem": "Linezolida 600mg 12/12h + Meropenem 1g 8/8h ",
-				"dest": 14
-			},
-			"node14": {
-				"id": 1,
-				"tipo":0,
-				"nome": "Infecção Viral?",
-				"variavel": "instabilidade_hemodinamica, infeccao_pele, pneumonia, gram_crescente",
-				"condicao": "infeccao_cateter OU infeccao_pele OU pneumonia OU gram_crescente",
-				"mensagem": "",
-				"dest": {
-					"true":15,
-					"false":16
-				}
-			},
-			"node15": {
-				"id": 15,
-				"tipo":1,
-				"nome": "Adicionar Medicação",
-				"variavel": "",
-				"condicao": "",
-				"prescricao": {
-					"medicacao": [
-						{
-							"id": 4,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 15,
-							"dosagem": "mg/kg",
-							"tempo": 12,
-							"intervalo":"horas"
-						}
-					],
-					"cuidados": []
-				},
-				"mensagem": "Adicionar Vancomicina 15mg/kg/dose EV 12/12h ao esquema inicial ",
-				"dest": 16
-			},
-			"node16": {
-				"id": 16,
-				"tipo":0,
-				"nome": "Sintomas Respiratórios?",
-				"variavel": "sintomas_resp, rx_torax_alterado",
-				"condicao": "sintomas_resp OU rx_torax_alterado",
-				"mensagem": "",
-				"dest": {
-					"true":17,
-					"false":18
-				}
-			},
-			"node17": {
-				"id": 17,
-				"tipo":1,
-				"nome": "Revisar Tratamento",
-				"variavel": "",
-				"condicao": "",
-				"prescricao": {
-					"medicacao": [
-						{
-							"id": 7,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 500,
-							"dosagem": "mg",
-							"tempo": 1,
-							"intervalo": "dias"
-						}
-					],
-					"cuidados": [
-						"Solicitar TC de Tórax",
-						"Considerar Tratamento de Pneumocistose em pacientes com hipoxemia grave e uso prolongado de corticoides ou QTX com análogos da purina",
-						"Considerar Influenza, em particular nos meses de inverno"
-					]
-				},
-				"mensagem": "- Solicitar TC de tórax - Adicionar Azitromicina 500mg EV/VO 1x/dia - Considerar tratamento de Pneumocistose (SMT/TMP 15 a 20mg de TMP/kg/dia ÷3/4) em pacientes com hipoxemia grave e uso prolongado de corticoides ou QTX com análogos da purina - Considerar Influenza, em particular nos meses de inverno ",
-				"dest": 18
-			},
-			"node18": {
-				"id": 18,
-				"tipo":0,
-				"nome": "Sepse?",
-				"variavel": "sepse_abdominal, tiflite, celulite_perianal",
-				"condicao": "sepse_abdominal OU tiflite OU celulite_perianal",
-				"mensagem": "",
-				"dest": {
-					"true":19,
-					"false":20
-				}
-			},
-			"node19": {
-				"id": 19,
-				"tipo":1,
-				"nome": "Adicionar Medicação",
-				"variavel": "",
-				"condicao": "",
-				"prescricao": {
-					"medicacao": [
-						{
-							"id": 8,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 500,
-							"dosagem": "mg",
-							"tempo": 8,
-							"intervalo":"horas"
-						}
-					],
-					"cuidados": []
-				},
-				"mensagem": "Acrescentar cobertura p/ anaeróbio (Metronidazol EV 500mg 8/8h)",
-				"dest": 20
-			},
-			"node20": {
-				"id": 20,
-				"tipo":0,
-				"nome": "Úlceras bucais?",
-				"variavel": "ulcera_bucal",
-				"condicao": "ulcera_bucal",
-				"mensagem": "",
-				"dest": {
-					"sim":21,
-					"nao":22
-				}
-			},
-			"node21": {
-				"id": 21,
-				"tipo":1,
-				"nome": "Prescrever Medicação",
-				"variavel": "",
-				"condicao": "",
-				"prescricao": {
-					"medicacao": [
-						{
-							"id": 9,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 5,
-							"dosagem": "mg/kg",
-							"tempo": 8,
-							"intervalo":"horas"
-						},
-						{
-							"id": 10,
-							"acao": "+",
-							"opcao": 0,
-							"dose": 200,
-							"dosagem": "mg",
-							"tempo": 1,
-							"intervalo": "dias"
-						}
-					],
-					"cuidados": []
-				},
-				"mensagem": "Aciclovir EV 5mg/kg 3x/dia + Fluconazol EV 200mg/dia ",
-				"dest": 22
-			},
-			"node22": {
-				"id": 22,
-				"tipo":0,
-				"nome": "Diarreia?",
-				"variavel": "diarreia",
-				"condicao": "diarreia",
-				"mensagem": "",
-				"dest": {
-					"true":23,
-					"false":24
-				}
-			},
-			"node23": {
-				"id": 23,
-				"tipo":1,
-				"nome": "Nova prescrição",
-				"variavel": "",
-				"condicao": "",
-				"prescricao": {
-					"medicacao": [],
-					"cuidados": [
-						"Solicitar coprocultura, pesquisa de toxina A e B e leucócitos fecais",
-						"se sintomas de colite: Adicionar Metronidazol 500mg VO 8/8h"
-					]
-				},
-				"mensagem": "Solicitar coprocultura, pesquisa de toxina A e B e leucócitos fecais se sintomas de colite: Adicionar Metronidazol 500mg VO 8/8h",
-				"dest": 24
-			},
-			"node24": {
-				"id": 24,
-				"tipo": 0,
-				"nome": "Infecção cateter",
-				"variavel": "infeccao_cateter",
-				"condicao": "infeccao_cateter",
-				"mensagem": "",
-				"dest": {
-					"true":25,
-					"false":-1
-				}
-			},
-			"node25": {
-				"id": 25,
-				"tipo": 1,
-				"nome": "Nova prescrição",
-				"variavel": "",
-				"condicao": "",
-				"prescricao": {
-					"medicacao": [],
-					"cuidados": [
-						"Remover o cateter se houver suspeita de infecção relacionada ao cateter E choque séptico refratário aos antibióticos",
-						"Coletar culturas e amostra de secreção do sítio de saída se houver secreção purulenta"
-					]
-				},
-				"mensagem": "Remover o cateter se houver suspeita de infecção relacionada ao cateter E choque séptico refratário aos antibióticos - Coletar culturas e amostra de secreção do sítio de saída se houver secreção purulenta ",
-				"dest": -1
-			}
-		}
-	}
+  "nome": "Neutropenia Febril",
+  "ano": "2023",
+  "versao": "1.1",
+  "diagnostico": {
+    "nodes": {
+      "node1": {
+        "id": 1,
+        "ordem": 1,
+        "nome": "Neutropenia",
+        "variavel": "neutrofilos",
+        "condicao": "Contagem de Neutrofilos <",
+        "valor": 1000,
+        "dest": [2, 3]
+      },
+      "node2": {
+        "id": 2,
+        "ordem": 2,
+        "nome": "Febre",
+        "variavel": "temperatura",
+        "condicao": "Temperatura >",
+        "valor": 38.3,
+        "dest": [-1]
+      },
+      "node3": {
+        "id": 3,
+        "ordem": 2,
+        "nome": "Febre Ascendente",
+        "variavel": "horas_temp_maior_38",
+        "condicao": "Horas com temperatura maior que 38°C >",
+        "valor": 1,
+        "dest": [-1]
+      }
+    }
+  },
+  "tratamento": {
+    "nodes": {
+      "node1": {
+        "id": 1,
+        "tipo": 0,
+        "nome": "Instabilidade Hemodinâmica",
+        "variavel": "instabilidade_hemodinamica",
+        "condicao": "instabilidade_hemodinamica",
+        "mensagem": "",
+        "dest": {
+          "sim": 2,
+          "nao": 3
+        }
+      },
+      "node2": {
+        "id": 2,
+        "tipo": 0,
+        "nome": "Infecção Prévia",
+        "variavel": "infeccao",
+        "condicao": "infeccao",
+        "mensagem": "",
+        "dest": {
+          "nao": 4,
+          "esbl": 5,
+          "mrsa": 6,
+          "epc": 7,
+          "vre": 8
+        }
+      },
+      "node3": {
+        "id": 3,
+        "tipo": 0,
+        "nome": "Infecção Prévia",
+        "variavel": "infeccao",
+        "condicao": "infeccao",
+        "mensagem": "",
+        "dest": {
+          "nao": 9,
+          "esbl": 10,
+          "mrsa": 11,
+          "epc": 12,
+          "vre": 13
+        }
+      },
+      "node4": {
+        "id": 4,
+        "tipo": 1,
+        "nome": "Notificar Prescrição",
+        "variavel": "",
+        "condicao": "",
+        "prescricao": {
+          "medicacao": [
+            {
+              "id": 0,
+              "acao": "+",
+              "opcao": 1,
+              "dose": 2,
+              "dosagem": "g",
+              "tempo": 8,
+              "intervalo": "horas"
+            },
+            {
+              "id": 1,
+              "acao": "+",
+              "opcao": 2,
+              "dose": 4.5,
+              "dosagem": "g",
+              "tempo": 6,
+              "intervalo": "horas"
+            }
+          ],
+          "cuidados": []
+        },
+        "mensagem": "Cefepime 2g 8/8h 2ª opção - Pipe-Tazo 4,5g 6/6h",
+        "dest": 14
+      },
+      "node5": {
+        "id": 5,
+        "tipo": 1,
+        "nome": "Notificar Prescrição",
+        "variavel": "",
+        "condicao": "",
+        "prescricao": {
+          "medicacao": [
+            {
+              "id": 0,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 2,
+              "dosagem": "g",
+              "tempo": 8,
+              "intervalo": "horas"
+            },
+            {
+              "id": 2,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 15,
+              "dosagem": "mg/kg",
+              "tempo": 1,
+              "intervalo": "dias"
+            },
+            {
+              "id": 3,
+              "acao": "*",
+              "opcao": 0,
+              "dose": 1,
+              "dosagem": "g",
+              "tempo": 8,
+              "intervalo": "horas"
+            }
+          ],
+          "cuidados": []
+        },
+        "mensagem": "Cefepime 2g 8/8h + Amicacina 15mg/kg/dia 2ª opção (pacientes com disfunção renal) - Meropenem 1g 8/8h",
+        "dest": 14
+      },
+      "node6": {
+        "id": 6,
+        "tipo": 1,
+        "nome": "Notificar Prescrição",
+        "variavel": "",
+        "condicao": "",
+        "prescricao": {
+          "medicacao": [
+            {
+              "id": 4,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 15,
+              "dosagem": "mg/kg",
+              "tempo": 12,
+              "intervalo": "horas"
+            },
+            {
+              "id": 0,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 2,
+              "dosagem": "g",
+              "tempo": 8,
+              "intervalo": "horas"
+            }
+          ],
+          "cuidados": []
+        },
+        "mensagem": "Vancomicina 15mg/kg 12/12h + Cefepime 2g 8/8h",
+        "dest": 14
+      },
+      "node7": {
+        "id": 7,
+        "tipo": 1,
+        "nome": "Notificar Prescrição",
+        "variavel": "",
+        "condicao": "",
+        "prescricao": {
+          "medicacao": [
+            {
+              "id": 3,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 2,
+              "dosagem": "g",
+              "tempo": 8,
+              "intervalo": "horas"
+            },
+            {
+              "id": 2,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 15,
+              "dosagem": "mg/kg",
+              "tempo": 1,
+              "intervalo": "dias"
+            },
+            {
+              "id": 3,
+              "acao": "+",
+              "opcao": 1,
+              "dose": 2,
+              "dosagem": "g",
+              "tempo": 8,
+              "intervalo": "horas"
+            },
+            {
+              "id": 5,
+              "acao": "+",
+              "opcao": 1,
+              "dose": 25000,
+              "dosagem": "UI/kg",
+              "tempo": 1,
+              "intervalo": "dias"
+            }
+          ],
+          "cuidados": []
+        },
+        "mensagem": "Meropenem 2g 8/8h + Amicacina 15mg/kg/dia 2ª opção - Meropenem 2g 8/8h + Polimixina B 25.000UI/Kg/dia (÷ 2 ou 3)",
+        "dest": 14
+      },
+      "node8": {
+        "id": 8,
+        "tipo": 1,
+        "nome": "Notificar Prescrição",
+        "variavel": "",
+        "condicao": "",
+        "prescricao": {
+          "medicacao": [
+            {
+              "id": 0,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 2,
+              "dosagem": "g",
+              "tempo": 8,
+              "intervalo": "horas"
+            },
+            {
+              "id": 6,
+              "acao": "+",
+              "opcao": 1,
+              "dose": 2,
+              "dosagem": "g",
+              "tempo": 8,
+              "intervalo": "horas"
+            }
+          ],
+          "cuidados": []
+        },
+        "mensagem": "Cefepime 2g 8/8h (adicionar Linezolida 600mg 12/12h se infecção por VRE nos últimos 30 dias) ",
+        "dest": 14
+      },
+      "node9": {
+        "id": 9,
+        "tipo": 1,
+        "nome": "Notificar Prescrição",
+        "variavel": "",
+        "condicao": "",
+        "prescricao": {
+          "medicacao": [
+            {
+              "id": 4,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 15,
+              "dosagem": "mg/kg",
+              "tempo": 12,
+              "intervalo": "horas"
+            },
+            {
+              "id": 3,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 1,
+              "dosagem": "g",
+              "tempo": 8,
+              "intervalo": "horas"
+            }
+          ],
+          "cuidados": []
+        },
+        "mensagem": "Vancomicina 15mg/kg 12/12h + Meropenem 1g 8/8h ",
+        "dest": 14
+      },
+      "node10": {
+        "id": 10,
+        "tipo": 1,
+        "nome": "Notificar Prescrição",
+        "variavel": "",
+        "condicao": "",
+        "prescricao": {
+          "medicacao": [
+            {
+              "id": 4,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 15,
+              "dosagem": "mg/kg",
+              "tempo": 12,
+              "intervalo": "horas"
+            },
+            {
+              "id": 3,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 1,
+              "dosagem": "g",
+              "tempo": 8,
+              "intervalo": "horas"
+            }
+          ],
+          "cuidados": []
+        },
+        "mensagem": "Vancomicina 15mg/kg 12/12h + Meropenem 1g 8/8h ",
+        "dest": 14
+      },
+      "node11": {
+        "id": 11,
+        "tipo": 1,
+        "nome": "Notificar Prescrição",
+        "variavel": "",
+        "condicao": "",
+        "prescricao": {
+          "medicacao": [
+            {
+              "id": 4,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 15,
+              "dosagem": "mg/kg",
+              "tempo": 12,
+              "intervalo": "horas"
+            },
+            {
+              "id": 3,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 1,
+              "dosagem": "g",
+              "tempo": 8,
+              "intervalo": "horas"
+            }
+          ],
+          "cuidados": []
+        },
+        "mensagem": "Vancomicina 15mg/kg 12/12h + Meropenem 1g 8/8h ",
+        "dest": 14
+      },
+      "node12": {
+        "id": 12,
+        "tipo": 1,
+        "nome": "Notificar Prescrição",
+        "variavel": "",
+        "condicao": "",
+        "prescricao": {
+          "medicacao": [
+            {
+              "id": 4,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 1,
+              "dosagem": "g",
+              "tempo": 12,
+              "intervalo": "horas"
+            },
+            {
+              "id": 3,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 1,
+              "dosagem": "g",
+              "tempo": 8,
+              "intervalo": "horas"
+            },
+            {
+              "id": 2,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 15,
+              "dosagem": "mg/kg",
+              "tempo": 1,
+              "intervalo": "dias"
+            }
+          ],
+          "cuidados": []
+        },
+        "mensagem": "Vancomicina 1g 12/12h + Meropenem 2g 8/8h + Amicacina 15mg/kg/dia ",
+        "dest": 14
+      },
+      "node13": {
+        "id": 13,
+        "tipo": 1,
+        "nome": "Notificar Prescrição",
+        "variavel": "",
+        "condicao": "",
+        "prescricao": {
+          "medicacao": [
+            {
+              "id": 6,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 600,
+              "dosagem": "mg",
+              "tempo": 12,
+              "intervalo": "horas"
+            },
+            {
+              "id": 3,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 1,
+              "dosagem": "g",
+              "tempo": 8,
+              "intervalo": "horas"
+            }
+          ],
+          "cuidados": []
+        },
+        "mensagem": "Linezolida 600mg 12/12h + Meropenem 1g 8/8h ",
+        "dest": 14
+      },
+      "node14": {
+        "id": 1,
+        "tipo": 0,
+        "nome": "Infecção Viral?",
+        "variavel": "instabilidade_hemodinamica, infeccao_pele, pneumonia, gram_crescente",
+        "condicao": "infeccao_cateter OU infeccao_pele OU pneumonia OU gram_crescente",
+        "mensagem": "",
+        "dest": {
+          "true": 15,
+          "false": 16
+        }
+      },
+      "node15": {
+        "id": 15,
+        "tipo": 1,
+        "nome": "Adicionar Medicação",
+        "variavel": "",
+        "condicao": "",
+        "prescricao": {
+          "medicacao": [
+            {
+              "id": 4,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 15,
+              "dosagem": "mg/kg",
+              "tempo": 12,
+              "intervalo": "horas"
+            }
+          ],
+          "cuidados": []
+        },
+        "mensagem": "Adicionar Vancomicina 15mg/kg/dose EV 12/12h ao esquema inicial ",
+        "dest": 16
+      },
+      "node16": {
+        "id": 16,
+        "tipo": 0,
+        "nome": "Sintomas Respiratórios?",
+        "variavel": "sintomas_resp, rx_torax_alterado",
+        "condicao": "sintomas_resp OU rx_torax_alterado",
+        "mensagem": "",
+        "dest": {
+          "true": 17,
+          "false": 18
+        }
+      },
+      "node17": {
+        "id": 17,
+        "tipo": 1,
+        "nome": "Revisar Tratamento",
+        "variavel": "",
+        "condicao": "",
+        "prescricao": {
+          "medicacao": [
+            {
+              "id": 7,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 500,
+              "dosagem": "mg",
+              "tempo": 1,
+              "intervalo": "dias"
+            }
+          ],
+          "cuidados": [
+            "Solicitar TC de Tórax",
+            "Considerar Tratamento de Pneumocistose em pacientes com hipoxemia grave e uso prolongado de corticoides ou QTX com análogos da purina",
+            "Considerar Influenza, em particular nos meses de inverno"
+          ]
+        },
+        "mensagem": "- Solicitar TC de tórax - Adicionar Azitromicina 500mg EV/VO 1x/dia - Considerar tratamento de Pneumocistose (SMT/TMP 15 a 20mg de TMP/kg/dia ÷3/4) em pacientes com hipoxemia grave e uso prolongado de corticoides ou QTX com análogos da purina - Considerar Influenza, em particular nos meses de inverno ",
+        "dest": 18
+      },
+      "node18": {
+        "id": 18,
+        "tipo": 0,
+        "nome": "Sepse?",
+        "variavel": "sepse_abdominal, tiflite, celulite_perianal",
+        "condicao": "sepse_abdominal OU tiflite OU celulite_perianal",
+        "mensagem": "",
+        "dest": {
+          "true": 19,
+          "false": 20
+        }
+      },
+      "node19": {
+        "id": 19,
+        "tipo": 1,
+        "nome": "Adicionar Medicação",
+        "variavel": "",
+        "condicao": "",
+        "prescricao": {
+          "medicacao": [
+            {
+              "id": 8,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 500,
+              "dosagem": "mg",
+              "tempo": 8,
+              "intervalo": "horas"
+            }
+          ],
+          "cuidados": []
+        },
+        "mensagem": "Acrescentar cobertura p/ anaeróbio (Metronidazol EV 500mg 8/8h)",
+        "dest": 20
+      },
+      "node20": {
+        "id": 20,
+        "tipo": 0,
+        "nome": "Úlceras bucais?",
+        "variavel": "ulcera_bucal",
+        "condicao": "ulcera_bucal",
+        "mensagem": "",
+        "dest": {
+          "sim": 21,
+          "nao": 22
+        }
+      },
+      "node21": {
+        "id": 21,
+        "tipo": 1,
+        "nome": "Prescrever Medicação",
+        "variavel": "",
+        "condicao": "",
+        "prescricao": {
+          "medicacao": [
+            {
+              "id": 9,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 5,
+              "dosagem": "mg/kg",
+              "tempo": 8,
+              "intervalo": "horas"
+            },
+            {
+              "id": 10,
+              "acao": "+",
+              "opcao": 0,
+              "dose": 200,
+              "dosagem": "mg",
+              "tempo": 1,
+              "intervalo": "dias"
+            }
+          ],
+          "cuidados": []
+        },
+        "mensagem": "Aciclovir EV 5mg/kg 3x/dia + Fluconazol EV 200mg/dia ",
+        "dest": 22
+      },
+      "node22": {
+        "id": 22,
+        "tipo": 0,
+        "nome": "Diarreia?",
+        "variavel": "diarreia",
+        "condicao": "diarreia",
+        "mensagem": "",
+        "dest": {
+          "true": 23,
+          "false": 24
+        }
+      },
+      "node23": {
+        "id": 23,
+        "tipo": 1,
+        "nome": "Nova prescrição",
+        "variavel": "",
+        "condicao": "",
+        "prescricao": {
+          "medicacao": [],
+          "cuidados": [
+            "Solicitar coprocultura, pesquisa de toxina A e B e leucócitos fecais",
+            "se sintomas de colite: Adicionar Metronidazol 500mg VO 8/8h"
+          ]
+        },
+        "mensagem": "Solicitar coprocultura, pesquisa de toxina A e B e leucócitos fecais se sintomas de colite: Adicionar Metronidazol 500mg VO 8/8h",
+        "dest": 24
+      },
+      "node24": {
+        "id": 24,
+        "tipo": 0,
+        "nome": "Infecção cateter",
+        "variavel": "infeccao_cateter",
+        "condicao": "infeccao_cateter",
+        "mensagem": "",
+        "dest": {
+          "true": 25,
+          "false": -1
+        }
+      },
+      "node25": {
+        "id": 25,
+        "tipo": 1,
+        "nome": "Nova prescrição",
+        "variavel": "",
+        "condicao": "",
+        "prescricao": {
+          "medicacao": [],
+          "cuidados": [
+            "Remover o cateter se houver suspeita de infecção relacionada ao cateter E choque séptico refratário aos antibióticos",
+            "Coletar culturas e amostra de secreção do sítio de saída se houver secreção purulenta"
+          ]
+        },
+        "mensagem": "Remover o cateter se houver suspeita de infecção relacionada ao cateter E choque séptico refratário aos antibióticos - Coletar culturas e amostra de secreção do sítio de saída se houver secreção purulenta ",
+        "dest": -1
+      }
+    }
+  }
 }

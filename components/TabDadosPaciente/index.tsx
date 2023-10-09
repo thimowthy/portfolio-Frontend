@@ -12,10 +12,58 @@ initTE({ Tab });
 export default function TabDadosPaciente({
   pacientes,
   setSelectedPatient,
-  nf,
-} // pendentes,
+  nf, // pendentes,
+} // pendetes,
 : any) {
+  const [listaPacientes, setListaPacientes] = useState(pacientes);
+  const [listaNf, setListaNf] = useState(nf);
+  const [listaPendetes, setListaPendentes] = useState([]);
   const [idAtivo, setIdAtivo] = useState(0);
+  const handleFilterPacientes = (busca: string) => {
+    let pacientesFiltrados;
+    const sanitizedBusca = busca.toLowerCase();
+    if (busca.length > 0) {
+      pacientesFiltrados = pacientes.filter(
+        (paciente: Paciente) =>
+          paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
+          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
+      );
+      setListaPacientes(pacientesFiltrados);
+    } else {
+      setListaPacientes(pacientes);
+    }
+  };
+
+  const handleFilterNf = (busca: string) => {
+    let pacientesNfFiltrados;
+    const sanitizedBusca = busca.toLowerCase();
+    if (busca.length > 0) {
+      pacientesNfFiltrados = nf.filter(
+        (paciente: Paciente) =>
+          paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
+          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
+      );
+      setListaNf(pacientesNfFiltrados);
+    } else {
+      setListaNf(nf);
+    }
+  };
+
+  // TODO: REPLACE [] TO PENDETES ARRAY AFTER BACK-END IS FINISHED
+  const handleFilterPendentes = (busca: string) => {
+    let pacientesPendentesFiltrados;
+    const sanitizedBusca = busca.toLowerCase();
+    if (busca.length > 0) {
+      pacientesPendentesFiltrados = [].filter(
+        (paciente: Paciente) =>
+          paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
+          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
+      );
+      setListaPendentes(pacientesPendentesFiltrados);
+    } else {
+      setListaPendentes([]);
+    }
+  };
   /**
    * Função para selecionar um paciente da lista para exibir os detalhes.
    * @param {Paciente} paciente - Paciente selecionado
@@ -47,10 +95,32 @@ export default function TabDadosPaciente({
             title="NF"
           />
         </TabList>
-        <div className="bg-[#DADADA] lista-pacientes_tab-content overflow-auto px-2 ">
+        <div className="bg-[#DADADA] lista-pacientes_tab-content overflow-auto px-6">
           <TabContents tabId="tab-todos" active={true}>
+            <div className="flex bg-white rounded-xl p-2 mt-5 mb-4">
+              <div className="pr-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="h-5 w-5"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <input
+                className="block w-full focus:border-none active:border-none focus:outline-none"
+                type="text"
+                placeholder="Busque por nome ou prontuário do paciente"
+                onChange={(e) => handleFilterPacientes(e.target.value)}
+              />
+            </div>
             <ul role="list" className="divide-y divide-gray-100">
-              {pacientes?.map((paciente: Paciente) => (
+              {listaPacientes?.map((paciente: Paciente) => (
                 <ItemListaPaciente
                   paciente={paciente}
                   idAtivo={idAtivo}
@@ -62,8 +132,30 @@ export default function TabDadosPaciente({
           </TabContents>
 
           <TabContents tabId="tab-pendentes" active={false}>
+            <div className="flex bg-white rounded-xl p-2 mt-5 mb-4">
+              <div className="pr-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="h-5 w-5"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <input
+                className="block w-full focus:border-none active:border-none focus:outline-none"
+                type="text"
+                placeholder="Busque por nome ou prontuário do paciente"
+                onChange={(e) => handleFilterPendentes(e.target.value)}
+              />
+            </div>
             <ul role="list" className="divide-y divide-gray-100">
-              {[]?.map((paciente: Paciente) => (
+              {listaPendetes?.map((paciente: Paciente) => (
                 <ItemListaPaciente
                   paciente={paciente}
                   idAtivo={idAtivo}
@@ -75,8 +167,30 @@ export default function TabDadosPaciente({
           </TabContents>
 
           <TabContents tabId="tab-NF" active={false}>
+            <div className="flex bg-white rounded-xl p-2 mt-5 mb-4">
+              <div className="pr-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="h-5 w-5"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <input
+                className="block w-full focus:border-none active:border-none focus:outline-none"
+                type="text"
+                placeholder="Busque por nome ou prontuário do paciente"
+                onChange={(e) => handleFilterNf(e.target.value)}
+              />
+            </div>
             <ul role="list" className="divide-y divide-gray-100">
-              {nf?.map((paciente: Paciente) => (
+              {listaNf?.map((paciente: Paciente) => (
                 <ItemListaPaciente
                   paciente={paciente}
                   idAtivo={idAtivo}

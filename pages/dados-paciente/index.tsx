@@ -15,9 +15,8 @@ const DynamicTabComponent = dynamic(
 
 const DadosPacientePage = ({
   pacientes,
-  nf,
-} //  pendentes,
-: any) => {
+  nf, //  pendentes,
+}: any) => {
   const router = useRouter();
   useEffect(() => {
     let pacienteAtivo =
@@ -50,7 +49,7 @@ export default DadosPacientePage;
 export async function getStaticProps<GetStaticProps>() {
   const pacientes = await fetcher({
     metodo: "GET",
-    rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatients",
+    rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatientsSemAlta",
   });
 
   // const nf = await fetcher({
@@ -74,7 +73,7 @@ export async function getStaticProps<GetStaticProps>() {
     paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
       ? paciente?.situacoesPaciente[0]?.diagnosticos[0].febre
       : false;
-  const nf = pacientes.filter(
+  const nf = pacientes?.filter(
     (paciente: Paciente) => febre(paciente) && isNeutropenico(paciente),
   );
 

@@ -1,3 +1,7 @@
+/**
+ * Renderiza um item de uma tablist. (renderiza apenas um item e deve estar dentro de um {@link: TabList})
+ * @category Component
+ */
 const TabItem = ({
   href,
   className,
@@ -5,6 +9,7 @@ const TabItem = ({
   active,
   children,
   liClassName,
+  disabled,
 }: {
   href: string;
   className?: string;
@@ -12,12 +17,13 @@ const TabItem = ({
   active?: boolean;
   children?: any;
   liClassName?: string;
+  disabled?: boolean;
 }) => {
   return (
     <li role="presentation" className={liClassName}>
       <a
         href={`#${href}`}
-        className={className}
+        className={`${className} ${disabled ? "disabled" : ""}`}
         data-te-toggle="pill"
         data-te-target={`#${href}`}
         data-te-nav-active={active}

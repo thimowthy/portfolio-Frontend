@@ -1,7 +1,7 @@
 import React from "react";
 import NovoProtocolForm from "./NovoProtocoloForm";
 import styles from "./styles.module.css";
-import BackIcon from "@/components/backIcon";
+import BackIcon from "@/components/buttons/backIcon";
 import Router from "next/router";
 import Diagnostico from "@/types/Diagnostico";
 import Tratamento from "@/types/Tratamento";
@@ -23,11 +23,10 @@ const CreateProtocol: React.FC<CreateProtocolProps> = ({
   diagnostico,
   tratamento,
   protocolo,
-  setProtocolo
+  setProtocolo,
 }) => {
-
-    return (
-      <>
+  return (
+    <>
       <div className={styles.header}></div>
       <div className={styles.container}>
         <form className={styles.menuForm}>
@@ -39,7 +38,7 @@ const CreateProtocol: React.FC<CreateProtocolProps> = ({
               onClick={() => {
                 Router.push("/menu");
               }}
-              />
+            />
             <label htmlFor="backBtn" className={styles.backButton}>
               <BackIcon width={40} height={40} color="#333" />
             </label>
@@ -57,9 +56,9 @@ const CreateProtocol: React.FC<CreateProtocolProps> = ({
             />
           </div>
         </form>
-      </div>          
-      </>
-    );
-  };
+      </div>
+    </>
+  );
+};
 
 export default CreateProtocol;

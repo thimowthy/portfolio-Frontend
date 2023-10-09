@@ -20,7 +20,7 @@ type EstratificacaoProps = {
   nome?: string;
   cpf?: string;
   numeroProntuario?: string;
-  cartaoSus?: string;
+  cns?: string;
   leito?: string;
 };
 
@@ -184,9 +184,7 @@ export default function FormEstratificacao({ paciente, setLoading }: any) {
                   </li>
                   <li>
                     Cartão SUS:{" "}
-                    {paciente.cartaoSus
-                      ? paciente.cartaoSus
-                      : "203029092350009"}
+                    {paciente.cns ? paciente.cns : "203029092350009"}
                   </li>
                 </ul>
               </div>
