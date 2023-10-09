@@ -1,27 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import ItemListaExame from '../ItemListaExame';
+import React, { useEffect, useState } from "react";
+import ItemListaExame from "../ItemListaExame";
 import Image from "next/image";
 import exameCinza from "@/public/medical-report-gray.png";
 
 interface ExameListProps {
   id: string;
 }
-const ExamesList: React.FC<ExameListProps> = ({id}) => {
-
+const ExamesList: React.FC<ExameListProps> = ({ id }) => {
   const [exames, setExames] = useState<Exame[]>([]);
 
   useEffect(() => {
- 
     const fetchExames = async () => {
       try {
-        const response = await fetch("https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetHemogramasFromPaciente?pacienteId="+id);
+        const response = await fetch(
+          "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetHemogramasFromPaciente?pacienteId=" +
+            id,
+        );
         if (response.ok) {
           const data = await response.json();
-          console.log(data)
+          console.log(data);
           setExames(data);
         }
       } catch (error) {
-        console.error('Erro ao buscar exames:', error);
+        console.error("Erro ao buscar exames:", error);
       }
     };
 
@@ -40,7 +41,9 @@ const ExamesList: React.FC<ExameListProps> = ({id}) => {
             height="250"
             alt="Exame"
           />
-          <p className="text-center text-gray-400 text-3xl font-bold mt-4">Nenhum exame <br/> realizado</p>
+          <p className="text-center text-gray-400 text-3xl font-bold mt-4">
+            Nenhum exame <br /> realizado
+          </p>
         </div>
       ) : (
         <ul>

@@ -58,7 +58,6 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     init();
   }, []);
 
-
   const [showPatientContent, setShowPatientContent] = useState(true);
   const [showExamsContent, setShowExamsContent] = useState(false);
 
@@ -69,7 +68,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   const showExams = () => {
     setShowExamsContent(true);
     setShowPatientContent(false);
-  }
+  };
 
   return (
     <div>
@@ -79,7 +78,11 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
           role="tablist"
           data-te-nav-ref
         >
-          <li role="presentation" className="bg-[#DADADA]" onClick={showPatient}>
+          <li
+            role="presentation"
+            className="bg-[#DADADA]"
+            onClick={showPatient}
+          >
             <a
               href="#tabs-todos"
               className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent dark:text-neutral-400 default-tab"
@@ -130,32 +133,37 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
               </div>
               <hr />
               {showPatientContent && (
-              <>
-                <div className="pt-2">
-                  <h1 className="text-2xl">
-                    Dados do paciente{" "}
-                    {paciente?.situacoesPaciente !== undefined &&
-                      paciente?.situacoesPaciente[0] &&
-                      paciente?.situacoesPaciente[0].diagnosticos[0] &&
-                      paciente?.situacoesPaciente[0].diagnosticos[0]
-                        .neutropenico &&
-                      paciente?.situacoesPaciente[0].diagnosticos[0].febre && (
-                        <span className="float-right text-danger flex">
-                          Neutropenia Febril{" "}
-                          <Image
-                            className="w-4 ml-4"
-                            src={febreImg}
-                            alt="Termômetro - Febre" />
-                        </span>
-                      )}
-                  </h1>
-                </div><div className="flex gap-x-4 pt-4 pb-4">
+                <>
+                  <div className="pt-2">
+                    <h1 className="text-2xl">
+                      Dados do paciente{" "}
+                      {paciente?.situacoesPaciente !== undefined &&
+                        paciente?.situacoesPaciente[0] &&
+                        paciente?.situacoesPaciente[0].diagnosticos[0] &&
+                        paciente?.situacoesPaciente[0].diagnosticos[0]
+                          .neutropenico &&
+                        paciente?.situacoesPaciente[0].diagnosticos[0]
+                          .febre && (
+                          <span className="float-right text-danger flex">
+                            Neutropenia Febril{" "}
+                            <Image
+                              className="w-4 ml-4"
+                              src={febreImg}
+                              alt="Termômetro - Febre"
+                            />
+                          </span>
+                        )}
+                    </h1>
+                  </div>
+                  <div className="flex gap-x-4 pt-4 pb-4">
                     <div>
                       <p>CPF: {paciente.cpf}</p>
                       <p>
                         Data de nascimento:{" "}
                         {paciente?.dataNascimento
-                          ? moment(paciente?.dataNascimento).format("DD/MM/YYYY")
+                          ? moment(paciente?.dataNascimento).format(
+                              "DD/MM/YYYY",
+                            )
                           : ""}
                       </p>
                       {/* <p>Cartão SUS: {paciente.cartaoSus}</p> */}
@@ -166,13 +174,15 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                       <p>
                         Leito:{" "}
                         {paciente?.situacoesPaciente !== undefined &&
-                          paciente?.situacoesPaciente[0]
+                        paciente?.situacoesPaciente[0]
                           ? paciente?.situacoesPaciente[0].leito
                           : ""}
                       </p>
                       {/* <p>Unidade: {paciente.unidade}</p> */}
                     </div>
-                  </div><hr /><div className="pt-2">
+                  </div>
+                  <hr />
+                  <div className="pt-2">
                     <h1 className="text-2xl">Progresso do tratamento</h1>
                     <div className="flex flex-row rounded-full bg-white mt-4">
                       <div className="basis-1/4 bg-yellow-800 py-2 pl-2 rounded-bl-full rounded-tl-full">
@@ -198,7 +208,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                                     {comorbidade?.nome}
                                   </p>
                                 );
-                              }
+                              },
                             )}
                           </div>
                           <div className="py-1">
@@ -249,7 +259,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                             <div className="flex justify-center">
                               <div
                                 className={selectLabelNeutrofilos(
-                                  quantidadeNeutrofilos || 0
+                                  quantidadeNeutrofilos || 0,
                                 )}
                               ></div>
                             </div>
@@ -282,7 +292,8 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                                 <path
                                   strokeLinecap="round"
                                   strokeLinejoin="round"
-                                  d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+                                  d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
+                                />
                               </svg>
                             </span>
                           </h1>
@@ -316,11 +327,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                   </div>
                 </>
               )}
-              {showExamsContent && (
-                <ExamesList
-                  id={paciente.id.toString()}
-                /> 
-              )}
+              {showExamsContent && <ExamesList id={paciente.id.toString()} />}
             </>
           )}
         </div>
