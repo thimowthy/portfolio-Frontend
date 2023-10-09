@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import fetcher from "@/api/fetcher";
 import SeoConfig from "../../components/SeoConfig/index";
-import toast, { Toaster } from "react-hot-toast";
 import DetalhesPaciente from "../../components/DetalhesPaciente";
+import Header from "@/components/Header";
 
 const DynamicTabComponent = dynamic(
   () => import("../../components/TabDadosPaciente"),
@@ -25,10 +25,12 @@ const DadosPacientePage = ({
     setSelectedPatient(pacienteAtivo);
   }, [router]);
   const [selectedPatient, setSelectedPatient] = useState<Paciente>({});
+  4;
   return (
     <>
       <SeoConfig title="Lista de pacientes" />
-      <section className="flex min-h-full flex items-center">
+      <Header />
+      <section className="flex min-h-full flex items-center pt-10">
         <div className="basis-2/5 mr-2">
           <DynamicTabComponent
             pacientes={pacientes || []}
