@@ -12,17 +12,17 @@ import { defaultProtocolo } from "@/components/MenuAdm/nodes/protFlow";
 import Protocolo from "@/types/Protocolo";
 
 const Protocolo = () => {
-    
-  const [ diagnostico, setDiagnostico ] = useState<Diagnostico>(defaultDiagnostico);
-  const [ tratamento, setTratamento ] = useState<Tratamento>(defaultTratamento);
-  const [ protocolo, setProtocolo ] = useState<Protocolo>(defaultProtocolo);
+  const [diagnostico, setDiagnostico] =
+    useState<Diagnostico>(defaultDiagnostico);
+  const [tratamento, setTratamento] = useState<Tratamento>(defaultTratamento);
+  const [protocolo, setProtocolo] = useState<Protocolo>(defaultProtocolo);
 
-  const [ openWin, setOpenWin ] = useState("menu_prot");
-  const [ closeWin, setCloseWin ] = useState("");
+  const [openWin, setOpenWin] = useState("menu_prot");
+  const [closeWin, setCloseWin] = useState("");
 
-  const [ winCriarTrat, setWinCriarTrat ] = useState(false);
-  const [ winCriarDiag, setWinCriarDiag ] = useState(false);
-  const [ winMenuProt, setwinMenuProt ] = useState(true);
+  const [winCriarTrat, setWinCriarTrat] = useState(false);
+  const [winCriarDiag, setWinCriarDiag] = useState(false);
+  const [winMenuProt, setwinMenuProt] = useState(true);
 
   const closeWindow = (window: string) => {
     switch (window) {
@@ -55,17 +55,17 @@ const Protocolo = () => {
   useEffect(() => {
     openWindow(openWin);
     closeWindow(closeWin);
-  }, [ openWin, closeWin ]);
-  
+  }, [openWin, closeWin]);
+
   useEffect(() => {
     //console.log(protocolo);
-  }, [ protocolo ]);
+  }, [protocolo]);
 
   return (
-      <div>
-        <SeoConfig title="Criar Protocolo" />
-        <Header />
-        { winMenuProt && (
+    <div>
+      <SeoConfig title="Criar Protocolo" />
+      <Header />
+      {winMenuProt && (
         <CriarProtocolo
           setOpenWindow={setOpenWin}
           setCloseWindow={setCloseWin}
@@ -74,22 +74,25 @@ const Protocolo = () => {
           tratamento={tratamento}
           protocolo={protocolo}
           setProtocolo={setProtocolo}
-        />)}
-        { winCriarDiag && (
+        />
+      )}
+      {winCriarDiag && (
         <CriarDiagnostico
           setOpenWindow={setOpenWin}
           setCloseWindow={setCloseWin}
           windowName="novo_diag"
           onDiagnosticoSubmit={setDiagnostico}
-        />)}
-        { winCriarTrat && (
+        />
+      )}
+      {winCriarTrat && (
         <CriarTratamento
           setOpenWindow={setOpenWin}
           setCloseWindow={setCloseWin}
           windowName="novo_trat"
           onTratamentoSubmit={setTratamento}
-        />)}
-      </div>
+        />
+      )}
+    </div>
   );
 };
 

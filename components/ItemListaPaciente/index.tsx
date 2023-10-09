@@ -2,6 +2,10 @@ import useIcon from "@/hooks/useIcon";
 import useServerityIcon from "@/hooks/useSeverityIcon";
 import Image from "next/image";
 import styles from "./styles.module.css";
+/**
+ * Renderiza um item da listagem de pacientes.
+ * @category Component
+ */
 const ItemListaPaciente = ({
   paciente,
   selectPatient,

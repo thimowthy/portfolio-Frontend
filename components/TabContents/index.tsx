@@ -1,53 +1,28 @@
-import ItemListaPaciente from "../ItemListaPaciente";
-
+/**
+ * Renderiza o container do conteúdo relacionado ao TabItem.
+ * @category Component
+ */
 const TabContents = ({
-  pacientes,
-  idAtivo,
-  selectPatient,
   tabId,
   className,
+  active,
+  children,
 }: {
-  pacientes: Paciente[];
-  idAtivo: number;
   tabId: string;
   className?: string;
-  selectPatient: Function;
+  active: boolean;
+  children?: any;
 }) => {
   return (
     <>
       <div
-        className={`${className} data-[te-tab-active]:block`}
+        className={`${className} hidden opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block`}
         id={tabId}
         role="tabpanel"
         aria-labelledby={`${tabId}-tab`}
-        data-te-tab-active
+        data-te-tab-active={active || undefined}
       >
-        <ul role="list" className="divide-y divide-gray-100">
-          {pacientes?.map((paciente: Paciente) => (
-            <ItemListaPaciente
-              paciente={paciente}
-              idAtivo={idAtivo}
-              selectPatient={selectPatient}
-              key={paciente.id}
-            />
-          ))}
-        </ul>
-      </div>
-      <div
-        className="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
-        id="tabs-pendentes"
-        role="tabpanel"
-        aria-labelledby="tabs-pendentes-tab"
-      >
-        Conteúdo
-      </div>
-      <div
-        className="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
-        id="tabs-NF"
-        role="tabpanel"
-        aria-labelledby="tabs-NF-tab"
-      >
-        Tab 3 content
+        {children}
       </div>
     </>
   );

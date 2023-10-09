@@ -3,4 +3,4 @@ type Exame = {
   dataSolicitacao: string;
   dataResultado: string;
   solicitante: string;
-}
+};
