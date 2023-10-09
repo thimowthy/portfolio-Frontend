@@ -58,7 +58,7 @@ const Protocolo = () => {
   }, [ openWin, closeWin ]);
   
   useEffect(() => {
-    console.log(protocolo);
+    //console.log(protocolo);
   }, [ protocolo ]);
 
   return (
