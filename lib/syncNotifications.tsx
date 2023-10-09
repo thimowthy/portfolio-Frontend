@@ -23,7 +23,7 @@ export default async function syncNotification() {
       existingNotifications.push(notification);
       browserNotification.browserNotify({
         title: "Atenção!!",
-        body: notification.tipoNotificacao.mensagem || "",
+        body: notification?.tipoNotificacao?.mensagem || "",
       });
     }
   });

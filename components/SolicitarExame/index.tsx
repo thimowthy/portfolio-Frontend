@@ -4,6 +4,7 @@ import BackIcon from "@/components/buttons/backIcon";
 import Router from "next/router";
 import ExameForm from "./SolicitarExameForm";
 import { ExameProps } from "./ExameProps";
+import Link from "next/link";
 
 const SolicitarExame: React.FC<ExameProps> = ({
   id,
@@ -17,17 +18,18 @@ const SolicitarExame: React.FC<ExameProps> = ({
       <div className={styles.container}>
         <form className={styles.menuForm}>
           <div className={styles.menuHeader}>
-            <button
+            <Link
               id="backBtn"
-              style={{ display: "none" }}
               type="button"
-              onClick={() => {
-                Router.push(`/dados-paciente/${id}`);
+              href={{
+                pathname: "/dados-paciente",
+                query: { id },
               }}
-            />
-            <label htmlFor="backBtn" className={styles.backButton}>
-              <BackIcon width={40} height={40} color="#333" />
-            </label>
+            >
+              <label htmlFor="backBtn" className={styles.backButton}>
+                <BackIcon width={40} height={40} color="#333" />
+              </label>
+            </Link>
             <h1 className={styles.headerTitle}>Solicitar Exame</h1>
           </div>
           <div className={styles.sep}></div>
