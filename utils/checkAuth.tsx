@@ -5,14 +5,14 @@ import jwt_decode from "jwt-decode";
  * @returns {boolean} Retorna verdadeiro se o usuário estiver autenticado; caso contrário, retorna falso.
  */
 const checkAuthentication = (): boolean => {
-  const token = localStorage.getItem('Authorization');
+  const token = localStorage.getItem("Authorization");
 
   if (!token) {
     return false;
   }
 
   try {
-    const decodedToken: JwtPayload = jwt_decode(token);
+    const decodedToken: JwtPayload = jwt_decode(token || "");
     const currentTimestamp = Math.floor(Date.now() / 1000);
 
     if (decodedToken.exp && decodedToken.exp < currentTimestamp) {
@@ -25,4 +25,3 @@ const checkAuthentication = (): boolean => {
 };
 
 export default checkAuthentication;
-

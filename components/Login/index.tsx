@@ -7,11 +7,10 @@ import ErrorToast from "@/components/toasts/errorToast";
 import styles from "./Login.module.css";
 
 const Login = () => {
-
-  const [ username, setUsername ] = useState("");
-  const [ password, setPassword ] = useState("");
-  const [ LoginError, setLoginError ] = useState(false);
-  const [ error, setError ] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [LoginError, setLoginError] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -47,7 +46,7 @@ const Login = () => {
        * @type {Response}
        */
       const response = await fetch(
-        "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Auth/Auth",
+        "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Auth/Autenticacao",
         {
           method: "POST",
           headers: {
@@ -147,14 +146,18 @@ const Login = () => {
           <ErrorToast
             title="Erro de login"
             message="Erro ao realizar login, credenciais inválidas"
-            onClose={() => { setLoginError(false); } }
+            onClose={() => {
+              setLoginError(false);
+            }}
           />
         )}
         {error && (
           <ErrorToast
             title="Ops, algo deu errado"
             message="Ocorreu um problema ao tentar efetuar o login. Tente novamente mais tarde"
-            onClose={() => { setError(false); } }
+            onClose={() => {
+              setError(false);
+            }}
           />
         )}
       </div>
