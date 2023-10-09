@@ -4,11 +4,9 @@ import { useEffect } from "react";
 import "tw-elements/dist/css/tw-elements.min.css";
 
 export default function Layout({ children }: any) {
-
   const router = useRouter();
 
   useEffect(() => {
-    
     const isAuthenticated = checkAuthentication();
     const isLoginPage = router.pathname === "/login";
 

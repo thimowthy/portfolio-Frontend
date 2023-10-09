@@ -78,6 +78,7 @@
 .infoText {
   font-size: 12px;
   text-align: center;
+  color: #555;
 }
 .loginError {
   position: absolute;

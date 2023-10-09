@@ -58,10 +58,10 @@ const Login = () => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
+        localStorage.setItem("Authorization", data.token);
 
-        localStorage.setItem("Authorization", "Bearer " + data.value);
-
-        const decodedToken: JwtPayload = jwt_decode(data.value);
+        const decodedToken: JwtPayload = jwt_decode(data.token);
 
         switch (decodedToken.cargo) {
           case "ADMINISTRADOR":
