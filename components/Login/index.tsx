@@ -1,4 +1,5 @@
 import { useState, FormEvent } from "react";
+import jwt_decode from "jwt-decode";
 import Image from "next/image";
 import Router from "next/router";
 import logo from "@/public/logo.png";
@@ -6,11 +7,10 @@ import ErrorToast from "@/components/toasts/errorToast";
 import styles from "./Login.module.css";
 
 const Login = () => {
-
-  const [ username, setUsername ] = useState("");
-  const [ password, setPassword ] = useState("");
-  const [ LoginError, setLoginError ] = useState(false);
-  const [ error, setError ] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [LoginError, setLoginError] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -31,12 +31,12 @@ const Login = () => {
     /**
      * As credenciais de login do usuário.
      * @type {Object}
-     * @property {string} username - O nome de usuário.
+     * @property {string} login - O nome de usuário.
      * @property {string} password - A senha do usuário.
      */
     e.preventDefault();
     const credentials = {
-      userName: username,
+      login: username,
       senha: password,
     };
 
@@ -46,7 +46,7 @@ const Login = () => {
        * @type {Response}
        */
       const response = await fetch(
-        "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Auth/Auth",
+        "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Auth/Autenticacao",
         {
           method: "POST",
           headers: {
@@ -58,8 +58,24 @@ const Login = () => {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("Authorization", "Bearer " + data.value);
-        Router.push("/dados-paciente");
+        console.log(data);
+        localStorage.setItem("Authorization", data.token);
+
+        const decodedToken: JwtPayload = jwt_decode(data.token);
+
+        switch (decodedToken.cargo) {
+          case "ADMINISTRADOR":
+            Router.push("/menu");
+            break;
+          case "MEDICO":
+            Router.push("/dados-paciente");
+            break;
+          case "ENFERMEIRO":
+            Router.push("/dados-paciente");
+            break;
+          default:
+            Router.push("/dashboard");
+        }
         console.log("Login successful!");
       } else {
         setLoginError(true);
@@ -70,12 +86,6 @@ const Login = () => {
       console.error("Error occurred during login:", error);
     }
 
-    /**
-     * Imprime as credenciais de login no console.
-     * @type {Object}
-     * @property {string} username - O nome de usuário.
-     * @property {string} password - A senha do usuário.
-     */
     console.log("Login credentials:", { username, password });
   };
 
@@ -136,14 +146,18 @@ const Login = () => {
           <ErrorToast
             title="Erro de login"
             message="Erro ao realizar login, credenciais inválidas"
-            onClose={() => { setLoginError(false); } }
+            onClose={() => {
+              setLoginError(false);
+            }}
           />
         )}
         {error && (
           <ErrorToast
             title="Ops, algo deu errado"
             message="Ocorreu um problema ao tentar efetuar o login. Tente novamente mais tarde"
-            onClose={() => { setError(false); } }
+            onClose={() => {
+              setError(false);
+            }}
           />
         )}
       </div>

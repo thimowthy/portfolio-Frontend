@@ -1,18 +1,26 @@
 import { useState } from "react";
 import styles from "./styles.module.css";
-import BackIcon from "@/components/backIcon";
+import BackIcon from "@/components/buttons/backIcon";
 
 interface FormBoxProps {
-    title: string;
-    content: React.ReactNode;
-    showButton: boolean;
-    openWin: string;
-    closeWin: string;
-    setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
-    setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
-  }
-  
-const FormBox: React.FC<FormBoxProps> = ({ title, content, showButton, openWin, closeWin, setOpenWindow, setCloseWindow }) => {
+  title: string;
+  content: React.ReactNode;
+  showButton: boolean;
+  openWin: string;
+  closeWin: string;
+  setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
+  setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const FormBox: React.FC<FormBoxProps> = ({
+  title,
+  content,
+  showButton,
+  openWin,
+  closeWin,
+  setOpenWindow,
+  setCloseWindow,
+}) => {
   return (
     <>
       <div className={styles.header}></div>
@@ -28,10 +36,10 @@ const FormBox: React.FC<FormBoxProps> = ({ title, content, showButton, openWin, 
                   onClick={() => {
                     setOpenWindow(openWin);
                     setCloseWindow(closeWin);
-
-                  }}/>
+                  }}
+                />
                 <label htmlFor="backBtn" className={styles.backButton}>
-                  <BackIcon width={40} height={40} color="#333"/>
+                  <BackIcon width={40} height={40} color="#333" />
                 </label>
               </>
             )}
