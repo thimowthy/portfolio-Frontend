@@ -53,7 +53,7 @@ export default function Notifications() {
                         Nova notificação!
                       </p>
                       <p className="mt-1 text-sm text-gray-500">
-                        {notification.tipoNotificacao.mensagem}
+                        {notification?.tipoNotificacao?.mensagem}
                       </p>
                     </div>
                   </div>
