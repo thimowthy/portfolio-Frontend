@@ -7,7 +7,6 @@ import bad from "../../public/bad.png";
 import veryBad from "../../public/very_bad.png";
 import febreImg from "../../public/termometro.png";
 import moment from "moment";
-import Link from "next/link";
 import TabList from "../TabList";
 import TabItem from "../TabItem";
 import TabContents from "../TabContents/index";

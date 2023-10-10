@@ -15,18 +15,13 @@ const ItemListaExame: React.FC<Exame> = ({
     >
       <div className="flex gap-x-4">
         {
-          <a
-            href="https://www.flaticon.com/free-icons/medical"
-            title="medical icons"
-          >
-            <Image
-              className="h-24 w-24 flex-none"
-              src={exameIcon}
-              width="250"
-              height="250"
-              alt="Exame"
-            />
-          </a>
+          <Image
+            className="h-24 w-24 flex-none"
+            src={exameIcon}
+            width="250"
+            height="250"
+            alt="Exame"
+          />
         }
         <div className="min-w-0 flex-auto">
           <p className="text-xl font-semibold leading-6 text-gray-900 text-2xl mb-4">
