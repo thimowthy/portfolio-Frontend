@@ -121,7 +121,7 @@ export default function FormEstratificacao({ paciente, setLoading }: any) {
         setLoading(false);
         if (response.ok) {
           alert("Escore MASCC armazenado com sucesso");
-          router.push("/sintomas");
+          router.push("/dados-paciente");
         } else {
           //console.error()
           alert("Erro ao armazenar Escore MASCC");

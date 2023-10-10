@@ -45,7 +45,7 @@ const SolicitarExame = () => {
             id={id}
             prontuario={fetchedData.numeroProntuario}
             leito={
-              fetchedData.internacao[fetchedData.internacao.length - 1].leito
+              fetchedData?.internacao[fetchedData.internacao.length - 1]?.leito
             }
             paciente={fetchedData.nome}
           />
