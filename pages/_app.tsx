@@ -8,7 +8,6 @@ export default function MyApp({ Component, pageProps }: any) {
     <Layout>
       <Component {...pageProps} />
       <Toaster />
-      <Notifications />
     </Layout>
   );
 }

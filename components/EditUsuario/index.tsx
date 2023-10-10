@@ -4,10 +4,10 @@ import Image from "next/image";
 
 export default function EditUsuario({ setListUsers, setUpdateUser, user, setLoading }: any) {
 
-  const [ nome, setNome ] = useState(user.nome);
-  const [ cpf, setCpf ] = useState(user.cpf);
-  const [ certificado, setCertificado ] = useState(user.certificado);
-  const [ userName, setUserName ] = useState(user.userName);
+  const [nome, setNome] = useState(user.nome);
+  const [cpf, setCpf] = useState(user.cpf);
+  const [certificado, setCertificado] = useState(user.certificado);
+  const [userName, setUserName] = useState(user.login);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -15,7 +15,7 @@ export default function EditUsuario({ setListUsers, setUpdateUser, user, setLoad
       const formData = {
         id: user.id,
         nome,
-        userName,
+        login: userName,
         cpf,
         certificado,
         senha: user.senha,
@@ -24,26 +24,31 @@ export default function EditUsuario({ setListUsers, setUpdateUser, user, setLoad
 
       setLoading(true);
 
-      const response = await fetch(`https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/PutUser/${user.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData)
-      });
+      const token = localStorage.getItem("Authorization");
 
-      setTimeout(() => {
-        setLoading(false);
-        if(response.ok){
-          alert("Usuário atualizado com sucesso");
-          setUpdateUser(false);
-          setListUsers(true);
-        } else {
-          //console.error()
-          alert("Erro ao atualizar usuário");
-          //setError(true);
-        }
-      }, 1500);
+      if (token) {
+        const response = await fetch(`http://localhost:7091/Usuario/PutUser/${user.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify(formData)
+        });
+        setTimeout(() => {
+          setLoading(false);
+          if (response.ok) {
+            alert("Usuário atualizado com sucesso");
+            setUpdateUser(false);
+            setListUsers(true);
+          } else {
+            //console.error()
+            alert("Erro ao atualizar usuário");
+            //setError(true);
+          }
+        }, 1500);
+      }
+
 
     } catch (error) {
       console.error(error);
@@ -52,7 +57,7 @@ export default function EditUsuario({ setListUsers, setUpdateUser, user, setLoad
     }
   };
 
-  function backToList(){
+  function backToList() {
     setUpdateUser(false);
     setListUsers(true);
   }
@@ -61,13 +66,13 @@ export default function EditUsuario({ setListUsers, setUpdateUser, user, setLoad
     <div className="flex min-h-full items-center">
       <div className="flex flex-col w-[40%] h-[60%] mx-auto mt-7 bg-[#fff] rounded-lg pb-5">
         <div className="flex items-center justify-center w-full h-12 gap-3 p-2 border-b-2 relative" onClick={() => backToList()}>
-          <Image className="absolute left-4 cursor-pointer" src={ArrowLeft} alt="Voltar"/>
+          <Image className="absolute left-4 cursor-pointer" src={ArrowLeft} alt="Voltar" />
           <h3 className="text-xl">Edição de usuário</h3>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col px-8">
             <div className="flex items-center w-full">
-              
+
               <div className="flex flex-col p-2 rounded-lg w-[50%]">
                 <label htmlFor="nome" className="ml-1">
                   Nome
@@ -83,7 +88,7 @@ export default function EditUsuario({ setListUsers, setUpdateUser, user, setLoad
                   required
                 />
               </div>
-            
+
               <div className="flex flex-col p-2 rounded-lg w-[50%]">
                 <label htmlFor="nome" className="ml-1">
                   Usuário
