@@ -11,11 +11,11 @@ const checkAuthentication = (): boolean => {
     return false;
   }
   try {
-    const decodedToken: JwtPayload = jwt_decode(token);
+    const decodedToken: JwtPayload = jwt_decode(token || "");
     const currentTimestamp = Math.floor(Date.now() / 1000);
 
     if (decodedToken.exp && decodedToken.exp < currentTimestamp) {
-      return true;
+      return false;
     }
     return true;
   } catch (error) {
