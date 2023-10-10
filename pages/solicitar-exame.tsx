@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 const SolicitarExame = () => {
   const router = useRouter();
-  const id = "12"; //router.query;
+  const id = router.query?.id;
 
   const [fetchedData, setFetchedData] = useState({
     numeroProntuario: "",

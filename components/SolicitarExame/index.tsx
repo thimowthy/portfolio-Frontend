@@ -23,7 +23,7 @@ const SolicitarExame: React.FC<ExameProps> = ({
               type="button"
               href={{
                 pathname: "/dados-paciente",
-                query: { id },
+                query: { paciente },
               }}
             >
               <label htmlFor="backBtn" className={styles.backButton}>
