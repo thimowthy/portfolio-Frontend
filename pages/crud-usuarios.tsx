@@ -23,14 +23,14 @@ const DeleteUsuario = dynamic(() => import("../components/DeleteUsuario"), {
 });
 
 const CrudUsuario = () => {
-  const [ user, setUser ] = useState({});
-  const [ selectedRole, setSelectedRole ] = useState({});
-  const [ listUsers, setListUsers ] = useState(true);
-  const [ createUser, setCreateUser ] = useState(false);
-  const [ updateUser, setUpdateUser ] = useState(false);
-  const [ deleteUser, setDeleteUser ] = useState(false);
-  const [ loading, setLoading ] = useState(false);
-  const [ users, setUsers ] = useState([]);
+  const [user, setUser] = useState({});
+  const [selectedRole, setSelectedRole] = useState({});
+  const [listUsers, setListUsers] = useState(true);
+  const [createUser, setCreateUser] = useState(false);
+  const [updateUser, setUpdateUser] = useState(false);
+  const [deleteUser, setDeleteUser] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [users, setUsers] = useState([]);
   const cargos = [
     { nome: "Médico", valor: "medico", codigo: 35 },
     { nome: "Enfermeiro", valor: "enfermeiro", codigo: 42 },
@@ -44,15 +44,20 @@ const CrudUsuario = () => {
   }, []);
 
   const fetchUsers = async () => {
+
+    const token = localStorage.getItem("Authorization");
+
     try {
       setLoading(true);
       const usersList = await fetcher({
         rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/GetListUsers",
         metodo: "GET",
-        cabecalho: "Content-Type: application/json",
+        cabecalho: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` }
       });
-      const filteredList = usersList.filter((u: Usuario) => u.ativo);
-      setUsers(filteredList);
+
+      console.log(usersList);
+      //const filteredList = usersList.filter((u: Usuario) => u.ativo); ativo não está sendo retornado
+      setUsers(usersList);
     } catch (error) {
       console.error(error);
     } finally {

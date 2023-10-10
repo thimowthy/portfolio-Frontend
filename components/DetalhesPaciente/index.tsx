@@ -11,8 +11,12 @@ import Link from "next/link";
 import TabList from "../TabList";
 import TabItem from "../TabItem";
 import TabContents from "../TabContents/index";
-import EditUser from "../../public/pencil.svg";
+import Edit from "../../public/pencil.svg";
 
+import ModalCriacaoCuidado from "../ModalCriacaoCuidado";
+import ModalCriacaoMedicamento from "../ModalCriacaoMedicamento";
+import Delete from "../../public/trash2.svg";
+import Plus from "../../public/plus.svg";
 import api from "@/helpers";
 import ErrorToast from "../toasts/errorToast";
 import SuccessToast from "../toasts/successToast";
@@ -23,6 +27,8 @@ import ExamesList from "../ExameList";
  */
 export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   const [instabilidadeH, setInstabilidadeH] = useState(false);
+  const [modalMedicamento, setModalMedicamento] = useState(false);
+  const [modalCuidado, setModalCuidado] = useState(false);
   const [infeccao, setInfeccao] = useState("");
   const [prescricao, setPrescricao] = useState({
     remedios: [""],
@@ -38,7 +44,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
           primeira_opcao: "Cefepime 2g 8/8h"
         },
         {
-          segunda_opcao: "Pipe-Tazo 4,5 6/6gh"
+          segunda_opcao: "Pipe-Tazo 4,5g 6/6h"
         }
       ]
     },
@@ -282,6 +288,31 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
       return neutral;
     }
     return good;
+  };
+
+  const openModalCreateMedicamento = () => {
+    setModalMedicamento(true);
+  };
+
+  const openModalCreateCuidado = () => {
+    setModalCuidado(true);
+  };
+
+  const handleDeleteCuidado = (element: any) => {
+    const index = prescricao.cuidados?.findIndex((item) => item == element);
+    const newCuidados = prescricao.cuidados?.splice(index, 1);
+    setPrescricao((prevState: Presc) => {
+      return {
+        sintomas: [...prevState.sintomas],
+        cuidados: [newCuidados],
+        remedios: [...prevState.remedios,]
+      };
+    });
+    prescricao.cuidados?.splice(index, 1);
+    console.log(prescricao.cuidados);
+  };
+  const handleDeleteMedicamento = () => {
+
   };
   useEffect(() => {
     const init = async () => {
@@ -712,7 +743,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
               <h1 className="text-2xl">Sintomas</h1>
               <div className="flex items-center gap-4 justify-center">
 
-                <div className="flex flex-col mt-2 gap-6 py-6 bg-slate-500 px-6 w-[50%] rounded-lg items-center justify-center">
+                <div className="flex flex-col mt-2 gap-6 py-6 bg-[#E1ECEA] px-6 w-[50%] rounded-lg items-center justify-center">
                   <p>Instabilidade Hemodinâmica:</p>
                   <div className="flex gap-3">
                     <input type="radio" name="resposta_form_01_sintomas" id="ih_sim" onChange={() => setInstabilidadeH(true)} checked={instabilidadeH} />
@@ -722,7 +753,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                   </div>
                 </div>
                 {instabilidadeH &&
-                  <div className="flex flex-col mt-2 gap-6 py-6 bg-slate-500 px-6 w-[50%] rounded-lg items-center justify-center">
+                  <div className="flex flex-col mt-2 gap-6 p-6 bg-[#E1ECEA] px-6 w-[50%] rounded-lg items-center justify-center">
                     <p>Infeccção prévia:</p>
                     <div className="flex gap-3 box-border">
                       <select id="select_infeccao" style={{ width: "100%", maxWidth: "100%" }} onChange={(e) => handleInfeccao(e.target.value)}>
@@ -732,7 +763,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                   </div>
                 }
                 {!instabilidadeH &&
-                  <div className="flex flex-col mt-2 gap-6 py-6 bg-slate-500 px-6 w-[50%] rounded-lg items-center justify-center">
+                  <div className="flex flex-col mt-2 gap-6 p-6 bg-[#E1ECEA] px-6 w-[50%] rounded-lg items-center justify-center">
                     <p>Infeccção prévia:</p>
                     <div className="flex gap-3 box-border">
                       <select id="select_infeccao" style={{ width: "100%", maxWidth: "100%" }} onChange={(e) => handleInfeccao(e.target.value)}>
@@ -747,7 +778,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                   <div className="grid grid-cols-2 justify-items-center pb-6">
 
                     {especificidadesMrsa.map((el) =>
-                      <div className="flex flex-col mt-3 gap-6 py-6 bg-slate-500 px-6 w-[300px] rounded-lg items-center justify-center" key={el.nome}>
+                      <div className="flex flex-col mt-3 gap-6 py-6 bg-[#E1ECEA] px-6 w-[300px] rounded-lg items-center justify-center" key={el.nome}>
                         {el.nome !== "esp04" && el.nome !== "esp05" && el.nome !== "esp06" &&
                           <div>
 
@@ -780,29 +811,70 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                   </div>
                 </>
               }
+              <h1 className="text-3xl mt-3">Prescrição</h1>
               <div className="pt-4 flex gap-4 pb-8">
-                <div className="flex flex-col w-[50%] min-h-[200px] h-[300px] bg-purple-300 p-4 rounded-lg">
-                  <h2 className="text-2xl">Medicamentos</h2>
+                <div className="flex flex-col w-[50%] min-h-[200px] bg-[#a9aee3] p-4 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-2xl">Medicamentos</h2>
+                    <a className="cursor-pointer" onClick={openModalCreateMedicamento}>
+                      <Image src={Plus} alt="Adicionar medicamento" className="cursor-pointer" />
+                    </a>
+                  </div>
                   <ul style={{ "listStyle": "square" }}>
                     {prescricao.remedios.map((el) =>
                     (<li key={el} className="p-2 flex items-center">
-                      <p>{el}</p>
-                      <Image src={EditUser} alt="Editar medicamento" />
+                      <div className="p-2 flex items-center justify-between">
+                        <p className="min-w-[85%]">{el}</p>
+                        {/* <a onClick={openModalEditMedicamento} className="ml-4 cursor-pointer w-[10%]">
+                          <Image src={Edit} alt="Editar medicamento" className="ml-4 cursor-pointer" />
+                        </a> */}
+                        <a className="cursor-pointer ml-4 w-[60px] h-[60px]" >
+                          <Image src={Delete} alt="Deletar medicamento" className="cursor-pointer w-[60px] h-[60px]" />
+                        </a>
+                      </div>
                     </li>
                     )
                     )
                     }
                   </ul>
                 </div>
-                <div className="flex flex-col w-[50%] min-h-[200px] h-[300px] bg-purple-300 p-4 rounded-lg">
-                  <h2 className="text-2xl">Cuidados</h2>
+                <div className="flex flex-col w-[50%] min-h-[200px] bg-[#a9aee3] p-4 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-2xl">Cuidados</h2>
+                    <a onClick={openModalCreateCuidado}>
+                      <Image src={Plus} alt="Adicionar cuidado" className="cursor-pointer " />
+                    </a>
+                  </div>
                   <ul>
                     {prescricao.cuidados.map((el) =>
-                      (<li key={el}>{el}</li>)
+                    (<li key={el} className="p-2 flex items-center justify-between">
+                      <div className="p-2 flex items-center">
+                        <p className="min-w-[85%]">
+                          {el}
+                        </p>
+                        {/* <a className="ml-4 cursor-pointer w-[10%]" onClick={openModalEditCuidado}>
+                          <Image src={Edit} alt="Editar cuidado" />
+                        </a> */}
+                        <a className="cursor-pointer ml-2 w-[60px] h-[60px]" onClick={() => handleDeleteCuidado(el)}>
+                          <Image src={Delete} alt="Deletar cuidado" className="w-[60px] h-[60px]" />
+                        </a>
+                      </div>
+                    </li>)
                     )
                     }
                   </ul>
                 </div>
+              </div>
+              {modalCuidado && <ModalCriacaoCuidado setModalCuidado={setModalCuidado} cuidados={prescricao.cuidados} />}
+              {modalMedicamento && instabilidadeH && <ModalCriacaoMedicamento lista={infeccoesComInstabilidadeHemodinamica} setModalMedicamento={setModalMedicamento} medicamentos={prescricao.remedios} />}
+              {modalMedicamento && !instabilidadeH && <ModalCriacaoMedicamento lista={infeccoesSemInstabilidadeHemodinamica} setModalMedicamento={setModalMedicamento} medicamentos={prescricao.remedios} />}
+              <div className="flex items-center w-full justify-end">
+
+                <button
+                  className="bg-blue-700 hover:bg-blue-900 px-5 mt-4 py-3 text-sm w-[200px] h-[50px] leading-5 rounded-lg font-semibold text-white"
+                >
+                  Prescrever
+                </button>
               </div>
             </div>}
           </TabContents>

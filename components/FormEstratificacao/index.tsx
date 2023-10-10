@@ -98,9 +98,17 @@ export default function FormEstratificacao({ paciente, setLoading }: any) {
     event.preventDefault();
     setLoading(true);
 
+    var risco;
+
+    if (escore < 21) {
+      risco = 0;
+    } else {
+      risco = 1;
+    }
+
     try {
       const response = await fetch(
-        `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/SetRisco/${paciente.id}?escore=${escore}`,
+        `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/SetRisco/${paciente.id}?risco=${risco}`,
         {
           method: "PUT",
           headers: {
