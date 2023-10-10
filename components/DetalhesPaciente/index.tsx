@@ -14,29 +14,15 @@ import api from "@/helpers";
 import ErrorToast from "../toasts/errorToast";
 import SuccessToast from "../toasts/successToast";
 import ExamesList from "../ExameList";
+import useServerityIcon from "@/hooks/useSeverityIcon";
 /**
  * Renderiza o a página de detalhes do paciente.
  * @category Component
  */
 export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
-  const quantidadeNeutrofilos =
-    paciente?.situacoesPaciente !== undefined &&
-    paciente?.situacoesPaciente?.length > 0 &&
-    paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
-      ? paciente?.situacoesPaciente[0]?.diagnosticos[0]?.neutrofilos
-      : null;
-  const neutropenico =
-    paciente?.situacoesPaciente !== undefined &&
-    paciente?.situacoesPaciente?.length > 0 &&
-    paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
-      ? paciente?.situacoesPaciente[0]?.diagnosticos[0].neutropenico
-      : false;
-  const febre =
-    paciente?.situacoesPaciente !== undefined &&
-    paciente?.situacoesPaciente?.length > 0 &&
-    paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
-      ? paciente?.situacoesPaciente[0]?.diagnosticos[0].febre
-      : false;
+  const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
+  let situacoesPacienteCopy = [...situacoesPaciente];
+  const situacaoAtual = situacoesPacienteCopy?.pop();
 
   const selectLabelNeutrofilos = (quantidadeNeutrofilos: number) => {
     if (quantidadeNeutrofilos > 1000) {
@@ -48,15 +34,18 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     }
   };
 
-  const imageURL = (paciente: Paciente) => {
-    if (neutropenico && febre) {
-      return veryBad;
-    } else if (neutropenico) {
-      return bad;
-    } else if (febre) {
-      return neutral;
-    }
-    return good;
+  const colors: any = [
+    [0, "bg-orange-900"],
+    [1, "bg-yellow-800"],
+    [2, "bg-yellow-700"],
+    [3, "bg-amber-600"],
+    [4, "bg-amber-500"],
+  ];
+
+  const colorMap = new Map(colors);
+
+  const ImageURL = (paciente: Paciente) => {
+    return useServerityIcon(paciente);
   };
   useEffect(() => {
     const init = async () => {
@@ -81,7 +70,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     setSucessDischarge(true);
     return;
   };
-
+  const situacaoPaciente = paciente?.internacao?.situacoesPaciente || [];
   return (
     <div>
       {dischargeError && (
@@ -129,10 +118,10 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                   <div className="flex gap-x-4 pb-3">
                     <Image
                       className="h-12 w-12 flex-none rounded-full"
-                      src={imageURL(paciente) || ""}
+                      src={ImageURL(paciente)}
                       width="250"
                       height="250"
-                      alt=""
+                      alt="Estado do paciente"
                     />
                     <div className="min-w-0 flex-auto">
                       <div className="flex justify-between">
@@ -157,13 +146,8 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                   <div className="pt-2">
                     <h1 className="text-2xl">
                       Dados do paciente{" "}
-                      {paciente?.situacoesPaciente !== undefined &&
-                        paciente?.situacoesPaciente[0] &&
-                        paciente?.situacoesPaciente[0].diagnosticos[0] &&
-                        paciente?.situacoesPaciente[0].diagnosticos[0]
-                          .neutropenico &&
-                        paciente?.situacoesPaciente[0].diagnosticos[0]
-                          .febre && (
+                      {situacaoAtual &&
+                        situacaoAtual?.situacaoDiagnostico?.febre && (
                           <span className="float-right text-danger flex">
                             Neutropenia Febril{" "}
                             <Image
@@ -191,13 +175,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
 
                     <div>
                       <p>Prontuário: {paciente.numeroProntuario}</p>
-                      <p>
-                        Leito:{" "}
-                        {paciente?.situacoesPaciente !== undefined &&
-                        paciente?.situacoesPaciente[0]
-                          ? paciente?.situacoesPaciente[0].leito
-                          : ""}
-                      </p>
+                      <p>Leito: {paciente?.internacao?.leito}</p>
                       {/* <p>Unidade: {paciente.unidade}</p> */}
                     </div>
                   </div>
@@ -266,212 +244,86 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                       {/* TODO: for (paciente.situacoesPaciente as situacao) */}
 
                       <TabList className="flex flex-row rounded-full bg-white mt-4">
-                        <TabItem
-                          href="D0"
-                          liClassName="basis-1/5 bg-orange-900 py-2 pl-2 rounded-bl-full rounded-tl-full"
-                          active={true}
-                        >
-                          <p className="text-white">D0: 10/07/2023</p>
-                        </TabItem>
-                        <TabItem
-                          href="D1"
-                          liClassName="basis-1/5 bg-yellow-800 py-2 pl-2"
-                        >
-                          <p className="text-white">D1: 11/07/2023</p>
-                        </TabItem>
-                        <TabItem
-                          href="D3"
-                          liClassName="basis-1/5 bg-yellow-700 py-2 pl-2"
-                        >
-                          <p className="text-white">D3: 13/07/2023</p>
-                        </TabItem>
-                        <TabItem
-                          href="D5"
-                          liClassName="basis-1/5 bg-amber-600 py-2 pl-2"
-                        >
-                          <p className="text-white">D5: 15/07/2023</p>
-                        </TabItem>
-                        <TabItem
-                          href="last"
-                          liClassName="basis-1/5 bg-amber-500 py-2 pl-2 rounded-br-full rounded-tr-full"
-                        >
-                          <p className="text-white">Atual: 17/07/2023</p>
-                        </TabItem>
+                        {situacaoPaciente?.map((item, index) => {
+                          return (
+                            <TabItem
+                              key={item.id}
+                              href={`tab-${item.id}`}
+                              liClassName={`basis-1/5 ${colorMap.get(
+                                index,
+                              )} py-2 pl-2 ${
+                                index === 0
+                                  ? "rounded-bl-full rounded-tl-full"
+                                  : ""
+                              } ${
+                                index === 4
+                                  ? "rounded-br-full rounded-tr-full"
+                                  : ""
+                              }`}
+                              active={true}
+                            >
+                              <p className="text-white">
+                                {moment(item?.dataVerificacao).format(
+                                  "DD/MM/YYYY h:mm:ss",
+                                )}
+                              </p>
+                            </TabItem>
+                          );
+                        })}
                       </TabList>
-                      {/* TODO: ENDFOR */}
-                      <TabContents tabId="D0" active={true}>
-                        <div className="pt-2 flex flex-row gap-x-2">
-                          <div className="basis-1/2">
-                            <p>
-                              Data de admissão: {paciente.dataAdmissao} D0 TAB{" "}
-                            </p>
-                            <p>Data internação: 21/10/2023</p>
-                            <p>Febre: 37.5</p>
-                          </div>
-                          <div className="basis-1/2">
-                            <div className="flex justify-center flex-col items-end text-center">
-                              <div>
-                                <p className="text-center">Neutrófilos:</p>
-                                <p className="text-red-500">
-                                  {paciente?.situacoesPaciente !== undefined &&
-                                    paciente?.situacoesPaciente[0]
-                                      ?.diagnosticos[0]?.neutrofilos}
-                                  /mm3
+                      {situacaoPaciente?.map((item, index) => {
+                        return (
+                          <TabContents
+                            key={item.id}
+                            tabId={`tab-${item.id}`}
+                            active={index === 0}
+                          >
+                            <div className="pt-2 flex flex-row gap-x-2">
+                              <div className="basis-1/2">
+                                <p>
+                                  Data de verificação:{" "}
+                                  {moment(
+                                    item?.situacaoDiagnostico?.dataVerificacao,
+                                  ).format("DD/MM/YYYY h:mm:ss")}
                                 </p>
-                                <div className="flex justify-center">
-                                  <div
-                                    className={selectLabelNeutrofilos(
-                                      quantidadeNeutrofilos || 0,
-                                    )}
-                                  ></div>
-                                </div>
+                                <p>
+                                  Data internação:{" "}
+                                  {moment(
+                                    paciente?.internacao?.dataAdmissao,
+                                  ).format("DD/MM/YYYY h:mm:ss")}
+                                </p>
+                                <p>
+                                  Temperatura:{" "}
+                                  {item?.situacaoDiagnostico?.temperatura}
+                                </p>
+                              </div>
+                              <div className="basis-1/2">
+                                <div className="flex justify-center flex-col items-end text-center">
+                                  <div>
+                                    <p className="text-center">Neutrófilos:</p>
+                                    <p className="text-red-500">
+                                      {item?.situacaoDiagnostico?.neutrofilos}
+                                      /mm3
+                                    </p>
+                                    <div className="flex justify-center">
+                                      <div
+                                        className={selectLabelNeutrofilos(
+                                          item?.situacaoDiagnostico
+                                            ?.neutrofilos || 0,
+                                        )}
+                                      ></div>
+                                    </div>
 
-                                <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
-                                  Acessar +exames
-                                </button>
+                                    <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
+                                      Acessar +exames
+                                    </button>
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                      </TabContents>
-
-                      <TabContents tabId="D1" active={false}>
-                        <div className="pt-2 flex flex-row gap-x-2">
-                          <div className="basis-1/2">
-                            <p>
-                              Data de admissão: {paciente.dataAdmissao} D1 TAB
-                            </p>
-                            <p>Data internação: 21/10/2023</p>
-                            <p>Febre: 38.5</p>
-                          </div>
-                          <div className="basis-1/2">
-                            <div className="flex justify-center flex-col items-end text-center">
-                              <div>
-                                <p className="text-center">Neutrófilos:</p>
-                                <p className="text-red-500">
-                                  {paciente?.situacoesPaciente !== undefined &&
-                                    paciente?.situacoesPaciente[0]
-                                      ?.diagnosticos[0]?.neutrofilos}
-                                  /mm3
-                                </p>
-                                <div className="flex justify-center">
-                                  <div
-                                    className={selectLabelNeutrofilos(
-                                      quantidadeNeutrofilos || 0,
-                                    )}
-                                  ></div>
-                                </div>
-
-                                <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
-                                  Acessar +exames
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </TabContents>
-
-                      <TabContents tabId="D3" active={false}>
-                        <div className="pt-2 flex flex-row gap-x-2">
-                          <div className="basis-1/2">
-                            <p>
-                              Data de admissão: {paciente.dataAdmissao} D3 TAB
-                            </p>
-                          </div>
-                          <div className="basis-1/2">
-                            <div className="flex justify-center flex-col items-end text-center">
-                              <div>
-                                <p className="text-center">Neutrófilos:</p>
-                                <p className="text-red-500">
-                                  {paciente?.situacoesPaciente !== undefined &&
-                                    paciente?.situacoesPaciente[0]
-                                      ?.diagnosticos[0]?.neutrofilos}
-                                  /mm3
-                                </p>
-                                <div className="flex justify-center">
-                                  <div
-                                    className={selectLabelNeutrofilos(
-                                      quantidadeNeutrofilos || 0,
-                                    )}
-                                  ></div>
-                                </div>
-
-                                <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
-                                  Acessar +exames
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </TabContents>
-
-                      <TabContents tabId="D5" active={false}>
-                        <div className="pt-2 flex flex-row gap-x-2">
-                          <div className="basis-1/2">
-                            <p>
-                              Data de admissão: {paciente.dataAdmissao} D4 TAB
-                            </p>
-                          </div>
-                          <div className="basis-1/2">
-                            <div className="flex justify-center flex-col items-end text-center">
-                              <div>
-                                <p className="text-center">Neutrófilos:</p>
-                                <p className="text-red-500">
-                                  {paciente?.situacoesPaciente !== undefined &&
-                                    paciente?.situacoesPaciente[0]
-                                      ?.diagnosticos[0]?.neutrofilos}
-                                  /mm3
-                                </p>
-                                <div className="flex justify-center">
-                                  <div
-                                    className={selectLabelNeutrofilos(
-                                      quantidadeNeutrofilos || 0,
-                                    )}
-                                  ></div>
-                                </div>
-
-                                <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
-                                  Acessar +exames
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </TabContents>
-
-                      <TabContents tabId="last" active={false}>
-                        <div className="pt-2 flex flex-row gap-x-2">
-                          <div className="basis-1/2">
-                            <p>
-                              Data de admissão: {paciente.dataAdmissao} LAST TAB
-                            </p>
-                          </div>
-                          <div className="basis-1/2">
-                            <div className="flex justify-center flex-col items-end text-center">
-                              <div>
-                                <p className="text-center">Neutrófilos:</p>
-                                <p className="text-red-500">
-                                  {paciente?.situacoesPaciente !== undefined &&
-                                    paciente?.situacoesPaciente[0]
-                                      ?.diagnosticos[0]?.neutrofilos}
-                                  /mm3
-                                </p>
-                                <div className="flex justify-center">
-                                  <div
-                                    className={selectLabelNeutrofilos(
-                                      quantidadeNeutrofilos || 0,
-                                    )}
-                                  ></div>
-                                </div>
-
-                                <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
-                                  Acessar +exames
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </TabContents>
+                          </TabContents>
+                        );
+                      })}
                     </div>
                   </div>
                 </>
