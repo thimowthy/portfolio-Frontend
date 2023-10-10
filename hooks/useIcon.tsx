@@ -7,19 +7,31 @@ import medicamento from "../public/medicamento.png";
  * @returns {string} string com a URL da imagem.
  */
 const useIcon = (paciente: Paciente) => {
-  const neutropenico =
-    paciente?.situacoesPaciente !== undefined &&
-    paciente?.situacoesPaciente?.length > 0 &&
-    paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
-      ? paciente?.situacoesPaciente[0]?.diagnosticos[0].neutropenico
-      : false;
-  const febre =
-    paciente?.situacoesPaciente !== undefined &&
-    paciente?.situacoesPaciente?.length > 0 &&
-    paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
-      ? paciente?.situacoesPaciente[0]?.diagnosticos[0].febre
-      : false;
-  if (neutropenico && febre) {
+  const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
+  let situacoesPacienteCopy = [...situacoesPaciente];
+  const situacaoAtual = situacoesPacienteCopy?.pop();
+
+  const isNeutropenico = (paciente: Paciente) => {
+    const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
+    let situacoesPacienteCopy = [...situacoesPaciente];
+    const situacaoAtual = situacoesPacienteCopy?.pop();
+
+    if (situacaoAtual?.situacaoDiagnostico?.neutropenia) {
+      return true;
+    }
+    return false;
+  };
+  const febre = (paciente: Paciente) => {
+    const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
+    let situacoesPacienteCopy = [...situacoesPaciente];
+    const situacaoAtual = situacoesPacienteCopy?.pop();
+
+    if (situacaoAtual?.situacaoDiagnostico?.febre) {
+      return true;
+    }
+    return false;
+  };
+  if (isNeutropenico(paciente) && febre(paciente)) {
     return (
       <div className="flex">
         <Image
@@ -38,7 +50,7 @@ const useIcon = (paciente: Paciente) => {
         />
       </div>
     );
-  } else if (neutropenico) {
+  } else if (isNeutropenico(paciente)) {
     return (
       <Image
         className="h-12 w-auto flex-none rounded-full"
@@ -48,7 +60,7 @@ const useIcon = (paciente: Paciente) => {
         height="50"
       />
     );
-  } else if (febre) {
+  } else if (febre(paciente)) {
     return (
       <Image
         className="h-12 w-auto flex-none rounded-full"
