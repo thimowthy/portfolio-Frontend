@@ -6,6 +6,7 @@ import "../pages/globals.css";
 export default function MyApp({ Component, pageProps }: any) {
   return (
     <Layout>
+      <Notifications />
       <Component {...pageProps} />
       <Toaster />
     </Layout>
