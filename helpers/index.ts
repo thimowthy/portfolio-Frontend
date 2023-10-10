@@ -29,7 +29,7 @@ const confirmNotification = async (notificationId: string) => {
 const setDischargePatient = async (pacienteId: number) => {
   try {
     await fetcher({
-      rota: `${apiURL}/Paciente/SetAlta/${pacienteId}`,
+      rota: `${apiURL}/Internacao/SetAlta/${pacienteId}`,
       metodo: "PUT",
     });
     return true;
