@@ -62,8 +62,6 @@ const ExameForm: React.FC<ExameProps> = ({
     } catch (error) {
       console.error("Error occurred during request:", error);
     }
-
-    //console.log("Login credentials:", { username, password });
   };
 
   return (

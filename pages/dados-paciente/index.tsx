@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import fetcher from "@/api/fetcher";
 import SeoConfig from "../../components/SeoConfig/index";
-import toast, { Toaster } from "react-hot-toast";
 import DetalhesPaciente from "../../components/DetalhesPaciente";
+import Header from "@/components/Header";
 
 const DynamicTabComponent = dynamic(
   () => import("../../components/TabDadosPaciente"),
@@ -25,10 +25,12 @@ const DadosPacientePage = ({
     setSelectedPatient(pacienteAtivo);
   }, [router]);
   const [selectedPatient, setSelectedPatient] = useState<Paciente>({});
+  4;
   return (
     <>
       <SeoConfig title="Lista de pacientes" />
-      <section className="flex min-h-full flex items-center">
+      <Header />
+      <section className="flex min-h-full flex items-center pt-10">
         <div className="basis-2/5 mr-2">
           <DynamicTabComponent
             pacientes={pacientes || []}
@@ -52,27 +54,26 @@ export async function getStaticProps<GetStaticProps>() {
     rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatientsSemAlta",
   });
 
-  // const nf = await fetcher({
-  //   metodo: "GET",
-  //   rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetNFPatients",
-  // });
+  const isNeutropenico = (paciente: Paciente) => {
+    const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
+    let situacoesPacienteCopy = [...situacoesPaciente];
+    const situacaoAtual = situacoesPacienteCopy?.pop();
 
-  // const pendentes = await fetcher({
-  //   metodo: "GET",
-  //   rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPending",
-  // });
-  const isNeutropenico = (paciente: Paciente) =>
-    paciente?.situacoesPaciente !== undefined &&
-    paciente?.situacoesPaciente?.length > 0 &&
-    paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
-      ? paciente?.situacoesPaciente[0]?.diagnosticos[0].neutropenico
-      : false;
-  const febre = (paciente: Paciente) =>
-    paciente?.situacoesPaciente !== undefined &&
-    paciente?.situacoesPaciente?.length > 0 &&
-    paciente?.situacoesPaciente[0]?.diagnosticos?.length > 0
-      ? paciente?.situacoesPaciente[0]?.diagnosticos[0].febre
-      : false;
+    if (situacaoAtual?.situacaoDiagnostico?.neutropenia) {
+      return true;
+    }
+    return false;
+  };
+  const febre = (paciente: Paciente) => {
+    const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
+    let situacoesPacienteCopy = [...situacoesPaciente];
+    const situacaoAtual = situacoesPacienteCopy?.pop();
+
+    if (situacaoAtual?.situacaoDiagnostico?.febre) {
+      return true;
+    }
+    return false;
+  };
   const nf = pacientes?.filter(
     (paciente: Paciente) => febre(paciente) && isNeutropenico(paciente),
   );
@@ -81,7 +82,6 @@ export async function getStaticProps<GetStaticProps>() {
     props: {
       pacientes,
       nf,
-      // pendentes,
     },
   };
 }

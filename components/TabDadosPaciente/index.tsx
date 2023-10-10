@@ -12,12 +12,11 @@ initTE({ Tab });
 export default function TabDadosPaciente({
   pacientes,
   setSelectedPatient,
-  nf, // pendentes,
-} // pendetes,
-: any) {
+  nf,
+}: any) {
   const [listaPacientes, setListaPacientes] = useState(pacientes);
   const [listaNf, setListaNf] = useState(nf);
-  const [listaPendetes, setListaPendentes] = useState([]);
+  // const [ listaPendetes, setListaPendentes ] = useState([]);
   const [idAtivo, setIdAtivo] = useState(0);
   const handleFilterPacientes = (busca: string) => {
     let pacientesFiltrados;
@@ -50,20 +49,20 @@ export default function TabDadosPaciente({
   };
 
   // TODO: REPLACE [] TO PENDETES ARRAY AFTER BACK-END IS FINISHED
-  const handleFilterPendentes = (busca: string) => {
-    let pacientesPendentesFiltrados;
-    const sanitizedBusca = busca.toLowerCase();
-    if (busca.length > 0) {
-      pacientesPendentesFiltrados = [].filter(
-        (paciente: Paciente) =>
-          paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
-          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
-      );
-      setListaPendentes(pacientesPendentesFiltrados);
-    } else {
-      setListaPendentes([]);
-    }
-  };
+  // const handleFilterPendentes = (busca: string) => {
+  //   let pacientesPendentesFiltrados;
+  //   const sanitizedBusca = busca.toLowerCase();
+  //   if (busca.length > 0) {
+  //     pacientesPendentesFiltrados = [].filter(
+  //       (paciente: Paciente) =>
+  //         paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
+  //         paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
+  //     );
+  //     setListaPendentes(pacientesPendentesFiltrados);
+  //   } else {
+  //     setListaPendentes([]);
+  //   }
+  // };
   /**
    * Função para selecionar um paciente da lista para exibir os detalhes.
    * @param {Paciente} paciente - Paciente selecionado
@@ -84,11 +83,11 @@ export default function TabDadosPaciente({
             title="Todos"
             active={true}
           />
-          <TabItem
+          {/* <TabItem
             href="tab-pendentes"
             className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
             title="Pendentes"
-          />
+          /> */}
           <TabItem
             href="tab-NF"
             className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
@@ -131,7 +130,7 @@ export default function TabDadosPaciente({
             </ul>
           </TabContents>
 
-          <TabContents tabId="tab-pendentes" active={false}>
+          {/* <TabContents tabId="tab-pendentes" active={false}>
             <div className="flex bg-white rounded-xl p-2 mt-5 mb-4">
               <div className="pr-2">
                 <svg
@@ -164,7 +163,7 @@ export default function TabDadosPaciente({
                 />
               ))}
             </ul>
-          </TabContents>
+          </TabContents> */}
 
           <TabContents tabId="tab-NF" active={false}>
             <div className="flex bg-white rounded-xl p-2 mt-5 mb-4">
