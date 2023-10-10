@@ -1,5 +1,9 @@
-export default function DeleteUsuario({ user, setDeleteUser, setLoading, fetchUsers }: any) {
-
+export default function DeleteUsuario({
+  user,
+  setDeleteUser,
+  setLoading,
+  fetchUsers,
+}: any) {
   const closeModal = () => {
     //setIsModalOpen(false);
     setDeleteUser(false);
@@ -11,13 +15,16 @@ export default function DeleteUsuario({ user, setDeleteUser, setLoading, fetchUs
 
     const token = localStorage.getItem("Authorization");
 
-    const response = await fetch(`http://localhost:7091/Usuario/DeleteUser/${user.id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      }
-    });
+    const response = await fetch(
+      `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/DeleteUser/${user.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
 
     setTimeout(() => {
       setLoading(false);
@@ -32,7 +39,6 @@ export default function DeleteUsuario({ user, setDeleteUser, setLoading, fetchUs
     setTimeout(async () => {
       await fetchUsers();
     }, 1000);
-
   };
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">

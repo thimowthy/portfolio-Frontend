@@ -2,8 +2,12 @@ import { useState, FormEvent } from "react";
 import ArrowLeft from "../../public/arrow_left.svg";
 import Image from "next/image";
 
-export default function EditUsuario({ setListUsers, setUpdateUser, user, setLoading }: any) {
-
+export default function EditUsuario({
+  setListUsers,
+  setUpdateUser,
+  user,
+  setLoading,
+}: any) {
   const [nome, setNome] = useState(user.nome);
   const [cpf, setCpf] = useState(user.cpf);
   const [certificado, setCertificado] = useState(user.certificado);
@@ -19,7 +23,7 @@ export default function EditUsuario({ setListUsers, setUpdateUser, user, setLoad
         cpf,
         certificado,
         senha: user.senha,
-        ativo: true
+        ativo: true,
       };
 
       setLoading(true);
@@ -27,14 +31,17 @@ export default function EditUsuario({ setListUsers, setUpdateUser, user, setLoad
       const token = localStorage.getItem("Authorization");
 
       if (token) {
-        const response = await fetch(`http://localhost:7091/Usuario/PutUser/${user.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+        const response = await fetch(
+          `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com//Usuario/PutUser/${user.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(formData),
           },
-          body: JSON.stringify(formData)
-        });
+        );
         setTimeout(() => {
           setLoading(false);
           if (response.ok) {
@@ -48,12 +55,9 @@ export default function EditUsuario({ setListUsers, setUpdateUser, user, setLoad
           }
         }, 1500);
       }
-
-
     } catch (error) {
       console.error(error);
     } finally {
-
     }
   };
 
@@ -65,14 +69,20 @@ export default function EditUsuario({ setListUsers, setUpdateUser, user, setLoad
   return (
     <div className="flex min-h-full items-center">
       <div className="flex flex-col w-[40%] h-[60%] mx-auto mt-7 bg-[#fff] rounded-lg pb-5">
-        <div className="flex items-center justify-center w-full h-12 gap-3 p-2 border-b-2 relative" onClick={() => backToList()}>
-          <Image className="absolute left-4 cursor-pointer" src={ArrowLeft} alt="Voltar" />
+        <div
+          className="flex items-center justify-center w-full h-12 gap-3 p-2 border-b-2 relative"
+          onClick={() => backToList()}
+        >
+          <Image
+            className="absolute left-4 cursor-pointer"
+            src={ArrowLeft}
+            alt="Voltar"
+          />
           <h3 className="text-xl">Edição de usuário</h3>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col px-8">
             <div className="flex items-center w-full">
-
               <div className="flex flex-col p-2 rounded-lg w-[50%]">
                 <label htmlFor="nome" className="ml-1">
                   Nome
@@ -139,7 +149,6 @@ export default function EditUsuario({ setListUsers, setUpdateUser, user, setLoad
             </div>
 
             <div className="flex items-center">
-
               {/* <div className="flex flex-col p-2 rounded-lg">
                 <label htmlFor="codigo" className="ml-1">
                   Código

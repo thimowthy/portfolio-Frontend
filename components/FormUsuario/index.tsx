@@ -4,7 +4,12 @@ import { useRouter } from "next/navigation";
 import ArrowLeft from "../../public/arrow_left.svg";
 import Image from "next/image";
 
-export default function FormUsuario({ cargo, setCreateUser, setListUsers, setLoading }: any) {
+export default function FormUsuario({
+  cargo,
+  setCreateUser,
+  setListUsers,
+  setLoading,
+}: any) {
   const router = useRouter();
 
   const [nome, setNome] = useState("");
@@ -31,21 +36,23 @@ export default function FormUsuario({ cargo, setCreateUser, setListUsers, setLoa
         login: userName,
         cpf,
         profissao: cargo.valor,
-        certificado
+        certificado,
       };
 
       const token = localStorage.getItem("Authorization");
 
       if (token) {
-
-        const response = await fetch("http://localhost:7091/Usuario/Create", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+        const response = await fetch(
+          "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/Create",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(formData),
           },
-          body: JSON.stringify(formData)
-        });
+        );
 
         setTimeout(() => {
           setLoading(false);
@@ -59,8 +66,6 @@ export default function FormUsuario({ cargo, setCreateUser, setListUsers, setLoa
           }
         }, 1500);
       }
-
-
     } catch (error) {
       console.error(error);
     }
@@ -68,9 +73,22 @@ export default function FormUsuario({ cargo, setCreateUser, setListUsers, setLoa
 
   return (
     <div className="flex flex-col w-[40%] h-[60%] mx-auto mt-7 bg-[#fff] rounded-lg">
-      {error && <ErrorToast title="Erro no cadastro" message="Erro ao cadastrar usuário" onClose={() => setError(false)} />}
-      <div className="flex items-center justify-center w-full h-12 gap-3 p-2 border-b-2 relative" onClick={() => backToList()}>
-        <Image className="absolute left-4 cursor-pointer" src={ArrowLeft} alt="Voltar" />
+      {error && (
+        <ErrorToast
+          title="Erro no cadastro"
+          message="Erro ao cadastrar usuário"
+          onClose={() => setError(false)}
+        />
+      )}
+      <div
+        className="flex items-center justify-center w-full h-12 gap-3 p-2 border-b-2 relative"
+        onClick={() => backToList()}
+      >
+        <Image
+          className="absolute left-4 cursor-pointer"
+          src={ArrowLeft}
+          alt="Voltar"
+        />
         <h3 className="text-xl">Cadastro de {cargo.nome}</h3>
       </div>
       <form onSubmit={handleSubmit}>
