@@ -44,15 +44,20 @@ const CrudUsuario = () => {
   }, []);
 
   const fetchUsers = async () => {
+
+    const token = localStorage.getItem("Authorization");
+
     try {
       setLoading(true);
       const usersList = await fetcher({
         rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/GetListUsers",
         metodo: "GET",
-        cabecalho: "Content-Type: application/json",
+        cabecalho: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` }
       });
-      const filteredList = usersList.filter((u: Usuario) => u.ativo);
-      setUsers(filteredList);
+
+      console.log(usersList);
+      //const filteredList = usersList.filter((u: Usuario) => u.ativo); ativo não está sendo retornado
+      setUsers(usersList);
     } catch (error) {
       console.error(error);
     } finally {

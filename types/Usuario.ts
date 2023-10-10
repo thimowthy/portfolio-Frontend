@@ -1,9 +1,8 @@
 type Usuario = {
   id: number
   nome: string
-  userName: string
+  login: string
   cpf: string
-  ativo: boolean
   certificado: string
-  profissao: string
+  cargo: string
 };

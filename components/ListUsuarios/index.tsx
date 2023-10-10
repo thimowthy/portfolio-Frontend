@@ -67,9 +67,9 @@ export default function ListUsuarios({
                     className="w-full h-14 rounded-lg flex justify-around items-center px-7"
                   >
                     <p style={{ width: "20%" }}>{user.nome}</p>
-                    <p style={{ width: "15%" }}>{user.userName}</p>
+                    <p style={{ width: "15%" }}>{user.login}</p>
                     <p style={{ width: "15%" }}>{user.cpf}</p>
-                    <p style={{ width: "15%" }}>{user.profissao}</p>
+                    <p style={{ width: "15%" }}>{user.cargo}</p>
                     <p style={{ width: "15%" }}>{user.certificado}</p>
                     <p
                       style={{ width: "10%" }}
