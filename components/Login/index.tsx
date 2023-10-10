@@ -45,16 +45,13 @@ const Login = () => {
        * A resposta da solicitação de envio do formulário.
        * @type {Response}
        */
-      const response = await fetch(
-        "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Auth/Autenticacao",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(credentials),
+      const response = await fetch("https://localhost:7091/Auth/Autenticacao", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(credentials),
+      });
 
       if (response.ok) {
         const data = await response.json();
