@@ -30,7 +30,7 @@ export default function Dashboard() {
       {
         label: "Visão geral",
         data: [10, 7],
-        backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(75, 192, 192, 0.2)"],
+        backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(75, 192, 192, 0.4)"],
         borderColor: ["rgba(255, 99, 132, 1)", "rgba(75, 192, 192, 1)"],
         borderWidth: 1,
       },
@@ -64,13 +64,13 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-4 rounded-lg w-3/4">
+        <div className="flex flex-col gap-4 rounded-lg w-3/4 h-full">
           <main
-            className="rounded-lg bg-[#fff] p-8 h-3/5"
+            className="rounded-lg bg-[#fff] p-8 h-3/5 flex flex-col justify-between align-center"
             style={{ border: "1px solid #689f92" }}
           >
             <InitTab />
-            <div className="w-full flex justify-center items-center">
+            <div className="w-full flex justify-center items-center h-full">
               <TabContents
                 tabId="tabs-barra"
                 active={true}
@@ -102,13 +102,13 @@ export default function Dashboard() {
               <TabList className="flex list-none flex-row flex-wrap border-b-0 justify-center items-center mt-5">
                 <TabItem
                   href="tabs-barra"
-                  className="px-5 mx-3 border-x-0 border-b-2 border-t-0 border-transparent p-1 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] bg-[#CCDBD8] data-[te-nav-active]:bg-[#90D8C7]"
+                  className="px-5 mx-3 rounded border-x-0 border-b-2 border-t-0 border-transparent p-1 font-medium uppercase hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] bg-[#CCDBD8] data-[te-nav-active]:bg-[#90D8C7]"
                   title=""
                   active={true}
                 />
                 <TabItem
                   href="tabs-pie"
-                  className="px-5 mx-3 border-x-0 border-b-2 border-t-0 border-transparent p-1 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] bg-[#CCDBD8] data-[te-nav-active]:bg-[#90D8C7]"
+                  className="px-5 mx-3 rounded border-x-0 border-b-2 border-t-0 border-transparent p-1 font-medium uppercase hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] bg-[#CCDBD8] data-[te-nav-active]:bg-[#90D8C7]"
                   title=""
                 />
               </TabList>
