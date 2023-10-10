@@ -1,10 +1,7 @@
 type SituacoesPaciente = {
   id: number;
-  temperatura: number;
-  peso?: number;
-  leito?: string;
-  dataAveriguacao: Date;
-  idPaciente: number;
-  idDiagnostico: number;
-  diagnosticos: Diagnosticos[];
+  situacaoDiagnostico?: SituacaoDiagnostico;
+  dataVerificacao?: string;
+  idDiagnostico?: number;
+  idSituacaoTratamento?: number;
 };

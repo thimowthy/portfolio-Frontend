@@ -8,6 +8,7 @@ type Paciente = {
   dataNascimento?: string;
   dataAdmissao?: string;
   comorbidades?: Comorbidades[];
+  internacao?: Internacao;
   prescricao?: any;
   alergias?: Alergias[];
   situacoesPaciente?: SituacoesPaciente[];
