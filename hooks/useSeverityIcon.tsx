@@ -12,7 +12,7 @@ const useServerityIcon = (paciente: Paciente) => {
   let tipo;
   const tipoNeutropenia =
     paciente?.internacao?.situacoesPaciente !== undefined &&
-    paciente?.internacao?.situacoesPaciente[0].situacaoDiagnostico
+    paciente?.internacao?.situacoesPaciente[0]?.situacaoDiagnostico
       ?.tipoNeutropenia;
   switch (tipoNeutropenia) {
     case 0:
