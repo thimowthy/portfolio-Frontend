@@ -550,7 +550,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                           data-te-html="true"
                           data-te-ripple-init
                           data-te-ripple-color="light"
-                          title=">38,3°C medida única, OU >38°C por mais de 1h"
+                          title=">38,3°C medida única OU >38°C por mais de 1h"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
