@@ -46,7 +46,8 @@
         "dest": {
           "sim": 2,
           "nao": 3
-        }
+        },
+        "posicao": [150, 712.5]
       },
       "node2": {
         "id": 2,
@@ -61,7 +62,8 @@
           "mrsa": 6,
           "epc": 7,
           "vre": 8
-        }
+        },
+        "posicao":[400, 227.5]
       },
       "node3": {
         "id": 3,
@@ -76,7 +78,8 @@
           "mrsa": 11,
           "epc": 12,
           "vre": 13
-        }
+        },
+        "posicao":[400, 1217.5]
       },
       "node4": {
         "id": 4,
@@ -85,24 +88,24 @@
         "variavel": "",
         "condicao": "",
         "prescricao": {
-          "medicacao": [
+          "medicacoes": [
             {
-              "id": 0,
+              "medicamento": 0,
               "acao": "+",
               "opcao": 1,
               "dose": 2,
               "dosagem": "g",
               "tempo": 8,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             },
             {
-              "id": 1,
+              "medicamento": 1,
               "acao": "+",
               "opcao": 2,
               "dose": 4.5,
               "dosagem": "g",
               "tempo": 6,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             }
           ],
           "cuidados": []
@@ -117,33 +120,33 @@
         "variavel": "",
         "condicao": "",
         "prescricao": {
-          "medicacao": [
+          "medicacoes": [
             {
-              "id": 0,
+              "medicamento": 0,
               "acao": "+",
               "opcao": 0,
               "dose": 2,
               "dosagem": "g",
               "tempo": 8,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             },
             {
-              "id": 2,
+              "medicamento": 2,
               "acao": "+",
               "opcao": 0,
               "dose": 15,
               "dosagem": "mg/kg",
               "tempo": 1,
-              "intervalo": "dias"
+              "intervalo_tempo": "dias"
             },
             {
-              "id": 3,
+              "medicamento": 3,
               "acao": "*",
               "opcao": 0,
               "dose": 1,
               "dosagem": "g",
               "tempo": 8,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             }
           ],
           "cuidados": []
@@ -158,24 +161,24 @@
         "variavel": "",
         "condicao": "",
         "prescricao": {
-          "medicacao": [
+          "medicacoes": [
             {
-              "id": 4,
+              "medicamento": 4,
               "acao": "+",
               "opcao": 0,
               "dose": 15,
               "dosagem": "mg/kg",
               "tempo": 12,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             },
             {
-              "id": 0,
+              "medicamento": 0,
               "acao": "+",
               "opcao": 0,
               "dose": 2,
               "dosagem": "g",
               "tempo": 8,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             }
           ],
           "cuidados": []
@@ -190,42 +193,42 @@
         "variavel": "",
         "condicao": "",
         "prescricao": {
-          "medicacao": [
+          "medicacoes": [
             {
-              "id": 3,
+              "medicamento": 3,
               "acao": "+",
               "opcao": 0,
               "dose": 2,
               "dosagem": "g",
               "tempo": 8,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             },
             {
-              "id": 2,
+              "medicamento": 2,
               "acao": "+",
               "opcao": 0,
               "dose": 15,
               "dosagem": "mg/kg",
               "tempo": 1,
-              "intervalo": "dias"
+              "intervalo_tempo": "dias"
             },
             {
-              "id": 3,
+              "medicamento": 3,
               "acao": "+",
               "opcao": 1,
               "dose": 2,
               "dosagem": "g",
               "tempo": 8,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             },
             {
-              "id": 5,
+              "medicamento": 5,
               "acao": "+",
               "opcao": 1,
               "dose": 25000,
               "dosagem": "UI/kg",
               "tempo": 1,
-              "intervalo": "dias"
+              "intervalo_tempo": "dias"
             }
           ],
           "cuidados": []
@@ -240,24 +243,24 @@
         "variavel": "",
         "condicao": "",
         "prescricao": {
-          "medicacao": [
+          "medicacoes": [
             {
-              "id": 0,
+              "medicamento": 0,
               "acao": "+",
               "opcao": 0,
               "dose": 2,
               "dosagem": "g",
               "tempo": 8,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             },
             {
-              "id": 6,
+              "medicamento": 6,
               "acao": "+",
               "opcao": 1,
               "dose": 2,
               "dosagem": "g",
               "tempo": 8,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             }
           ],
           "cuidados": []
@@ -272,24 +275,24 @@
         "variavel": "",
         "condicao": "",
         "prescricao": {
-          "medicacao": [
+          "medicacoes": [
             {
-              "id": 4,
+              "medicamento": 4,
               "acao": "+",
               "opcao": 0,
               "dose": 15,
               "dosagem": "mg/kg",
               "tempo": 12,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             },
             {
-              "id": 3,
+              "medicamento": 3,
               "acao": "+",
               "opcao": 0,
               "dose": 1,
               "dosagem": "g",
               "tempo": 8,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             }
           ],
           "cuidados": []
@@ -304,24 +307,24 @@
         "variavel": "",
         "condicao": "",
         "prescricao": {
-          "medicacao": [
+          "medicacoes": [
             {
-              "id": 4,
+              "medicamento": 4,
               "acao": "+",
               "opcao": 0,
               "dose": 15,
               "dosagem": "mg/kg",
               "tempo": 12,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             },
             {
-              "id": 3,
+              "medicamento": 3,
               "acao": "+",
               "opcao": 0,
               "dose": 1,
               "dosagem": "g",
               "tempo": 8,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             }
           ],
           "cuidados": []
@@ -336,24 +339,24 @@
         "variavel": "",
         "condicao": "",
         "prescricao": {
-          "medicacao": [
+          "medicacoes": [
             {
-              "id": 4,
+              "medicamento": 4,
               "acao": "+",
               "opcao": 0,
               "dose": 15,
               "dosagem": "mg/kg",
               "tempo": 12,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             },
             {
-              "id": 3,
+              "medicamento": 3,
               "acao": "+",
               "opcao": 0,
               "dose": 1,
               "dosagem": "g",
               "tempo": 8,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             }
           ],
           "cuidados": []
@@ -368,33 +371,33 @@
         "variavel": "",
         "condicao": "",
         "prescricao": {
-          "medicacao": [
+          "medicacoes": [
             {
-              "id": 4,
+              "medicamento": 4,
               "acao": "+",
               "opcao": 0,
               "dose": 1,
               "dosagem": "g",
               "tempo": 12,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             },
             {
-              "id": 3,
+              "medicamento": 3,
               "acao": "+",
               "opcao": 0,
               "dose": 1,
               "dosagem": "g",
               "tempo": 8,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             },
             {
-              "id": 2,
+              "medicamento": 2,
               "acao": "+",
               "opcao": 0,
               "dose": 15,
               "dosagem": "mg/kg",
               "tempo": 1,
-              "intervalo": "dias"
+              "intervalo_tempo": "dias"
             }
           ],
           "cuidados": []
@@ -409,24 +412,24 @@
         "variavel": "",
         "condicao": "",
         "prescricao": {
-          "medicacao": [
+          "medicacoes": [
             {
-              "id": 6,
+              "medicamento": 6,
               "acao": "+",
               "opcao": 0,
               "dose": 600,
               "dosagem": "mg",
               "tempo": 12,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             },
             {
-              "id": 3,
+              "medicamento": 3,
               "acao": "+",
               "opcao": 0,
               "dose": 1,
               "dosagem": "g",
               "tempo": 8,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             }
           ],
           "cuidados": []
@@ -435,7 +438,7 @@
         "dest": 14
       },
       "node14": {
-        "id": 1,
+        "id": 14,
         "tipo": 0,
         "nome": "Infecção Viral?",
         "variavel": "instabilidade_hemodinamica, infeccao_pele, pneumonia, gram_crescente",
@@ -453,15 +456,15 @@
         "variavel": "",
         "condicao": "",
         "prescricao": {
-          "medicacao": [
+          "medicacoes": [
             {
-              "id": 4,
+              "medicamento": 4,
               "acao": "+",
               "opcao": 0,
               "dose": 15,
               "dosagem": "mg/kg",
               "tempo": 12,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             }
           ],
           "cuidados": []
@@ -488,15 +491,15 @@
         "variavel": "",
         "condicao": "",
         "prescricao": {
-          "medicacao": [
+          "medicacoes": [
             {
-              "id": 7,
+              "medicamento": 7,
               "acao": "+",
               "opcao": 0,
               "dose": 500,
               "dosagem": "mg",
               "tempo": 1,
-              "intervalo": "dias"
+              "intervalo_tempo": "dias"
             }
           ],
           "cuidados": [
@@ -527,15 +530,15 @@
         "variavel": "",
         "condicao": "",
         "prescricao": {
-          "medicacao": [
+          "medicacoes": [
             {
-              "id": 8,
+              "medicamento": 8,
               "acao": "+",
               "opcao": 0,
               "dose": 500,
               "dosagem": "mg",
               "tempo": 8,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             }
           ],
           "cuidados": []
@@ -562,24 +565,24 @@
         "variavel": "",
         "condicao": "",
         "prescricao": {
-          "medicacao": [
+          "medicacoes": [
             {
-              "id": 9,
+              "medicamento": 9,
               "acao": "+",
               "opcao": 0,
               "dose": 5,
               "dosagem": "mg/kg",
               "tempo": 8,
-              "intervalo": "horas"
+              "intervalo_tempo": "horas"
             },
             {
-              "id": 10,
+              "medicamento": 10,
               "acao": "+",
               "opcao": 0,
               "dose": 200,
               "dosagem": "mg",
               "tempo": 1,
-              "intervalo": "dias"
+              "intervalo_tempo": "dias"
             }
           ],
           "cuidados": []
@@ -606,7 +609,7 @@
         "variavel": "",
         "condicao": "",
         "prescricao": {
-          "medicacao": [],
+          "medicacoes": [],
           "cuidados": [
             "Solicitar coprocultura, pesquisa de toxina A e B e leucócitos fecais",
             "se sintomas de colite: Adicionar Metronidazol 500mg VO 8/8h"
@@ -634,7 +637,7 @@
         "variavel": "",
         "condicao": "",
         "prescricao": {
-          "medicacao": [],
+          "medicacoes": [],
           "cuidados": [
             "Remover o cateter se houver suspeita de infecção relacionada ao cateter E choque séptico refratário aos antibióticos",
             "Coletar culturas e amostra de secreção do sítio de saída se houver secreção purulenta"

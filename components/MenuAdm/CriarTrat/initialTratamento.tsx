@@ -1,3 +1,5 @@
+import { IntervaloTempo } from "@/types/Enum/IntervaloTempo";
+import { UnidadeDosagem } from "@/types/Enum/UnidadeDosagem";
 import TratamentoNode from "@/types/tratNode";
 
 const graphTratamento: Record<string, TratamentoNode> = {
@@ -52,8 +54,33 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
-        mensagem: "Cefepime 2g 8/8h 2ª opção - Pipe-Tazo 4,5g 6/6h",
-        dest: 14,
+        prescricao: {
+            medicacoes: [
+              {
+                medicamento: {
+                  id: 0,
+                  nome: "Amicacina"
+                },
+                dose: 2,
+                unidade_dosagem: UnidadeDosagem.G,
+                intervalo: 8,
+                intervalo_tempo: IntervaloTempo.HORAS
+              },
+              // {
+              //   medicamento: {
+              //     id: 1,
+              //     nome: "Pipe-Zato"
+              //   },
+              //   dose: 4.5,
+              //   unidade_dosagem: UnidadeDosagem.G,
+              //   intervalo: 6,
+              //   intervalo_tempo: IntervaloTempo.HORAS
+              // }
+            ],
+            "cuidados": []
+          },
+          "mensagem": "Cefepime 2g 8/8h 2ª opção - Pipe-Tazo 4,5g 6/6h",
+          "dest": 14,
         posicao:[650, 10]
     },
     node5: {
@@ -62,6 +89,41 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        prescricao: {
+            "medicacoes": [
+              {
+                medicamento: {
+                  id: 0,
+                  nome: "Amicacina"
+                },
+                dose: 2,
+                unidade_dosagem: UnidadeDosagem.G,
+                intervalo: 8,
+                intervalo_tempo: IntervaloTempo.HORAS
+              },
+              {
+                medicamento: {
+                  id: 2,
+                  nome: "Amicacina"
+                },
+                dose: 15,
+                unidade_dosagem: UnidadeDosagem.MG_KG,
+                intervalo: 1,
+                intervalo_tempo: IntervaloTempo.DIAS
+              },
+              {
+                medicamento: {
+                  id: 3,
+                  nome: "Meropenem"
+                },
+                dose: 1,
+                unidade_dosagem: UnidadeDosagem.G,
+                intervalo: 8,
+                intervalo_tempo: IntervaloTempo.HORAS
+              }
+            ],
+            "cuidados": []
+          },
         mensagem: "Cefepime 2g 8/8h + Amicacina 15mg/kg/dia 2ª opção (pacientes com disfunção renal) - Meropenem 1g 8/8h",
         dest: 14,
         posicao:[650, 110]
@@ -72,6 +134,31 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        prescricao: {
+            "medicacoes": [
+              {
+                medicamento: {
+                  id: 4,
+                  nome: "Vancomicina"
+                },
+                dose: 15,
+                unidade_dosagem: UnidadeDosagem.MG_KG,
+                intervalo: 12,
+                intervalo_tempo: IntervaloTempo.HORAS
+              },
+              {
+                medicamento: {
+                  id: 0,
+                  nome: "Amicacina"
+                },
+                dose: 2,
+                unidade_dosagem: UnidadeDosagem.G,
+                intervalo: 8,
+                intervalo_tempo: IntervaloTempo.HORAS
+              }
+            ],
+            "cuidados": []
+          },
         mensagem: "Vancomicina 15mg/kg 12/12h + Cefepime 2g 8/8h",
         dest: 14,
         posicao:[650, 210]
@@ -82,6 +169,51 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        prescricao: {
+            "medicacoes": [
+              {
+                medicamento: {
+                  id: 3,
+                  nome: "Meropenem"
+                },
+                dose: 2,
+                unidade_dosagem: UnidadeDosagem.G,
+                intervalo: 8,
+                intervalo_tempo: IntervaloTempo.HORAS
+              },
+              {
+                medicamento: {
+                  id: 2,
+                  nome: "Amicacina"
+                },
+                dose: 15,
+                unidade_dosagem: UnidadeDosagem.MG_KG,
+                intervalo: 1,
+                intervalo_tempo: IntervaloTempo.DIAS
+              },
+              //{
+              //   medicamento: {
+              //     id: 3,
+              //     nome: "Meropenem"
+              //   },
+              //   dose: 2,
+              //   unidade_dosagem: UnidadeDosagem.G,
+              //   intervalo: 8,
+              //   intervalo_tempo: IntervaloTempo.HORAS
+              // },
+              // {
+              //   medicamento: {
+              //     id: 5,
+              //     nome: "Poliximina B"
+              //   },
+              //   dose: 25000,
+              //   unidade_dosagem: UnidadeDosagem.UI_KG,
+              //   intervalo: 1,
+              //   intervalo_tempo: IntervaloTempo.DIAS
+              // }
+            ],
+            "cuidados": []
+          },
         mensagem: "Meropenem 2g 8/8h + Amicacina 15mg/kg/dia 2ª opção - Meropenem 2g 8/8h + Polimixina B 25.000UI/Kg/dia (÷ 2 ou 3)",
         dest: 14,
         posicao:[650, 310]
@@ -92,6 +224,31 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        prescricao: {
+            "medicacoes": [
+              {
+                medicamento: {
+                  id: 0,
+                  nome: "Amicacina"
+                },
+                dose: 2,
+                unidade_dosagem: UnidadeDosagem.G,
+                intervalo: 8,
+                intervalo_tempo: IntervaloTempo.HORAS
+              },
+              // {
+              //   medicamento: {
+              //     id: 6,
+              //     nome: "Linezolida"
+              //   },
+              //   dose: 2,
+              //   unidade_dosagem: UnidadeDosagem.G,
+              //   intervalo: 8,
+              //   intervalo_tempo: IntervaloTempo.HORAS
+              // }
+            ],
+            "cuidados": []
+          },
         mensagem: "Cefepime 2g 8/8h (adicionar Linezolida 600mg 12/12h se infecção por VRE nos últimos 30 dias)",
         dest: 14,
         posicao:[650, 410]
@@ -102,6 +259,31 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        prescricao: {
+            "medicacoes": [
+              {
+                medicamento: {
+                  id: 4,
+                  nome: "Vancomicina"
+                },
+                dose: 15,
+                unidade_dosagem: UnidadeDosagem.MG_KG,
+                intervalo: 12,
+                intervalo_tempo: IntervaloTempo.HORAS
+              },
+              {
+                medicamento: {
+                  id: 3,
+                  nome: "Meropenem"
+                },
+                dose: 1,
+                unidade_dosagem: UnidadeDosagem.G,
+                intervalo: 8,
+                intervalo_tempo: IntervaloTempo.HORAS
+              }
+            ],
+            "cuidados": []
+          },
         mensagem: "Vancomicina 15mg/kg 12/12h + Meropenem 1g 8/8h",
         dest: 14,
         posicao:[650, 1000]
@@ -112,6 +294,31 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        prescricao: {
+            "medicacoes": [
+              {
+                medicamento: {
+                  id: 4,
+                  nome: "Vancomicina"
+                },
+                dose: 15,
+                unidade_dosagem: UnidadeDosagem.MG_KG,
+                intervalo: 12,
+                intervalo_tempo: IntervaloTempo.HORAS
+              },
+              {
+                medicamento: {
+                  id: 3,
+                  nome: "Meropenem"
+                },
+                dose: 1,
+                unidade_dosagem: UnidadeDosagem.G,
+                intervalo: 8,
+                intervalo_tempo: IntervaloTempo.HORAS
+              }
+            ],
+            "cuidados": []
+          },
         mensagem: "Vancomicina 15mg/kg 12/12h + Meropenem 1g 8/8h",
         dest: 14,
         posicao:[650, 1100]
@@ -122,6 +329,31 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        prescricao: {
+            "medicacoes": [
+              {
+                medicamento: {
+                  id: 4,
+                  nome: "Vancomicina"
+                },
+                dose: 15,
+                unidade_dosagem: UnidadeDosagem.MG_KG,
+                intervalo: 12,
+                intervalo_tempo: IntervaloTempo.HORAS
+              },
+              {
+                medicamento: {
+                  id: 3,
+                  nome: "Meropenem"
+                },
+                dose: 1,
+                unidade_dosagem: UnidadeDosagem.G,
+                intervalo: 8,
+                intervalo_tempo: IntervaloTempo.HORAS
+              }
+            ],
+            "cuidados": []
+          },
         mensagem: "Vancomicina 15mg/kg 12/12h + Meropenem 1g 8/8h",
         dest: 14,
         posicao:[650, 1200]
@@ -132,6 +364,41 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        prescricao: {
+            "medicacoes": [
+              {
+                medicamento: {
+                  id: 4,
+                  nome: "Vancomicina"
+                },
+                dose: 1,
+                unidade_dosagem: UnidadeDosagem.G,
+                intervalo: 12,
+                intervalo_tempo: IntervaloTempo.HORAS
+              },
+              {
+                medicamento: {
+                  id: 3,
+                  nome: "Meropenem"
+                },
+                dose: 1,
+                unidade_dosagem: UnidadeDosagem.G,
+                intervalo: 8,
+                intervalo_tempo: IntervaloTempo.HORAS
+              },
+              {
+                medicamento: {
+                  id: 2,
+                  nome: "Amicacina"
+                },
+                dose: 15,
+                unidade_dosagem: UnidadeDosagem.MG_KG,
+                intervalo: 1,
+                intervalo_tempo: IntervaloTempo.DIAS
+              }
+            ],
+            "cuidados": []
+          },
         mensagem: "Vancomicina 1g 12/12h + Meropenem 2g 8/8h + Amicacina 15mg/kg/dia",
         dest: 14,
         posicao:[650, 1300]
@@ -142,6 +409,31 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        prescricao: {
+            "medicacoes": [
+              {
+                medicamento: {
+                  id: 6,
+                  nome: "Linezolida"
+                },
+                dose: 600,
+                unidade_dosagem: UnidadeDosagem.MG,
+                intervalo: 12,
+                intervalo_tempo: IntervaloTempo.HORAS
+              },
+              {
+                medicamento: {
+                  id: 3,
+                  nome: "Meropenem"
+                },
+                dose: 1,
+                unidade_dosagem: UnidadeDosagem.G,
+                intervalo: 8,
+                intervalo_tempo: IntervaloTempo.HORAS
+              }
+            ],
+            "cuidados": []
+          },
         mensagem: "Linezolida 600mg 12/12h + Meropenem 1g 8/8h",
         dest: 14,
         posicao:[650, 1400]
@@ -165,6 +457,21 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Adicionar Medicação",
         variavel: "",
         condicao: "",
+        prescricao: {
+            "medicacoes": [
+              {
+                medicamento: {
+                  id: 4,
+                  nome: "Vancomicina"
+                },
+                dose: 15,
+                unidade_dosagem: UnidadeDosagem.MG_KG,
+                intervalo: 12,
+                intervalo_tempo: IntervaloTempo.HORAS
+              }
+            ],
+            "cuidados": []
+          },
         mensagem: "Adicionar Vancomicina 15mg/kg/dose EV 12/12h ao esquema inicial",
         dest: 16,
         posicao:[1300, 750]
@@ -188,6 +495,25 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Revisar Tratamento",
         variavel: "",
         condicao: "",
+        prescricao: {
+            "medicacoes": [
+              {
+                medicamento: {
+                  id: 7,
+                  nome: "Azitromicina"
+                },
+                dose: 500,
+                unidade_dosagem: UnidadeDosagem.MG,
+                intervalo: 1,
+                intervalo_tempo: IntervaloTempo.DIAS
+              }
+            ],
+            "cuidados": [
+              { descricao: "Solicitar TC de Tórax" },
+              { descricao: "Considerar Tratamento de Pneumocistose em pacientes com hipoxemia grave e uso prolongado de corticoides ou QTX com análogos da purina" },
+              { descricao: "Considerar Influenza, em particular nos meses de inverno" }
+            ]
+          },
         mensagem: "- Solicitar TC de tórax - Adicionar Azitromicina 500mg EV/VO 1x/dia - Considerar tratamento de Pneumocistose (SMT/TMP 15 a 20mg de TMP/kg/dia ÷3/4) em pacientes com hipoxemia grave e uso prolongado de corticoides ou QTX com análogos da purina - Considerar Influenza, em particular nos meses de inverno",
         dest: 18,
         posicao:[1600, 750]
@@ -211,6 +537,21 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Adicionar Medicação",
         variavel: "",
         condicao: "",
+        prescricao: {
+            "medicacoes": [
+              {
+                medicamento: {
+                  id: 8,
+                  nome: "Metronidazol"
+                },
+                dose: 500,
+                unidade_dosagem: UnidadeDosagem.MG,
+                intervalo: 8,
+                intervalo_tempo: IntervaloTempo.HORAS
+              }
+            ],
+            "cuidados": []
+          },
         mensagem: "Acrescentar cobertura p/ anaeróbio (Metronidazol EV 500mg 8/8h)",
         dest: 20,
         posicao:[1900, 750]
@@ -234,6 +575,31 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Prescrever Medicação",
         variavel: "",
         condicao: "",
+        prescricao: {
+            "medicacoes": [
+              {
+                medicamento: {
+                  id: 9,
+                  nome: "Aciclovir"
+                },
+                dose: 5,
+                unidade_dosagem: UnidadeDosagem.MG_KG,
+                intervalo: 8,
+                intervalo_tempo: IntervaloTempo.HORAS
+              },
+              {
+                medicamento: {
+                  id: 10,
+                  nome: "Fluconazol"
+                },
+                dose: 200,
+                unidade_dosagem: UnidadeDosagem.MG,
+                intervalo: 1,
+                intervalo_tempo: IntervaloTempo.DIAS
+              }
+            ],
+            "cuidados": []
+          },
         mensagem: "Aciclovir EV 5mg/kg 3x/dia + Fluconazol EV 200mg/dia",
         dest: 22,
         posicao:[2200, 750]
@@ -257,6 +623,13 @@ const graphTratamento: Record<string, TratamentoNode> = {
       nome: "Diagnosticar colite",
       variavel: "",
       condicao: "",
+      prescricao: {
+        "medicacoes": [],
+        "cuidados": [
+            { descricao: "Solicitar coprocultura, pesquisa de toxina A e B e leucócitos fecais" },
+            { descricao: "se sintomas de colite: Adicionar Metronidazol 500mg VO 8/8h" }
+        ]
+      },
       mensagem: " Solicitar coprocultura, pesquisa de toxina A e B e leucócitos fecais - Se sinais/sintomas de colite: Metronidazol 500mg VO 8/8h",
       dest: 24,
       posicao:[2500, 750]
@@ -280,6 +653,13 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Remover cateter",
         variavel: "",
         condicao: "",
+        prescricao: {
+            "medicacoes": [],
+            "cuidados": [
+                { descricao: "Remover o cateter se houver suspeita de infecção relacionada ao cateter E choque séptico refratário aos antibióticos" },
+                { descricao: "Coletar culturas e amostra de secreção do sítio de saída se houver secreção purulenta" }
+            ]
+          },
         mensagem: "Remover o cateter se houver suspeita de infecção relacionada ao cateter E choque séptico refratário aos antibióticos - Coletar culturas e amostra de secreção do sítio de saída se houver secreção purulenta",
         dest: "n",
         posicao:[2800, 750]

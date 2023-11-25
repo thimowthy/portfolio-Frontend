@@ -1,3 +1,5 @@
+import { Prescricao } from "./Prescricao";
+
 type TratamentoNode = {
   id: number;
   tipo: number;
@@ -5,6 +7,7 @@ type TratamentoNode = {
   variavel: string;
   condicao: string;
   mensagem: string;
+  prescricao?: Prescricao
   dest: string | number | Record<string, number | string>;
   posicao: [number, number];
 }

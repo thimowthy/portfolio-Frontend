@@ -6,7 +6,7 @@
   }
   
   .chartDiv {
-    flex: 3;
+    width: 680px;
     background-color: white;
     border-radius: 10px;
     padding: 20px;
@@ -23,8 +23,10 @@
   .edgeStyle {
     stroke: #a4c5bd;
   }
+  .editDiv {
+    width: 100%;
+  }
   .inputDiv {
-    flex: 1;
     background-color: white;
     overflow: auto;
     border-radius: 10px;
