@@ -7,10 +7,10 @@ import ErrorToast from "@/components/toasts/errorToast";
 import styles from "./styles.module.css";
 
 const Login = () => {
-  const [ username, setUsername ] = useState("");
-  const [ password, setPassword ] = useState("");
-  const [ LoginError, setLoginError ] = useState(false);
-  const [ error, setError ] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [LoginError, setLoginError] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);

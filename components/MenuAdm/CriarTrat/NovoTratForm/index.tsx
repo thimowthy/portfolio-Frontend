@@ -75,9 +75,9 @@ const edges: Edge[] = createEdgesFromNodes(initialTratamento).concat(
 
 const TratFormContent: React.FC<TratFormContentProps> = ({ onTratamentoSubmit }) => {
   
-  const [ tratamento, setTratamento ] = useState(initialTratamento);
-  const [ selectedNode, setSelectedNode ] = useState("");
-  const [ toastVisible, setToastVisible ] = useState(false);
+  const [tratamento, setTratamento] = useState(initialTratamento);
+  const [selectedNode, setSelectedNode] = useState("");
+  const [toastVisible, setToastVisible] = useState(false);
 
   const handleNodeClick = (_: React.MouseEvent, node: Node) => {
     setSelectedNode("node" + node.id.toString());

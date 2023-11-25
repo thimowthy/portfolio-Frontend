@@ -72,11 +72,11 @@ const edges: Edge[] = initialEdges;
 
 const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }) => {
     
-  const [ diagnostico, setDiagnostico ] = useState(initialDiagnostico);
+  const [diagnostico, setDiagnostico] = useState(initialDiagnostico);
 
-  const [ selectedNode, setSelectedNode ] = useState("");
+  const [selectedNode, setSelectedNode] = useState("");
 
-  const [ toastVisible, setToastVisible ] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
 
   const handleNodeClick = (_: React.MouseEvent, node: Node) => {
     setSelectedNode("node" + node.id.toString());
