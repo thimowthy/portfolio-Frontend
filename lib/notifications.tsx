@@ -20,8 +20,8 @@ export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
   useEffect(() => {
     const getAllNotifications = async () => {
-      const allNotifications = await syncNotification();
-      setNotifications(allNotifications);
+      // const allNotifications = await syncNotification();
+      // setNotifications(allNotifications);
     };
     setInterval(getAllNotifications, 30000);
 

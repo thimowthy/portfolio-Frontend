@@ -16,6 +16,7 @@
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "chart.js": "^4.4.0",
+    "cpf-cnpj-validator": "^1.0.3",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
     "eslint-config-next": "13.4.12",
@@ -28,6 +29,7 @@
     "react-dom": "18.2.0",
     "react-flow-renderer": "^10.3.17",
     "react-hot-toast": "^2.4.1",
+    "react-input-mask": "^2.0.4",
     "react-loader-spinner": "^5.4.5",
     "reactflow": "^11.8.3",
     "reactjs-localstorage": "^1.0.1",
@@ -36,6 +38,7 @@
   },
   "devDependencies": {
     "@microsoft/tsdoc": "^0.14.2",
+    "@types/react-input-mask": "^3.0.4",
     "@types/reactjs-localstorage": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "eslint": "^8.46.0",

@@ -8,6 +8,7 @@ import medicamentoIcon from "@/public/medicine.svg";
 import anotacoesIcon from "@/public/notes.svg";
 import styles from "./styles.module.css";
 import { clearLocalStorage } from "@/utils/clearLocalStorage";
+import Router from "next/router";
 
 
 const Header = () => {
@@ -23,7 +24,7 @@ const Header = () => {
         <nav className={styles.nav}>
           <ul>
             <li>
-              <button>
+              <button onClick={() => { Router.push("/adicionar-paciente"); }}>
                 <div className="flex items-center gap-2">
                   <Image src={novoPacienteIcon} alt="Adicionar Paciente" width="40" height="40" />
                   <span>Novo Paciente</span>
@@ -41,7 +42,7 @@ const Header = () => {
             </li>
             <div className={styles.sep}></div>
             <li>
-              <button>
+              <button onClick={() => { Router.push("/adicionar-paciente"); }}>
                 <div className="flex items-center gap-2">
                   <Image src={anotacoesIcon} alt="Cuidados e Recomendações" width="40" height="40" />
                   <span>Cuidados e Recomendações</span>

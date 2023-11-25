@@ -4,13 +4,13 @@ import Image from "next/image";
 import Router from "next/router";
 import logo from "@/public/logo.png";
 import ErrorToast from "@/components/toasts/errorToast";
-import styles from "./Login.module.css";
+import styles from "./styles.module.css";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [LoginError, setLoginError] = useState(false);
-  const [error, setError] = useState(false);
+  const [ username, setUsername ] = useState("");
+  const [ password, setPassword ] = useState("");
+  const [ LoginError, setLoginError ] = useState(false);
+  const [ error, setError ] = useState(false);
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -77,9 +77,13 @@ const Login = () => {
             Router.push("/dashboard");
         }
         console.log("Login successful!");
-      } else {
+      } else if (response.status == 401) {
         setLoginError(true);
-        console.log("Login failed!");
+        console.log("Invalid credentials");
+      }
+      else {
+        setError(true);
+        console.error("Error occurred during login:", error);  
       }
     } catch (error) {
       setError(true);
