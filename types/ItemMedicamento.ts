@@ -3,7 +3,7 @@ import { UnidadeDosagem } from "./Enum/UnidadeDosagem";
 import { Medicamento } from "./Medicamento";
 
 export type ItemMedicamento = {
-    medicamento: Medicamento;
+    medicamento: Medicamento | undefined;
     dose: number;
     unidade_dosagem: UnidadeDosagem;
     intervalo: number;

@@ -1,5 +1,5 @@
 export enum IntervaloTempo {
-    MINUTOS = "minutos",
-    HORAS = "horas",
-    DIAS = "dias",
+    MINUTOS = "Minutos",
+    HORAS = "Horas",
+    DIAS = "Dias",
 }

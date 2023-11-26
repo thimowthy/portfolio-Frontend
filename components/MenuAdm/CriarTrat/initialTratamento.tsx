@@ -8,8 +8,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
       tipo: 0,
       nome: "Instabilidade Hemodinâmica",
       variavel: "instabilidade_hemodinamica",
-      condicao: "instabilidade_hemodinamica",
       mensagem: "",
+      condicao: "instabilidade_hemodinamica",
+      descricao: "Verifica se o paciente apresenta instabilidade hemodinâmica.",
       dest: {
           sim: 2,
           nao: 3
@@ -23,6 +24,12 @@ const graphTratamento: Record<string, TratamentoNode> = {
         variavel: "infeccao",
         condicao: "infeccao",
         mensagem: "",
+        descricao: "Determina qual tipo de infecção prévia o paciente possui.\n\
+  - NAO: Não Possui Infecção\n\
+  - ESBL: Infecções por Bactérias com Beta-lactamase de Espectro Estendido.\n\
+  - MRSA: Methicillin-resistant Staphylococcus aureus\n\
+  - EPC: \n\
+  - VRE: Enterococo Resistente à Vancomicina",
         dest: {
             nao: 4,
             esbl: 5,
@@ -39,6 +46,12 @@ const graphTratamento: Record<string, TratamentoNode> = {
         variavel: "infeccao",
         condicao: "infeccao",
         mensagem: "",
+        descricao: "Determina qual tipo de infecção prévia o paciente possui.\n\
+  - NAO: Não Possui Infecção\n\
+  - ESBL: Infecções por Bactérias com Beta-lactamase de Espectro Estendido.\n\
+  - MRSA: Methicillin-resistant Staphylococcus aureus\n\
+  - EPC: \n\
+  - VRE: Enterococo Resistente à Vancomicina",
         dest: {
             nao: 9,
             esbl: 10,
@@ -54,6 +67,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        descricao: "instabilidade_hemodinamica",
         prescricao: {
             medicacoes: [
               {
@@ -89,6 +103,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        descricao: "instabilidade_hemodinamica",
         prescricao: {
             "medicacoes": [
               {
@@ -134,6 +149,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        descricao: "instabilidade_hemodinamica",
         prescricao: {
             "medicacoes": [
               {
@@ -169,6 +185,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        descricao: "instabilidade_hemodinamica",
         prescricao: {
             "medicacoes": [
               {
@@ -224,6 +241,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        descricao: "instabilidade_hemodinamica",
         prescricao: {
             "medicacoes": [
               {
@@ -259,6 +277,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        descricao: "instabilidade_hemodinamica",
         prescricao: {
             "medicacoes": [
               {
@@ -294,6 +313,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        descricao: "instabilidade_hemodinamica",
         prescricao: {
             "medicacoes": [
               {
@@ -329,6 +349,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        descricao: "instabilidade_hemodinamica",
         prescricao: {
             "medicacoes": [
               {
@@ -364,6 +385,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        descricao: "instabilidade_hemodinamica",
         prescricao: {
             "medicacoes": [
               {
@@ -409,6 +431,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Notificar Prescrição",
         variavel: "",
         condicao: "",
+        descricao: "instabilidade_hemodinamica",
         prescricao: {
             "medicacoes": [
               {
@@ -441,10 +464,14 @@ const graphTratamento: Record<string, TratamentoNode> = {
     node14: {
         id: 14,
         tipo: 0,
-        nome: "Infecção Viral?",
+        nome: "Infecção?",
         variavel: "instabilidade_hemodinamica, infeccao_pele, pneumonia, gram_crescente",
         condicao: "infeccao_cateter OU infeccao_pele OU pneumonia OU gram_crescente",
         mensagem: "",
+        descricao: "- Suspeita de infecção relacionada ao cateter(calafrios após infusão pelo acesso; sinais flogísticos ao redor do sítio de saída)\n\
+- Infecção de pele ou partes moles\n\
+- Pneumonia\n\
+- Crescimento de Gram+ na hemocultura",
         dest: {
             sim: 15,
             nao: 16
@@ -457,6 +484,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Adicionar Medicação",
         variavel: "",
         condicao: "",
+        descricao: "instabilidade_hemodinamica",
         prescricao: {
             "medicacoes": [
               {
@@ -483,6 +511,8 @@ const graphTratamento: Record<string, TratamentoNode> = {
         variavel: "sintomas_resp, rx_torax_alterado",
         condicao: "sintomas_resp OU rx_torax_alterado",
         mensagem: "",
+        descricao: "- Sinais/sintomas respiratórios\n\
+- Raio X do tórax alterado",
         dest: {
             sim: 17,
             nao: 18
@@ -495,6 +525,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Revisar Tratamento",
         variavel: "",
         condicao: "",
+        descricao: "instabilidade_hemodinamica",
         prescricao: {
             "medicacoes": [
               {
@@ -525,6 +556,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
       variavel: "sepse_abdominal, tiflite, celulite_perianal",
       condicao: "sepse_abdominal OU tiflite OU celulite_perianal",
       mensagem: "",
+      descricao: "- Suspeita de sepse de foco abdominal/pelve?\n\
+- Enterocolite neutropênica (tifilite)\n\
+- Celulite perianal",
       dest: {
           sim: 19,
           nao: 20
@@ -537,6 +571,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Adicionar Medicação",
         variavel: "",
         condicao: "",
+        descricao: "instabilidade_hemodinamica",
         prescricao: {
             "medicacoes": [
               {
@@ -563,6 +598,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
         variavel: "ulcera_bucal",
         condicao: "ulcera_bucal",
         mensagem: "",
+        descricao: "Presença de úlceras em cavidade oral?",
         dest: {
             sim: 21,
             nao: 22
@@ -575,6 +611,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
         nome: "Prescrever Medicação",
         variavel: "",
         condicao: "",
+        descricao: "instabilidade_hemodinamica",
         prescricao: {
             "medicacoes": [
               {
@@ -611,6 +648,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
         variavel: "diarreia",
         condicao: "diarreia",
         mensagem: "",
+        descricao: "Presença de diarreia?",
         dest: {
             sim: 23,
             nao: 24
@@ -623,11 +661,12 @@ const graphTratamento: Record<string, TratamentoNode> = {
       nome: "Diagnosticar colite",
       variavel: "",
       condicao: "",
+      descricao: "instabilidade_hemodinamica",
       prescricao: {
         "medicacoes": [],
         "cuidados": [
             { descricao: "Solicitar coprocultura, pesquisa de toxina A e B e leucócitos fecais" },
-            { descricao: "se sintomas de colite: Adicionar Metronidazol 500mg VO 8/8h" }
+            { descricao: "Se sintomas de colite: Adicionar Metronidazol 500mg VO 8/8h" }
         ]
       },
       mensagem: " Solicitar coprocultura, pesquisa de toxina A e B e leucócitos fecais - Se sinais/sintomas de colite: Metronidazol 500mg VO 8/8h",
@@ -641,6 +680,7 @@ const graphTratamento: Record<string, TratamentoNode> = {
       variavel: "infec_cateter",
       condicao: "infec_cateter",
       mensagem: "",
+      descricao: "Infecção relaciona ao cateter?",
       dest: {
           sim: 25,
           nao: "n"
@@ -652,7 +692,8 @@ const graphTratamento: Record<string, TratamentoNode> = {
         tipo: 1,
         nome: "Remover cateter",
         variavel: "",
-        condicao: "",
+        condicao: "instabilidade_hemodinamica",
+        descricao: "",
         prescricao: {
             "medicacoes": [],
             "cuidados": [
