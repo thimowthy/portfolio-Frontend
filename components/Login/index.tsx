@@ -58,7 +58,7 @@ const Login = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        //console.log(data);
         localStorage.setItem("Authorization", data.token);
 
         const decodedToken: JwtPayload = jwt_decode(data.token);
@@ -76,21 +76,21 @@ const Login = () => {
           default:
             Router.push("/dashboard");
         }
-        console.log("Login successful!");
+        //console.log("Login successful!");
       } else if (response.status == 401) {
         setLoginError(true);
-        console.log("Invalid credentials");
+        // console.log("Invalid credentials");
       }
       else {
         setError(true);
-        console.error("Error occurred during login:", error);  
+        // console.error("Error occurred during login:", error);  
       }
     } catch (error) {
       setError(true);
-      console.error("Error occurred during login:", error);
+      // console.error("Error occurred during login:", error);
     }
 
-    console.log("Login credentials:", { username, password });
+    // console.log("Login credentials:", { username, password });
   };
 
   return (

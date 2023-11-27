@@ -54,11 +54,11 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
         Router.push("/menu");
       } else {
         setErrorToast(true);
-        console.error("Failed to save Protocolo:", response.statusText);
+        //console.error("Failed to save Protocolo:", response.statusText);
       }
     } catch (error) {
       setSendErrorToast(true);
-      console.error("An error occurred while sending the request:", error);
+      //console.error("An error occurred while sending the request:", error);
     }
   };                                                          
   const handleInputChange = (fieldName: string, value: string) => {

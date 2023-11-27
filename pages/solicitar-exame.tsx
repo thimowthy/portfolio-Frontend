@@ -29,7 +29,7 @@ const SolicitarExame = () => {
 
         setFetchedData(data);
       } catch (error) {
-        console.error("Ocorreu um erro durante a solicitação:", error);
+        //console.error("Ocorreu um erro durante a solicitação:", error);
       }
     };
     fetchData();

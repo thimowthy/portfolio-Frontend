@@ -4,6 +4,7 @@ type DiagnosticoNode = {
   nome: string;
   variavel: string;
   condicao: string;
+  valor: number;
   posicao: [number, number];
   dest: number[];
 };
