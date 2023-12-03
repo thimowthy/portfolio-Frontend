@@ -1,5 +1,5 @@
 import SeoConfig from "@/components/SeoConfig";
-import SolicitarExameForm from "@/components/SolicitarExame";
+import SolicitarExameForm from "@/components/CadastrarExame";
 import Header from "@/components/Header";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";

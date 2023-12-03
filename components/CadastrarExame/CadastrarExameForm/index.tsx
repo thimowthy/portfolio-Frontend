@@ -1,7 +1,7 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { format } from "date-fns-tz";
-import { ExameProps } from "./../ExameProps";
+import { ExameProps } from "../ExameProps";
 import { getId } from "@/hooks/getId";
 
 const unidades = [
@@ -18,18 +18,17 @@ const timeZone = "America/Sao_Paulo";
 const currentDate = format(new Date(), "yyyy-MM-dd", { timeZone });
 
 const ExameForm: React.FC<ExameProps> = ({
-  id,
-  paciente,
-  leito,
-  prontuario,
+  pacientes,
+  medicos
 }) => {
   const [unidade, setUnidade] = useState("");
   const [tipo, setTipo] = useState("");
+  const [cpf, setCPF] = useState("");
   const [dataSolicitacao, setDataSolicitacao] = useState(currentDate);
   const [nome, setNome] = useState("");
-  const [nomePaciente, setPaciente] = useState(paciente);
-  const [numProntuario, setProntuario] = useState(prontuario);
-  const [numLeito, setLeito] = useState(leito);
+  const [nomePaciente, setPaciente] = useState("");
+  const [numProntuario, setProntuario] = useState("");
+  const [numLeito, setLeito] = useState("");
   const [quarto, setQuarto] = useState("");
   const [solicitadoPor, setSolicitadoPor] = useState("");
 
@@ -39,7 +38,7 @@ const ExameForm: React.FC<ExameProps> = ({
 
   const handleSubmit = async (): Promise<void> => {
     const exameData = {
-      idPaciente: id,
+      idPaciente: "id",
       idSolicitante: solicitadoPor,
     };
     try {
@@ -66,19 +65,14 @@ const ExameForm: React.FC<ExameProps> = ({
 
   return (
     <div className={styles.form}>
-      <div className={styles.divExame}>
-        <div className={styles.unidade}>
-          <label>Unidade</label>
-          <select onChange={(e) => setUnidade(e.target.value)} value={unidade}>
-            {unidades.map((unidadeOption) => (
-              <option
-                key={unidadeOption.id}
-                value={unidadeOption.id.toString()}
-              >
-                {unidadeOption.nome}
-              </option>
-            ))}
-          </select>
+      <div className={styles.divPaciente}>
+        <div className={styles.cpf}>
+          <label>CPF</label>
+          <input
+            type="text"
+            value={cpf}
+          >
+          </input>
         </div>
         <div className={styles.tipo}>
           <label>Tipo</label>
@@ -107,7 +101,7 @@ const ExameForm: React.FC<ExameProps> = ({
           value={nome}
         />
       </div>
-      <div className={styles.divExame}>
+      <div className={styles.divSolicitante}>
         <label>Nº do Prontuário</label>
         <input
           type="text"

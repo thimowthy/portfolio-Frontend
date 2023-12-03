@@ -2,15 +2,13 @@ import { useState } from "react";
 import styles from "./styles.module.css";
 import BackIcon from "@/components/buttons/backIcon";
 import Router from "next/router";
-import ExameForm from "./SolicitarExameForm";
+import ExameForm from "./CadastrarExameForm";
 import { ExameProps } from "./ExameProps";
 import Link from "next/link";
 
-const SolicitarExame: React.FC<ExameProps> = ({
-  id,
-  paciente,
-  leito,
-  prontuario,
+const CadastrarExame: React.FC<ExameProps> = ({
+  pacientes,
+  medicos
 }) => {
   return (
     <>
@@ -23,22 +21,19 @@ const SolicitarExame: React.FC<ExameProps> = ({
               type="button"
               href={{
                 pathname: "/dados-paciente",
-                query: { paciente },
               }}
             >
               <label htmlFor="backBtn" className={styles.backButton}>
                 <BackIcon width={40} height={40} color="#333" />
               </label>
             </Link>
-            <h1 className={styles.headerTitle}>Solicitar Exame</h1>
+            <h1 className={styles.headerTitle}>Cadastrar Exame</h1>
           </div>
           <div className={styles.sep}></div>
           <div className={styles.content}>
             <ExameForm
-              id={id}
-              prontuario={prontuario}
-              leito={leito}
-              paciente={paciente}
+              pacientes={pacientes}
+              medicos={medicos}
             />
           </div>
         </form>
@@ -47,4 +42,4 @@ const SolicitarExame: React.FC<ExameProps> = ({
   );
 };
 
-export default SolicitarExame;
+export default CadastrarExame;
