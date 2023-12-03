@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import Link from "next/link";
@@ -6,116 +7,213 @@ import Protocolo from "@/types/Protocolo";
 import { ProtocoloDB } from "@/types/ProtocoloDB";
 import loading from "@/public/loading.gif";
 import Image from "next/image";
+import SuccessToast from "@/components/toasts/successToast";
+import ErrorToast from "@/components/toasts/errorToast";
 
+type Prot = {
+  id: number,
+  descricao: Protocolo,
+  ativo?: boolean | undefined,
+};
 const MenuFormContent = () => {
 
-    const ListaProtocolos: ProtocoloDB[] = [
-      {
-        id: 1,
-        descricao:{ id: 1, nome: "Protocolo Neutropenia 2022 V1.0", ano:"2023", versao:"1.0", diagnostico:{ nodes:{} }, tratamento:{ nodes:{} } },
-        ativo:true
-      },
-      {
-        id: 2,
-        descricao: { id: 2, nome: "Protocolo Neutropenia 2022 V1.1", ano:"2023", versao:"1.1", diagnostico:{ nodes:{} }, tratamento:{ nodes:{} } },
-        ativo: false
-      },
-      {
-        id: 3,
-        descricao: { id: 3, nome: "Protocolo Neutropenia 2022 V1.2", ano:"2023", versao:"1.2", diagnostico:{ nodes:{} }, tratamento:{ nodes:{} } },
-        ativo: false
-      },
-      {
-        id: 4,
-        descricao: { id: 4, nome: "Protocolo Neutropenia 2023 V2.0", ano:"2023", versao:"2.0", diagnostico:{ nodes:{} }, tratamento:{ nodes:{} } },
-        ativo: false
-      },
-    ];
-    const [protocolos, setProtocolos] = useState<Protocolo[]>(ListaProtocolos.map(protocoloDB => protocoloDB.descricao));
+    const [listaProtocolos, setListaProtocolos] = useState<ProtocoloDB[]>();
+    const [protocolos, setProtocolos] = useState<Prot[]>([]);
+
+    const [efetivarSuccess, setEfetivarSuccess] = useState<Boolean>(false);
+    const [efetivarError, setEfetivarError] = useState<Boolean>(false);
+    const [efetivarEfetivadoError, setEfetivarEfetivadoError] = useState<Boolean>(false);
+    const [excluirSuccess, setExcluirSuccess] = useState<Boolean>(false);
+    const [excluirError, setExcluirError] = useState<Boolean>(false);
+    
+
+    const [ativo, setAtivo] = useState<number>();
     const [selectedItemId, setSelectedItemId] = useState<number>(1);
 
     const handleEfetivarProtocolo = (id: number) => {
       if (id) {
-
-        const descricao = protocolos.find(protocolo => protocolo.id === id);
-
-        const requestOptions = {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(descricao),
-        };
+        console.log(ativo, id);
+        if (id === ativo) {
+          setEfetivarEfetivadoError(true);
+        }
+        else {
+          fetch(`https://localhost:7091/Protocolo/EfetivarProtocolo/${id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(id),
+          })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error("Erro ao efetivar o protocolo");
+              }
+              return response.json();
+            })
+            .then(data => {
+              setEfetivarSuccess(true);
+            })
+            .catch(error => {
+              setEfetivarError(true);
+            });
+        }
+      }
+      else {
+        console.log("Selecione um protocolo!");
+      }
+    };
     
-        fetch(`URL/${id}`, requestOptions)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error("Erro ao efetivar o protocolo");
-            }
-            return response.json();
+    const handleExcluirProtocolo = (id: number) => {
+      if (id) {
+        console.log(ativo, id);
+        if (id === ativo) {
+          console.log("Você não pode excluir o protocolo em execução");
+        }
+        else {
+          fetch(`https://localhost:7091/Protocolo/DeleteProtocolo?protocoloId=${id}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(id),
           })
-          .then(data => {
-            console.log("Protocolo efetivado com sucesso", data);
-          })
-          .catch(error => {
-            console.error("Erro:", error);
-          });
+            .then(response => {
+              if (!response.ok) {
+                throw new Error("Erro ao excluir protocolo");
+              }
+              return response;
+            })
+            .then(data => {
+              console.log(data);
+              setExcluirSuccess(true);
+            })
+            .catch(error => {
+              console.log(error);
+              setExcluirError(true);
+            });
+        }
       }
       else {
         console.log("Selecione um protocolo!");
       }
     };
 
-    const handleItemClick = (itemId: number) => {
-      setSelectedItemId(itemId);
+    const handleItemClick = (id: number) => {
+      setSelectedItemId(id);
     };
-
+    
     useEffect(() => {
-      fetch("")
+      fetch("https://localhost:7091/Protocolo/GetListProtocolo")
         .then(response => response.json())
-        .then(data => setProtocolos(data))
+        .then(data => {
+          setListaProtocolos(data);
+        })
         .catch(error => console.error("Error ", error));
     }, []);
 
+    useEffect(() => {
+      if (listaProtocolos) {
+        const protocolos = listaProtocolos?.map(protocoloDB => ({
+          ...protocoloDB,
+          descricao: JSON.parse(protocoloDB.descricao)
+        }));
+        setProtocolos(protocolos);
+        setAtivo(listaProtocolos?.find(item => item.ativo)?.id);
+      }
+    }, [listaProtocolos]);
+
   return (
-    <div className={styles.menuDiv}>
-      <div className={styles.buttons}>
-      <button
-        className={styles.button}
-        type="button"
-        onClick={() => {
-          Router.push("/criar-protocolo");
-        }}
-      >Novo Protocolo</button>
-      <button className={styles.button} type="button">Editar Protocolo</button>
-      <button
-        className={styles.button}
-        type="button"
-        onClick={() => {handleEfetivarProtocolo(selectedItemId);}}>
-          Efetivar Protocolo
-      </button>
-      <div className="mt-8 mb-4 border"></div>
-      <button className={styles.button}>
-        <Link href="/crud-usuarios">Gerenciar Usuários</Link>
-      </button>
+    <>
+      { listaProtocolos && (    
+      <div className={styles.menuDiv}>
+        <div className={styles.buttons}>
+        <button
+          className={styles.button}
+          type="button"
+          onClick={() => {
+            Router.push("/criar-protocolo");
+          }}
+        >
+          Novo Protocolo
+        </button>
+        <button className={styles.button} type="button">Editar Protocolo</button>
+        <button
+          className={styles.button}
+          type="button"
+          onClick={() => {handleEfetivarProtocolo(selectedItemId);}}>
+            Efetivar Protocolo
+        </button>
+        <button
+          className={styles.button}
+          type="button"
+          onClick={() => {handleExcluirProtocolo(selectedItemId);}}>
+            Excluir Protocolo
+        </button>
+        <div className="mt-4 mb-2 border"></div>
+        <button className={styles.button}>
+          <Link href="/crud-usuarios">Gerenciar Usuários</Link>
+        </button>
+        </div>
+        <div className={styles.textDiv}>
+          <ul>
+              { protocolos.map(protocolo => (
+                <li
+                  key={protocolo.id}
+                  onClick={() => handleItemClick(protocolo.id)}
+                  className={`${styles.listItem} ${selectedItemId === protocolo.id ? styles.selected : ""}`}
+                >
+                  <span className={styles.marker}>•{
+                    "   " + protocolo.descricao.nome +
+                    "  v" + protocolo.descricao.versao
+                  }</span>  
+                  {protocolo.ativo && (
+                    <Image src={loading} style={{ marginLeft: "10px", width: "30px", maxHeight: "30px" }} title="Em execução" alt="Protocolo vigente"/>
+                  )}
+                </li>
+              ))}
+          </ul>
+        </div>
+        <div className="absolute bottom-5 right-5">
+        { efetivarSuccess && (
+          <SuccessToast
+            title="Protocolo Efetivado"
+            message="Protocolo efetivado com sucesso!"
+            onClose={() => { setEfetivarSuccess(false); }}
+          /> 
+        )}
+        { excluirSuccess && (
+          <SuccessToast
+            title="Protocolo Excluído"
+            message="Protocolo excluído com sucesso!"
+            onClose={() => { setExcluirSuccess(false); }}
+          /> 
+        )}
+        { efetivarError && (
+          <ErrorToast
+            title="Erro ao efetivar protocolo"
+            message="Ocorreu um problema ao efetivar o protocolo"
+            onClose={() => { setEfetivarError(false); }}
+          /> 
+        )}
+        { efetivarEfetivadoError && (
+          <ErrorToast
+            title="Protocolo já efetivado!"
+            message="O protocolo selecionado já está em execução"
+            onClose={() => { setEfetivarEfetivadoError(false); }}
+          /> 
+        )}
+        { excluirError && (
+          <ErrorToast
+            title="Erro ao excluir protocolo"
+            message="Ocorreu um problema ao excluir o protocolo"
+            onClose={() => { setExcluirError(false); }}
+          /> 
+        )}
+        </div>
       </div>
-      <div className={styles.textDiv}>
-        <ul>
-            { ListaProtocolos.map(protocoloDB => (
-              <li
-                key={protocoloDB.id}
-                onClick={() => handleItemClick(protocoloDB.id)}
-                className={`${styles.listItem} ${selectedItemId === protocoloDB.id ? styles.selected : ""}`}
-              >
-                <span className={styles.marker}>•</span> {protocoloDB.descricao.nome}
-                {protocoloDB.ativo && (
-                  <Image src={loading} style={{ marginLeft: "10px", width: "30px", maxHeight: "30px" }} title="Em execução" alt="Protocolo vigente"/>
-                )}
-              </li>
-            ))}
-        </ul>
-      </div>
-    </div>
+      )
+    }
+  </>
   );
 };
 
