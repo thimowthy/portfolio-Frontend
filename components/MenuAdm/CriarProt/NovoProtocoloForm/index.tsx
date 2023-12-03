@@ -31,27 +31,19 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
 
   const sendProtocolo = async (protocolo: Protocolo) => {
     try {
-      console.log(protocolo);
-      const response = await fetch("https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/CadastrarProtocolo", {
+      const response = await fetch("https://localhost:7091/Protocolo/CadastrarProtocolo", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(JSON.stringify(protocolo)),
       });
-      //console.log("'"+JSON.stringify(protocolo)+"'");
       if (response.ok) {
-        //const responseData = await response.json();
-        //console.log("Protocolo saved successfully:", responseData);
         setSendToast(true);
         Router.push("/menu");
       } else {
         setErrorToast(true);
-        //console.error("Failed to save Protocolo:", response.statusText);
       }
     } catch (error) {
       setSendErrorToast(true);
-      //console.error("An error occurred while sending the request:", error);
     }
   };                                                          
   const handleInputChange = (fieldName: string, value: string) => {
