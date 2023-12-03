@@ -10,17 +10,13 @@ import ErrorToast from "@/components/toasts/errorToast";
 interface ProtocolFormContentProps {
   setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
   setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
-  diagnostico: Diagnostico;
-  tratamento: Tratamento;
   prot: Protocolo;
-  onSave: React.Dispatch<React.SetStateAction<Protocolo>>;
+  onSave: React.Dispatch<React.SetStateAction<Protocolo | undefined>>;
 }
 
 const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
   setOpenWindow,
   setCloseWindow,
-  diagnostico,
-  tratamento,
   prot,
   onSave
   }) => {
@@ -31,14 +27,11 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
   const [errorToast, setErrorToast] = useState(false);
   const [sendErrorToast, setSendErrorToast] = useState(false);
 
-  const [protocolo, setProtocolo] = useState<Protocolo>({
-                                                            ...prot,
-                                                            diagnostico: diagnostico,
-                                                            tratamento: tratamento,
-                                                          });
+  const [protocolo, setProtocolo] = useState<Protocolo>(prot);
 
   const sendProtocolo = async (protocolo: Protocolo) => {
     try {
+      console.log(protocolo);
       const response = await fetch("https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/CadastrarProtocolo", {
         method: "POST",
         headers: {

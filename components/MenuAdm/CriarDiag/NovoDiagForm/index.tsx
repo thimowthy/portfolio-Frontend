@@ -11,6 +11,7 @@ import SuccessToast from "@/components/toasts/successToast";
 
 interface DiagFormContentProps {
   onDiagnosticoSubmit: (diagnostico: Diagnostico) => void;
+  diag: Diagnostico;
 }
 
 const initialDiagnostico: Record<string, DiagnosticoNode> = graphDiagnostico;
@@ -70,12 +71,13 @@ const nodes: Node[] = [
 
 const edges: Edge[] = initialEdges;
 
-const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }) => {
+const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit, diag }) => {
     
-  const [diagnostico, setDiagnostico] = useState(initialDiagnostico);
+  const [diagnostico, setDiagnostico] = useState<Record<string, DiagnosticoNode>>(diag.nodes);
+  
   const [valor, setValor] = useState<Record<string, string>>(
-    Object.keys(initialDiagnostico).reduce((acc, chave) => {
-      acc[chave] = initialDiagnostico[chave].valor.toString();
+    Object.keys(diag.nodes).reduce((acc, chave) => {
+      acc[chave] = diag.nodes[chave].valor.toString();
       return acc;
     }, {} as Record<string, string>)
   );
@@ -83,11 +85,14 @@ const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }
 
   const [toastVisible, setToastVisible] = useState(false);
 
+  useEffect(() => {
+    console.log(diagnostico);
+  }, [diagnostico]);
 
   const handleNodeClick = (_: React.MouseEvent, node: Node) => {
     setSelectedNode("node" + node.id.toString());
   };
-  const handleDiagnoticoSubmit = () => {
+  const handleDiagnosticoSubmit = () => {
     const novoDiagnostico: Diagnostico = {
       nodes: diagnostico
     };
@@ -184,7 +189,7 @@ const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }
               type="button"
               onClick={() => {
                 //console.log(diagnostico);
-                handleDiagnoticoSubmit();
+                handleDiagnosticoSubmit();
               } }
             >
               Salvar

@@ -13,10 +13,12 @@ import { ItemMedicamento } from "@/types/ItemMedicamento";
 import { ItemCuidado } from "@/types/ItemCuidado";
 import { Prescricao } from "@/types/Prescricao";
 import { tratamentoInicial } from "./initialTratamento";
+import TratamentoNode from "@/types/tratNode";
 
 
 interface TratFormContentProps {
   onTratamentoSubmit: (tratamento: Tratamento) => void;
+  trat: Tratamento;
 }
 
 const nodes: Node[] = [
@@ -76,9 +78,9 @@ const noInicial = "node4";
 const presc = tratamentoInicial[noInicial].prescricao;
 const precricaoInicial = presc?presc:{ medicacoes:[], cuidados:[] };
 
-const TratFormContent: React.FC<TratFormContentProps> = ({ onTratamentoSubmit }) => {
+const TratFormContent: React.FC<TratFormContentProps> = ({ onTratamentoSubmit, trat }) => {
   
-  const [tratamento, setTratamento] = useState(tratamentoInicial);
+  const [tratamento, setTratamento] = useState<Record<string, TratamentoNode>>(trat.nodes);
   const [selectedNode, setSelectedNode] = useState(noInicial);
   const [nodeType, setNodeType] = useState(1);
   const [toastVisible, setToastVisible] = useState(false);
@@ -97,7 +99,7 @@ const TratFormContent: React.FC<TratFormContentProps> = ({ onTratamentoSubmit })
     { id: 10, nome: "Fluconazol" },
   ];
 
-  const [prescricao, setPrescricao] = useState<Prescricao>(precricaoInicial);
+  const [prescricao, setPrescricao] = useState<Prescricao>(trat.nodes[noInicial].prescricao || precricaoInicial);
   const [medicacoes, setMedicacoes] = useState<ItemMedicamento[]>(prescricao.medicacoes);
   const [cuidados, setCuidados] = useState<ItemCuidado[]>(prescricao.cuidados);
   const [medicamento, setMedicamento] = useState<Medicamento>();

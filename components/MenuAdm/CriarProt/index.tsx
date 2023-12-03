@@ -11,17 +11,13 @@ interface CreateProtocolProps {
   setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
   setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
   windowName: string;
-  diagnostico: Diagnostico;
-  tratamento: Tratamento;
   protocolo: Protocolo;
-  setProtocolo: React.Dispatch<React.SetStateAction<Protocolo>>;
+  setProtocolo: React.Dispatch<React.SetStateAction<Protocolo | undefined>>;
 }
 
 const CreateProtocol: React.FC<CreateProtocolProps> = ({
   setOpenWindow,
   setCloseWindow,
-  diagnostico,
-  tratamento,
   protocolo,
   setProtocolo,
 }) => {
@@ -49,8 +45,6 @@ const CreateProtocol: React.FC<CreateProtocolProps> = ({
             <NovoProtocolForm
               setOpenWindow={setOpenWindow}
               setCloseWindow={setCloseWindow}
-              diagnostico={diagnostico}
-              tratamento={tratamento}
               prot={protocolo}
               onSave={setProtocolo}
             />

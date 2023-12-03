@@ -4,7 +4,7 @@ import Protocolo from "@/types/Protocolo";
 
 
 const defaultProtocolo: Protocolo = {
-    id: 0,
+    id: 1,
     nome: "",
     ano: "",
     versao: "",
