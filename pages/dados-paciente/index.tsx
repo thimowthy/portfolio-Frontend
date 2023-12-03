@@ -49,39 +49,39 @@ const DadosPacientePage = ({
 export default DadosPacientePage;
 
 export async function getStaticProps<GetStaticProps>() {
-  const pacientes = await fetcher({
-    metodo: "GET",
-    rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatientsSemAlta",
-  });
+  // const pacientes = await fetcher({
+  //   metodo: "GET",
+  //   rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatientsSemAlta",
+  // });
 
-  const isNeutropenico = (paciente: Paciente) => {
-    const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
-    let situacoesPacienteCopy = [...situacoesPaciente];
-    const situacaoAtual = situacoesPacienteCopy?.pop();
+  // const isNeutropenico = (paciente: Paciente) => {
+  //   const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
+  //   let situacoesPacienteCopy = [...situacoesPaciente];
+  //   const situacaoAtual = situacoesPacienteCopy?.pop();
 
-    if (situacaoAtual?.situacaoDiagnostico?.neutropenia) {
-      return true;
-    }
-    return false;
-  };
-  const febre = (paciente: Paciente) => {
-    const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
-    let situacoesPacienteCopy = [...situacoesPaciente];
-    const situacaoAtual = situacoesPacienteCopy?.pop();
+  //   if (situacaoAtual?.situacaoDiagnostico?.neutropenia) {
+  //     return true;
+  //   }
+  //   return false;
+  // };
+  // const febre = (paciente: Paciente) => {
+  //   const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
+  //   let situacoesPacienteCopy = [...situacoesPaciente];
+  //   const situacaoAtual = situacoesPacienteCopy?.pop();
 
-    if (situacaoAtual?.situacaoDiagnostico?.febre) {
-      return true;
-    }
-    return false;
-  };
-  const nf = pacientes?.filter(
-    (paciente: Paciente) => febre(paciente) && isNeutropenico(paciente),
-  );
+  //   if (situacaoAtual?.situacaoDiagnostico?.febre) {
+  //     return true;
+  //   }
+  //   return false;
+  // };
+  // const nf = pacientes?.filter(
+  //   (paciente: Paciente) => febre(paciente) && isNeutropenico(paciente),
+  // );
 
   return {
     props: {
-      pacientes,
-      nf,
+      pacientes:[],
+      nf:[],
     },
   };
 }
