@@ -11,12 +11,14 @@ import { defaultTratamento } from "@/components/MenuAdm/nodes/tratFlow";
 import { defaultDiagnostico } from "@/components/MenuAdm/nodes/diagFlow";
 import { defaultProtocolo } from "@/components/MenuAdm/nodes/protFlow";
 import { useRouter } from "next/router";
+import { ProtocoloDB } from "@/types/ProtocoloDB";
 
 
 const Protocolo = () => {
 
   const router = useRouter();
   
+  const [protocoloDB, setProtocoloDB] = useState<ProtocoloDB>();  
   const [protocolo, setProtocolo] = useState<Protocolo>();  
   const [diagnostico, setDiagnostico] = useState<Diagnostico>(defaultDiagnostico);
   const [tratamento, setTratamento] = useState<Tratamento>(defaultTratamento);
@@ -28,30 +30,39 @@ const Protocolo = () => {
   const [winCriarDiag, setWinCriarDiag] = useState(false);
   const [winMenuProt, setwinMenuProt] = useState(true);
 
-  useEffect(() => {
-
+  useEffect(() => { // CRIAR NOVO PROTOCOLO
     if (router.query.protocolo) {
-      const protocolo = JSON.parse(router.query.protocolo as string);
+      const protocoloDB = JSON.parse(router.query.protocolo as string);
+      const protocolo: Protocolo = JSON.parse(protocoloDB.descricao);
+      setProtocoloDB(protocoloDB);
       setProtocolo(protocolo);
       setDiagnostico(protocolo.diagnostico);
       setTratamento(protocolo.tratamento);
     }
     else {
+      setProtocoloDB({ id: 0, descricao: JSON.stringify(defaultProtocolo) });
       setProtocolo(defaultProtocolo);
       setDiagnostico(defaultDiagnostico);
       setTratamento(defaultTratamento);
     }
-      
   }, [router.query.protocolo]);
-  
+
   useEffect(() => {
     setProtocolo((protocolo) => ({
       ...protocolo!,
       diagnostico: diagnostico,
       tratamento: tratamento,
     }));
-
   }, [diagnostico, tratamento]);
+
+  useEffect(() => {
+    if (protocolo) {
+      setProtocoloDB((protocoloDB) => ({
+        ...protocoloDB!,
+        descricao: JSON.stringify(protocolo),
+      }));
+    }
+  }, [protocolo]);
 
   const closeWindow = (window: string) => {
     switch (window) {
@@ -88,7 +99,7 @@ const Protocolo = () => {
 
   return (
     <>
-      {protocolo && (   
+      {protocoloDB && (   
         <div>
           <SeoConfig title="Criar Protocolo" />
           <Header />
@@ -97,7 +108,8 @@ const Protocolo = () => {
               setOpenWindow={setOpenWin}
               setCloseWindow={setCloseWin}
               windowName="menu_prot"
-              protocolo={protocolo}
+              protocolo={protocoloDB}
+              edit={Boolean(router.query.protocolo)}
               setProtocolo={setProtocolo}
             />
           )}
@@ -107,7 +119,7 @@ const Protocolo = () => {
               setCloseWindow={setCloseWin}
               windowName="novo_diag"
               onDiagnosticoSubmit={setDiagnostico}
-              diagnostico={protocolo.diagnostico}
+              diagnostico={diagnostico}
             />
           )}
           {winCriarTrat && (
@@ -116,7 +128,7 @@ const Protocolo = () => {
               setCloseWindow={setCloseWin}
               windowName="novo_trat"
               onTratamentoSubmit={setTratamento}
-              tratamento={protocolo.tratamento}
+              tratamento={tratamento}
             />
           )}
         </div>

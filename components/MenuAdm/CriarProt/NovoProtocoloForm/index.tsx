@@ -6,11 +6,14 @@ import Protocolo from "@/types/Protocolo";
 import Router from "next/router";
 import SuccessToast from "@/components/toasts/successToast";
 import ErrorToast from "@/components/toasts/errorToast";
+import { ProtocoloDB } from "@/types/ProtocoloDB";
+import { defaultProtocolo } from "../../nodes/protFlow";
 
 interface ProtocolFormContentProps {
   setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
   setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
-  prot: Protocolo;
+  prot: ProtocoloDB;
+  edit: Boolean;
   onSave: React.Dispatch<React.SetStateAction<Protocolo | undefined>>;
 }
 
@@ -18,6 +21,7 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
   setOpenWindow,
   setCloseWindow,
   prot,
+  edit,
   onSave
   }) => {
 
@@ -26,25 +30,49 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
   const [sendToast, setSendToast] = useState(false);
   const [errorToast, setErrorToast] = useState(false);
   const [sendErrorToast, setSendErrorToast] = useState(false);
+  const [protocoloDB, setProtocoloDB] = useState<ProtocoloDB>(prot);
+  const [protocolo, setProtocolo] = useState<Protocolo>(defaultProtocolo);
 
-  const [protocolo, setProtocolo] = useState<Protocolo>(prot);
+  useEffect(() => {
+    setProtocolo(JSON.parse(protocoloDB.descricao));
+  }, [protocoloDB]);
 
   const sendProtocolo = async (protocolo: Protocolo) => {
-    try {
-      const response = await fetch("https://localhost:7091/Protocolo/CadastrarProtocolo", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(JSON.stringify(protocolo)),
-      });
-      if (response.ok) {
-        setSendToast(true);
-        Router.push("/menu");
-      } else {
-        setErrorToast(true);
+    if (edit) {
+      try {
+        const response = await fetch(`https://localhost:7091/Protocolo/AtualizaProtocolo/${protocoloDB.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(JSON.stringify(protocolo)),
+        });
+        if (response.ok) {
+          setSendToast(true);
+          Router.push("/menu");
+        } else {
+          setErrorToast(true);
+        }
+      } catch (error) {
+        setSendErrorToast(true);
       }
-    } catch (error) {
-      setSendErrorToast(true);
     }
+    else {
+      try {
+        const response = await fetch("https://localhost:7091/Protocolo/CadastrarProtocolo", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(JSON.stringify(protocolo)),
+        });
+        if (response.ok) {
+          setSendToast(true);
+          Router.push("/menu");
+        } else {
+          setErrorToast(true);
+        }
+      } catch (error) {
+        setSendErrorToast(true);
+      }
+    }
+
   };                                                          
   const handleInputChange = (fieldName: string, value: string) => {
     setProtocolo((prevProtocolo) => {

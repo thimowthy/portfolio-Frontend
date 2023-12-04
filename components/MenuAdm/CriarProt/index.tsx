@@ -6,12 +6,14 @@ import Router from "next/router";
 import Diagnostico from "@/types/Diagnostico";
 import Tratamento from "@/types/Tratamento";
 import Protocolo from "@/types/Protocolo";
+import { ProtocoloDB } from "@/types/ProtocoloDB";
 
 interface CreateProtocolProps {
   setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
   setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
   windowName: string;
-  protocolo: Protocolo;
+  protocolo: ProtocoloDB;
+  edit: Boolean;
   setProtocolo: React.Dispatch<React.SetStateAction<Protocolo | undefined>>;
 }
 
@@ -19,6 +21,7 @@ const CreateProtocol: React.FC<CreateProtocolProps> = ({
   setOpenWindow,
   setCloseWindow,
   protocolo,
+  edit,
   setProtocolo,
 }) => {
   return (
@@ -46,6 +49,7 @@ const CreateProtocol: React.FC<CreateProtocolProps> = ({
               setOpenWindow={setOpenWindow}
               setCloseWindow={setCloseWindow}
               prot={protocolo}
+              edit={edit}
               onSave={setProtocolo}
             />
           </div>

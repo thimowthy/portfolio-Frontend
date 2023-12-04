@@ -30,9 +30,6 @@ const nodes: Node[] = [
           <>Evento {node.id}<br/>{node.nome}</>
         ),
       },
-      // onClick: () => {
-      //   console.log(`Node ${node.id} clicked`);
-      // },
     };
   }),
   {
@@ -84,10 +81,6 @@ const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit, 
   const [selectedNode, setSelectedNode] = useState("node1");
 
   const [toastVisible, setToastVisible] = useState(false);
-
-  useEffect(() => {
-    console.log(diagnostico);
-  }, [diagnostico]);
 
   const handleNodeClick = (_: React.MouseEvent, node: Node) => {
     setSelectedNode("node" + node.id.toString());
