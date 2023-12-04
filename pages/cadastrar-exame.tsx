@@ -15,12 +15,12 @@ const CadastrarExame = () => {
   }]);
   
   const [medicos, setMedicos] = useState<Profissional[]>([{
-    id: 0,
-    cpf: "",
-    nome: "",
-    login: "",
-    cargo: "",
-    certificado: ""
+    id: 2,
+    cpf: "12345678900",
+    nome: "Doutor Hans Chucrute",
+    login: "AAA",
+    cargo: "MEDICO",
+    certificado: "ABFSD%#F"
   }]);
 
   useEffect(() => {

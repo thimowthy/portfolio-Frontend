@@ -17,12 +17,11 @@ const tipos: TipoOption[] = Object.values(TiposExame).map((tipo, index) => ({
 
 const timeZone = "America/Sao_Paulo";
 const currentDate = format(new Date(), "yyyy-MM-dd", { timeZone });
-
 const ExameForm: React.FC<ExameProps> = ({
   pacientes,
   medicos
 }) => {
-
+  const [idPaciente, setIdPaciente] = useState<number>();
   const [cpf, setCPF] = useState("");
   const [cpfFormated, setCpfFormated] = useState("");
   const [nomePaciente, setNomePaciente] = useState("");
@@ -32,23 +31,48 @@ const ExameForm: React.FC<ExameProps> = ({
   const [dataAdmissao, setDataAdmissao] = useState("");
   const [unidade, setUnidade] = useState("");
   
+  const [idMedico, setIdMedico] = useState<number>();
+  const [cpfMedicoFormated, setCpfMedicoFormated] = useState("");
+  const [cpfMedico, setCpfMedico] = useState("");
   const [solicitadoPor, setSolicitadoPor] = useState("");
+
   const [cadastradoPor, setCadastradoPor] = useState("");
   const [dataSolicitacao, setDataSolicitacao] = useState("");
   const [dataResultado, setDataResultado] = useState(currentDate);
   const [tipoExame, setTipoExame] = useState<TiposExame>(TiposExame.HEMORAGRAMA);
   const [pacienteNaoEncontrado, setPacienteNaoEncontrado] = useState(false);
+  const [neutrofilos, setNeutrofilos] = useState<number>(0);
 
-const formatCPF = (cpf: string) => {
+  const [idInternacao, setIdInternacao] = useState<number>();
 
-  const cpfFormatado = cpf.replace(
-    /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
-    "$1.$2.$3-$4"
-  );
 
-  return cpfFormatado;
-};
+  const formatCPF = (cpf: string) => {
 
+    const cpfFormatado = cpf.replace(
+      /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
+      "$1.$2.$3-$4"
+    );
+
+    return cpfFormatado;
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `https://localhost:7091/Internacao/GetInternacaoAtual?pacienteId=${idPaciente}`,
+          { method: "GET" }
+        );
+        if (response.ok) {
+          const internacao = await response.json();  
+          setIdInternacao(internacao.Id);
+        }
+      } catch (error) { }
+    };
+    if (idPaciente)
+      fetchData();
+  }, [idPaciente]);
+  
   useEffect(() => {
     setCadastradoPor(getId(localStorage.getItem("Authorization")));
   }, []);
@@ -57,31 +81,44 @@ const formatCPF = (cpf: string) => {
     setCpfFormated(formatCPF(cpf));
   }, [cpf]);
 
+  useEffect(() => {
+    setCpfMedicoFormated(formatCPF(cpfMedico));
+  }, [cpfMedico]);
+
   const handleSubmit = async (): Promise<void> => {
-    const exameData = {
-      idPaciente: "id",
-      idSolicitante: solicitadoPor,
-    };
-    try {
-      const response = await fetch(
-        "https://localhost:7091/Exame/AddHemograma",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+    if (tipoExame === TiposExame.HEMORAGRAMA) {
+      const hemogramaData = {
+        neutrofilos: neutrofilos,
+        dataSolicitacao: dataSolicitacao,
+        dataResultado: dataResultado,
+        urgente: true,
+        temperatura: 0,
+        resultado: "string",
+        idInternamento: idInternacao,
+        idSolicitante: idMedico
+      };
+      try {
+        const response = await fetch(
+          "https://localhost:7091/Exame/AddHemograma",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(hemogramaData),
           },
-          body: JSON.stringify(exameData),
-        },
-      );
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Request successful!");
-      } else {
-        console.log("Request failed!");
+        );
+        if (response.ok) {
+          const data = await response;
+          console.log("Request successful!");
+        } else {
+          console.log("Request failed!");
+        }
+      } catch (error) {
+        console.error("Error occurred during request:", error);
       }
-    } catch (error) {
-      console.error("Error occurred during request:", error);
     }
+
   };
 
   const autoFillPacienteInputs = () => {
@@ -90,6 +127,7 @@ const formatCPF = (cpf: string) => {
     
     if (pacienteEncontrado) {
       setPacienteNaoEncontrado(false);
+      setIdPaciente(pacienteEncontrado?.id);
       setCPF(pacienteEncontrado.cpf || "");
       setNomePaciente(pacienteEncontrado.nome || "");
       setCNS(pacienteEncontrado.cns || "");
@@ -105,6 +143,21 @@ const formatCPF = (cpf: string) => {
       setUnidade("");
       setDataNasc("");
       setDataAdmissao("");
+    }
+  };
+
+  const autoFillMedicoInputs = () => {
+    
+    const medicoEncontrado = medicos.find(medico => medico.cpf === cpfMedico);
+    
+    if (medicoEncontrado) {
+      setIdMedico(medicoEncontrado?.id);
+      setCpfMedico(medicoEncontrado.cpf || "");
+      setSolicitadoPor(medicoEncontrado.nome || "");
+    }
+    else {
+      setCpfMedico("");
+      setSolicitadoPor("");
     }
   };
 
@@ -136,6 +189,7 @@ const formatCPF = (cpf: string) => {
               maxLength={11}
               value={cpfFormated}
               onChange={(e) => { setCPF(e.target.value); }}
+              disabled
             />
           </div>
           <div>
@@ -144,6 +198,7 @@ const formatCPF = (cpf: string) => {
               className="w-36"
               type="text"
               value={cns}
+              disabled
             />
           </div>
           <div>
@@ -152,6 +207,7 @@ const formatCPF = (cpf: string) => {
               className="w-44"
               type="date"
               value={dataAdmissao}
+              disabled
             />
           </div>
           <div className="w-64">
@@ -160,6 +216,7 @@ const formatCPF = (cpf: string) => {
               className="w-full"
               type="text"
               value={unidade}
+              disabled
             />
           </div>
         </div>
@@ -170,6 +227,7 @@ const formatCPF = (cpf: string) => {
               className="w-full"
               type="text"
               value={nomePaciente}
+              disabled
             />
           </div>
           <div className="ml-4">
@@ -178,18 +236,31 @@ const formatCPF = (cpf: string) => {
               className="w-40"
               type="date"
               value={dataNasc}
+              disabled
             />
           </div>
         </div>
       </div>
-      <div className={styles.divMedico}>
-        <div className="w-full">
+      <div className="flex">
+        <div className="w-1/5">
+          <label>CPF do Solicitante</label>
+          <input
+            type="text"
+            value={cpfMedicoFormated}
+            maxLength={11}
+            onChange={(e) => { setCpfMedico(e.target.value); }}
+            onBlur={autoFillMedicoInputs}
+
+          />
+        </div>
+        <div className="w-4/5 ml-4">
           <label>Solicitante</label>
           <input
-            className="w-4/5"
+            className="w-full"
             type="text"
             value={solicitadoPor}
             onChange={(e) => { setSolicitadoPor(e.target.value); }}
+            disabled
           />
         </div>
       </div>
@@ -233,6 +304,8 @@ const formatCPF = (cpf: string) => {
                 className="w-full"
                 type="number"
                 maxLength={5}
+                value={neutrofilos}
+                onChange={(e) => setNeutrofilos(parseInt(e.target.value)) }
               />
             </div>
           )}
