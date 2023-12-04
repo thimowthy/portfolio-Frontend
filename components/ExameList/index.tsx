@@ -15,7 +15,7 @@ const ExamesList: React.FC<ExameListProps> = ({ id }) => {
       try {
         const response = await fetch(
           // TO DO - ATUALIZAR URL
-          "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetHemogramasFromPaciente?pacienteId=" +
+          "https://localhost:7091/Exame/GetHemogramasFromPaciente?pacienteId=" +
             id,
         );
         if (response.ok) {
@@ -35,18 +35,6 @@ const ExamesList: React.FC<ExameListProps> = ({ id }) => {
     <div>
       <div className="flex items-center">
         <h1 className="text-2xl text-black font-gray-600">Exames</h1>
-        <button
-          className="ml-auto mr-10px h-40px px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-600"
-          onClick={() => {
-            Router.push({
-              pathname: "/solicitar-exame",
-              query: { id },
-            });
-            
-          }}
-        >
-          Solicitar Exame
-        </button>
       </div>
 
       

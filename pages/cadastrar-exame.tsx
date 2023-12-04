@@ -26,36 +26,28 @@ const CadastrarExame = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatientsSemAlta",
+        const responsePacientes = await fetch(
+          "https://localhost:7091/Paciente/GetListPatientsSemAlta",
           { method: "GET" },
         );
-
-        if (!response.ok) throw new Error("Erro na solicitação");
-
-        const pacientes = await response.json();
-
+        
+        if (!responsePacientes.ok)
+          throw new Error("Erro na solicitação");
+        
+        const pacientes = await responsePacientes.json();
         setPacientes(pacientes);
-      } catch (error) {
-        console.error("Ocorreu um erro durante a solicitação:", error);
-      }
-    };
-    fetchData();
-  }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatientsSemAlta",
+        const responseMedicos = await fetch(
+          "https://localhost:7091/Usuario/GetListUsers?filtroCargo=MEDICO",
           { method: "GET" },
         );
+        
+        if (!responseMedicos.ok)
+          throw new Error("Erro na solicitação");
+        
+        const medicos = await responseMedicos.json();
+        setMedicos(medicos);
 
-        if (!response.ok) throw new Error("Erro na solicitação");
-
-        const pacientes = await response.json();
-
-        setMedicos(pacientes);
       } catch (error) {
         console.error("Ocorreu um erro durante a solicitação:", error);
       }

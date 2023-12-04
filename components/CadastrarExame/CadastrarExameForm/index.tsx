@@ -3,16 +3,17 @@ import styles from "./styles.module.css";
 import { format } from "date-fns-tz";
 import { ExameProps } from "../ExameProps";
 import { getId } from "@/hooks/getId";
+import { TiposExame } from "@/types/Enum/TiposExame";
 
-const unidades = [
-  { id: 1, nome: "Unidade 1" },
-  { id: 2, nome: "Unidade 2" },
-];
+interface TipoOption {
+  id: number;
+  nome: string;
+}
 
-const tipos = [
-  { id: 1, nome: "Hemograma" },
-  { id: 2, nome: "Exame" },
-];
+const tipos: TipoOption[] = Object.values(TiposExame).map((tipo, index) => ({
+  id: index + 1,
+  nome: tipo,
+}));
 
 const timeZone = "America/Sao_Paulo";
 const currentDate = format(new Date(), "yyyy-MM-dd", { timeZone });
@@ -21,20 +22,40 @@ const ExameForm: React.FC<ExameProps> = ({
   pacientes,
   medicos
 }) => {
-  const [unidade, setUnidade] = useState("");
-  const [tipo, setTipo] = useState("");
+
   const [cpf, setCPF] = useState("");
-  const [dataSolicitacao, setDataSolicitacao] = useState(currentDate);
-  const [nome, setNome] = useState("");
-  const [nomePaciente, setPaciente] = useState("");
+  const [cpfFormated, setCpfFormated] = useState("");
+  const [nomePaciente, setNomePaciente] = useState("");
   const [numProntuario, setProntuario] = useState("");
-  const [numLeito, setLeito] = useState("");
-  const [quarto, setQuarto] = useState("");
+  const [cns, setCNS] = useState("");
+  const [dataNasc, setDataNasc] = useState("");
+  const [dataAdmissao, setDataAdmissao] = useState("");
+  const [unidade, setUnidade] = useState("");
+  
   const [solicitadoPor, setSolicitadoPor] = useState("");
+  const [cadastradoPor, setCadastradoPor] = useState("");
+  const [dataSolicitacao, setDataSolicitacao] = useState("");
+  const [dataResultado, setDataResultado] = useState(currentDate);
+  const [tipoExame, setTipoExame] = useState<TiposExame>(TiposExame.HEMORAGRAMA);
+  const [pacienteNaoEncontrado, setPacienteNaoEncontrado] = useState(false);
+
+const formatCPF = (cpf: string) => {
+
+  const cpfFormatado = cpf.replace(
+    /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
+    "$1.$2.$3-$4"
+  );
+
+  return cpfFormatado;
+};
 
   useEffect(() => {
-    setSolicitadoPor(getId(localStorage.getItem("Authorization")));
+    setCadastradoPor(getId(localStorage.getItem("Authorization")));
   }, []);
+
+  useEffect(() => {
+    setCpfFormated(formatCPF(cpf));
+  }, [cpf]);
 
   const handleSubmit = async (): Promise<void> => {
     const exameData = {
@@ -43,7 +64,7 @@ const ExameForm: React.FC<ExameProps> = ({
     };
     try {
       const response = await fetch(
-        "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/AddHemograma",
+        "https://localhost:7091/Exame/AddHemograma",
         {
           method: "POST",
           headers: {
@@ -63,80 +84,169 @@ const ExameForm: React.FC<ExameProps> = ({
     }
   };
 
+  const autoFillPacienteInputs = () => {
+    
+    const pacienteEncontrado = pacientes.find(paciente => paciente.numeroProntuario === numProntuario);
+    
+    if (pacienteEncontrado) {
+      setPacienteNaoEncontrado(false);
+      setCPF(pacienteEncontrado.cpf || "");
+      setNomePaciente(pacienteEncontrado.nome || "");
+      setCNS(pacienteEncontrado.cns || "");
+      setUnidade(pacienteEncontrado.unidade || "");
+      setDataNasc(pacienteEncontrado.dataNascimento || "");
+      setDataAdmissao(pacienteEncontrado.dataAdmissao || "");
+    }
+    else {
+      setPacienteNaoEncontrado(true);
+      setCPF("");
+      setNomePaciente("");
+      setCNS("");
+      setUnidade("");
+      setDataNasc("");
+      setDataAdmissao("");
+    }
+  };
+
   return (
     <div className={styles.form}>
-      <div className={styles.divPaciente}>
-        <div className={styles.cpf}>
-          <label>CPF</label>
+      <div className="block">
+        <div className="flex mb-4">
+          <div>
+            <label>Prontuário</label>
+            <input
+              className="w-40"
+              type="number"
+              step={1}
+              value={numProntuario}
+              onChange={(e) => { setProntuario(e.target.value); }}
+              onBlur={autoFillPacienteInputs}
+            />
+            {pacienteNaoEncontrado && (
+              <span className="text-red-500">
+                Paciente não encontrado
+              </span>
+            )}
+          </div>
+          <div>
+            <label>CPF</label>
+            <input
+              className="w-36"
+              type="text"
+              maxLength={11}
+              value={cpfFormated}
+              onChange={(e) => { setCPF(e.target.value); }}
+            />
+          </div>
+          <div>
+            <label>CNS</label>
+            <input
+              className="w-36"
+              type="text"
+              value={cns}
+            />
+          </div>
+          <div>
+            <label>Data de Admissão</label>
+            <input
+              className="w-44"
+              type="date"
+              value={dataAdmissao}
+            />
+          </div>
+          <div className="w-64">
+            <label>Unidade</label>
+            <input
+              className="w-full"
+              type="text"
+              value={unidade}
+            />
+          </div>
+        </div>
+        <div className="flex mb-8">
+          <div className="w-full">
+            <label>Nome</label>
+            <input
+              className="w-full"
+              type="text"
+              value={nomePaciente}
+            />
+          </div>
+          <div className="ml-4">
+            <label>Data de Nascimento</label>
+            <input
+              className="w-40"
+              type="date"
+              value={dataNasc}
+            />
+          </div>
+        </div>
+      </div>
+      <div className={styles.divMedico}>
+        <div className="w-full">
+          <label>Solicitante</label>
           <input
+            className="w-4/5"
             type="text"
-            value={cpf}
-          >
-          </input>
+            value={solicitadoPor}
+            onChange={(e) => { setSolicitadoPor(e.target.value); }}
+          />
         </div>
-        <div className={styles.tipo}>
-          <label>Tipo</label>
-          <select onChange={(e) => setTipo(e.target.value)} value={tipo}>
-            {tipos.map((tipoOption) => (
-              <option key={tipoOption.id} value={tipoOption.id.toString()}>
-                {tipoOption.nome}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className={styles.data}>
-          <label>Data de solicitação</label>
+      </div>
+      <div className={styles.divExame}>
+        <div>
+          <label>Data de Solicitação</label>
           <input
             type="date"
             onChange={(e) => setDataSolicitacao(e.target.value)}
             value={dataSolicitacao}
           />
         </div>
-      </div>
-      <div className={styles.nome}>
-        <label>Exame</label>
-        <input
-          type="text"
-          onChange={(e) => setNome(e.target.value)}
-          value={nome}
-        />
-      </div>
-      <div className={styles.divSolicitante}>
-        <label>Nº do Prontuário</label>
-        <input
-          type="text"
-          disabled
-          onChange={(e) => setProntuario(e.target.value)}
-          value={numProntuario}
-        />
-        <label>Leito</label>
-        <input
-          type="text"
-          disabled
-          className={styles.shortInput}
-          onChange={(e) => setLeito(e.target.value)}
-          value={numLeito}
-        />
-        <label>Quarto</label>
-        <input
-          type="text"
-          className={styles.shortInput}
-          onChange={(e) => setQuarto(e.target.value)}
-          value={quarto}
-        />
-      </div>
-      <div className={styles.nome}>
-        <label>Paciente</label>
-        <input
-          type="text"
-          disabled
-          onChange={(e) => setPaciente(e.target.value)}
-          value={nomePaciente.toUpperCase()}
-        />
-      </div>
-      <div>
-        <label>Solicitado Por</label>
-        <input disabled type="text" value={solicitadoPor} />
+        <div>
+          <label>Data do Resultado</label>
+          <input
+            type="date"
+            value={dataResultado}
+            onChange={(e) => { setDataResultado(e.target.value); }}
+          />
+        </div>
+        <div className="ml-4">
+          <label>Tipo</label>
+          <select
+            className="block h-10 border rounded p-2 border-gray-300 w-48"
+            onChange={(e) => { setTipoExame(e.target.value as TiposExame); }}
+            value={tipoExame}
+          >
+            {tipos.map((tipoOption) => (
+              <option key={tipoOption.id} value={tipoOption.nome}>
+                {tipoOption.nome}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="ml-auto flex w-2/5">
+          <div>
+            { tipoExame === TiposExame.HEMORAGRAMA && (
+            <div>
+              <label>Contagem de Neutrófilos</label>
+              <input
+                className="w-full"
+                type="number"
+                maxLength={5}
+              />
+            </div>
+          )}
+          { tipoExame === TiposExame.OUTRO && (
+            <div>
+              <label>Upload do Exame</label>
+              <input
+                className="w-full"
+                type="file"
+              />
+            </div>
+          )}
+          </div>
+        </div>
       </div>
       <div className={styles.btnDiv}>
         <button
@@ -144,7 +254,7 @@ const ExameForm: React.FC<ExameProps> = ({
           className="w-48 h-12 rounded-lg bg-[#C55A11] text-[#fff] hover:bg-[#ED7C31] transition-colors mt-2 mx-auto font-bold"
           onClick={handleSubmit}
         >
-          Enviar Solicitação
+          Cadastrar Exame
         </button>
       </div>
     </div>
