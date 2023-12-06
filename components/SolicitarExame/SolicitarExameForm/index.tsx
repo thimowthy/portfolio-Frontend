@@ -55,12 +55,12 @@ const ExameForm: React.FC<ExameProps> = ({
       );
       if (response.ok) {
         const data = await response.json();
-        console.log("Request successful!");
+        //console.log("Request successful!");
       } else {
-        console.log("Request failed!");
+        //console.log("Request failed!");
       }
     } catch (error) {
-      console.error("Error occurred during request:", error);
+      //console.error("Error occurred during request:", error);
     }
   };
 

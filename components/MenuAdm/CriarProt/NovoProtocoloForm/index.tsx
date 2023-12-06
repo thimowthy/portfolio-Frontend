@@ -25,13 +25,13 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
   onSave
   }) => {
 
-  const [ showDiagText, setShowDiagText ] = useState(false);
-  const [ showTratText, setShowTratText ] = useState(false);
-  const [ sendToast, setSendToast ] = useState(false);
-  const [ errorToast, setErrorToast ] = useState(false);
-  const [ sendErrorToast, setSendErrorToast ] = useState(false);
+  const [showDiagText, setShowDiagText] = useState(false);
+  const [showTratText, setShowTratText] = useState(false);
+  const [sendToast, setSendToast] = useState(false);
+  const [errorToast, setErrorToast] = useState(false);
+  const [sendErrorToast, setSendErrorToast] = useState(false);
 
-  const [ protocolo, setProtocolo ] = useState<Protocolo>({
+  const [protocolo, setProtocolo] = useState<Protocolo>({
                                                             ...prot,
                                                             diagnostico: diagnostico,
                                                             tratamento: tratamento,
@@ -54,11 +54,11 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
         Router.push("/menu");
       } else {
         setErrorToast(true);
-        console.error("Failed to save Protocolo:", response.statusText);
+        //console.error("Failed to save Protocolo:", response.statusText);
       }
     } catch (error) {
       setSendErrorToast(true);
-      console.error("An error occurred while sending the request:", error);
+      //console.error("An error occurred while sending the request:", error);
     }
   };                                                          
   const handleInputChange = (fieldName: string, value: string) => {

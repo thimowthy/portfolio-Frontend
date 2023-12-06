@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import fetcher from "@/api/fetcher";
 import SeoConfig from "../../components/SeoConfig/index";
 import DetalhesPaciente from "../../components/DetalhesPaciente";
-import Header from "@/components/Header";
+import Header from "@/components/HeaderMedico";
 
 const DynamicTabComponent = dynamic(
   () => import("../../components/TabDadosPaciente"),

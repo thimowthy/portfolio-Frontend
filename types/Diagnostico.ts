@@ -1,6 +1,6 @@
 import DiagnosticoNode from "./diagNode";
 
-type Diagnostico = {
+  type Diagnostico = {
     nodes: {
       [key: string]: DiagnosticoNode;
     };

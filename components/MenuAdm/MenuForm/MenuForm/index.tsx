@@ -13,8 +13,8 @@ const mockedData = [
 
 const MenuFormContent = () => {
 
-    const [ listData, setListData ] = useState(mockedData);
-    const [ selectedItemId, setSelectedItemId ] = useState<number | null>(null);
+    const [listData, setListData] = useState(mockedData);
+    const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
 
     const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];

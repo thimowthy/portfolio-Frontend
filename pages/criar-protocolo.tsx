@@ -12,8 +12,7 @@ import { defaultProtocolo } from "@/components/MenuAdm/nodes/protFlow";
 import Protocolo from "@/types/Protocolo";
 
 const Protocolo = () => {
-  const [diagnostico, setDiagnostico] =
-    useState<Diagnostico>(defaultDiagnostico);
+  const [diagnostico, setDiagnostico] = useState<Diagnostico>(defaultDiagnostico);
   const [tratamento, setTratamento] = useState<Tratamento>(defaultTratamento);
   const [protocolo, setProtocolo] = useState<Protocolo>(defaultProtocolo);
 

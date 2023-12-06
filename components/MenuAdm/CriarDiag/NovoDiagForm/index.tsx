@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactFlow, { Node, Edge, MarkerType, Position } from "reactflow";
 import "reactflow/dist/style.css";
 import styles from "./styles.module.css";
@@ -29,9 +29,9 @@ const nodes: Node[] = [
           <>Evento {node.id}<br/>{node.nome}</>
         ),
       },
-      onClick: () => {
-        console.log(`Node ${node.id} clicked`);
-      },
+      // onClick: () => {
+      //   console.log(`Node ${node.id} clicked`);
+      // },
     };
   }),
   {
@@ -72,11 +72,17 @@ const edges: Edge[] = initialEdges;
 
 const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }) => {
     
-  const [ diagnostico, setDiagnostico ] = useState(initialDiagnostico);
+  const [diagnostico, setDiagnostico] = useState(initialDiagnostico);
+  const [valor, setValor] = useState<Record<string, string>>(
+    Object.keys(initialDiagnostico).reduce((acc, chave) => {
+      acc[chave] = initialDiagnostico[chave].valor.toString();
+      return acc;
+    }, {} as Record<string, string>)
+  );
+  const [selectedNode, setSelectedNode] = useState("node1");
 
-  const [ selectedNode, setSelectedNode ] = useState("");
+  const [toastVisible, setToastVisible] = useState(false);
 
-  const [ toastVisible, setToastVisible ] = useState(false);
 
   const handleNodeClick = (_: React.MouseEvent, node: Node) => {
     setSelectedNode("node" + node.id.toString());
@@ -89,12 +95,19 @@ const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }
     setToastVisible(true);
   };
 
-  const handleConditionChange = (node:string, value:string) => {
+  useEffect(() => {
+    if (valor) {
+      let val = parseFloat(valor[selectedNode]);
+      handleConditionChange(val);
+    }
+  }, [valor]);
+  
+  const handleConditionChange = (value:number) => {
     setDiagnostico((prevDiagnostico) => ({
       ...prevDiagnostico,
-      [node]: {
-        ...prevDiagnostico[node],
-        condicao: value,
+      [selectedNode]: {
+        ...prevDiagnostico[selectedNode],
+        valor: value,
       },
     }));
   };
@@ -109,7 +122,7 @@ const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }
     <>
       <div className={styles.formContainer}>
         <div className={styles.chartDiv}>
-          <div style={{ width: "720px", height: "320px" }}>
+          <div style={{ width: "690px", height: "320px" }}>
             <ReactFlow
               nodes={nodes}
               edges={edges}
@@ -139,26 +152,30 @@ const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }
             </div>
             <div className={styles.varInput}>
               <label className={styles.label}>Variável</label>
-              <input
-                className={styles.input}
-                id="var"
-                type="text"
-                placeholder="febre"
-                value={selectedNodeData?.variavel || ""}
-                disabled={true} />
+              <p className={styles.input} id="var" placeholder="febre">
+                {selectedNodeData?.variavel || ""}
+              </p>
             </div>
             <div className={styles.condInput}>
               <label className={styles.label}>Condição</label>
-              <input
-                className={styles.input}
-                id="condition"
-                type="text"
-                placeholder="febre > 38"
-                value={selectedNodeData?.condicao || ""}
-                onChange={(e) => {
-                  const novoValor = e.target.value;
-                  handleConditionChange(selectedNode, novoValor);
-                } } />
+              <div className={styles.input}>
+                <p>{selectedNodeData.condicao.slice(0, -1)}</p>
+                <input
+                  className="w-16 h-8 ml-2 text-left pl-2 border rounded"
+                  id="condition"
+                  type="number"
+                  min={0}
+                  pattern="[0-9]+([\.,][0-9]+)?"
+                  value={valor[selectedNode]}
+                  onChange={(e) => { 
+                    setValor(prevValor => {
+                              const novoValor = { ...prevValor };
+                              novoValor[selectedNode] = e.target.value;
+                              return novoValor;
+                            });
+                  }}
+                />
+              </div>
             </div>
           </div>
           <div className={styles.saveDiv}>

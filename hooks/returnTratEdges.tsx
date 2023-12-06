@@ -6,9 +6,9 @@ const edgeStyle: React.CSSProperties = {
   };
 
 const createEdgesFromNodes = (nodes: Record<string, TratamentoNode>): Edge[] => {
-    return Object.entries(nodes).flatMap(([ nodeId, node ]) =>
+    return Object.entries(nodes).flatMap(([nodeId, node]) =>
       node.tipo === 0
-        ? Object.entries(node.dest).map(([ label, targetNodeId ]) => ({
+        ? Object.entries(node.dest).map(([label, targetNodeId]) => ({
             id: `e${node.id}-${targetNodeId}`,
             source: node.id.toString(),
             target: targetNodeId.toString(),

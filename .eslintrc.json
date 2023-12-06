@@ -7,7 +7,8 @@
     "no-console": "warn",
     "object-curly-spacing": ["warn", "always"],
     "no-multi-spaces": "warn",
-    "array-bracket-spacing": ["warn", "always"],
-    "no-await-in-loop": "warn"
+    "array-bracket-spacing": ["warn", "never"],
+    "no-await-in-loop": "warn",
+    "comma-spacing": ["error", { "before": false, "after": true }]
   }
 }
