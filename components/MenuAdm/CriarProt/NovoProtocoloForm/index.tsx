@@ -22,45 +22,40 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
   diagnostico,
   tratamento,
   prot,
-  onSave
-  }) => {
+  onSave,
+}) => {
+  const [showDiagText, setShowDiagText] = useState(false);
+  const [showTratText, setShowTratText] = useState(false);
+  const [sendToast, setSendToast] = useState(false);
+  const [errorToast, setErrorToast] = useState(false);
+  const [sendErrorToast, setSendErrorToast] = useState(false);
 
-  const [ showDiagText, setShowDiagText ] = useState(false);
-  const [ showTratText, setShowTratText ] = useState(false);
-  const [ sendToast, setSendToast ] = useState(false);
-  const [ errorToast, setErrorToast ] = useState(false);
-  const [ sendErrorToast, setSendErrorToast ] = useState(false);
-
-  const [ protocolo, setProtocolo ] = useState<Protocolo>({
-                                                            ...prot,
-                                                            diagnostico: diagnostico,
-                                                            tratamento: tratamento,
-                                                          });
+  const [protocolo, setProtocolo] = useState<Protocolo>({
+    ...prot,
+    diagnostico: diagnostico,
+    tratamento: tratamento,
+  });
 
   const sendProtocolo = async (protocolo: Protocolo) => {
     try {
-      const response = await fetch("https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/CadastrarProtocolo", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://localhost:7091/Protocolo/CadastrarProtocolo",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(JSON.stringify(protocolo)),
         },
-        body: JSON.stringify(JSON.stringify(protocolo)),
-      });
-      //console.log("'"+JSON.stringify(protocolo)+"'");
+      );
       if (response.ok) {
-        //const responseData = await response.json();
-        //console.log("Protocolo saved successfully:", responseData);
         setSendToast(true);
         Router.push("/menu");
       } else {
         setErrorToast(true);
-        console.error("Failed to save Protocolo:", response.statusText);
       }
     } catch (error) {
       setSendErrorToast(true);
-      console.error("An error occurred while sending the request:", error);
     }
-  };                                                          
+  };
   const handleInputChange = (fieldName: string, value: string) => {
     setProtocolo((prevProtocolo) => {
       const updatedProtocolo = {
@@ -71,7 +66,7 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
       return updatedProtocolo;
     });
   };
-                                                                                                          
+
   return (
     <div className={styles.formContainer}>
       <div className={styles.nameInput}>
@@ -112,20 +107,22 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
           <p className={styles.textInfo}>
             Um fluxograma de diagnóstico é uma representação visual que ilustra
             o processo de determinar a presença ou ausência de uma determinada
-            condição médica com base em uma série de condições e restrições lógicas.
+            condição médica com base em uma série de condições e restrições
+            lógicas.
           </p>
         )}
         {showTratText && (
           <p className={styles.textInfo}>
-            Um fluxograma de tratamento é uma representação visual das etapas
-            e decisões envolvidas no tratamento de uma condição médica específica. Ele
-            é projetado para fornecer uma visão geral clara e organizada do plano de
-            tratamento, incluindo as intervenções médicas, terapias, medicamentos e
-            ações a serem tomadas em diferentes estágios da doença.
+            Um fluxograma de tratamento é uma representação visual das etapas e
+            decisões envolvidas no tratamento de uma condição médica específica.
+            Ele é projetado para fornecer uma visão geral clara e organizada do
+            plano de tratamento, incluindo as intervenções médicas, terapias,
+            medicamentos e ações a serem tomadas em diferentes estágios da
+            doença.
           </p>
         )}
       </div>
-      <div className = {styles.btn} id={styles.diagBtn}>
+      <div className={styles.btn} id={styles.diagBtn}>
         <button
           className={styles.actionButton}
           type="button"
@@ -135,9 +132,11 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
           }}
           onMouseEnter={() => setShowDiagText(true)}
           onMouseLeave={() => setShowDiagText(false)}
-        >Criar Diagnóstico</button>
+        >
+          Criar Diagnóstico
+        </button>
       </div>
-      <div className= {styles.btn} id={styles.tratBtn}>
+      <div className={styles.btn} id={styles.tratBtn}>
         <button
           className={styles.actionButton}
           type="button"
@@ -147,36 +146,49 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
           }}
           onMouseEnter={() => setShowTratText(true)}
           onMouseLeave={() => setShowTratText(false)}
-        >Criar Tratamento</button>
+        >
+          Criar Tratamento
+        </button>
       </div>
-      <div className= {styles.btn} id={styles.saveBtn}>
+      <div className={styles.btn} id={styles.saveBtn}>
         <button
           className={styles.saveButton}
           type="button"
-          onClick={() => { 
+          onClick={() => {
             onSave(protocolo);
-            sendProtocolo(protocolo);   
+            sendProtocolo(protocolo);
           }}
-        >Salvar Protocolo</button>
+        >
+          Salvar Protocolo
+        </button>
       </div>
       <div className={styles.toasts}>
         {sendToast && (
           <SuccessToast
             title="Sucesso"
             message="Protocolo salvo com sucesso"
-            onClose={() => { setSendToast(false); } } />
+            onClose={() => {
+              setSendToast(false);
+            }}
+          />
         )}
         {errorToast && (
           <ErrorToast
             title="Erro"
             message="Erro ao salvar protocolo"
-            onClose={() => { setErrorToast(false); } } />
+            onClose={() => {
+              setErrorToast(false);
+            }}
+          />
         )}
         {sendErrorToast && (
           <ErrorToast
             title="Erro"
             message="Erro ao enviar protocolo"
-            onClose={() => { setSendErrorToast(false); } } />
+            onClose={() => {
+              setSendErrorToast(false);
+            }}
+          />
         )}
       </div>
     </div>

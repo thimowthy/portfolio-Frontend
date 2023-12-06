@@ -37,6 +37,8 @@
   }
   
   .listItem {
+    display: flex;
+    align-items: center;
     cursor: pointer;
     font-size: 24px;
     color: #555;
