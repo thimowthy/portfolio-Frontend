@@ -49,10 +49,16 @@ export default function Dashboard() {
               Dashboard
             </button>
             <Link
-              href="/dados-paciente"
-              className="block text-center py-3 h-[60px] w-full bg-[#CCDBD8] text-[#689F92] text-xl rounded-lg"
+              href="/pacientes"
+              className="block text-center py-3 h-[60px] w-full bg-[#CCDBD8] text-[#689F92] text-xl rounded-lg mb-3"
             >
               Pacientes
+            </Link>
+            <Link
+              href="/dados-paciente"
+              className="block text-center py-3 h-[60px] w-full bg-[#CCDBD8] text-[#689F92] text-xl rounded-lg mb-3"
+            >
+              Internações
             </Link>
           </aside>
 
