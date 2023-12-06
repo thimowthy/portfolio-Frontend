@@ -1,7 +1,7 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { format } from "date-fns-tz";
-import { ExameProps } from "../ExameProps";
+import { CrudExameProps } from "../CrudExameProps";
 import { getId } from "@/hooks/getId";
 import { TiposExame } from "@/types/Enum/TiposExame";
 
@@ -17,9 +17,12 @@ const tipos: TipoOption[] = Object.values(TiposExame).map((tipo, index) => ({
 
 const timeZone = "America/Sao_Paulo";
 const currentDate = format(new Date(), "yyyy-MM-dd", { timeZone });
-const ExameForm: React.FC<ExameProps> = ({
+
+
+const ExameForm: React.FC<CrudExameProps> = ({
   pacientes,
-  medicos
+  medicos,
+  exame
 }) => {
   const [idPaciente, setIdPaciente] = useState<number>();
   const [cpf, setCPF] = useState("");
@@ -40,12 +43,12 @@ const ExameForm: React.FC<ExameProps> = ({
   const [dataSolicitacao, setDataSolicitacao] = useState("");
   const [dataResultado, setDataResultado] = useState(currentDate);
   const [tipoExame, setTipoExame] = useState<TiposExame>(TiposExame.HEMORAGRAMA);
+
   const [pacienteNaoEncontrado, setPacienteNaoEncontrado] = useState(false);
-  const [neutrofilos, setNeutrofilos] = useState<number>(0);
+  const [neutrofilos, setNeutrofilos] = useState<number>(exame?.neutrofilos || 0);
 
   const [idInternacao, setIdInternacao] = useState<number>();
-
-
+  
   const formatCPF = (cpf: string) => {
 
     const cpfFormatado = cpf.replace(
@@ -121,6 +124,41 @@ const ExameForm: React.FC<ExameProps> = ({
 
   };
 
+  useEffect(() => {
+    if (exame) {
+      const medicoEncontrado = medicos.find(medico => medico.id === exame.idSolicitante);
+      const pacienteEncontrado = pacientes.find(medico => medico.id === exame.idSolicitante);
+
+      if (medicoEncontrado) {
+        setIdMedico(medicoEncontrado.id);
+        setCpfMedico(medicoEncontrado.cpf);
+        setSolicitadoPor(medicoEncontrado.nome);
+        // setIdPaciente(pacienteEncontrado.id);
+        // setCPF(pacienteEncontrado.cpf || "");
+        // setNomePaciente(pacienteEncontrado.nome || "");
+        // setCNS(pacienteEncontrado.cns || "");
+        // setUnidade(pacienteEncontrado.unidade || "");
+        // setDataNasc(pacienteEncontrado.dataNascimento || "");
+        // setDataAdmissao(pacienteEncontrado.dataAdmissao || "");
+        setDataSolicitacao(exame.dataSolicitacao);
+        setDataResultado(exame.dataResultado);
+        setSolicitadoPor(exame.solicitante);
+      }
+      else {
+        setCpfMedico("");
+        setSolicitadoPor("");
+        setSolicitadoPor("");
+        setCPF("");
+        setNomePaciente("");
+        setCNS("");
+        setUnidade("");
+        setDataNasc("");
+        setDataAdmissao("");
+      }
+    }
+  }, [exame]);
+
+
   const autoFillPacienteInputs = () => {
     
     const pacienteEncontrado = pacientes.find(paciente => paciente.numeroProntuario === numProntuario);
@@ -174,6 +212,7 @@ const ExameForm: React.FC<ExameProps> = ({
               value={numProntuario}
               onChange={(e) => { setProntuario(e.target.value); }}
               onBlur={autoFillPacienteInputs}
+              disabled={Boolean(exame)}
             />
             {pacienteNaoEncontrado && (
               <span className="text-red-500">
@@ -250,7 +289,7 @@ const ExameForm: React.FC<ExameProps> = ({
             maxLength={11}
             onChange={(e) => { setCpfMedico(e.target.value); }}
             onBlur={autoFillMedicoInputs}
-
+            disabled={Boolean(exame)}
           />
         </div>
         <div className="w-4/5 ml-4">
@@ -322,13 +361,29 @@ const ExameForm: React.FC<ExameProps> = ({
         </div>
       </div>
       <div className={styles.btnDiv}>
-        <button
-          type="button"
-          className="w-48 h-12 rounded-lg bg-[#C55A11] text-[#fff] hover:bg-[#ED7C31] transition-colors mt-2 mx-auto font-bold"
-          onClick={handleSubmit}
-        >
-          Cadastrar Exame
-        </button>
+        {
+          !Boolean(exame) && (
+            <button
+              type="submit"
+              className="w-48 h-12 rounded-lg bg-[#C55A11] text-[#fff] hover:bg-[#ED7C31] transition-colors mt-2 mx-auto font-bold"
+              onClick={handleSubmit}
+            >
+              Cadastrar Exame
+            </button>
+          )
+        }
+        {
+          Boolean(exame) && (
+            <button
+            type="submit"
+            className="w-48 h-12 rounded-lg bg-[#C55A11] text-[#fff] hover:bg-[#ED7C31] transition-colors mt-2 mx-auto font-bold"
+            onClick={handleSubmit}
+            >
+              Salvar Exame
+            </button>
+          )
+        }
+
       </div>
     </div>
   );

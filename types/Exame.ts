@@ -1,6 +1,11 @@
 type Exame = {
-  nome: string;
+  id: number;
   dataSolicitacao: string;
   dataResultado: string;
+  idSolicitante: number;
   solicitante: string;
 };
+
+type Hemograma = Exame & { 
+  neutrofilos: number
+}
