@@ -55,16 +55,16 @@ const CadastrarExame = () => {
     fetchData();
   }, []);
   return (
-    <div>
-      <SeoConfig title="Cadastrar Exame" />
-      <Header />
-      {pacientes && (
-        <CadastrarExameForm
-          pacientes={pacientes}
-          medicos={medicos}
-        />
-      )}
-    </div>
+      <div>
+        <SeoConfig title="Cadastrar Exame" />
+        <Header />
+        {pacientes && (
+          <CadastrarExameForm
+            pacientes={pacientes}
+            medicos={medicos}
+          />
+        )}
+      </div>
   );
 };
 

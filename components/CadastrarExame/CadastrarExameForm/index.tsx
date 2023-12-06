@@ -4,6 +4,7 @@ import { format } from "date-fns-tz";
 import { CrudExameProps } from "../CrudExameProps";
 import { getId } from "@/hooks/getId";
 import { TiposExame } from "@/types/Enum/TiposExame";
+import { convertDateFormat } from "@/utils/convertDateFormat";
 
 interface TipoOption {
   id: number;
@@ -89,39 +90,80 @@ const ExameForm: React.FC<CrudExameProps> = ({
   }, [cpfMedico]);
 
   const handleSubmit = async (): Promise<void> => {
-    if (tipoExame === TiposExame.HEMORAGRAMA) {
-      const hemogramaData = {
-        neutrofilos: neutrofilos,
-        dataSolicitacao: dataSolicitacao,
-        dataResultado: dataResultado,
-        urgente: true,
-        temperatura: 0,
-        resultado: "string",
-        idInternamento: idInternacao,
-        idSolicitante: idMedico
-      };
-      try {
-        const response = await fetch(
-          "https://localhost:7091/Exame/AddHemograma",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
+    if (!exame) {
+      if (tipoExame === TiposExame.HEMORAGRAMA) {
+        const hemogramaData = {
+          neutrofilos: neutrofilos,
+          dataSolicitacao: dataSolicitacao,
+          dataResultado: dataResultado,
+          urgente: true,
+          temperatura: 0,
+          resultado: "string",
+          idInternamento: idInternacao,
+          idSolicitante: idMedico
+        };
+        try {
+          const response = await fetch(
+            "https://localhost:7091/Exame/AddHemograma",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(hemogramaData),
             },
-            body: JSON.stringify(hemogramaData),
-          },
-        );
-        if (response.ok) {
-          const data = await response;
-          console.log("Request successful!");
-        } else {
-          console.log("Request failed!");
+          );
+          if (response.ok) {
+            const data = await response;
+            console.log("Request successful!");
+          } else {
+            console.log("Request failed!");
+          }
+        } catch (error) {
+          console.error("Error occurred during request:", error);
         }
-      } catch (error) {
-        console.error("Error occurred during request:", error);
       }
-    }
+    } else {
+      if (tipoExame === TiposExame.HEMORAGRAMA) {
+        const hemogramaData = {
+          neutrofilos: neutrofilos,
+          dataSolicitacao: dataSolicitacao,
+          dataResultado: dataResultado
+        };
 
+        try {
+          const response = await fetch(
+            `https://localhost:7091/Exame/PutExame/${exame.id}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(hemogramaData),
+            },
+          );
+          if (response.ok) {
+            const data = await response;
+            console.log("Request successful!");
+          } else {
+            console.log("Request failed!");
+          }
+        } catch (error) {
+          console.error("Error occurred during request:", error);
+        }
+      } 
+    }
+  };
+
+  const cleanUseStates = () => {
+    setCPF("");
+    setNomePaciente("");
+    setCNS("");
+    setUnidade("");
+    setDataNasc("");
+    setDataAdmissao("");
+    setCpfMedico("");
+    setSolicitadoPor("");
   };
 
   useEffect(() => {
@@ -138,11 +180,10 @@ const ExameForm: React.FC<CrudExameProps> = ({
         // setNomePaciente(pacienteEncontrado.nome || "");
         // setCNS(pacienteEncontrado.cns || "");
         // setUnidade(pacienteEncontrado.unidade || "");
-        // setDataNasc(pacienteEncontrado.dataNascimento || "");
-        // setDataAdmissao(pacienteEncontrado.dataAdmissao || "");
-        setDataSolicitacao(exame.dataSolicitacao);
-        setDataResultado(exame.dataResultado);
-        setSolicitadoPor(exame.solicitante);
+        // setDataNasc(convertDateFormat(pacienteEncontrado.dataNascimento, "yyyy-mm-dd") || "");
+        // setDataAdmissao(convertDateFormat(pacienteEncontrado.dataAdmissao, "yyyy-mm-dd") || "");
+        setDataSolicitacao(convertDateFormat(exame.dataSolicitacao, "yyyy-mm-dd"));
+        setDataResultado(convertDateFormat(exame.dataResultado, "yyyy-mm-dd"));
       }
       else {
         setCpfMedico("");
@@ -156,7 +197,10 @@ const ExameForm: React.FC<CrudExameProps> = ({
         setDataAdmissao("");
       }
     }
-  }, [exame]);
+    else
+      cleanUseStates();
+  }, [exame, medicos, pacientes]);
+
 
 
   const autoFillPacienteInputs = () => {
@@ -175,12 +219,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
     }
     else {
       setPacienteNaoEncontrado(true);
-      setCPF("");
-      setNomePaciente("");
-      setCNS("");
-      setUnidade("");
-      setDataNasc("");
-      setDataAdmissao("");
+      cleanUseStates();
     }
   };
 
@@ -194,8 +233,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
       setSolicitadoPor(medicoEncontrado.nome || "");
     }
     else {
-      setCpfMedico("");
-      setSolicitadoPor("");
+      cleanUseStates();
     }
   };
 
@@ -206,7 +244,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
           <div>
             <label>Prontuário</label>
             <input
-              className="w-40"
+              className="w-36"
               type="number"
               step={1}
               value={numProntuario}
@@ -243,13 +281,13 @@ const ExameForm: React.FC<CrudExameProps> = ({
           <div>
             <label>Data de Admissão</label>
             <input
-              className="w-44"
+              className="w-40"
               type="date"
               value={dataAdmissao}
               disabled
             />
           </div>
-          <div className="w-64">
+          <div className="w-32">
             <label>Unidade</label>
             <input
               className="w-full"
@@ -281,9 +319,10 @@ const ExameForm: React.FC<CrudExameProps> = ({
         </div>
       </div>
       <div className="flex">
-        <div className="w-1/5">
+        <div>
           <label>CPF do Solicitante</label>
           <input
+            className="w-40"
             type="text"
             value={cpfMedicoFormated}
             maxLength={11}
@@ -292,7 +331,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
             disabled={Boolean(exame)}
           />
         </div>
-        <div className="w-4/5 ml-4">
+        <div className="w-4/5 ml-2">
           <label>Solicitante</label>
           <input
             className="w-full"
@@ -310,6 +349,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
             type="date"
             onChange={(e) => setDataSolicitacao(e.target.value)}
             value={dataSolicitacao}
+            required
           />
         </div>
         <div>
@@ -318,12 +358,13 @@ const ExameForm: React.FC<CrudExameProps> = ({
             type="date"
             value={dataResultado}
             onChange={(e) => { setDataResultado(e.target.value); }}
+            required
           />
         </div>
-        <div className="ml-4">
+        <div className="ml-2">
           <label>Tipo</label>
           <select
-            className="block h-10 border rounded p-2 border-gray-300 w-48"
+            className="block h-10 border rounded p-2 border-gray-300 w-36"
             onChange={(e) => { setTipoExame(e.target.value as TiposExame); }}
             value={tipoExame}
           >
@@ -334,17 +375,17 @@ const ExameForm: React.FC<CrudExameProps> = ({
             ))}
           </select>
         </div>
-        <div className="ml-auto flex w-2/5">
+        <div className="flex ml-2">
           <div>
             { tipoExame === TiposExame.HEMORAGRAMA && (
             <div>
               <label>Contagem de Neutrófilos</label>
               <input
-                className="w-full"
                 type="number"
                 maxLength={5}
                 value={neutrofilos}
                 onChange={(e) => setNeutrofilos(parseInt(e.target.value)) }
+                required
               />
             </div>
           )}
@@ -352,7 +393,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
             <div>
               <label>Upload do Exame</label>
               <input
-                className="w-full"
+                className="w-64"
                 type="file"
               />
             </div>
@@ -365,7 +406,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
           !Boolean(exame) && (
             <button
               type="submit"
-              className="w-48 h-12 rounded-lg bg-[#C55A11] text-[#fff] hover:bg-[#ED7C31] transition-colors mt-2 mx-auto font-bold"
+              className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-orange-400 transition-colors mt-2 mx-auto font-bold"
               onClick={handleSubmit}
             >
               Cadastrar Exame
@@ -376,14 +417,13 @@ const ExameForm: React.FC<CrudExameProps> = ({
           Boolean(exame) && (
             <button
             type="submit"
-            className="w-48 h-12 rounded-lg bg-[#C55A11] text-[#fff] hover:bg-[#ED7C31] transition-colors mt-2 mx-auto font-bold"
+            className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-orange-400 transition-colors mt-2 mx-auto font-bold"
             onClick={handleSubmit}
             >
               Salvar Exame
             </button>
           )
         }
-
       </div>
     </div>
   );

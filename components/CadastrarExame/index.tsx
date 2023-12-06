@@ -13,22 +13,23 @@ const CadastrarExame: React.FC<CrudExameProps> = ({
 }) => {
 
   const [exame, setExame] = useState<Hemograma>();
-  
   useEffect(() => {
     console.log(exame);
   }, [exame]);
-  
   return (
     <>
       <div className={styles.header}></div>
-      <div className="flex w-full ml-0">
-        <div className="mt-8 mr-16 overflow-auto bg-gray-200 p-8 w-min-96 rounded">
-          <ExamesList
-            id={""}
-            setExame={setExame}
-          />
+      <div className="flex">
+        <div className="mt-[40px] mr-4 p-2 bg-gray-100 h-[560px] w-96 rounded-lg">
+          <div className="overflow-auto h-[540px] px-4">
+            <ExamesList
+              id={""}
+              setExame={setExame}
+            />
+          </div>
+
         </div>
-        <div className={styles.container}>
+        <div className="flex items-center justify-center h-[630px]">
           <form className={styles.menuForm}>
             <div className={styles.menuHeader}>
               <Link
@@ -43,9 +44,17 @@ const CadastrarExame: React.FC<CrudExameProps> = ({
                 </label>
               </Link>
               <h1 className={styles.headerTitle}>Cadastrar Exame</h1>
+              <button
+                className="ml-auto w-8 h-8 rounded-full flex text-xl text-white justify-center bg-orange-500"
+                type="button"
+                title="Cadastrar novo exame"
+                onClick={() => {setExame(undefined); }}  
+              >
+                <span>+</span>
+              </button>
             </div>
             <div className={styles.sep}></div>
-            <div className={styles.content}>
+            <div className="w-min">
               <ExameForm
                 pacientes={pacientes}
                 medicos={medicos}

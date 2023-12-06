@@ -17,7 +17,7 @@ export default function Layout({ children }: any) {
 
   return (
     <main className="h-full bg-[#689f92]">
-      <div className="container mx-2 px-2 h-full">{children}</div>
+      <div className="container mx-auto px-2 h-full">{children}</div>
     </main>
   );
 }
