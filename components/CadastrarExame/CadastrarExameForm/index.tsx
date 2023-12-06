@@ -42,7 +42,9 @@ const ExameForm: React.FC<CrudExameProps> = ({
 
   const [cadastradoPor, setCadastradoPor] = useState("");
   const [dataSolicitacao, setDataSolicitacao] = useState("");
+  const [dataSolicitacaoFormated, setDataSolicitacaoFormated] = useState("");
   const [dataResultado, setDataResultado] = useState(currentDate);
+  const [dataResultadoFormated, setDataResultadoFormated] = useState("");
   const [tipoExame, setTipoExame] = useState<TiposExame>(TiposExame.HEMORAGRAMA);
 
   const [pacienteNaoEncontrado, setPacienteNaoEncontrado] = useState(false);
@@ -60,6 +62,12 @@ const ExameForm: React.FC<CrudExameProps> = ({
     return cpfFormatado;
   };
 
+  useEffect(() => {
+    if (dataResultado)
+      setDataResultadoFormated(convertDateFormat(dataResultado, "yyyy-mm-dd"));
+    if (dataSolicitacao)
+      setDataSolicitacaoFormated(convertDateFormat(dataSolicitacao, "yyyy-mm-dd"));
+  }, [dataSolicitacao, dataResultado]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -126,11 +134,11 @@ const ExameForm: React.FC<CrudExameProps> = ({
     } else {
       if (tipoExame === TiposExame.HEMORAGRAMA) {
         const hemogramaData = {
-          neutrofilos: neutrofilos,
+          contagemNeutrofilos: neutrofilos,
           dataSolicitacao: dataSolicitacao,
           dataResultado: dataResultado
         };
-
+        console.log(hemogramaData);
         try {
           const response = await fetch(
             `https://localhost:7091/Exame/PutExame/${exame.id}`,
@@ -200,8 +208,6 @@ const ExameForm: React.FC<CrudExameProps> = ({
     else
       cleanUseStates();
   }, [exame, medicos, pacientes]);
-
-
 
   const autoFillPacienteInputs = () => {
     
@@ -348,7 +354,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
           <input
             type="date"
             onChange={(e) => setDataSolicitacao(e.target.value)}
-            value={dataSolicitacao}
+            value={dataSolicitacaoFormated}
             required
           />
         </div>
@@ -356,7 +362,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
           <label>Data do Resultado</label>
           <input
             type="date"
-            value={dataResultado}
+            value={dataResultadoFormated}
             onChange={(e) => { setDataResultado(e.target.value); }}
             required
           />
@@ -384,7 +390,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
                 type="number"
                 maxLength={5}
                 value={neutrofilos}
-                onChange={(e) => setNeutrofilos(parseInt(e.target.value)) }
+                onChange={(e) => setNeutrofilos(parseInt(e.target.value || "0")) }
                 required
               />
             </div>
@@ -416,7 +422,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
         {
           Boolean(exame) && (
             <button
-            type="submit"
+            type="button"
             className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-orange-400 transition-colors mt-2 mx-auto font-bold"
             onClick={handleSubmit}
             >
