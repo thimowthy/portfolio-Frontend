@@ -5,11 +5,13 @@ const ErrorToast = ({
   message,
   onClose,
   className,
+  autohide,
 }: {
   title: string;
   message: string;
   className?: string;
   onClose: () => void;
+  autohide?: boolean;
 }) => {
   const [isToastVisible, setToastVisible] = useState(true);
 
@@ -36,7 +38,8 @@ const ErrorToast = ({
       role="alert"
       aria-live="assertive"
       aria-atomic="true"
-      data-te-autohide="false"
+      data-te-delay={500}
+      data-te-autohide={autohide || false}
       data-te-toast-init
       data-te-toast-show
     >

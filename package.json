@@ -36,6 +36,7 @@
     "react-loader-spinner": "^5.4.5",
     "reactflow": "^11.8.3",
     "reactjs-localstorage": "^1.0.1",
+    "sweetalert2": "^11.10.1",
     "tailwindcss": "3.3.3",
     "tw-elements": "^1.0.0-beta2"
   },

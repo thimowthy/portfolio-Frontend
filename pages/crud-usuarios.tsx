@@ -44,7 +44,6 @@ const CrudUsuario = () => {
   }, []);
 
   const fetchUsers = async () => {
-
     const token = localStorage.getItem("Authorization");
 
     try {
@@ -52,7 +51,10 @@ const CrudUsuario = () => {
       const usersList = await fetcher({
         rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/GetListUsers",
         metodo: "GET",
-        cabecalho: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` }
+        cabecalho: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       console.log(usersList);

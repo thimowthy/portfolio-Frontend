@@ -42,14 +42,12 @@ const ExamesList: React.FC<ExameListProps> = ({ id }) => {
               pathname: "/solicitar-exame",
               query: { id },
             });
-            
           }}
         >
           Solicitar Exame
         </button>
       </div>
 
-      
       {exames.length === 0 ? (
         <div className="w-full h-full flex flex-col items-center justify-center py-8">
           <Image

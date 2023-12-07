@@ -1,5 +1,4 @@
 export type Medicamento = {
-    id: number;
-    nome: string;
+  id: number;
+  nome: string;
 };
-  
