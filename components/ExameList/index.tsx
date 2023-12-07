@@ -5,7 +5,7 @@ import exameCinza from "@/public/medical-report-gray.png";
 
 interface ExameListProps {
   id: string;
-  setExame: React.Dispatch<Hemograma>;
+  setExame?: React.Dispatch<Hemograma>;
 }
 const ExamesList: React.FC<ExameListProps> = ({ id, setExame }) => {
   const [exames, setExames] = useState<Exame[]>([]);

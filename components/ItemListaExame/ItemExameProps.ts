@@ -1,6 +1,6 @@
 export interface ItemExameProps {
     id: string;
-    exame: Exame;
+    exame: Hemograma;
     setExame: React.Dispatch<Hemograma>;
   }
   

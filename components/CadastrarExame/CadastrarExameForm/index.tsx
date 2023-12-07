@@ -68,6 +68,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
     if (dataSolicitacao)
       setDataSolicitacaoFormated(convertDateFormat(dataSolicitacao, "yyyy-mm-dd"));
   }, [dataSolicitacao, dataResultado]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -172,6 +173,9 @@ const ExameForm: React.FC<CrudExameProps> = ({
     setDataAdmissao("");
     setCpfMedico("");
     setSolicitadoPor("");
+    setDataResultadoFormated("");
+    setDataSolicitacaoFormated("");
+
   };
 
   useEffect(() => {
@@ -422,7 +426,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
         {
           Boolean(exame) && (
             <button
-            type="button"
+            type="submit"
             className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-orange-400 transition-colors mt-2 mx-auto font-bold"
             onClick={handleSubmit}
             >

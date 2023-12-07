@@ -13,9 +13,7 @@ const CadastrarExame: React.FC<CrudExameProps> = ({
 }) => {
 
   const [exame, setExame] = useState<Hemograma>();
-  useEffect(() => {
-    console.log(exame);
-  }, [exame]);
+
   return (
     <>
       <div className={styles.header}></div>
