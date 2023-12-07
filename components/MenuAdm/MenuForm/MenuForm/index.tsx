@@ -12,9 +12,9 @@ import ErrorToast from "@/components/toasts/errorToast";
 import router from "next/router";
 
 type Prot = {
-  id: number,
-  descricao: Protocolo,
-  ativo?: boolean | undefined,
+  id: number;
+  descricao: Protocolo;
+  ativo?: boolean | undefined;
 };
 const MenuFormContent = () => {
 
@@ -109,29 +109,29 @@ const MenuFormContent = () => {
     };
     
 
-    const handleItemClick = (id: number) => {
-      setSelectedItemId(id);
-    };
-    
-    useEffect(() => {
-      fetch("https://localhost:7091/Protocolo/GetListProtocolo")
-        .then(response => response.json())
-        .then(data => {
-          setListaProtocolos(data);
-        })
-        .catch(error => console.error("Error ", error));
-    }, []);
+  const handleItemClick = (id: number) => {
+    setSelectedItemId(id);
+  };
 
-    useEffect(() => {
-      if (listaProtocolos) {
-        const protocolos = listaProtocolos?.map(protocoloDB => ({
-          ...protocoloDB,
-          descricao: JSON.parse(protocoloDB.descricao)
-        }));
-        setProtocolos(protocolos);
-        setAtivo(listaProtocolos?.find(item => item.ativo)?.id);
-      }
-    }, [listaProtocolos]);
+  useEffect(() => {
+    fetch("https://localhost:7091/Protocolo/GetListProtocolo")
+      .then((response) => response.json())
+      .then((data) => {
+        setListaProtocolos(data);
+      })
+      .catch((error) => console.error("Error ", error));
+  }, []);
+
+  useEffect(() => {
+    if (listaProtocolos) {
+      const protocolos = listaProtocolos?.map((protocoloDB) => ({
+        ...protocoloDB,
+        descricao: JSON.parse(protocoloDB.descricao),
+      }));
+      setProtocolos(protocolos);
+      setAtivo(listaProtocolos?.find((item) => item.ativo)?.id);
+    }
+  }, [listaProtocolos]);
 
   return (
     <>
@@ -179,14 +179,28 @@ const MenuFormContent = () => {
                 <li
                   key={protocolo.id}
                   onClick={() => handleItemClick(protocolo.id)}
-                  className={`${styles.listItem} ${selectedItemId === protocolo.id ? styles.selected : ""}`}
+                  className={`${styles.listItem} ${
+                    selectedItemId === protocolo.id ? styles.selected : ""
+                  }`}
                 >
-                  <span className={styles.marker}>•{
-                    "   " + protocolo.descricao.nome +
-                    "  v" + protocolo.descricao.versao
-                  }</span>  
+                  <span className={styles.marker}>
+                    •
+                    {"   " +
+                      protocolo.descricao.nome +
+                      "  v" +
+                      protocolo.descricao.versao}
+                  </span>
                   {protocolo.ativo && (
-                    <Image src={loading} style={{ marginLeft: "10px", width: "30px", maxHeight: "30px" }} title="Em execução" alt="Protocolo vigente"/>
+                    <Image
+                      src={loading}
+                      style={{
+                        marginLeft: "10px",
+                        width: "30px",
+                        maxHeight: "30px",
+                      }}
+                      title="Em execução"
+                      alt="Protocolo vigente"
+                    />
                   )}
                 </li>
               ))}

@@ -1,0 +1,28 @@
+.logoname {
+  font-family: "Trebuchet MS";
+  font-weight: 100;
+  margin-left: 20px;
+  font-size: 36px;
+  color: #555;
+}
+.nav ul {
+  display: flex;
+}
+.nav {
+  display: flex;
+  margin-left: auto;
+  align-items: center;
+}
+.nav li {
+  font-weight: 200;
+  font-family: "Trebuchet MS";
+  font-size: 18px;
+  margin: 0 20px;
+}
+.nav a {
+  text-decoration: none;
+  color: #333;
+}
+.nav a:hover {
+  color: #777;
+}

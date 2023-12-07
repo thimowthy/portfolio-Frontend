@@ -1,0 +1,23 @@
+.grave {
+  width: 40px;
+  height: 40px;
+  background-color: yellow;
+}
+
+.medium {
+  width: 40px;
+  height: 40px;
+  background-color: rgb(0, 107, 41);
+}
+
+.low {
+  width: 40px;
+  height: 40px;
+  background-color: blue;
+}
+
+.high {
+  width: 40px;
+  height: 40px;
+  background-color: red;
+}

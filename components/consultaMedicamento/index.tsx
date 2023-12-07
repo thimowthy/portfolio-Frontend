@@ -15,7 +15,9 @@ const MedicamentoSelector = () => {
       try {
         // Faça a requisição à API para obter a lista de medicamentos
         // Substitua a URL abaixo pela sua API real
-        const response = await fetch(`https://sua-api.com/medicamentos?q=${inputValue}`);
+        const response = await fetch(
+          `https://sua-api.com/medicamentos?q=${inputValue}`,
+        );
         const data = await response.json();
         setMedicamentos(data);
       } catch (error) {
@@ -36,7 +38,7 @@ const MedicamentoSelector = () => {
     <Autocomplete
       id="medicamento-selector"
       options={medicamentos}
-      getOptionLabel={(option) => option.nome} // Substitua "nome" pelo campo que contém o nome do medicamento na resposta da API
+      getOptionLabel={(option: any) => option.nome} // Substitua "nome" pelo campo que contém o nome do medicamento na resposta da API
       value={selectedMedicamento}
       onChange={(_, newValue) => setSelectedMedicamento(newValue)}
       onInputChange={(_, newInputValue) => setInputValue(newInputValue)}
@@ -49,7 +51,9 @@ const MedicamentoSelector = () => {
             ...params.InputProps,
             endAdornment: (
               <>
-                {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                {loading ? (
+                  <CircularProgress color="inherit" size={20} />
+                ) : null}
                 {params.InputProps.endAdornment}
               </>
             ),

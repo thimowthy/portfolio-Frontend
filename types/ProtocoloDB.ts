@@ -1,7 +1,5 @@
-
 export type ProtocoloDB = {
-    id: number;
-    descricao: string;
-    ativo?: boolean;
+  id: number;
+  descricao: string;
+  ativo?: boolean;
 };
-  

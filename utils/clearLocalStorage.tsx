@@ -1,6 +1,5 @@
 export function clearLocalStorage() {
-    try {
-      localStorage.clear();
-    } catch (error) {}
-  }
-  
+  try {
+    localStorage.clear();
+  } catch (error) {}
+}

@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import fetcher from "@/api/fetcher";
 import SeoConfig from "../../components/SeoConfig/index";
 import DetalhesPaciente from "../../components/DetalhesPaciente";
-import Header from "@/components/HeaderMedico";
+import Header from "@/components/Header";
 
 const DynamicTabComponent = dynamic(
   () => import("../../components/TabDadosPaciente"),
@@ -24,7 +24,7 @@ const DadosPacientePage = ({
       {};
     setSelectedPatient(pacienteAtivo);
   }, [router]);
-  const [selectedPatient, setSelectedPatient] = useState<Paciente>({});
+  const [selectedPatient, setSelectedPatient] = useState<any>({});
   4;
   return (
     <>
@@ -48,11 +48,11 @@ const DadosPacientePage = ({
 
 export default DadosPacientePage;
 
-export async function getStaticProps<GetStaticProps>() {
-  // const pacientes = await fetcher({
-  //   metodo: "GET",
-  //   rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatientsSemAlta",
-  // });
+export async function getServerSideProps<GetServerSideProps>() {
+  const pacientes = await fetcher({
+    metodo: "GET",
+    rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatientsSemAlta",
+  });
 
   // const isNeutropenico = (paciente: Paciente) => {
   //   const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];

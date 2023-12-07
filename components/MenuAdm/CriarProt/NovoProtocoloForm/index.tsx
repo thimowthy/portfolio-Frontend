@@ -84,7 +84,7 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
       return updatedProtocolo;
     });
   };
-                                                                                                          
+
   return (
     <div className={styles.formContainer}>
       <div className={styles.nameInput}>
@@ -125,20 +125,22 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
           <p className={styles.textInfo}>
             Um fluxograma de diagnóstico é uma representação visual que ilustra
             o processo de determinar a presença ou ausência de uma determinada
-            condição médica com base em uma série de condições e restrições lógicas.
+            condição médica com base em uma série de condições e restrições
+            lógicas.
           </p>
         )}
         {showTratText && (
           <p className={styles.textInfo}>
-            Um fluxograma de tratamento é uma representação visual das etapas
-            e decisões envolvidas no tratamento de uma condição médica específica. Ele
-            é projetado para fornecer uma visão geral clara e organizada do plano de
-            tratamento, incluindo as intervenções médicas, terapias, medicamentos e
-            ações a serem tomadas em diferentes estágios da doença.
+            Um fluxograma de tratamento é uma representação visual das etapas e
+            decisões envolvidas no tratamento de uma condição médica específica.
+            Ele é projetado para fornecer uma visão geral clara e organizada do
+            plano de tratamento, incluindo as intervenções médicas, terapias,
+            medicamentos e ações a serem tomadas em diferentes estágios da
+            doença.
           </p>
         )}
       </div>
-      <div className = {styles.btn} id={styles.diagBtn}>
+      <div className={styles.btn} id={styles.diagBtn}>
         <button
           className={styles.actionButton}
           type="button"
@@ -148,9 +150,11 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
           }}
           onMouseEnter={() => setShowDiagText(true)}
           onMouseLeave={() => setShowDiagText(false)}
-        >Criar Diagnóstico</button>
+        >
+          Criar Diagnóstico
+        </button>
       </div>
-      <div className= {styles.btn} id={styles.tratBtn}>
+      <div className={styles.btn} id={styles.tratBtn}>
         <button
           className={styles.actionButton}
           type="button"
@@ -160,36 +164,49 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
           }}
           onMouseEnter={() => setShowTratText(true)}
           onMouseLeave={() => setShowTratText(false)}
-        >Criar Tratamento</button>
+        >
+          Criar Tratamento
+        </button>
       </div>
-      <div className= {styles.btn} id={styles.saveBtn}>
+      <div className={styles.btn} id={styles.saveBtn}>
         <button
           className={styles.saveButton}
           type="button"
-          onClick={() => { 
+          onClick={() => {
             onSave(protocolo);
-            sendProtocolo(protocolo);   
+            sendProtocolo(protocolo);
           }}
-        >Salvar Protocolo</button>
+        >
+          Salvar Protocolo
+        </button>
       </div>
       <div className={styles.toasts}>
         {sendToast && (
           <SuccessToast
             title="Sucesso"
             message="Protocolo salvo com sucesso"
-            onClose={() => { setSendToast(false); } } />
+            onClose={() => {
+              setSendToast(false);
+            }}
+          />
         )}
         {errorToast && (
           <ErrorToast
             title="Erro"
             message="Erro ao salvar protocolo"
-            onClose={() => { setErrorToast(false); } } />
+            onClose={() => {
+              setErrorToast(false);
+            }}
+          />
         )}
         {sendErrorToast && (
           <ErrorToast
             title="Erro"
             message="Erro ao enviar protocolo"
-            onClose={() => { setSendErrorToast(false); } } />
+            onClose={() => {
+              setSendErrorToast(false);
+            }}
+          />
         )}
       </div>
     </div>
