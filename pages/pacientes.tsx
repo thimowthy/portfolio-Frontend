@@ -85,9 +85,9 @@ export default function Pacientes({
       <SeoConfig title="Lista de pacientes" />
       <Header />
       <div className="flex min-h-full min-w-full items-center">
-        <div className="w-[100%] h-[80vh] mx-auto pt-10 px-7 bg-[#fff] rounded-lg flex flex-col relative">
-          <div className="flex w-full justify-end mb-4">
-            <h1 className="mx-auto text-center font-bold text-2xl pb-6">Lista de Pacientes</h1>
+        <div className="w-[100%] h-[80vh] mx-auto pt-6 px-7 bg-[#fff] rounded-lg flex flex-col relative">
+          <div className="flex w-full justify-end mb-4 items-center ">
+            <h1 className="mx-auto text-center font-bold text-2xl">Lista de Pacientes</h1>
             <div className="flex">
               <button
                 onClick={loadPacientes}
