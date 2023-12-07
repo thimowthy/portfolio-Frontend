@@ -13,7 +13,7 @@ export default function Layout({ children }: any) {
     if (!isAuthenticated && !isLoginPage) {
       router.push("/login");
     }
-  }, []);
+  }, [router]);
 
   return (
     <main className="h-full bg-[#689f92]">

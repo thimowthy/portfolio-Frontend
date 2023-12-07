@@ -6,6 +6,7 @@ type TratamentoNode = {
   nome: string;
   variavel: string;
   condicao: string;
+  descricao: string;
   mensagem: string;
   prescricao?: Prescricao
   dest: string | number | Record<string, number | string>;

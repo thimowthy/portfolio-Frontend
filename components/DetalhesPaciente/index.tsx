@@ -36,6 +36,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     cuidados: [""],
     sintomas: [""],
   });
+  const [temperatura, setTemperatura] = useState<number>(36.5);
 
   const infeccoesSemInstabilidadeHemodinamica = [
     {
@@ -226,6 +227,10 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     }
   };
 
+  const enviarTemperatura = () => {
+    // FAZER REQUISIÇÃO AQUI
+  };
+
   type Presc = {
     cuidados: Array<string>;
     sintomas: Array<string>;
@@ -340,7 +345,9 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     });
     prescricao.cuidados?.splice(index, 1);
   };
+  
   const handleDeleteMedicamento = () => {};
+
   useEffect(() => {
     const init = async () => {
       const { Ripple, Tooltip, initTE } = await import("tw-elements");
@@ -543,8 +550,8 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                     <hr />
                     <div className="mt-4">
                       <h1 className="text-xl flex">
-                        Febre?{" "}
-                        <span
+                        Temperatura (°C){" "}
+                        {/* <span
                           className="text-xl"
                           data-te-toggle="tooltip"
                           data-te-html="true"
@@ -566,8 +573,23 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                               d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
                             />
                           </svg>
-                        </span>
+                        </span> */}
                       </h1>
+                      <input
+                          className="w-28 h-12 ml-2 mt-2 rounded-lg p-2 text-xl"
+                          type="number"
+                          step="0.1"
+                          value={temperatura}
+                          onChange={(e) => { setTemperatura(parseFloat(e.target.value)); }}
+                          max={44}
+                          min={30}
+                      />
+                      <button
+                        className="ml-4 w-fit text-white font-bold bg-green-500 hover:bg-green-400 px-4 py-2 rounded"
+                        onClick={() => { enviarTemperatura(); }}
+                      >
+                        Salvar
+                      </button>
                       <div className="flex mt-2">
                         <button className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10">
                           Não
