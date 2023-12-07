@@ -8,13 +8,15 @@ interface CreateDiagProps {
   setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
   windowName: string;
   onDiagnosticoSubmit:React.Dispatch<React.SetStateAction<Diagnostico>>;
+  diagnostico: Diagnostico;
 }
 
 const CreateDiag: React.FC<CreateDiagProps> = ({
   setOpenWindow,
   setCloseWindow,
   windowName,
-  onDiagnosticoSubmit
+  onDiagnosticoSubmit,
+  diagnostico
   }) => {
     return (
       <FormBox
@@ -22,6 +24,7 @@ const CreateDiag: React.FC<CreateDiagProps> = ({
         content={
           <DiagFormContent
             onDiagnosticoSubmit={onDiagnosticoSubmit}
+            diag={diagnostico}
           />
         }
         showButton={true}
