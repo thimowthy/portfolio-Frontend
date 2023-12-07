@@ -67,24 +67,22 @@ const AdicionarPaciente = () => {
       if (paciente) {
         try {
           const responseInternamento = await fetch(
-            `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetInternacaoAtual?pacienteId=${paciente.id}`, 
+            `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetInternacaoAtual?pacienteId=${paciente.id}`,
             { method: "GET" },
           );
-      
+
           if (!responseInternamento.ok) throw new Error("Erro na solicitação");
-      
+
           const internamento = await responseInternamento.json();
 
           setFormData((prevFormData) => ({
             ...prevFormData,
             leito: internamento.Leito,
           }));
-
         } catch (error) {
           console.error("Ocorreu um erro durante a solicitação:", error);
         }
       }
-
     };
     fetchInternamento();
   }, [paciente]);
@@ -100,8 +98,7 @@ const AdicionarPaciente = () => {
         if (!responsePacientes.ok) throw new Error("Erro na solicitação");
 
         const pacientes = await responsePacientes.json();
-        setPacientes(pacientes);  
-
+        setPacientes(pacientes);
       } catch (error) {
         console.error("Ocorreu um erro durante a solicitação:", error);
       }
@@ -113,7 +110,7 @@ const AdicionarPaciente = () => {
     if (!lista || !lista.length) {
       return "";
     }
-  
+
     const nomesComorbidades = lista.map((item) => item.nome);
     return nomesComorbidades.join(", ");
   };
@@ -122,7 +119,7 @@ const AdicionarPaciente = () => {
     const pacienteEncontrado = pacientesCadastrados.find(
       (paciente) => paciente.numeroProntuario === formData.numeroProntuario,
     );
-  
+
     if (pacienteEncontrado) {
       setPaciente(pacienteEncontrado);
 
@@ -137,11 +134,9 @@ const AdicionarPaciente = () => {
         comorbidades: stringfyList(pacienteEncontrado.comorbidades || []) || "",
         alergias: stringfyList(pacienteEncontrado.alergias || []) || "",
       }));
-    } else {
-      cleanUseStates();
     }
   };
-  
+
   const cleanUseStates = () => {
     setFormData({
       nome: "",
@@ -229,12 +224,10 @@ const AdicionarPaciente = () => {
         setLoading(false);
         setError(true);
       }
-    }
-    else {
+    } else {
       // FAZER REQUISIÇÃO PARA INTERNAR PACIENTE JÁ CADASTRADO
       // setar internado para true quando a requisição for bem sucedida
       setInternado(true);
-      
     }
   };
   return (
@@ -264,27 +257,31 @@ const AdicionarPaciente = () => {
       <div className="flex min-h-full min-w-full justify-center items-center py-9">
         <div className="bg-white rounded-lg min-h-full w-[65%] pt-8 px-8   flex justify-center mt-12">
           <form className="w-full max-w-3xl" onSubmit={handleSubmit}>
-          <div className="flex items-center justify-center">
-            <PreviousPageButton
-              href="/pacientes"
-              title=""
-            />
-            <h1 className="text-xl text-center font-bold mx-auto">
-              {paciente?"Internar":"Cadastrar"} Paciente
-            </h1>
-            <div className="flex">
-              <button
-                className="ml-auto"
-                title="Limpar campos"
-                onClick={() => {
-                  cleanUseStates(); 
-                  setPaciente(undefined);
-                }}>
-                <Image src={trashIcon} alt="" width="30" height="30" style={{ opacity: 0.3 }} />
-              </button>
+            <div className="flex items-center justify-center">
+              <PreviousPageButton href="/pacientes" title="" />
+              <h1 className="text-xl text-center font-bold mx-auto">
+                {paciente ? "Internar" : "Cadastrar"} Paciente
+              </h1>
+              <div className="flex">
+                <button
+                  className="ml-auto"
+                  title="Limpar campos"
+                  onClick={() => {
+                    cleanUseStates();
+                    setPaciente(undefined);
+                  }}
+                >
+                  <Image
+                    src={trashIcon}
+                    alt=""
+                    width="30"
+                    height="30"
+                    style={{ opacity: 0.3 }}
+                  />
+                </button>
+              </div>
             </div>
-          </div>
-          <div className="border-b border-gray-200 w-full px-32 my-3"></div>
+            <div className="border-b border-gray-200 w-full px-32 my-3"></div>
             <div className="flex flex-wrap -mx-3 mt-4">
               <div className="w-full md:w-1/2 px-3 ">
                 <label
@@ -484,7 +481,7 @@ const AdicionarPaciente = () => {
                 type="submit"
                 className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-orange-400 transition-colors mt-2 mx-auto font-bold"
               >
-                { !paciente? "Cadastrar":"Internar Paciente"}
+                {!paciente ? "Cadastrar" : "Internar Paciente"}
               </button>
             </div>
           </form>
