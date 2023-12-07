@@ -25,6 +25,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     cuidados: [""],
     sintomas: [""],
   });
+  const [temperatura, setTemperatura] = useState<number>(36.5);
 
   const infeccoesSemInstabilidadeHemodinamica = [
     {
@@ -215,6 +216,10 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     }
   };
 
+  const enviarTemperatura = () => {
+    // FAZER REQUISIÇÃO AQUI
+  };
+
   type Presc = {
     cuidados: Array<string>;
     sintomas: Array<string>;
@@ -301,7 +306,9 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     });
     prescricao.cuidados?.splice(index, 1);
   };
+
   const handleDeleteMedicamento = () => {};
+
   useEffect(() => {
     const init = async () => {
       const { Ripple, Tooltip, initTE } = await import("tw-elements");
