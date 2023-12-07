@@ -182,7 +182,7 @@ export default function EditUsuario({
           <div className="flex w-full items-center mt-3">
             <button
               type="submit"
-              className="w-48 h-12 rounded-lg bg-[#C55A11] text-[#fff] hover:bg-[#ED7C31] transition-colors mt-2 mx-auto font-bold"
+              className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-[#ED7C31] transition-colors mt-2 mx-auto font-bold"
             >
               Atualizar
             </button>

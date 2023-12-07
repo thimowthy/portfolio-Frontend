@@ -1,5 +1,5 @@
 import { useState, FormEvent, useEffect } from "react";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import Bad from "@/public/bad.png";
 import Good from "@/public/good.png";
 import Image from "next/image";
@@ -157,8 +157,8 @@ export default function FormEstratificacao({ paciente, setLoading }: any) {
 
   return (
     <div className="flex min-h-full items-center">
-      <div className="w-[100%] h-[70vh] mx-auto pt-3 px-7 bg-[#fff] pb-6 rounded-lg flex flex-col">
-        <div>
+      <div className="w-[100%] h-fit mx-auto pt-3 px-7 bg-[#fff] pb-6 rounded-lg flex flex-col">
+        <div className="flex items-center justify-center mt-4"> 
           <Image
             src={LeftArrow}
             alt="Voltar"
@@ -167,8 +167,9 @@ export default function FormEstratificacao({ paciente, setLoading }: any) {
             className="cursor-pointer"
             onClick={() => router.push("/dados-paciente")}
           />
-          <h1 className="text-center text-3xl">Estratificação de Risco</h1>
+          <h1 className="text-center mx-auto font-bold text-3xl">Estratificação de Risco</h1>
         </div>
+        <div className="border-b border-gray-200 w-full px-32 my-6"></div>
         <section className="flex justify-between">
           <div className="flex items-center gap-5">
             <div>
@@ -199,15 +200,15 @@ export default function FormEstratificacao({ paciente, setLoading }: any) {
               <ul className="pt-5">
                 <li>
                   Prontuário:{" "}
-                  {paciente.numeroProntuario != ""
-                    ? paciente.numeroProntuario
+                  {paciente.prontuario 
+                    ? paciente.prontuario
                     : "0982633/0"}
                 </li>
                 <li>Leito: {paciente.leito !== "" ? paciente.leito : "3C"}</li>
               </ul>
             </div>
           </div>
-          <div className="flex flex-col p-3">
+          <div className="flex flex-col p-5 bg-gray-100 rounded">
             {escore >= 21 && (
               <p className="text-3xl text-[#ABEA0C] ">Escore MASCC: {escore}</p>
             )}
@@ -232,25 +233,29 @@ export default function FormEstratificacao({ paciente, setLoading }: any) {
             </div>
           </div>
         </section>
-        <div className="flex relative pt-7">
-          <form onSubmit={handleEstratificacao}>
-            <ul className="flex flex-col">
-              {params.map((param) => (
-                <li key={param.id} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    name={param.nome}
-                    id={param.nome}
-                    onChange={() => handleCheckboxChange(param)}
-                  />
-                  <label htmlFor={param.nome}>{param.text}</label>
-                  <span className="font-bold">({param.valor})</span>
-                </li>
-              ))}
-            </ul>
-            {escore < 21 && (
+        <div className="space-x-20 flex w-full">
+          <div className="flex relative p-2 px-4 bg-gray-100 w-fit mt-2 rounded">
+            <form onSubmit={handleEstratificacao}>
+              <ul className="flex flex-col">
+                {params.map((param) => (
+                  <li key={param.id} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      name={param.nome}
+                      id={param.nome}
+                      onChange={() => handleCheckboxChange(param)}
+                    />
+                    <label htmlFor={param.nome}>{param.text}</label>
+                    <span className="font-bold">({param.valor})</span>
+                  </li>
+                ))}
+              </ul>
+            </form>
+          </div>
+          <div className="flex items-center justify-center">
+            {escore < 21 && ( 
               <button
-                className="w-48 h-12 rounded-3xl bg-[#C55A11] text-[#fff] font-bold absolute bottom-0 right-4"
+                className="w-48 h-12 rounded-3xl bg-orange-500 text-[#fff] font-bold"
                 type="submit"
               >
                 Iniciar Tratamento
@@ -258,15 +263,16 @@ export default function FormEstratificacao({ paciente, setLoading }: any) {
             )}
             {escore >= 21 && (
               <button
-                className="w-48 h-12 rounded-3xl bg-[#c4c4c4] text-[#fff] font-bold absolute bottom-0 right-4"
+                className="w-48 h-12 rounded-3xl bg-[#c4c4c4] text-[#fff] font-bold"
                 disabled
                 type="submit"
               >
-                Iniciar Tratamento
+                Dar Alta
               </button>
             )}
-          </form>
+          </div>
         </div>
+
       </div>
     </div>
   );

@@ -136,7 +136,7 @@ export default function Form02Sintomas({ instabilidadeH }: any) {
               <p className="text-lg">Selecione a infecção</p>
               <div className="grid grid-cols-2 px-2 py-2 gap-4">
                 {infeccoesComInstabilidadeHemodinamica.map((el) => (
-                  <button className="w-56 h-14 rounded-3xl bg-[#C55A11] hover:bg-[#d3824c] text-[#fff] font-bold py-2 px-2" key={el.nome}>{el.nome}</button>
+                  <button className="w-56 h-14 rounded-3xl bg-orange-500 hover:bg-[#d3824c] text-[#fff] font-bold py-2 px-2" key={el.nome}>{el.nome}</button>
                 )
                 )}
               </div>
@@ -150,7 +150,7 @@ export default function Form02Sintomas({ instabilidadeH }: any) {
               <p className="text-lg">Selecione a infecção</p>
               <div className="grid grid-cols-2 px-2 py-2 gap-4">
                 {infeccoesSemInstabilidadeHemodinamica.map((el) => (
-                  <button className="w-56 h-14 rounded-3xl bg-[#C55A11] hover:bg-[#d3824c] text-[#fff] font-bold py-2 px-2" key={el.nome}>{el.nome}</button>
+                  <button className="w-56 h-14 rounded-3xl bg-orange-500 hover:bg-[#d3824c] text-[#fff] font-bold py-2 px-2" key={el.nome}>{el.nome}</button>
                 )
                 )}
               </div>
