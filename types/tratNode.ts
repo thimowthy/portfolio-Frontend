@@ -8,9 +8,8 @@ type TratamentoNode = {
   condicao: string;
   descricao: string;
   mensagem: string;
-  prescricao?: Prescricao
+  prescricao?: Prescricao;
   dest: string | number | Record<string, number | string>;
   posicao: [number, number];
-}
-  export default TratamentoNode;
-  
+};
+export default TratamentoNode;

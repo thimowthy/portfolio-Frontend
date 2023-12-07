@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import styles from "./styles.module.css";
-import good from "../../public/good.png";
-import neutral from "../../public/neutral.png";
-import bad from "../../public/bad.png";
-import veryBad from "../../public/very_bad.png";
-import febreImg from "../../public/termometro.png";
-import moment from "moment";
 import TabList from "../TabList";
 import TabItem from "../TabItem";
 import TabContents from "../TabContents/index";
@@ -16,9 +9,6 @@ import ModalCriacaoCuidado from "../ModalCriacaoCuidado";
 import ModalCriacaoMedicamento from "../ModalCriacaoMedicamento";
 import Delete from "../../public/trash2.svg";
 import Plus from "../../public/plus.svg";
-import api from "@/helpers";
-import ErrorToast from "../toasts/errorToast";
-import SuccessToast from "../toasts/successToast";
 import ExamesList from "../ExameList";
 import Link from "next/link";
 import useServerityIcon from "@/hooks/useSeverityIcon";
@@ -29,6 +19,7 @@ import { ItemCuidado } from "@/types/ItemCuidado";
 import { UnidadeDosagem } from "@/types/Enum/UnidadeDosagem";
 import { IntervaloTempo } from "@/types/Enum/IntervaloTempo";
 import { Prescricao } from "@/types/Prescricao";
+import PacienteTab from "../PacienteTab";
 /**
  * Renderiza o a página de detalhes do paciente.
  * @category Component
@@ -46,7 +37,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   const [dose, setDose] = useState(1);
   const [dosagem, setDosagem] = useState<UnidadeDosagem>(UnidadeDosagem.COMPRIMIDO);
   const [tempo, setTempo] = useState(1);
-  const [intervalo, setIntervalo] = useState<IntervaloTempo>(IntervaloTempo.DIAS);  
+  const [intervalo, setIntervalo] = useState<IntervaloTempo>(IntervaloTempo.DIAS);
   const [medicacao, setMedicacao] = useState<ItemMedicamento>();
   const [cuidado, setCuidado] = useState<ItemCuidado>();
 
@@ -242,7 +233,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   //     }
   //   }
   // };
-  
+
   const handleAddCuidado = (e: any) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -286,7 +277,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     setPrescricao({
       medicacoes: medicacoes,
       cuidados: cuidados
-      });
+    });
   }, [medicacoes, cuidados]);
 
   const enviarTemperatura = async () => {
@@ -297,7 +288,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
         body: JSON.stringify(
           { temperatura: temperatura }
         ),
-        });
+      });
       if (response.ok) {
         //console.log("foi");
       } else {
@@ -387,73 +378,41 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   //   console.log(prescricao);
   // };
 
-  const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
-  let situacoesPacienteCopy = [...situacoesPaciente];
-  const situacaoAtual = situacoesPacienteCopy?.pop();
-
-  const selectLabelNeutrofilos = (quantidadeNeutrofilos: number) => {
-    if (quantidadeNeutrofilos > 1000) {
-      return styles.low;
-    } else if (quantidadeNeutrofilos > 500) {
-      return styles.medium;
-    } else {
-      return styles.grave;
-    }
+  const openModalCreateMedicamento = () => {
+    setModalMedicamento(true);
   };
 
-  const colors: any = [
-    [0, "bg-orange-900"],
-    [1, "bg-yellow-800"],
-    [2, "bg-yellow-700"],
-    [3, "bg-amber-600"],
-    [4, "bg-amber-500"],
-  ];
-
-  const colorMap = new Map(colors);
-
-  const ImageURL = (paciente: Paciente) => {
-    return useServerityIcon(paciente);
+  const openModalCreateCuidado = () => {
+    setModalCuidado(true);
   };
-  
-  const [dischargeError, setDischargeError] = useState(false);
-  const [sucessDischarge, setSucessDischarge] = useState(false);
-  /**
-   * Seta alta no paciente
-   * @param {Number} pacienteId - Id do paciente
-   * @returns {void}.
-   */
-  const handleDischargePatient = async (pacienteId: number) => {
-    const result = await api.setDischargePatient(pacienteId as number);
-    if (!result) {
-      setDischargeError(true);
-      return;
-    }
-    setSucessDischarge(true);
-    return;
+
+  const handleDeleteCuidado = (element: any) => {
+    /* const index = prescricao.cuidados?.findIndex((item) => item == element);
+    const newCuidados = prescricao.cuidados?.splice(index, 1);
+    setPrescricao((prevState: Presc) => {
+      return {
+        sintomas: [...prevState.sintomas],
+        cuidados: newCuidados,
+        remedios: [...prevState.remedios],
+      };
+    });
+    prescricao.cuidados?.splice(index, 1); */
   };
-  const situacaoPaciente = paciente?.internacao?.situacoesPaciente || [];
+
+  const handleDeleteMedicamento = () => { };
+
+  useEffect(() => {
+    const init = async () => {
+      const { Ripple, Tooltip, initTE } = await import("tw-elements");
+      setInfeccao("Nenhuma");
+      //handleInfeccao("Nenhuma");
+      initTE({ Ripple, Tooltip });
+    };
+    init();
+  }, []);
+
   return (
     <div>
-      {dischargeError && (
-        <ErrorToast
-          className="toast-error"
-          title="Ocorreu um erro ao dar alta ao paciente"
-          message="Ocorreu um erro no sistema ao tentar dar alta ao paciente, por favor tente mais tarde ou contate um administrador."
-          onClose={() => {
-            setDischargeError(false);
-          }}
-        />
-      )}
-      {sucessDischarge && (
-        <SuccessToast
-          className="toast-error"
-          title="A alta do paciente foi realizada com sucesso!"
-          message="A alta para o paciente foi registrada no sistema com sucesso."
-          onClose={() => {
-            setSucessDischarge(false);
-          }}
-        />
-      )}
       <>
         <TabList className="flex list-none flex-row flex-wrap border-b-0 pl-0">
           <TabItem
@@ -484,291 +443,8 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
         </TabList>
         <div id="contents" className="bg-[#DADADA]">
           <TabContents tabId="tabs-neutral" active={true}>
-            <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
-              {paciente.id && (
-                <>
-                  <div className="flex gap-x-4 pb-3">
-                    <Image
-                      className="h-12 w-12 flex-none rounded-full"
-                      src={ImageURL(paciente)}
-                      width="250"
-                      height="250"
-                      alt="Estado do paciente"
-                    />
-                    <div className="min-w-0 flex-auto">
-                      <div className="flex justify-between">
-                        <p className="text-xl font-semibold leading-6 text-gray-900 align-middle">
-                          {paciente.nome}
-                        </p>
-                        <button
-                          className="bg-green-500 hover:bg-green-700 text-white py-2 px-6 rounded"
-                          onClick={() =>
-                            handleDischargePatient(paciente.id as number)
-                          }
-                        >
-                          Dar alta
-                        </button>
-                      </div>
-                      <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                        Prontuário: {paciente.numeroProntuario}
-                      </p>
-                    </div>
-                  </div>
-                  <hr />
-                  <div className="pt-2">
-                    <h1 className="text-2xl">
-                      Dados do paciente{" "}
-                      {situacaoAtual &&
-                        situacaoAtual?.situacaoDiagnostico?.febre && (
-                          <span className="float-right text-danger flex">
-                            Neutropenia Febril{" "}
-                            <Image
-                              className="w-4 ml-4"
-                              src={febreImg}
-                              alt="Termômetro - Febre"
-                            />
-                          </span>
-                        )}
-                    </h1>
-                  </div>
-                  <div className="flex gap-x-4 pt-4 pb-2">
-                    <div>
-                      <p>CPF: {paciente.cpf}</p>
-                      <p>
-                        Data de nascimento:{" "}
-                        {paciente?.dataNascimento
-                          ? moment(paciente?.dataNascimento).format(
-                            "DD/MM/YYYY",
-                          )
-                          : ""}
-                      </p>
-                      <p>Cartão SUS: {paciente.cns}</p>
-                    </div>
-
-                    <div>
-                      <p>Prontuário: {paciente.numeroProntuario}</p>
-
-                      <p>Leito: {paciente?.internacao?.leito}</p>
-
-                      {/* <p>Unidade: {paciente.unidade}</p> */}
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="rounded-md bg-green-200 p-2 w-100">
-                      <p className="text-xl">
-                        Prontuário {paciente.numeroProntuario}
-                      </p>
-                      {paciente?.comorbidades &&
-                        paciente?.comorbidades?.length > 0 && (
-                          <div className="py-1">
-                            <p className="text-lg pl-2">Comorbidades:</p>
-                            {paciente?.comorbidades?.map(
-                              (comorbidade: any, index: number) => {
-                                return (
-                                  <p
-                                    key={`${comorbidade.nome}${index}`}
-                                    className="text-sm pl-4"
-                                  >
-                                    {comorbidade?.nome}
-                                  </p>
-                                );
-                              },
-                            )}
-                          </div>
-                        )}
-                      <div className="py-1">
-                        <p className="text-lg pl-2">Alergias:</p>
-                        {paciente?.alergias?.map((alergia: any) => {
-                          return (
-                            <p key={alergia.nome} className="text-sm pl-4">
-                              {alergia?.nome}
-                            </p>
-                          );
-                        })}
-                      </div>
-                      {/* <div className="py-1">
-                        <p className="text-lg pl-2">
-                          Última prescrição: {paciente.prescricao?.data}
-                        </p>
-                        {paciente.prescricao?.medicamentos.map(
-                          (prescricao: any) => (
-                            <p
-                              key={prescricao.numeroProntuario}
-                              className="text-sm pl-4"
-                            >
-                              {prescricao.medicacao +
-                                prescricao.dosagem +
-                                prescricao.periodo}
-                            </p>
-                          ),
-                        )}
-                      </div> */}
-                      <div className="flex justify-end">
-                        <a href="#" className="text-right text-sm">
-                          Ver prontuário completo
-                        </a>
-                      </div>
-                    </div>
-
-                    <hr />
-                    <div className="mt-4">
-                      <h1 className="text-xl flex">
-                        Temperatura (°C){" "}
-                        {/* <span
-                          className="text-xl"
-                          data-te-toggle="tooltip"
-                          data-te-html="true"
-                          data-te-ripple-init
-                          data-te-ripple-color="light"
-                          title=">38,3°C medida única OU >38°C por mais de 1h"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="#3FB8FC"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-4 h-4"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
-                            />
-                          </svg>
-                        </span> */}
-                      </h1>
-                      <input
-                        className="w-28 h-12 ml-2 mt-2 rounded-lg p-2 text-xl"
-                        type="number"
-                        step="0.1"
-                        value={temperatura}
-                        onChange={(e) => { setTemperatura(parseFloat(e.target.value)); }}
-                        max={44}
-                        min={30}
-                      />
-                      <button
-                        className="ml-4 w-fit text-white font-bold bg-green-500 hover:bg-green-400 px-4 py-2 rounded"
-                        type="submit"
-                        onClick={() => { enviarTemperatura(); }}
-                      >
-                        Salvar
-                      </button>
-                      <div className="flex mt-2">
-                        <button className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10">
-                          Não
-                        </button>
-
-                        <Link
-                          href={{
-                            pathname: "/estratificacao-risco",
-                            query: {
-                              id: paciente.id,
-                              dataNascimento: paciente.dataNascimento,
-                              admissao: paciente.dataAdmissao,
-                              nome: paciente.nome,
-                              cpf: paciente.cpf,
-                              prontuario: paciente.numeroProntuario,
-                              cartaoSus: paciente.cns,
-                            },
-                          }}
-                          className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10"
-                        >
-                          Sim
-                        </Link>
-                      </div>
-                    </div>
-                    <div className="pt-2">
-                      <h1 className="text-2xl">Progresso do tratamento</h1>
-
-                      {/* TODO: for (paciente.situacoesPaciente as situacao) */}
-
-                      <TabList className="flex flex-row rounded-full bg-white mt-4">
-                        {situacaoPaciente?.map((item, index) => {
-                          return (
-                            <TabItem
-                              key={item.id}
-                              href={`tab-${item.id}`}
-                              liClassName={`basis-1/5 ${colorMap.get(
-                                index,
-                              )} py-2 pl-2 ${index === 0
-                                ? "rounded-bl-full rounded-tl-full"
-                                : ""
-                                } ${index === 4
-                                  ? "rounded-br-full rounded-tr-full"
-                                  : ""
-                                }`}
-                              active={true}
-                            >
-                              <p className="text-white">
-                                {moment(item?.dataVerificacao).format(
-                                  "DD/MM/YYYY h:mm:ss",
-                                )}
-                              </p>
-                            </TabItem>
-                          );
-                        })}
-                      </TabList>
-                      {situacaoPaciente?.map((item, index) => {
-                        return (
-                          <TabContents
-                            key={item.id}
-                            tabId={`tab-${item.id}`}
-                            active={index === 0}
-                          >
-                            <div className="pt-2 flex flex-row gap-x-2">
-                              <div className="basis-1/2">
-                                <p>
-                                  Data de verificação:{" "}
-                                  {moment(
-                                    item?.situacaoDiagnostico?.dataVerificacao,
-                                  ).format("DD/MM/YYYY h:mm:ss")}
-                                </p>
-                                <p>
-                                  Data internação:{" "}
-                                  {moment(
-                                    paciente?.internacao?.dataAdmissao,
-                                  ).format("DD/MM/YYYY h:mm:ss")}
-                                </p>
-                                <p>
-                                  Temperatura:{" "}
-                                  {item?.situacaoDiagnostico?.temperatura}
-                                </p>
-                              </div>
-                              <div className="basis-1/2">
-                                <div className="flex justify-center flex-col items-end text-center">
-                                  <div>
-                                    <p className="text-center">Neutrófilos:</p>
-                                    <p className="text-red-500">
-                                      {item?.situacaoDiagnostico?.neutrofilos}
-                                      /mm3
-                                    </p>
-                                    <div className="flex justify-center">
-                                      <div
-                                        className={selectLabelNeutrofilos(
-                                          item?.situacaoDiagnostico
-                                            ?.neutrofilos || 0,
-                                        )}
-                                      ></div>
-                                    </div>
-
-                                    <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
-                                      Acessar +exames
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </TabContents>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-          </TabContents>
+            <PacienteTab paciente={paciente} />
+          </TabContents >
           <TabContents tabId="tab-prescricao" active={false}>
             {paciente.id && (
               <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
@@ -923,7 +599,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                   </button>
                 </div>
                 <div className="pt-4 flex gap-4 pb-8">
-                  <div className="bg-white w-[50%] min-h-[200px] bg-[#a9aee3] p-4 rounded-lg">    
+                  <div className="bg-white w-[50%] min-h-[200px] bg-[#a9aee3] p-4 rounded-lg">
                     <div>
                       <label htmlFor="add-medicacao">Adicionar medicação</label>
                       <div id="add-medicacao" className="my-2 border p-2 rounded-md shadow-md gap-2">
@@ -967,7 +643,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                             value={dosagem}
                             onChange={(e) => {
                               const dose = Object.values(UnidadeDosagem).find(dose => dose === e.target.value);
-                              setDosagem(dose?dose:UnidadeDosagem.COMPRIMIDO);
+                              setDosagem(dose ? dose : UnidadeDosagem.COMPRIMIDO);
                             }}>
                             {Object.values(UnidadeDosagem).map((opcao) => (
                               <option key={opcao} value={opcao}>
@@ -980,7 +656,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                           <label htmlFor="tempo">Intervalo de tempo</label>
                           <input
                             className="ml-auto w-14 text-right pr-2 py-1 rounded"
-                            min={1}               
+                            min={1}
                             id="tempo"
                             type="number"
                             maxLength={6}
@@ -993,7 +669,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                             value={intervalo}
                             onChange={(e) => {
                               const intervalo = Object.values(IntervaloTempo).find(dose => dose === e.target.value);
-                              setIntervalo(intervalo?intervalo:IntervaloTempo.DIAS);
+                              setIntervalo(intervalo ? intervalo : IntervaloTempo.DIAS);
                             }}>
                             {Object.values(IntervaloTempo).map((opcao) => (
                               <option key={opcao} value={opcao}>
@@ -1043,10 +719,10 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                         <li key={el} className="p-2 flex items-center">
                           <div className="p-2 flex items-center justify-between">
                             <p className="min-w-[85%]">{el}</p> */}
-                            {/* <a onClick={openModalEditMedicamento} className="ml-4 cursor-pointer w-[10%]">
+                    {/* <a onClick={openModalEditMedicamento} className="ml-4 cursor-pointer w-[10%]">
                           <Image src={Edit} alt="Editar medicamento" className="ml-4 cursor-pointer" />
                         </a> */}
-                            {/* <a className="cursor-pointer ml-4 w-[60px] h-[60px]">
+                    {/* <a className="cursor-pointer ml-4 w-[60px] h-[60px]">
                               <Image
                                 src={Delete}
                                 alt="Deletar medicamento"
@@ -1058,7 +734,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                       ))}
                     </ul> */}
                   </div>
-                  <div className="bg-white w-[50%] min-h-[200px] bg-[#a9aee3] p-4 rounded-lg">    
+                  <div className="bg-white w-[50%] min-h-[200px] bg-[#a9aee3] p-4 rounded-lg">
                     <label htmlFor="add-cuidado">Adicionar cuidado</label>
                     <div id="add-cuidado">
                       <input
@@ -1092,7 +768,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                       </ul>
                     </div>
                   </div>
-                    {/* <ul>
+                  {/* <ul>
                       {prescricao.cuidados.map((el) => (
                         <li
                           key={el}
@@ -1100,10 +776,10 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                         >
                           <div className="p-2 flex items-center">
                             <p className="min-w-[85%]">{el}</p> */}
-                            {/* <a className="ml-4 cursor-pointer w-[10%]" onClick={openModalEditCuidado}>
+                  {/* <a className="ml-4 cursor-pointer w-[10%]" onClick={openModalEditCuidado}>
                           <Image src={Edit} alt="Editar cuidado" />
                         </a> */}
-                            {/* <a
+                  {/* <a
                               className="cursor-pointer ml-2 w-[60px] h-[60px]"
                               onClick={() => handleDeleteCuidado(el)}
                             >
@@ -1117,7 +793,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                         </li>
                       ))}
                     </ul> */}
-                  </div>
+                </div>
                 {/* {modalCuidado && (
                   <ModalCriacaoCuidado
                     setModalCuidado={setModalCuidado}
@@ -1143,7 +819,9 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
           </TabContents>
           <TabContents tabId="tabs-exames" active={false}>
             <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
-              <ExamesList id={paciente.id?.toString() || ""} />
+              <ExamesList
+                id={paciente.id?.toString() || ""}
+              />
             </div>
           </TabContents>
           <TabContents tabId="tab-sintomas" active={false}>
@@ -1151,8 +829,8 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
               <SintomasForm />
             </div>
           </TabContents>
-        </div>
+        </div >
       </>
-    </div>
+    </div >
   );
 }

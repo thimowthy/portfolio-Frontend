@@ -11,6 +11,7 @@ import SuccessToast from "@/components/toasts/successToast";
 
 interface DiagFormContentProps {
   onDiagnosticoSubmit: (diagnostico: Diagnostico) => void;
+  diag: Diagnostico;
 }
 
 const initialDiagnostico: Record<string, DiagnosticoNode> = graphDiagnostico;
@@ -26,18 +27,18 @@ const nodes: Node[] = [
       style: nodeStyle,
       data: {
         label: (
-          <>Evento {node.id}<br/>{node.nome}</>
+          <>
+            Evento {node.id}
+            <br />
+            {node.nome}
+          </>
         ),
       },
-      // onClick: () => {
-      //   console.log(`Node ${node.id} clicked`);
-      // },
     };
   }),
   {
     id: "0",
-    data: {
-    },
+    data: {},
     style: {
       borderRadius: "50%",
       width: "40px",
@@ -48,12 +49,11 @@ const nodes: Node[] = [
     position: { x: 20, y: 25 },
     sourcePosition: Position.Right,
     targetPosition: Position.Right,
-    selectable: false
+    selectable: false,
   },
   {
     id: "n",
-    data: {
-    },
+    data: {},
     style: {
       width: "30px",
       height: "30px",
@@ -64,18 +64,19 @@ const nodes: Node[] = [
     position: { x: 650, y: 260 },
     sourcePosition: Position.Top,
     targetPosition: Position.Top,
-    selectable: false
+    selectable: false,
   },
 ];
 
 const edges: Edge[] = initialEdges;
 
-const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }) => {
+const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit, diag }) => {
     
-  const [diagnostico, setDiagnostico] = useState(initialDiagnostico);
+  const [diagnostico, setDiagnostico] = useState<Record<string, DiagnosticoNode>>(diag.nodes);
+  
   const [valor, setValor] = useState<Record<string, string>>(
-    Object.keys(initialDiagnostico).reduce((acc, chave) => {
-      acc[chave] = initialDiagnostico[chave].valor.toString();
+    Object.keys(diag.nodes).reduce((acc, chave) => {
+      acc[chave] = diag.nodes[chave].valor.toString();
       return acc;
     }, {} as Record<string, string>)
   );
@@ -83,13 +84,12 @@ const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }
 
   const [toastVisible, setToastVisible] = useState(false);
 
-
   const handleNodeClick = (_: React.MouseEvent, node: Node) => {
     setSelectedNode("node" + node.id.toString());
   };
-  const handleDiagnoticoSubmit = () => {
+  const handleDiagnosticoSubmit = () => {
     const novoDiagnostico: Diagnostico = {
-      nodes: diagnostico
+      nodes: diagnostico,
     };
     onDiagnosticoSubmit(novoDiagnostico);
     setToastVisible(true);
@@ -101,8 +101,8 @@ const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }
       handleConditionChange(val);
     }
   }, [valor]);
-  
-  const handleConditionChange = (value:number) => {
+
+  const handleConditionChange = (value: number) => {
     setDiagnostico((prevDiagnostico) => ({
       ...prevDiagnostico,
       [selectedNode]: {
@@ -135,7 +135,8 @@ const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }
               zoomOnPinch={false}
               zoomOnDoubleClick={false}
               nodesConnectable={false}
-              onNodeClick={handleNodeClick} />
+              onNodeClick={handleNodeClick}
+            />
           </div>
         </div>
         <div className={styles.editDiv}>
@@ -148,7 +149,8 @@ const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }
                 type="text"
                 placeholder="Febre"
                 value={selectedNodeData?.nome || ""}
-                disabled={true} />
+                disabled={true}
+              />
             </div>
             <div className={styles.varInput}>
               <label className={styles.label}>Variável</label>
@@ -167,12 +169,12 @@ const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }
                   min={0}
                   pattern="[0-9]+([\.,][0-9]+)?"
                   value={valor[selectedNode]}
-                  onChange={(e) => { 
-                    setValor(prevValor => {
-                              const novoValor = { ...prevValor };
-                              novoValor[selectedNode] = e.target.value;
-                              return novoValor;
-                            });
+                  onChange={(e) => {
+                    setValor((prevValor) => {
+                      const novoValor = { ...prevValor };
+                      novoValor[selectedNode] = e.target.value;
+                      return novoValor;
+                    });
                   }}
                 />
               </div>
@@ -184,7 +186,7 @@ const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }
               type="button"
               onClick={() => {
                 //console.log(diagnostico);
-                handleDiagnoticoSubmit();
+                handleDiagnosticoSubmit();
               } }
             >
               Salvar
@@ -193,12 +195,15 @@ const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit }
         </div>
       </div>
       <div className={styles.successToast}>
-          {toastVisible && (
-            <SuccessToast
-              title="Sucesso"
-              message="Diagnóstico salvo com sucesso"
-              onClose={() => { setToastVisible(false); } } />
-          )}
+        {toastVisible && (
+          <SuccessToast
+            title="Sucesso"
+            message="Diagnóstico salvo com sucesso"
+            onClose={() => {
+              setToastVisible(false);
+            }}
+          />
+        )}
       </div>
     </>
   );

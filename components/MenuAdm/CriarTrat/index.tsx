@@ -8,13 +8,15 @@ interface CreateTratProps {
   setCloseWindow: React.Dispatch<React.SetStateAction<string>>;
   windowName: string;
   onTratamentoSubmit: React.Dispatch<React.SetStateAction<Tratamento>>;
+  tratamento: Tratamento;
 }
 
 const CreateTrat: React.FC<CreateTratProps> = ({
   setOpenWindow,
   setCloseWindow,
   windowName,
-  onTratamentoSubmit
+  onTratamentoSubmit,
+  tratamento
   }) => {
     return (
       <FormBox
@@ -22,6 +24,7 @@ const CreateTrat: React.FC<CreateTratProps> = ({
         content={
         <TratFormContent 
           onTratamentoSubmit={onTratamentoSubmit}
+          trat={tratamento}
         />}
         showButton={true}
         setOpenWindow={setOpenWindow}
