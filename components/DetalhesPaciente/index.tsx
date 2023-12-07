@@ -22,6 +22,7 @@ import SuccessToast from "../toasts/successToast";
 import ExamesList from "../ExameList";
 import Link from "next/link";
 import useServerityIcon from "@/hooks/useSeverityIcon";
+import SintomasForm from "../Sintomas";
 /**
  * Renderiza o a página de detalhes do paciente.
  * @category Component
@@ -345,8 +346,8 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     });
     prescricao.cuidados?.splice(index, 1);
   };
-  
-  const handleDeleteMedicamento = () => {};
+
+  const handleDeleteMedicamento = () => { };
 
   useEffect(() => {
     const init = async () => {
@@ -412,6 +413,12 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
             disabled={!paciente || !paciente.id}
           />
           <TabItem
+            href="tab-sintomas"
+            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
+            title="Sintomas"
+            disabled={!paciente || !paciente.id}
+          />
+          <TabItem
             href="tab-prescricao"
             className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
             title="Prescrição"
@@ -474,8 +481,8 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                         Data de nascimento:{" "}
                         {paciente?.dataNascimento
                           ? moment(paciente?.dataNascimento).format(
-                              "DD/MM/YYYY",
-                            )
+                            "DD/MM/YYYY",
+                          )
                           : ""}
                       </p>
                       <p>Cartão SUS: {paciente.cns}</p>
@@ -576,13 +583,13 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                         </span> */}
                       </h1>
                       <input
-                          className="w-28 h-12 ml-2 mt-2 rounded-lg p-2 text-xl"
-                          type="number"
-                          step="0.1"
-                          value={temperatura}
-                          onChange={(e) => { setTemperatura(parseFloat(e.target.value)); }}
-                          max={44}
-                          min={30}
+                        className="w-28 h-12 ml-2 mt-2 rounded-lg p-2 text-xl"
+                        type="number"
+                        step="0.1"
+                        value={temperatura}
+                        onChange={(e) => { setTemperatura(parseFloat(e.target.value)); }}
+                        max={44}
+                        min={30}
                       />
                       <button
                         className="ml-4 w-fit text-white font-bold bg-green-500 hover:bg-green-400 px-4 py-2 rounded"
@@ -627,15 +634,13 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                               href={`tab-${item.id}`}
                               liClassName={`basis-1/5 ${colorMap.get(
                                 index,
-                              )} py-2 pl-2 ${
-                                index === 0
-                                  ? "rounded-bl-full rounded-tl-full"
-                                  : ""
-                              } ${
-                                index === 4
+                              )} py-2 pl-2 ${index === 0
+                                ? "rounded-bl-full rounded-tl-full"
+                                : ""
+                                } ${index === 4
                                   ? "rounded-br-full rounded-tr-full"
                                   : ""
-                              }`}
+                                }`}
                               active={true}
                             >
                               <p className="text-white">
@@ -709,7 +714,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
           <TabContents tabId="tab-prescricao" active={false}>
             {paciente.id && (
               <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
-                <h1 className="text-2xl">Sintomas</h1>
+                {/* <h1 className="text-2xl">Sintomas</h1>
                 <div className="flex items-center gap-4 justify-center">
                   <div className="flex flex-col mt-2 gap-6 py-6 bg-[#E1ECEA] px-6 w-[50%] rounded-lg items-center justify-center">
                     <p>Instabilidade Hemodinâmica:</p>
@@ -815,39 +820,39 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                           {(el.nome === "esp04" ||
                             el.nome === "esp05" ||
                             el.nome === "esp06") && (
-                            <div className="flex flex-col">
-                              <p>{el.opcoes[0]}</p>
-                              <div className="flex items-center justify-center gap-4">
-                                <input
-                                  type="radio"
-                                  id={el.opcoes[0] + "sim"}
-                                  name={el.opcoes[0]}
-                                  onChange={() =>
-                                    handleEspecificidadeRadio(el.nome)
-                                  }
-                                />
-                                <label htmlFor={el.opcoes[0] + "sim"}>
-                                  Sim
-                                </label>
-                                <input
-                                  type="radio"
-                                  id={el.opcoes[0] + "nao"}
-                                  name={el.opcoes[0]}
-                                  onChange={() =>
-                                    removeEspecificidadeRadio(el.nome)
-                                  }
-                                />
-                                <label htmlFor={el.opcoes[0] + "nao"}>
-                                  Não
-                                </label>
+                              <div className="flex flex-col">
+                                <p>{el.opcoes[0]}</p>
+                                <div className="flex items-center justify-center gap-4">
+                                  <input
+                                    type="radio"
+                                    id={el.opcoes[0] + "sim"}
+                                    name={el.opcoes[0]}
+                                    onChange={() =>
+                                      handleEspecificidadeRadio(el.nome)
+                                    }
+                                  />
+                                  <label htmlFor={el.opcoes[0] + "sim"}>
+                                    Sim
+                                  </label>
+                                  <input
+                                    type="radio"
+                                    id={el.opcoes[0] + "nao"}
+                                    name={el.opcoes[0]}
+                                    onChange={() =>
+                                      removeEspecificidadeRadio(el.nome)
+                                    }
+                                  />
+                                  <label htmlFor={el.opcoes[0] + "nao"}>
+                                    Não
+                                  </label>
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
                         </div>
                       ))}
                     </div>
                   </>
-                )}
+                )} */}
                 <h1 className="text-3xl mt-3">Prescrição</h1>
                 <div className="pt-4 flex gap-4 pb-8">
                   <div className="flex flex-col w-[50%] min-h-[200px] bg-[#a9aee3] p-4 rounded-lg">
@@ -953,6 +958,11 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
           <TabContents tabId="tabs-exames" active={false}>
             <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
               <ExamesList id={paciente.id?.toString() || ""} />
+            </div>
+          </TabContents>
+          <TabContents tabId="tab-sintomas" active={false}>
+            <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
+              <SintomasForm />
             </div>
           </TabContents>
         </div>
