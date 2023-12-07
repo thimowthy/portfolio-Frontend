@@ -80,7 +80,7 @@ export async function getServerSideProps<GetServerSideProps>() {
 
   return {
     props: {
-      pacientes: [],
+      pacientes: pacientes,
       nf: [],
     },
   };
