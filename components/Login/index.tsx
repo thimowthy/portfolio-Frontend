@@ -80,10 +80,9 @@ const Login = () => {
       } else if (response.status == 401) {
         setLoginError(true);
         // console.log("Invalid credentials");
-      }
-      else {
+      } else {
         setError(true);
-        // console.error("Error occurred during login:", error);  
+        // console.error("Error occurred during login:", error);
       }
     } catch (error) {
       setError(true);

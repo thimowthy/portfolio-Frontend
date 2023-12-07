@@ -44,7 +44,6 @@ const CrudUsuario = () => {
   }, []);
 
   const fetchUsers = async () => {
-
     const token = localStorage.getItem("Authorization");
 
     try {
@@ -52,7 +51,10 @@ const CrudUsuario = () => {
       const usersList = await fetcher({
         rota: "https://localhost:7091/Usuario/GetListUsers",
         metodo: "GET",
-        cabecalho: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` }
+        cabecalho: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       console.log(usersList);

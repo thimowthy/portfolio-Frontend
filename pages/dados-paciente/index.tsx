@@ -24,7 +24,7 @@ const DadosPacientePage = ({
       {};
     setSelectedPatient(pacienteAtivo);
   }, [router]);
-  const [selectedPatient, setSelectedPatient] = useState<Paciente>({});
+  const [selectedPatient, setSelectedPatient] = useState<any>({});
   4;
   return (
     <>
@@ -48,7 +48,7 @@ const DadosPacientePage = ({
 
 export default DadosPacientePage;
 
-export async function getStaticProps<GetStaticProps>() {
+export async function getServerSideProps<GetServerSideProps>() {
   const pacientes = await fetcher({
     metodo: "GET",
     rota: "https://localhost:7091/Paciente/GetListPatientsSemAlta",

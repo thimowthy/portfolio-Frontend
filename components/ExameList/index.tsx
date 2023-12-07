@@ -48,6 +48,7 @@ const ExamesList: React.FC<ExameListProps> = ({ id, setExame }) => {
       <div className="flex items-center">
         <h1 className="text-2xl text-black font-gray-600">Exames</h1>
       </div>
+
       {exames.length === 0 ? (
         <div className="w-full h-full flex flex-col items-center justify-center py-8">
           <Image
