@@ -593,7 +593,9 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
           </TabContents>
           <TabContents tabId="tabs-exames" active={false}>
             <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
-              <ExamesList id={paciente.id?.toString() || ""} />
+              <ExamesList
+                id={paciente.id?.toString() || ""}
+              />
             </div>
           </TabContents>
         </div>

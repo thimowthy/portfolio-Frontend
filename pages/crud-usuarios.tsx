@@ -49,7 +49,7 @@ const CrudUsuario = () => {
     try {
       setLoading(true);
       const usersList = await fetcher({
-        rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/GetListUsers",
+        rota: "https://localhost:7091/Usuario/GetListUsers",
         metodo: "GET",
         cabecalho: {
           "Content-Type": "application/json",

@@ -32,7 +32,7 @@ export default function EditUsuario({
 
       if (token) {
         const response = await fetch(
-          `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com//Usuario/PutUser/${user.id}`,
+          `https://localhost:7091//Usuario/PutUser/${user.id}`,
           {
             method: "PUT",
             headers: {

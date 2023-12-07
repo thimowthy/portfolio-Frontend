@@ -51,7 +51,7 @@ export default DadosPacientePage;
 export async function getServerSideProps<GetServerSideProps>() {
   const pacientes = await fetcher({
     metodo: "GET",
-    rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatientsSemAlta",
+    rota: "https://localhost:7091/Paciente/GetListPatientsSemAlta",
   });
 
   const isNeutropenico = (paciente: Paciente) => {

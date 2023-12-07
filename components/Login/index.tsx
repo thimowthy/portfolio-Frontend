@@ -46,7 +46,7 @@ const Login = () => {
        * @type {Response}
        */
       const response = await fetch(
-        "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Auth/Autenticacao",
+        "https://localhost:7091/Auth/Autenticacao",
         {
           method: "POST",
           headers: {
