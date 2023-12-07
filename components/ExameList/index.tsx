@@ -2,32 +2,44 @@ import React, { useEffect, useState } from "react";
 import ItemListaExame from "../ItemListaExame";
 import Image from "next/image";
 import exameCinza from "@/public/medical-report-gray.png";
-import Router from "next/router";
 
 interface ExameListProps {
   id: string;
+  setExame?: React.Dispatch<Hemograma>;
 }
-const ExamesList: React.FC<ExameListProps> = ({ id }) => {
-  const [exames, setExames] = useState<Exame[]>([]);
+const ExamesList: React.FC<ExameListProps> = ({ id, setExame }) => {
+  const [exames, setExames] = useState<Hemograma[]>([]);
 
   useEffect(() => {
     const fetchExames = async () => {
-      try {
-        const response = await fetch(
-          // TO DO - ATUALIZAR URL
-          "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetHemogramasFromPaciente?pacienteId=" +
-            id,
-        );
-        if (response.ok) {
-          const data = await response.json();
-          console.log(data);
-          setExames(data);
+      if (id) {
+        try {
+          const response = await fetch(
+            "https://localhost:7091/Exame/GetHemogramasFromPaciente?pacienteId=" +
+              id,
+          );
+          if (response.ok) {
+            const data = await response.json();
+            setExames(data);
+          }
+        } catch (error) {
+          console.error("Erro ao buscar exames:", error);
         }
-      } catch (error) {
-        console.error("Erro ao buscar exames:", error);
+      }
+      else {
+        try {
+          const response = await fetch(
+            "https://localhost:7091/Exame/GetAllExames",
+          );
+          if (response.ok) {
+            const data = await response.json();
+            setExames(data);
+          }
+        } catch (error) {
+          console.error("Erro ao buscar exames:", error);
+        }
       }
     };
-
     fetchExames();
   }, [id]);
 
@@ -35,21 +47,8 @@ const ExamesList: React.FC<ExameListProps> = ({ id }) => {
     <div>
       <div className="flex items-center">
         <h1 className="text-2xl text-black font-gray-600">Exames</h1>
-        <button
-          className="ml-auto mr-10px h-40px px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-600"
-          onClick={() => {
-            Router.push({
-              pathname: "/solicitar-exame",
-              query: { id },
-            });
-            
-          }}
-        >
-          Solicitar Exame
-        </button>
       </div>
 
-      
       {exames.length === 0 ? (
         <div className="w-full h-full flex flex-col items-center justify-center py-8">
           <Image
@@ -67,12 +66,11 @@ const ExamesList: React.FC<ExameListProps> = ({ id }) => {
         <ul>
           {exames.map((exame, index) => (
             <ItemListaExame
-              nome={exame.nome}
-              dataSolicitacao={exame.dataSolicitacao}
-              dataResultado={exame.dataResultado}
-              solicitante={exame.solicitante}
+              id={id}
+              exame={exame}
+              setExame={setExame}
               key={index}
-            ></ItemListaExame>
+            />
           ))}
         </ul>
       )}

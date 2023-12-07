@@ -1,12 +1,12 @@
 import Image from "next/image";
 import exameIcon from "@/public/medical-report.png";
-import { format, parseISO } from "date-fns";
+import { convertDateFormat } from "../../utils/convertDateFormat";
+import { ItemExameProps } from "./ItemExameProps";
 
-const ItemListaExame: React.FC<Exame> = ({
-  nome,
-  dataSolicitacao,
-  dataResultado,
-  solicitante,
+const ItemListaExame: React.FC<ItemExameProps> = ({
+  id,
+  exame,
+  setExame,
 }) => {
   return (
     <li
@@ -28,24 +28,23 @@ const ItemListaExame: React.FC<Exame> = ({
             {"Hemograma"}
           </p>
           <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-base">
-            {"Data da solicitação: " +
-              format(parseISO(dataSolicitacao), "dd/mm/yyyy")}
+            {"Data da solicitação: " + convertDateFormat(exame?.dataSolicitacao)}
           </p>
           <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-base">
-            {"Data do resultado: " +
-              format(parseISO(dataResultado), "dd/mm/yyyy")}
+            {"Data do resultado: " + convertDateFormat(exame.dataResultado)}
           </p>
         </div>
       </div>
       <div className="hidden sm:flex sm:flex-col sm:items-center justify-end">
-        <a
-          href="https://treinamento.ebserh.gov.br/aghu/pages/casca/login.xhtml"
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
           className="bg-blue-700 hover:bg-blue-900 px-5 mt-4 py-1 text-sm leading-5 rounded-lg font-semibold text-white"
+          onClick={() => {
+            if (setExame)
+              setExame(exame);
+          }}
         >
           Ver Exame
-        </a>
+        </button>
       </div>
     </li>
   );

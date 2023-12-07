@@ -1,0 +1,29 @@
+.divExame {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.form input {
+  display: block;
+  color: #000;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 4px;
+  height: 40px; 
+  margin-right: 16px;
+}
+
+.btnDiv {
+  color: #000;
+  text-align: center;
+  margin: 25px 0 20px 0;
+}
+
+.form label {
+  font-weight: bold;
+  color: #000;
+  margin-right: 20px;
+}

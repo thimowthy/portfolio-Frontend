@@ -1,31 +1,33 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
-import { useToasterStore } from "react-hot-toast/headless";
 import exclamationImg from "../public/exclamation.svg";
 import browserNotification from "../utils/browserNotification";
 import syncNotification from "./syncNotifications";
 import api from "@/helpers";
-import Link from "next/link";
 /**
  * Component that show the notifications in the layout.
  * @component
  */
 export default function Notifications() {
-  const router = useRouter();
   browserNotification.requestPermission();
-  const { toasts } = useToasterStore();
   const [notifications, setNotifications] = useState([]);
-  useEffect(() => {
-    const getAllNotifications = async () => {
-      const allNotifications = await syncNotification();
-      setNotifications(allNotifications);
-    };
-    setInterval(getAllNotifications, 30000);
+  const router = useRouter();
+  const isLoginPage = router.pathname === "/login";
 
-    getAllNotifications();
+  useEffect(() => {
+    if (!isLoginPage) {
+      const getAllNotifications = async () => {
+        const allNotifications = await syncNotification();
+        setNotifications(allNotifications);
+      };
+      setInterval(getAllNotifications, 30000);
+
+      getAllNotifications();
+    }
   }, []);
 
   return (

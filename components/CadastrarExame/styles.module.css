@@ -2,14 +2,8 @@
     height: 70px
   }
   
-  .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 630px;
-  }
   .menuForm {
-    width: 1050px;
+    width: 870px;
     height: auto;
     border-radius: 8px;
     padding: 0 40px 0 40px;
