@@ -22,7 +22,7 @@ async function loadPaciente(id: any) {
   try {
     const paciente = await fetcher({
       metodo: "GET",
-      rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetById?pacienteId=${id}`,
+      rota: `https://localhost:7091/Paciente/GetById?pacienteId=${id}`,
     });
     return paciente;
   } catch (err) {
@@ -67,7 +67,6 @@ export default function EditUserPage() {
     ];
     for (const field of requiredFields) {
       const fieldValue = formData[field as keyof typeof formData];
-      console.log(fieldValue);
       if (!fieldValue) {
         setError(true);
         return false;
@@ -81,7 +80,7 @@ export default function EditUserPage() {
         rota:
           "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/EditPaciente?pacienteId=" +
           id,
-        metodo: "POST",
+        metodo: "PUT",
         body: formDataClone,
       });
       if (result) {
@@ -101,22 +100,41 @@ export default function EditUserPage() {
   useEffect(() => {
     async function load() {
       setIsFetching(true);
-      const p = await loadPaciente(id);
-      setPaciente(p);
+      try {
+        const paciente2 = await fetcher({
+          metodo: "GET",
+          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetById?pacienteId=${id}`,
+        });
+        setPaciente(paciente2);
+        setFormData((prevState) => ({
+          ...prevState,
+          ["nome"]: paciente2.nome,
+          ["cns"]: paciente2.cns,
+          ["cpf"]: paciente2.cpf,
+          ["dataNascimento"]: paciente2.dataNascimento,
+          ["tipoSanguineo"]: paciente2.tipoSanguineo,
+          ["numeroProntuario"]: paciente2.numeroProntuario,
+        }));
+      } catch (err) {
+        console.log(err);
+      }
     }
-    if (router.isReady) {
-      load();
-      setFormData((prevState) => ({
-        ...prevState,
-        ["nome"]: paciente.nome,
-        ["cns"]: paciente.cns,
-        ["cpf"]: paciente.cpf,
-        ["dataNascimento"]: paciente.dataNascimento,
-        ["tipoSanguineo"]: paciente.tipoSanguineo,
-        ["numeroProntuario"]: paciente.tipoSanguineo,
-      }));
-    }
-  }, [router.isReady]);
+    load();
+    // if (router.isReady) {
+    // const loadedPaciente = load(id);
+    // console.log(loadedPaciente);
+    // setPaciente(loadedPaciente);
+    // setFormData((prevState) => ({
+    //   ...prevState,
+    //   ["nome"]: paciente.nome,
+    //   ["cns"]: paciente.cns,
+    //   ["cpf"]: paciente.cpf,
+    //   ["dataNascimento"]: paciente.dataNascimento,
+    //   ["tipoSanguineo"]: paciente.tipoSanguineo,
+    //   ["numeroProntuario"]: paciente.tipoSanguineo,
+    // }));
+    // }
+  }, []);
   // async function load() {
   //   setIsFetching(true);
   //   await loadPaciente();
@@ -286,7 +304,7 @@ export default function EditUserPage() {
                     >
                       {TiposSanguineos.map((tipo) => (
                         <option
-                          key="tipo.id"
+                          key={tipo.id}
                           value={tipo.id}
                           selected={paciente.tipoSanguineo === tipo.id}
                         >
