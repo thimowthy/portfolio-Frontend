@@ -11,16 +11,16 @@
         <path
             id="secondary"
             d="M3,17H7M5,19V15"
-            style="fill: none; stroke: #aaa; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;">
+            style="fill: none; stroke: #689f92; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;">
         </path>
         <path
             id="primary"
             d="M9,21H20a1,1,0,0,0,1-1,7,7,0,0,0-7-7H12a6.91,6.91,0,0,0-2,.29"
-            style="fill: none; stroke: #ccc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5;">
+            style="fill: none; stroke: #95bbb2; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5;">
         </path>
         <circle
             id="primary-2"
             data-name="primary" cx="13" cy="8" r="5"
-            style="fill: none; stroke: #ccc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5;">
+            style="fill: none; stroke: #95bbb2; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5;">
         </circle>
 </svg>
