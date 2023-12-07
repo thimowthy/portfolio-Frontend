@@ -11,8 +11,7 @@ export const useDashboard = () => {
   ) => {
     try {
       const { dadosInternamentos, pacientesNeutropenia } = await fetcher({
-        // rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetDashboard",
-        rota: "https://localhost:7091/Internacao/GetDashboard",
+        rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetDashboard",
         metodo: "GET",
       });
       setNeutropenicosFunction(pacientesNeutropenia);
