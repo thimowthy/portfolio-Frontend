@@ -175,39 +175,48 @@ const ExameForm: React.FC<CrudExameProps> = ({
     setSolicitadoPor("");
     setDataResultadoFormated("");
     setDataSolicitacaoFormated("");
-
   };
 
   useEffect(() => {
+    const fetchPacienteData = async () => {
+      try {
+        const responseInternamento = await fetch(
+          `https://localhost:7091/Internacao/GetPacientePeloInternamento?internamentoId=${exame?.idInternamento}`,
+          { method: "GET" },
+        );
+
+        const internamento = await responseInternamento.json();
+        const pacienteEncontrado = internamento?.Paciente;
+
+        setIdPaciente(pacienteEncontrado.ID);
+        setProntuario(pacienteEncontrado.NumeroProntuario);
+        setCPF(pacienteEncontrado.CPF || "");
+        setNomePaciente(pacienteEncontrado.Nome || "");
+        setCNS(pacienteEncontrado.CNS || "");
+        setUnidade(internamento.Leito || "");
+        setDataNasc(pacienteEncontrado.DataNascimento || "");
+        setDataAdmissao(internamento.DataAdmissao || "");
+        setPacienteNaoEncontrado(false);
+
+      } catch (error) {
+        console.error("Ocorreu um erro durante a solicitação:", error);
+      }
+    };
     if (exame) {
+
+      fetchPacienteData();
+
       const medicoEncontrado = medicos.find(medico => medico.id === exame.idSolicitante);
-      const pacienteEncontrado = pacientes.find(medico => medico.id === exame.idSolicitante);
 
       if (medicoEncontrado) {
         setIdMedico(medicoEncontrado.id);
         setCpfMedico(medicoEncontrado.cpf);
         setSolicitadoPor(medicoEncontrado.nome);
-        // setIdPaciente(pacienteEncontrado.id);
-        // setCPF(pacienteEncontrado.cpf || "");
-        // setNomePaciente(pacienteEncontrado.nome || "");
-        // setCNS(pacienteEncontrado.cns || "");
-        // setUnidade(pacienteEncontrado.unidade || "");
-        // setDataNasc(convertDateFormat(pacienteEncontrado.dataNascimento, "yyyy-mm-dd") || "");
-        // setDataAdmissao(convertDateFormat(pacienteEncontrado.dataAdmissao, "yyyy-mm-dd") || "");
         setDataSolicitacao(convertDateFormat(exame.dataSolicitacao, "yyyy-mm-dd"));
         setDataResultado(convertDateFormat(exame.dataResultado, "yyyy-mm-dd"));
       }
-      else {
-        setCpfMedico("");
-        setSolicitadoPor("");
-        setSolicitadoPor("");
-        setCPF("");
-        setNomePaciente("");
-        setCNS("");
-        setUnidade("");
-        setDataNasc("");
-        setDataAdmissao("");
-      }
+      else
+        cleanUseStates();
     }
     else
       cleanUseStates();

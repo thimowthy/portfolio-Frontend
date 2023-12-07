@@ -4,6 +4,7 @@ type Exame = {
   dataResultado: string;
   idSolicitante: number;
   solicitante: string;
+  idInternamento: number;
 };
 
 type Hemograma = Exame & { 
