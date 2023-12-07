@@ -15,9 +15,13 @@ export const AuthProvider = ({
   const router = useRouter();
   const authRole = useAuthRole();
   const cargo = authRole?.cargo || "";
+  console.log(cargo);
   useEffect(() => {
-    if (permission && !permission.includes(cargo)) {
-      // TODO: add && cargo !== "ADMINISTRADOR"
+    if (
+      permission &&
+      !permission.includes(cargo) &&
+      cargo !== "ADMINISTRADOR"
+    ) {
       if (redirect) {
         router.push(redirect);
         return;

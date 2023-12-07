@@ -73,6 +73,9 @@ const Login = () => {
           case "ENFERMEIRO":
             Router.push("/dados-paciente");
             break;
+          case "LABORATORISTA":
+            Router.push("/cadastrar-exame");
+            break;
           default:
             Router.push("/dashboard");
         }
