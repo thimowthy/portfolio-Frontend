@@ -54,34 +54,34 @@ export async function getServerSideProps<GetServerSideProps>() {
     rota: "https://localhost:7091/Paciente/GetListPatientsSemAlta",
   });
 
-  const isNeutropenico = (paciente: Paciente) => {
-    const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
-    let situacoesPacienteCopy = [...situacoesPaciente];
-    const situacaoAtual = situacoesPacienteCopy?.pop();
+  // const isNeutropenico = (paciente: Paciente) => {
+  //   const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
+  //   let situacoesPacienteCopy = [...situacoesPaciente];
+  //   const situacaoAtual = situacoesPacienteCopy?.pop();
 
-    if (situacaoAtual?.situacaoDiagnostico?.neutropenia) {
-      return true;
-    }
-    return false;
-  };
-  const febre = (paciente: Paciente) => {
-    const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
-    let situacoesPacienteCopy = [...situacoesPaciente];
-    const situacaoAtual = situacoesPacienteCopy?.pop();
+  //   if (situacaoAtual?.situacaoDiagnostico?.neutropenia) {
+  //     return true;
+  //   }
+  //   return false;
+  // };
+  // const febre = (paciente: Paciente) => {
+  //   const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
+  //   let situacoesPacienteCopy = [...situacoesPaciente];
+  //   const situacaoAtual = situacoesPacienteCopy?.pop();
 
-    if (situacaoAtual?.situacaoDiagnostico?.febre) {
-      return true;
-    }
-    return false;
-  };
-  const nf = pacientes?.filter(
-    (paciente: Paciente) => febre(paciente) && isNeutropenico(paciente),
-  );
+  //   if (situacaoAtual?.situacaoDiagnostico?.febre) {
+  //     return true;
+  //   }
+  //   return false;
+  // };
+  // const nf = pacientes?.filter(
+  //   (paciente: Paciente) => febre(paciente) && isNeutropenico(paciente),
+  // );
 
   return {
     props: {
-      pacientes,
-      nf,
+      pacientes:[],
+      nf:[],
     },
   };
 }
