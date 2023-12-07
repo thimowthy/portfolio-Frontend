@@ -31,7 +31,7 @@ const CadastrarExame = () => {
     const fetchData = async () => {
       try {
         const responsePacientes = await fetch(
-          "https://localhost:7091/Paciente/GetListPatientsSemAlta",
+          "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatientsSemAlta",
           { method: "GET" },
         );
 
@@ -41,7 +41,7 @@ const CadastrarExame = () => {
         setPacientes(pacientes);
 
         const responseMedicos = await fetch(
-          "https://localhost:7091/Usuario/GetListUsers?filtroCargo=MEDICO",
+          "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/GetListUsers?filtroCargo=MEDICO",
           { method: "GET" },
         );
 

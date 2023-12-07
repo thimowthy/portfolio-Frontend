@@ -15,7 +15,7 @@ const ExamesList: React.FC<ExameListProps> = ({ id, setExame }) => {
       if (id) {
         try {
           const response = await fetch(
-            "https://localhost:7091/Exame/GetHemogramasFromPaciente?pacienteId=" +
+            "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetHemogramasFromPaciente?pacienteId=" +
               id,
           );
           if (response.ok) {
@@ -25,11 +25,10 @@ const ExamesList: React.FC<ExameListProps> = ({ id, setExame }) => {
         } catch (error) {
           console.error("Erro ao buscar exames:", error);
         }
-      }
-      else {
+      } else {
         try {
           const response = await fetch(
-            "https://localhost:7091/Exame/GetAllExames",
+            "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetAllExames",
           );
           if (response.ok) {
             const data = await response.json();
