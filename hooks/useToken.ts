@@ -1,6 +1,6 @@
 import checkAuthentication from "@/utils/checkAuth";
 
-const useToken = async () => {
+const useToken = () => {
   const token = localStorage.getItem("Authorization");
   if (token && checkAuthentication()) {
     return token;

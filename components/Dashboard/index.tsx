@@ -11,25 +11,23 @@ import Link from "next/link";
 import TabList from "../TabList";
 import TabItem from "../TabItem";
 import TabContents from "../TabContents/index";
+import { useDashboard } from "@/hooks/useDashboard";
 export default function Dashboard() {
   const InitTab = dynamic(() => import("../Tab"), {
     ssr: false,
   });
 
-  const dadosLeitos = [
-    { leito: "01", risco: "alto" },
-    { leito: "02", risco: "alto" },
-    { leito: "03", risco: "baixo" },
-    { leito: "04", risco: "baixo" },
-    { leito: "05", risco: "baixo" },
-  ];
+  const [neutropenicos, internamentos] = useDashboard();
 
   const data = {
-    labels: ["Pacientes internados", "Pacientes recuperados"],
+    labels: ["Pacientes neutropênicos", "Pacientes internados"],
     datasets: [
       {
         label: "Visão geral",
-        data: [10, 7],
+        data: [
+          neutropenicos,
+          typeof internamentos == "object" ? internamentos.length : 0,
+        ],
         backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(75, 192, 192, 0.4)"],
         borderColor: ["rgba(255, 99, 132, 1)", "rgba(75, 192, 192, 1)"],
         borderWidth: 1,
@@ -63,10 +61,12 @@ export default function Dashboard() {
           </aside>
 
           <div className="bg-[#fff] p-5 rounded-lg flex flex-col justify-center items-center h-2/5">
-            <h1 className="text-lg">Medicação pendente</h1>
+            <h1 className="text-lg">Pacientes neutropênicos</h1>
             <div className="inline-flex mt-4 items-center">
               <Image src={BedAlto} alt="Alto Risco" width="60" />
-              <span className="text-[#cB2828] ml-4 text-2xl">07</span>
+              <span className="text-[#cB2828] ml-4 text-2xl">
+                {neutropenicos}
+              </span>
             </div>
           </div>
         </div>
@@ -125,37 +125,58 @@ export default function Dashboard() {
             className="rounded-lg bg-[#fff] pb-4 px-4 h-2/5"
             style={{ border: "1px solid #689f92" }}
           >
-            <h2 className="text-center mb-2 mt-4 text-lg">
-              Leitos prioritários
-            </h2>
-            <div className="grid grid-cols-3">
-              {dadosLeitos.map((el) => (
-                <div className="flex items-center gap-4" key={el.leito}>
-                  <p
-                    className={`${
-                      el.risco === "alto" ? "text-[#EB2828]" : "text-[#689F92]"
-                    } text-2xl`}
-                  >
-                    {el.leito}
-                  </p>
-                  {el.risco === "alto" && (
-                    <Image
-                      src={BedAlto}
-                      alt="Alto Risco"
-                      width="60"
-                      className="my-1"
-                    />
-                  )}
-                  {el.risco === "baixo" && (
-                    <Image
-                      src={BedBaixo}
-                      alt="Baixo Risco"
-                      width="60"
-                      className="my-1"
-                    />
-                  )}
-                </div>
-              ))}
+            <h2 className="text-center mb-2 mt-4 text-lg">Internamento</h2>
+            <div className="grid grid-cols-5">
+              {typeof internamentos == "object" &&
+                internamentos.map((el: any) => (
+                  <div className="flex items-center gap-4" key={el.leito}>
+                    <p
+                      className={`${
+                        el.risco === "ALTO"
+                          ? "text-[#EB2828]"
+                          : "text-[#689F92]"
+                      } text-xl`}
+                    >
+                      {el.leito}
+                    </p>
+                    {el.risco === "ALTO" && (
+                      <Image
+                        src={BedAlto}
+                        alt="Alto Risco"
+                        width="40"
+                        className="my-1"
+                      />
+                    )}
+                    {el.risco === "BAIXO" && (
+                      <Image
+                        src={BedBaixo}
+                        alt="Baixo Risco"
+                        width="40"
+                        className="my-1"
+                      />
+                    )}
+                  </div>
+                ))}
+            </div>
+            <div className="absolute bottom-[40px] float-right flex">
+              <div className="flex items-center justify-center mr-4">
+                <span className="mr-2">Baixo risco</span>
+                <Image
+                  src={BedBaixo}
+                  alt="Baixo Risco"
+                  width="30"
+                  className="my-1"
+                />
+              </div>
+              <div className="flex items-center justify-center mr-2">
+                <span className="mr-2">Alto risco</span>
+                <Image
+                  src={BedAlto}
+                  alt="Alto Risco"
+                  width="30"
+                  className="my-1"
+                />
+              </div>
             </div>
           </section>
         </div>

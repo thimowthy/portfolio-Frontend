@@ -9,6 +9,7 @@ import { useState } from "react";
 import RowLoading from "@/components/SkeletonLoading/RowLoading";
 import { tiposSanguineosMap } from "@/utils/maps";
 import Swal from "sweetalert2";
+import { AuthProvider } from "@/components/AuthProvider";
 
 export default function Pacientes({
   listPacientes,
@@ -84,6 +85,7 @@ export default function Pacientes({
     <>
       <SeoConfig title="Lista de pacientes" />
       <Header />
+      <AuthProvider permission={["ADMINISTRADOR"]} redirect="/dados-paciente" />
       <div className="flex min-h-full min-w-full items-center">
         <div className="w-[100%] h-[80vh] mx-auto pt-6 px-7 bg-[#fff] rounded-lg flex flex-col relative">
           <div className="flex w-full justify-end mb-4 items-center ">
