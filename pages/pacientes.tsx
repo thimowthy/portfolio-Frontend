@@ -90,12 +90,12 @@ export default function Pacientes({
           <div className="flex w-full justify-end mb-4">
             <button
               onClick={loadPacientes}
-              className="rounded-lg py-3 px-3 mr-3 bg-[#C55A11] text-[#fff] hover:bg-[#ED7C31] transition-colors"
+              className="rounded-lg py-3 px-3 mr-3 bg-orange-500 text-[#fff] hover:bg-[#ED7C31] transition-colors"
             >
               Atualizar
             </button>
             <Link
-              className="flex gap-3 box-border w-[250px] rounded-lg py-3 px-3 cursor-pointer bg-[#C55A11] text-[#fff] hover:bg-[#ED7C31] transition-colors"
+              className="flex gap-3 box-border w-[250px] rounded-lg py-3 px-3 cursor-pointer bg-orange-500 text-[#fff] hover:bg-[#ED7C31] transition-colors"
               href="/adicionar-paciente"
             >
               <Image src={AddUser} alt="Adicionar Usuário" className="invert" />

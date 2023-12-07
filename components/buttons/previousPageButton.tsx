@@ -12,7 +12,7 @@ const PreviousPageButton = ({
 }) => {
   return (
     <Link href={href} className={`flex items-center ${className}`}>
-      <BackIcon width={20} height={20} color="#333" />
+      <BackIcon width={30} height={30} color="#333" />
       <h1>{title}</h1>
     </Link>
   );

@@ -125,7 +125,7 @@ export default function TabDadosPaciente({
                 type="button"
                 title="Adicionar paciente"
                 onClick={() => {
-                  router.push("/pacientes");
+                  router.push("/adicionar-paciente");
                 }}
               >
                 <span className="text-white text-xl font-bold">+</span>
