@@ -12,7 +12,7 @@ export default async function SyncNotification() {
     token = "";
   }
   const notifications = await fetcher({
-    rota: "https://localhost:7091/Notificacao/GetAllNotSent",
+    rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Notificacao/GetAllNotSent",
     cabecalho: {
       Authorization: `Bearer ${token}`,
     },

@@ -19,12 +19,7 @@ const tipos: TipoOption[] = Object.values(TiposExame).map((tipo, index) => ({
 const timeZone = "America/Sao_Paulo";
 const currentDate = format(new Date(), "yyyy-MM-dd", { timeZone });
 
-
-const ExameForm: React.FC<CrudExameProps> = ({
-  pacientes,
-  medicos,
-  exame
-}) => {
+const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
   const [idPaciente, setIdPaciente] = useState<number>();
   const [cpf, setCPF] = useState("");
   const [cpfFormated, setCpfFormated] = useState("");
@@ -34,7 +29,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
   const [dataNasc, setDataNasc] = useState("");
   const [dataAdmissao, setDataAdmissao] = useState("");
   const [unidade, setUnidade] = useState("");
-  
+
   const [idMedico, setIdMedico] = useState<number>();
   const [cpfMedicoFormated, setCpfMedicoFormated] = useState("");
   const [cpfMedico, setCpfMedico] = useState("");
@@ -45,18 +40,21 @@ const ExameForm: React.FC<CrudExameProps> = ({
   const [dataSolicitacaoFormated, setDataSolicitacaoFormated] = useState("");
   const [dataResultado, setDataResultado] = useState(currentDate);
   const [dataResultadoFormated, setDataResultadoFormated] = useState("");
-  const [tipoExame, setTipoExame] = useState<TiposExame>(TiposExame.HEMORAGRAMA);
+  const [tipoExame, setTipoExame] = useState<TiposExame>(
+    TiposExame.HEMORAGRAMA,
+  );
 
   const [pacienteNaoEncontrado, setPacienteNaoEncontrado] = useState(false);
-  const [neutrofilos, setNeutrofilos] = useState<number>(exame?.neutrofilos || 0);
+  const [neutrofilos, setNeutrofilos] = useState<number>(
+    exame?.neutrofilos || 0,
+  );
 
   const [idInternacao, setIdInternacao] = useState<number>();
-  
-  const formatCPF = (cpf: string) => {
 
+  const formatCPF = (cpf: string) => {
     const cpfFormatado = cpf.replace(
       /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
-      "$1.$2.$3-$4"
+      "$1.$2.$3-$4",
     );
 
     return cpfFormatado;
@@ -66,26 +64,27 @@ const ExameForm: React.FC<CrudExameProps> = ({
     if (dataResultado)
       setDataResultadoFormated(convertDateFormat(dataResultado, "yyyy-mm-dd"));
     if (dataSolicitacao)
-      setDataSolicitacaoFormated(convertDateFormat(dataSolicitacao, "yyyy-mm-dd"));
+      setDataSolicitacaoFormated(
+        convertDateFormat(dataSolicitacao, "yyyy-mm-dd"),
+      );
   }, [dataSolicitacao, dataResultado]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `https://localhost:7091/Internacao/GetInternacaoAtual?pacienteId=${idPaciente}`,
-          { method: "GET" }
+          `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetInternacaoAtual?pacienteId=${idPaciente}`,
+          { method: "GET" },
         );
         if (response.ok) {
-          const internacao = await response.json();  
+          const internacao = await response.json();
           setIdInternacao(internacao.Id);
         }
-      } catch (error) { }
+      } catch (error) {}
     };
-    if (idPaciente)
-      fetchData();
+    if (idPaciente) fetchData();
   }, [idPaciente]);
-  
+
   useEffect(() => {
     setCadastradoPor(getId(localStorage.getItem("Authorization")));
   }, []);
@@ -109,11 +108,11 @@ const ExameForm: React.FC<CrudExameProps> = ({
           temperatura: 0,
           resultado: "string",
           idInternamento: idInternacao,
-          idSolicitante: idMedico
+          idSolicitante: idMedico,
         };
         try {
           const response = await fetch(
-            "https://localhost:7091/Exame/AddHemograma",
+            "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/AddHemograma",
             {
               method: "POST",
               headers: {
@@ -137,12 +136,12 @@ const ExameForm: React.FC<CrudExameProps> = ({
         const hemogramaData = {
           contagemNeutrofilos: neutrofilos,
           dataSolicitacao: dataSolicitacao,
-          dataResultado: dataResultado
+          dataResultado: dataResultado,
         };
         console.log(hemogramaData);
         try {
           const response = await fetch(
-            `https://localhost:7091/Exame/PutExame/${exame.id}`,
+            `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/PutExame/${exame.id}`,
             {
               method: "PUT",
               headers: {
@@ -160,7 +159,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
         } catch (error) {
           console.error("Error occurred during request:", error);
         }
-      } 
+      }
     }
   };
 
@@ -181,7 +180,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
     const fetchPacienteData = async () => {
       try {
         const responseInternamento = await fetch(
-          `https://localhost:7091/Internacao/GetPacientePeloInternamento?internamentoId=${exame?.idInternamento}`,
+          `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetPacientePeloInternamento?internamentoId=${exame?.idInternamento}`,
           { method: "GET" },
         );
 
@@ -197,35 +196,34 @@ const ExameForm: React.FC<CrudExameProps> = ({
         setDataNasc(pacienteEncontrado.DataNascimento || "");
         setDataAdmissao(internamento.DataAdmissao || "");
         setPacienteNaoEncontrado(false);
-
       } catch (error) {
         console.error("Ocorreu um erro durante a solicitação:", error);
       }
     };
     if (exame) {
-
       fetchPacienteData();
 
-      const medicoEncontrado = medicos.find(medico => medico.id === exame.idSolicitante);
+      const medicoEncontrado = medicos.find(
+        (medico) => medico.id === exame.idSolicitante,
+      );
 
       if (medicoEncontrado) {
         setIdMedico(medicoEncontrado.id);
         setCpfMedico(medicoEncontrado.cpf);
         setSolicitadoPor(medicoEncontrado.nome);
-        setDataSolicitacao(convertDateFormat(exame.dataSolicitacao, "yyyy-mm-dd"));
+        setDataSolicitacao(
+          convertDateFormat(exame.dataSolicitacao, "yyyy-mm-dd"),
+        );
         setDataResultado(convertDateFormat(exame.dataResultado, "yyyy-mm-dd"));
-      }
-      else
-        cleanUseStates();
-    }
-    else
-      cleanUseStates();
+      } else cleanUseStates();
+    } else cleanUseStates();
   }, [exame, medicos, pacientes]);
 
   const autoFillPacienteInputs = () => {
-    
-    const pacienteEncontrado = pacientes.find(paciente => paciente.numeroProntuario === numProntuario);
-    
+    const pacienteEncontrado = pacientes.find(
+      (paciente) => paciente.numeroProntuario === numProntuario,
+    );
+
     if (pacienteEncontrado) {
       setPacienteNaoEncontrado(false);
       setIdPaciente(pacienteEncontrado?.id);
@@ -235,23 +233,20 @@ const ExameForm: React.FC<CrudExameProps> = ({
       setUnidade(pacienteEncontrado.unidade || "");
       setDataNasc(pacienteEncontrado.dataNascimento || "");
       setDataAdmissao(pacienteEncontrado.dataAdmissao || "");
-    }
-    else {
+    } else {
       setPacienteNaoEncontrado(true);
       cleanUseStates();
     }
   };
 
   const autoFillMedicoInputs = () => {
-    
-    const medicoEncontrado = medicos.find(medico => medico.cpf === cpfMedico);
-    
+    const medicoEncontrado = medicos.find((medico) => medico.cpf === cpfMedico);
+
     if (medicoEncontrado) {
       setIdMedico(medicoEncontrado?.id);
       setCpfMedico(medicoEncontrado.cpf || "");
       setSolicitadoPor(medicoEncontrado.nome || "");
-    }
-    else {
+    } else {
       cleanUseStates();
     }
   };
@@ -267,14 +262,14 @@ const ExameForm: React.FC<CrudExameProps> = ({
               type="number"
               step={1}
               value={numProntuario}
-              onChange={(e) => { setProntuario(e.target.value); }}
+              onChange={(e) => {
+                setProntuario(e.target.value);
+              }}
               onBlur={autoFillPacienteInputs}
               disabled={Boolean(exame)}
             />
             {pacienteNaoEncontrado && (
-              <span className="text-red-500">
-                Paciente não encontrado
-              </span>
+              <span className="text-red-500">Paciente não encontrado</span>
             )}
           </div>
           <div>
@@ -284,36 +279,23 @@ const ExameForm: React.FC<CrudExameProps> = ({
               type="text"
               maxLength={11}
               value={cpfFormated}
-              onChange={(e) => { setCPF(e.target.value); }}
+              onChange={(e) => {
+                setCPF(e.target.value);
+              }}
               disabled
             />
           </div>
           <div>
             <label>CNS</label>
-            <input
-              className="w-36"
-              type="text"
-              value={cns}
-              disabled
-            />
+            <input className="w-36" type="text" value={cns} disabled />
           </div>
           <div>
             <label>Data de Admissão</label>
-            <input
-              className="w-40"
-              type="date"
-              value={dataAdmissao}
-              disabled
-            />
+            <input className="w-40" type="date" value={dataAdmissao} disabled />
           </div>
           <div className="w-32">
             <label>Unidade</label>
-            <input
-              className="w-full"
-              type="text"
-              value={unidade}
-              disabled
-            />
+            <input className="w-full" type="text" value={unidade} disabled />
           </div>
         </div>
         <div className="flex mb-8">
@@ -328,12 +310,7 @@ const ExameForm: React.FC<CrudExameProps> = ({
           </div>
           <div className="ml-4">
             <label>Data de Nascimento</label>
-            <input
-              className="w-40"
-              type="date"
-              value={dataNasc}
-              disabled
-            />
+            <input className="w-40" type="date" value={dataNasc} disabled />
           </div>
         </div>
       </div>
@@ -345,7 +322,9 @@ const ExameForm: React.FC<CrudExameProps> = ({
             type="text"
             value={cpfMedicoFormated}
             maxLength={11}
-            onChange={(e) => { setCpfMedico(e.target.value); }}
+            onChange={(e) => {
+              setCpfMedico(e.target.value);
+            }}
             onBlur={autoFillMedicoInputs}
             disabled={Boolean(exame)}
           />
@@ -356,7 +335,9 @@ const ExameForm: React.FC<CrudExameProps> = ({
             className="w-full"
             type="text"
             value={solicitadoPor}
-            onChange={(e) => { setSolicitadoPor(e.target.value); }}
+            onChange={(e) => {
+              setSolicitadoPor(e.target.value);
+            }}
             disabled
           />
         </div>
@@ -376,7 +357,9 @@ const ExameForm: React.FC<CrudExameProps> = ({
           <input
             type="date"
             value={dataResultadoFormated}
-            onChange={(e) => { setDataResultado(e.target.value); }}
+            onChange={(e) => {
+              setDataResultado(e.target.value);
+            }}
             required
           />
         </div>
@@ -384,7 +367,9 @@ const ExameForm: React.FC<CrudExameProps> = ({
           <label>Tipo</label>
           <select
             className="block h-10 border rounded p-2 border-gray-300 w-36"
-            onChange={(e) => { setTipoExame(e.target.value as TiposExame); }}
+            onChange={(e) => {
+              setTipoExame(e.target.value as TiposExame);
+            }}
             value={tipoExame}
           >
             {tipos.map((tipoOption) => (
@@ -396,53 +381,48 @@ const ExameForm: React.FC<CrudExameProps> = ({
         </div>
         <div className="flex ml-2">
           <div>
-            { tipoExame === TiposExame.HEMORAGRAMA && (
-            <div>
-              <label>Contagem de Neutrófilos</label>
-              <input
-                type="number"
-                maxLength={5}
-                value={neutrofilos}
-                onChange={(e) => setNeutrofilos(parseInt(e.target.value || "0")) }
-                required
-              />
-            </div>
-          )}
-          { tipoExame === TiposExame.OUTRO && (
-            <div>
-              <label>Upload do Exame</label>
-              <input
-                className="w-64"
-                type="file"
-              />
-            </div>
-          )}
+            {tipoExame === TiposExame.HEMORAGRAMA && (
+              <div>
+                <label>Contagem de Neutrófilos</label>
+                <input
+                  type="number"
+                  maxLength={5}
+                  value={neutrofilos}
+                  onChange={(e) =>
+                    setNeutrofilos(parseInt(e.target.value || "0"))
+                  }
+                  required
+                />
+              </div>
+            )}
+            {tipoExame === TiposExame.OUTRO && (
+              <div>
+                <label>Upload do Exame</label>
+                <input className="w-64" type="file" />
+              </div>
+            )}
           </div>
         </div>
       </div>
       <div className={styles.btnDiv}>
-        {
-          !Boolean(exame) && (
-            <button
-              type="submit"
-              className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-orange-400 transition-colors mt-2 mx-auto font-bold"
-              onClick={handleSubmit}
-            >
-              Cadastrar Exame
-            </button>
-          )
-        }
-        {
-          Boolean(exame) && (
-            <button
+        {!Boolean(exame) && (
+          <button
             type="submit"
             className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-orange-400 transition-colors mt-2 mx-auto font-bold"
             onClick={handleSubmit}
-            >
-              Salvar Exame
-            </button>
-          )
-        }
+          >
+            Cadastrar Exame
+          </button>
+        )}
+        {Boolean(exame) && (
+          <button
+            type="submit"
+            className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-orange-400 transition-colors mt-2 mx-auto font-bold"
+            onClick={handleSubmit}
+          >
+            Salvar Exame
+          </button>
+        )}
       </div>
     </div>
   );

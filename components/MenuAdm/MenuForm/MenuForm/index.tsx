@@ -17,104 +17,111 @@ type Prot = {
   ativo?: boolean | undefined;
 };
 const MenuFormContent = () => {
+  const [listaProtocolos, setListaProtocolos] = useState<ProtocoloDB[]>();
+  const [protocolos, setProtocolos] = useState<Prot[]>([]);
+  const [efetivarSuccess, setEfetivarSuccess] = useState<Boolean>(false);
+  const [efetivarError, setEfetivarError] = useState<Boolean>(false);
+  const [efetivarEfetivadoError, setEfetivarEfetivadoError] =
+    useState<Boolean>(false);
+  const [excluirSuccess, setExcluirSuccess] = useState<Boolean>(false);
+  const [excluirError, setExcluirError] = useState<Boolean>(false);
+  const [editarError, setEditarError] = useState<Boolean>(false);
+  const [ativo, setAtivo] = useState<number>();
+  const [selectedItemId, setSelectedItemId] = useState<number>(1);
 
-    const [listaProtocolos, setListaProtocolos] = useState<ProtocoloDB[]>();
-    const [protocolos, setProtocolos] = useState<Prot[]>([]);
-    const [efetivarSuccess, setEfetivarSuccess] = useState<Boolean>(false);
-    const [efetivarError, setEfetivarError] = useState<Boolean>(false);
-    const [efetivarEfetivadoError, setEfetivarEfetivadoError] = useState<Boolean>(false);
-    const [excluirSuccess, setExcluirSuccess] = useState<Boolean>(false);
-    const [excluirError, setExcluirError] = useState<Boolean>(false);
-    const [editarError, setEditarError] = useState<Boolean>(false);
-    const [ativo, setAtivo] = useState<number>();
-    const [selectedItemId, setSelectedItemId] = useState<number>(1);
-
-    const handleEfetivarProtocolo = (id: number) => {
-      if (id) {
-        if (id === ativo) {
-          setEfetivarEfetivadoError(true);
-        }
-        else {
-          fetch(`https://localhost:7091/Protocolo/EfetivarProtocolo/${id}`, {
+  const handleEfetivarProtocolo = (id: number) => {
+    if (id) {
+      if (id === ativo) {
+        setEfetivarEfetivadoError(true);
+      } else {
+        fetch(
+          `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/EfetivarProtocolo/${id}`,
+          {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(id),
+          },
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Erro ao efetivar o protocolo");
+            }
+            return response.json();
           })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error("Erro ao efetivar o protocolo");
-              }
-              return response.json();
-            })
-            .then(data => {
-              setEfetivarSuccess(true);
-            })
-            .catch(error => {
-              setEfetivarError(true);
-            });
-        }
-      }
-      else {
-        console.log("Selecione um protocolo!");
-      }
-    };
-    const handleEditarProtocolo = (id: number) => {
-      if (id) {
-        if (id === ativo) {
-          console.log("Você não pode editar um protocolo em execução");
-        }
-        else {
-          const protocoloDB = listaProtocolos?.find(protocoloDB => protocoloDB.id === id);
-          router.push({
-            pathname: "/criar-protocolo",
-            query: { protocolo: JSON.stringify(protocoloDB) },
+          .then((data) => {
+            setEfetivarSuccess(true);
+          })
+          .catch((error) => {
+            setEfetivarError(true);
           });
-        }
       }
-    };
-    const handleExcluirProtocolo = (id: number) => {
-      if (!id)
-        console.log("Selecione um protocolo!");
-    
-      if (id === ativo)
-        console.log("Você não pode excluir o protocolo em execução");
-    
-      const shouldDelete = window.confirm("Tem certeza de que deseja excluir este protocolo?");
-    
-      if (shouldDelete) {
-        fetch(`https://localhost:7091/Protocolo/DeleteProtocolo?protocoloId=${id}`, {
+    } else {
+      console.log("Selecione um protocolo!");
+    }
+  };
+  const handleEditarProtocolo = (id: number) => {
+    if (id) {
+      if (id === ativo) {
+        console.log("Você não pode editar um protocolo em execução");
+      } else {
+        const protocoloDB = listaProtocolos?.find(
+          (protocoloDB) => protocoloDB.id === id,
+        );
+        router.push({
+          pathname: "/criar-protocolo",
+          query: { protocolo: JSON.stringify(protocoloDB) },
+        });
+      }
+    }
+  };
+  const handleExcluirProtocolo = (id: number) => {
+    if (!id) console.log("Selecione um protocolo!");
+
+    if (id === ativo)
+      console.log("Você não pode excluir o protocolo em execução");
+
+    const shouldDelete = window.confirm(
+      "Tem certeza de que deseja excluir este protocolo?",
+    );
+
+    if (shouldDelete) {
+      fetch(
+        `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/DeleteProtocolo?protocoloId=${id}`,
+        {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(id),
+        },
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Erro ao excluir protocolo");
+          }
+          return response;
         })
-          .then(response => {
-            if (!response.ok) {
-              throw new Error("Erro ao excluir protocolo");
-            }
-            return response;
-          })
-          .then(data => {
-            console.log(data);
-            setExcluirSuccess(true);
-          })
-          .catch(error => {
-            console.log(error);
-            setExcluirError(true);
-          });
-      }
-    };
-    
+        .then((data) => {
+          console.log(data);
+          setExcluirSuccess(true);
+        })
+        .catch((error) => {
+          console.log(error);
+          setExcluirError(true);
+        });
+    }
+  };
 
   const handleItemClick = (id: number) => {
     setSelectedItemId(id);
   };
 
   useEffect(() => {
-    fetch("https://localhost:7091/Protocolo/GetListProtocolo")
+    fetch(
+      "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/GetListProtocolo",
+    )
       .then((response) => response.json())
       .then((data) => {
         setListaProtocolos(data);
@@ -135,47 +142,49 @@ const MenuFormContent = () => {
 
   return (
     <>
-        
       <div className={styles.menuDiv}>
         <div className={styles.buttons}>
-        <button
-          className={styles.button}
-          type="button"
-          onClick={() => {
-            Router.push("/criar-protocolo");
-          }}
-        >
-          Novo Protocolo
-        </button>
-        <button
-          className={styles.button}
-          type="button"
-          onClick={() => handleEditarProtocolo(selectedItemId)}
-        >
-          Editar Protocolo
-        </button>
-        <button
-          className={styles.button}
-          type="submit"
-          onClick={() => handleEfetivarProtocolo(selectedItemId)}
-        >
-          Efetivar Protocolo
-        </button>
-        <button
-          className={styles.button}
-          type="submit"
-          onClick={() => {handleExcluirProtocolo(selectedItemId);}}>
+          <button
+            className={styles.button}
+            type="button"
+            onClick={() => {
+              Router.push("/criar-protocolo");
+            }}
+          >
+            Novo Protocolo
+          </button>
+          <button
+            className={styles.button}
+            type="button"
+            onClick={() => handleEditarProtocolo(selectedItemId)}
+          >
+            Editar Protocolo
+          </button>
+          <button
+            className={styles.button}
+            type="submit"
+            onClick={() => handleEfetivarProtocolo(selectedItemId)}
+          >
+            Efetivar Protocolo
+          </button>
+          <button
+            className={styles.button}
+            type="submit"
+            onClick={() => {
+              handleExcluirProtocolo(selectedItemId);
+            }}
+          >
             Excluir Protocolo
-        </button>
-        <div className="mt-4 mb-2 border"></div>
-        <button className={styles.button}>
-          <Link href="/crud-usuarios">Gerenciar Usuários</Link>
-        </button>
+          </button>
+          <div className="mt-4 mb-2 border"></div>
+          <button className={styles.button}>
+            <Link href="/crud-usuarios">Gerenciar Usuários</Link>
+          </button>
         </div>
         <div className={styles.textDiv}>
-        { listaProtocolos && (  
-          <ul>
-              { protocolos.map(protocolo => (
+          {listaProtocolos && (
+            <ul>
+              {protocolos.map((protocolo) => (
                 <li
                   key={protocolo.id}
                   onClick={() => handleItemClick(protocolo.id)}
@@ -204,55 +213,67 @@ const MenuFormContent = () => {
                   )}
                 </li>
               ))}
-          </ul>
-        )}
+            </ul>
+          )}
         </div>
         <div className="absolute bottom-5 right-5">
-        { efetivarSuccess && (
-          <SuccessToast
-            title="Protocolo Efetivado"
-            message="Protocolo efetivado com sucesso!"
-            onClose={() => { setEfetivarSuccess(false); }}
-          /> 
-        )}
-        { excluirSuccess && (
-          <SuccessToast
-            title="Protocolo Excluído"
-            message="Protocolo excluído com sucesso!"
-            onClose={() => { setExcluirSuccess(false); }}
-          /> 
-        )}
-        { efetivarError && (
-          <ErrorToast
-            title="Erro ao efetivar protocolo"
-            message="Ocorreu um problema ao efetivar o protocolo"
-            onClose={() => { setEfetivarError(false); }}
-          /> 
-        )}
-        { efetivarEfetivadoError && (
-          <ErrorToast
-            title="Protocolo já efetivado!"
-            message="O protocolo selecionado já está em execução"
-            onClose={() => { setEfetivarEfetivadoError(false); }}
-          /> 
-        )}
-        { excluirError && (
-          <ErrorToast
-            title="Erro ao excluir protocolo"
-            message="Ocorreu um problema ao excluir o protocolo"
-            onClose={() => { setExcluirError(false); }}
-          /> 
-        )}
-        { editarError && (
-          <ErrorToast
-            title="Erro ao editar protocolo"
-            message="Você não pode editar um problema em execução"
-            onClose={() => { setEditarError(false); }}
-          /> 
-        )}
+          {efetivarSuccess && (
+            <SuccessToast
+              title="Protocolo Efetivado"
+              message="Protocolo efetivado com sucesso!"
+              onClose={() => {
+                setEfetivarSuccess(false);
+              }}
+            />
+          )}
+          {excluirSuccess && (
+            <SuccessToast
+              title="Protocolo Excluído"
+              message="Protocolo excluído com sucesso!"
+              onClose={() => {
+                setExcluirSuccess(false);
+              }}
+            />
+          )}
+          {efetivarError && (
+            <ErrorToast
+              title="Erro ao efetivar protocolo"
+              message="Ocorreu um problema ao efetivar o protocolo"
+              onClose={() => {
+                setEfetivarError(false);
+              }}
+            />
+          )}
+          {efetivarEfetivadoError && (
+            <ErrorToast
+              title="Protocolo já efetivado!"
+              message="O protocolo selecionado já está em execução"
+              onClose={() => {
+                setEfetivarEfetivadoError(false);
+              }}
+            />
+          )}
+          {excluirError && (
+            <ErrorToast
+              title="Erro ao excluir protocolo"
+              message="Ocorreu um problema ao excluir o protocolo"
+              onClose={() => {
+                setExcluirError(false);
+              }}
+            />
+          )}
+          {editarError && (
+            <ErrorToast
+              title="Erro ao editar protocolo"
+              message="Você não pode editar um problema em execução"
+              onClose={() => {
+                setEditarError(false);
+              }}
+            />
+          )}
         </div>
       </div>
-  </>
+    </>
   );
 };
 

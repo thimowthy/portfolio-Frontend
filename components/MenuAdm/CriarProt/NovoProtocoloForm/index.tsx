@@ -22,9 +22,8 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
   setCloseWindow,
   prot,
   edit,
-  onSave
-  }) => {
-
+  onSave,
+}) => {
   const [showDiagText, setShowDiagText] = useState(false);
   const [showTratText, setShowTratText] = useState(false);
   const [sendToast, setSendToast] = useState(false);
@@ -40,11 +39,14 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
   const sendProtocolo = async (protocolo: Protocolo) => {
     if (edit) {
       try {
-        const response = await fetch(`https://localhost:7091/Protocolo/AtualizaProtocolo/${protocoloDB.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(JSON.stringify(protocolo)),
-        });
+        const response = await fetch(
+          `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/AtualizaProtocolo/${protocoloDB.id}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(JSON.stringify(protocolo)),
+          },
+        );
         if (response.ok) {
           setSendToast(true);
           Router.push("/menu");
@@ -54,14 +56,16 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
       } catch (error) {
         setSendErrorToast(true);
       }
-    }
-    else {
+    } else {
       try {
-        const response = await fetch("https://localhost:7091/Protocolo/CadastrarProtocolo", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(JSON.stringify(protocolo)),
-        });
+        const response = await fetch(
+          "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/CadastrarProtocolo",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(JSON.stringify(protocolo)),
+          },
+        );
         if (response.ok) {
           setSendToast(true);
           Router.push("/menu");
@@ -72,8 +76,7 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
         setSendErrorToast(true);
       }
     }
-
-  };                                                          
+  };
   const handleInputChange = (fieldName: string, value: string) => {
     setProtocolo((prevProtocolo) => {
       const updatedProtocolo = {
