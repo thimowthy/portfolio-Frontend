@@ -252,7 +252,12 @@ const SintomasForm: React.FC = () => {
   };
   return (
     <div>
-      <h1 className="text-2xl">Sintomas</h1>
+      <div className="flex items-center w-full justify-between">
+        <h1 className="text-2xl">Sintomas</h1>
+        <button className="h-40px px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-600">
+          Salvar
+        </button>
+      </div>
       <div className="flex items-center gap-4 justify-center">
         <div className="flex flex-col mt-2 gap-6 py-6 bg-[#E1ECEA] px-6 w-[50%] rounded-lg items-center justify-center">
           <p>Instabilidade Hemodinâmica:</p>
@@ -386,11 +391,6 @@ const SintomasForm: React.FC = () => {
               )}
           </div>
         ))}
-      </div>
-      <div className="flex items-center w-full justify-end">
-        <button className="bg-blue-700 hover:bg-blue-900 px-5 mt-4 py-3 text-sm w-[200px] h-[50px] leading-5 rounded-lg font-semibold text-white">
-          Salvar
-        </button>
       </div>
     </div>
   );
