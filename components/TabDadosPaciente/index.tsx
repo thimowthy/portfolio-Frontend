@@ -97,8 +97,8 @@ export default function TabDadosPaciente({
         </TabList>
         <div className="bg-[#DADADA] lista-pacientes_tab-content overflow-auto px-6">
           <TabContents tabId="tab-todos" active={true}>
-            <div className="flex items-center">
-              <div className="flex bg-white rounded-xl p-2 mt-5 mb-4 w-full mr-4">
+            <div className="flex items-center mt-5 mb-4">
+              <div className="flex bg-white rounded-xl p-2 w-full mr-4">
                 <div className="pr-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -121,14 +121,14 @@ export default function TabDadosPaciente({
                 />
               </div>
               <button
-                className="flex w-8 h-auto rounded-full bg-orange-500 hover:bg-orange-400 items-center justify-center"
+                className="ml-auto font-bold w-8 h-8 px-4 rounded-full flex text-xl text-white justify-center bg-orange-500"
                 type="button"
                 title="Adicionar paciente"
                 onClick={() => {
-                  router.push("/pacientes");
-                }}
+                  router.push("/adicionar-paciente");
+                }}  
               >
-                <span className="text-white text-xl font-bold">+</span>
+                <span>+</span>
               </button>
             </div>
             <ul role="list" className="divide-y divide-gray-100">
