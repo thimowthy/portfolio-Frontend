@@ -12,6 +12,16 @@ async function fetcher({
   cabecalho?: any;
   body?: any;
 }) {
+  const token =
+    typeof window != "undefined"
+      ? localStorage?.getItem("Authorization")
+      : null;
+  let defaultHeader = { Authorization: `Bearer ${token}` };
+  if (token) {
+    if (cabecalho && !cabecalho.Authorization) {
+      cabecalho.Authorization = `Bearer ${token}`;
+    }
+  }
   const httpsAgent = new https.Agent({
     rejectUnauthorized: false,
   });
@@ -20,7 +30,7 @@ async function fetcher({
     method: metodo,
     url: rota,
     data: body,
-    headers: cabecalho || {},
+    headers: cabecalho || defaultHeader,
   }).catch((error) => {
     throw error;
   });
