@@ -18,8 +18,6 @@ export default function Pacientes({
 }) {
   const [pacientes, setPacientes] = useState(listPacientes || []);
 
-  const [loading, setLoading] = useState(false);
-
   const loadPacientes = async () => {
     setPacientes([]);
     try {
@@ -28,6 +26,15 @@ export default function Pacientes({
         rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatients",
       });
       if (pacientes.length > 0) {
+        pacientes.sort(function (a: any, b: any) {
+          if (a.nome < b.nome) {
+            return -1;
+          }
+          if (a.nome > b.nome) {
+            return 1;
+          }
+          return 0;
+        });
         setPacientes(pacientes);
       }
     } catch (err) {
@@ -89,7 +96,9 @@ export default function Pacientes({
       <div className="flex min-h-full min-w-full items-center">
         <div className="w-[100%] h-[80vh] mx-auto pt-6 px-7 bg-[#fff] rounded-lg flex flex-col relative">
           <div className="flex w-full justify-end mb-4 items-center ">
-            <h1 className="mx-auto text-center font-bold text-2xl">Lista de Pacientes</h1>
+            <h1 className="mx-auto text-center font-bold text-2xl">
+              Lista de Pacientes
+            </h1>
             <div className="flex">
               <button
                 onClick={loadPacientes}
@@ -101,11 +110,14 @@ export default function Pacientes({
                 className="flex gap-3 box-border w-[250px] rounded-lg py-3 px-3 cursor-pointer bg-orange-500 text-[#fff] hover:bg-[#ED7C31] transition-colors"
                 href="/adicionar-paciente"
               >
-                <Image src={AddUser} alt="Adicionar Usuário" className="invert" />
+                <Image
+                  src={AddUser}
+                  alt="Adicionar Usuário"
+                  className="invert"
+                />
                 Cadastrar novo paciente
               </Link>
             </div>
-
           </div>
           <div className="border p-4 border-gray-300 mb-8 rounded overflow-y-auto">
             <div className="relative overflow-x-auto">
@@ -202,7 +214,9 @@ export default function Pacientes({
                         </td>
                         <td className="px-6 py-4">{paciente.cns}</td>
                         <td className="px-6 py-4">{paciente.dataNascimento}</td>
-                        <td className="px-6 py-4">{paciente.numeroProntuario}</td>
+                        <td className="px-6 py-4">
+                          {paciente.numeroProntuario}
+                        </td>
                         <td className="px-6 py-4">
                           {tiposSanguineosMap.get(paciente.tipoSanguineo)}
                         </td>
@@ -211,7 +225,7 @@ export default function Pacientes({
                   </tbody>
                 </table>
               )}
-            </div>  
+            </div>
           </div>
         </div>
       </div>
@@ -224,6 +238,17 @@ export async function getServerSideProps<GetServerSideProps>() {
     metodo: "GET",
     rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatients",
   });
+  if (listPacientes.length > 0) {
+    listPacientes.sort(function (a: any, b: any) {
+      if (a.nome < b.nome) {
+        return -1;
+      }
+      if (a.nome > b.nome) {
+        return 1;
+      }
+      return 0;
+    });
+  }
 
   return {
     props: {

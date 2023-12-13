@@ -54,29 +54,28 @@ export async function getServerSideProps<GetServerSideProps>() {
     rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatientsSemAlta",
   });
 
-  // const isNeutropenico = (paciente: Paciente) => {
-  //   const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
-  //   let situacoesPacienteCopy = [...situacoesPaciente];
-  //   const situacaoAtual = situacoesPacienteCopy?.pop();
+  pacientes.sort(function (a: any, b: any) {
+    const situacoesPaciente1 = a?.internacao?.situacoesPaciente || [];
+    let situacoesPacienteCopy1 = [...situacoesPaciente1];
+    const situacaoAtual1 = situacoesPacienteCopy1?.pop();
 
-  //   if (situacaoAtual?.situacaoDiagnostico?.neutropenia) {
-  //     return true;
-  //   }
-  //   return false;
-  // };
-  // const febre = (paciente: Paciente) => {
-  //   const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
-  //   let situacoesPacienteCopy = [...situacoesPaciente];
-  //   const situacaoAtual = situacoesPacienteCopy?.pop();
-
-  //   if (situacaoAtual?.situacaoDiagnostico?.febre) {
-  //     return true;
-  //   }
-  //   return false;
-  // };
-  // const nf = pacientes?.filter(
-  //   (paciente: Paciente) => febre(paciente) && isNeutropenico(paciente),
-  // );
+    const situacoesPaciente2 = b?.internacao?.situacoesPaciente || [];
+    let situacoesPacienteCopy2 = [...situacoesPaciente2];
+    const situacaoAtual2 = situacoesPacienteCopy2?.pop();
+    if (
+      situacaoAtual1?.situacaoDiagnostico?.neutrofilos <
+      situacaoAtual2?.situacaoDiagnostico?.neutrofilos
+    ) {
+      return -1;
+    }
+    if (
+      situacaoAtual1?.situacaoDiagnostico?.neutrofilos >
+      situacaoAtual2?.situacaoDiagnostico?.neutrofilos
+    ) {
+      return 1;
+    }
+    return 0;
+  });
 
   return {
     props: {
