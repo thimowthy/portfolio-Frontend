@@ -160,7 +160,7 @@ export default function Dashboard() {
             </div>
             <div className="absolute bottom-[40px] float-right flex">
               <div className="flex items-center justify-center mr-4">
-                <span className="mr-2">Baixo risco</span>
+                <span className="mr-2 text-[#000000]">Baixo risco</span>
                 <Image
                   src={BedBaixo}
                   alt="Baixo Risco"
@@ -169,7 +169,7 @@ export default function Dashboard() {
                 />
               </div>
               <div className="flex items-center justify-center mr-2">
-                <span className="mr-2">Alto risco</span>
+                <span className="mr-2 text-[#000000]">Alto risco</span>
                 <Image
                   src={BedAlto}
                   alt="Alto Risco"
