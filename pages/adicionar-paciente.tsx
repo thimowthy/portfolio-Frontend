@@ -12,6 +12,7 @@ import trashIcon from "@/public/trash.svg";
 
 import { useRouter } from "next/router";
 import { format } from "date-fns-tz";
+import { formatCPF } from "@/utils/formatCPF";
 
 interface FormObject {
   nome: string;
@@ -39,6 +40,7 @@ const AdicionarPaciente = () => {
     alergias: "",
   });
 
+  const [cpfFormated, setCpfFormated] = useState("");
   const [loading, setLoading] = useState(false);
   const [sucessFetchStatus, setSucessFetchStatus] = useState(false);
   const [error, setError] = useState(false);
@@ -107,6 +109,10 @@ const AdicionarPaciente = () => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    setCpfFormated(formatCPF(formData.cpf));
+  }, [formData.cpf]);
 
   const stringfyList = (lista: any[]) => {
     if (!lista || !lista.length) {
@@ -207,8 +213,11 @@ const AdicionarPaciente = () => {
     }
     else
       formDataClone.alergias = [];
+
     formDataClone.tipoSanguineo = parseInt(formDataClone.tipoSanguineo);
+    formDataClone.cpf = formDataClone.cpf.replace(/\D/g, "");
     setLoading(true);
+    console.log(formDataClone);
     if (!paciente) {
       try {
         const result = await fetcher({
@@ -277,6 +286,8 @@ const AdicionarPaciente = () => {
       setInternado(true);
     }
   };
+
+  
   return (
     <>
       {sucessFetchStatus && (
@@ -302,7 +313,7 @@ const AdicionarPaciente = () => {
       <SeoConfig title="Adicionar paciente" />
       <Header />
       <div className="flex min-h-full min-w-full justify-center items-center py-9">
-        <div className="bg-white rounded-lg min-h-full w-[65%] pt-8 px-8   flex justify-center mt-12">
+        <div className="bg-white rounded-lg min-h-full w-[65%] pt-6 px-8 flex justify-center mt-12">
           <form className="w-full max-w-3xl" onSubmit={handleSubmit}>
             <div className="flex items-center justify-center">
               <PreviousPageButton href="/pacientes" title="" />
@@ -344,6 +355,7 @@ const AdicionarPaciente = () => {
                   placeholder="Número do prontuário"
                   name="numeroProntuario"
                   onChange={handleInput}
+                  maxLength={16}
                   onBlur={autoFillPacienteInputs}
                   required
                   value={formData.numeroProntuario}
@@ -362,9 +374,11 @@ const AdicionarPaciente = () => {
                   type="text"
                   placeholder="CPF"
                   name="cpf"
+                  maxLength={14}
+                  minLength={11}
                   required
                   onChange={handleInput}
-                  value={formData.cpf}
+                  value={cpfFormated}
                   disabled={Boolean(paciente)}
                 />
               </div>
@@ -503,7 +517,7 @@ const AdicionarPaciente = () => {
                     disabled={Boolean(paciente)}
                   >
                     {TiposSanguineos.map((tipo) => (
-                      <option key="tipo.id" value={tipo.id}>
+                      <option key={tipo.id} value={tipo.id}>
                         {tipo.nome}
                       </option>
                     ))}
