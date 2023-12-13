@@ -28,7 +28,7 @@ const ItemListaExame: React.FC<ItemExameProps> = ({
             {"Hemograma"}
           </p>
           <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-base">
-            {"Data da solicitação: " + convertDateFormat(exame?.dataSolicitacao)}
+            {"Data da solicitação: " + convertDateFormat(exame.dataSolicitacao)}
           </p>
           <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-base">
             {"Data do resultado: " + convertDateFormat(exame.dataResultado)}

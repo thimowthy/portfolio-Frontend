@@ -8,12 +8,10 @@ export function convertDateFormat(inputDate: string, format:string = "dd/mm/yyyy
 
   let formattedDate;
   if (format === "yyyy-mm-dd")
-    if (day.length === 1)
-      formattedDate = `${year}-${month}-0${(parseInt(day)+1).toString()}`;
-    else
-      formattedDate = `${year}-${month}-${(parseInt(day)+1).toString()}`;
+    formattedDate = inputDate.substring(0, 10);
   else
     formattedDate = `${day}/${month}/${year}`;
 
+    
   return formattedDate;
 }
