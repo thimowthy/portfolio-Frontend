@@ -1,6 +1,7 @@
 import { useState, FormEvent } from "react";
 import ArrowLeft from "../../public/arrow_left.svg";
 import Image from "next/image";
+import fetcher from "@/api/fetcher";
 
 export default function EditUsuario({
   setListUsers,
@@ -31,17 +32,19 @@ export default function EditUsuario({
       const token = localStorage.getItem("Authorization");
 
       if (token) {
-        const response = await fetch(
-          `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com//Usuario/PutUser/${user.id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(formData),
-          },
-        );
+        const response = await fetcher({
+          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/PutUser/${user.id}`,
+          metodo: "PUT",
+          body: formData,
+          // {
+          //   method: "PUT",
+          //   headers: {
+          //     "Content-Type": "application/json",
+          //     Authorization: `Bearer ${token}`,
+          //   },
+          //   body: JSON.stringify(formData),
+          // },
+        });
         setTimeout(() => {
           setLoading(false);
           if (response.ok) {
