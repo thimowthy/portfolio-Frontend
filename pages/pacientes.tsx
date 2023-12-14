@@ -5,7 +5,7 @@ import AddUser from "../public/add_user.svg";
 import Image from "next/image";
 import fetcher from "@/api/fetcher";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RowLoading from "@/components/SkeletonLoading/RowLoading";
 import { tiposSanguineosMap } from "@/utils/maps";
 import Swal from "sweetalert2";
@@ -88,11 +88,14 @@ export default function Pacientes({
     });
   };
 
+  useEffect(() => {
+    loadPacientes();
+  }, []);
   return (
     <>
       <SeoConfig title="Lista de pacientes" />
       <Header />
-      <AuthProvider permission={["ADMINISTRADOR"]} redirect="/dados-paciente" />
+      {/* <AuthProvider permission={["ADMINISTRADOR"]} redirect="/dados-paciente" /> */}
       <div className="flex min-h-full min-w-full items-center">
         <div className="w-[100%] h-[80vh] mx-auto pt-6 px-7 bg-[#fff] rounded-lg flex flex-col relative">
           <div className="flex w-full justify-end mb-4 items-center ">
@@ -233,26 +236,30 @@ export default function Pacientes({
   );
 }
 
-export async function getServerSideProps<GetServerSideProps>() {
-  const listPacientes = await fetcher({
-    metodo: "GET",
-    rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatients",
-  });
-  if (listPacientes.length > 0) {
-    listPacientes.sort(function (a: any, b: any) {
-      if (a.nome < b.nome) {
-        return -1;
-      }
-      if (a.nome > b.nome) {
-        return 1;
-      }
-      return 0;
-    });
-  }
+// export async function getServerSideProps<GetServerSideProps>() {
+//   try {
+//     const listPacientes = await fetcher({
+//       metodo: "GET",
+//       rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatients",
+//     });
+//     if (listPacientes.length > 0) {
+//       listPacientes.sort(function (a: any, b: any) {
+//         if (a.nome < b.nome) {
+//           return -1;
+//         }
+//         if (a.nome > b.nome) {
+//           return 1;
+//         }
+//         return 0;
+//       });
+//     }
+//     return {
+//       props: {
+//         listPacientes,
+//       },
+//     };
+//   } catch (error) {
+//     console.log(error);
+//   }
 
-  return {
-    props: {
-      listPacientes,
-    },
-  };
-}
+// }

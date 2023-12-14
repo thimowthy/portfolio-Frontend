@@ -22,7 +22,7 @@ async function loadPaciente(id: any) {
   try {
     const paciente = await fetcher({
       metodo: "GET",
-      rota: `https://localhost:7091/Paciente/GetById?pacienteId=${id}`,
+      rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetById?pacienteId=${id}`,
     });
     return paciente;
   } catch (err) {

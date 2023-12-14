@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ItemListaExame from "../ItemListaExame";
 import Image from "next/image";
 import exameCinza from "@/public/medical-report-gray.png";
+import fetcher from "@/api/fetcher";
 
 interface ExameListProps {
   id: string;
@@ -14,10 +15,12 @@ const ExamesList: React.FC<ExameListProps> = ({ id, setExame }) => {
     const fetchExames = async () => {
       if (id) {
         try {
-          const response = await fetch(
-            "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetHemogramasFromPaciente?pacienteId=" +
+          const response = await fetcher({
+            rota:
+              "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetHemogramasFromPaciente?pacienteId=" +
               id,
-          );
+            metodo: "GET",
+          });
           if (response.ok) {
             const data = await response.json();
             setExames(data);
@@ -27,9 +30,10 @@ const ExamesList: React.FC<ExameListProps> = ({ id, setExame }) => {
         }
       } else {
         try {
-          const response = await fetch(
-            "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetAllExames",
-          );
+          const response = await fetcher({
+            rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetAllExames",
+            metodo: "GET",
+          });
           if (response.ok) {
             const data = await response.json();
             setExames(data);
