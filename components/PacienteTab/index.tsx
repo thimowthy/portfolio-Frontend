@@ -290,7 +290,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                     <TabContents
                       key={item.id}
                       tabId={`tab-${item.id}`}
-                      active={index === 0 || false}
+                      active={index === situacaoPaciente.length - 1 || false}
                     >
                       <div className="pt-2 flex flex-row gap-x-2">
                         <div className="basis-1/2">
