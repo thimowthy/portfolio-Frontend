@@ -14,10 +14,9 @@ export default function TabDadosPaciente({
   pacientes,
   setSelectedPatient,
   nf,
+  setNf,
+  setPacientes,
 }: any) {
-  const [listaPacientes, setListaPacientes] = useState(pacientes);
-  const [listaNf, setListaNf] = useState(nf);
-  // const [ listaPendetes, setListaPendentes ] = useState([]);
   const [idAtivo, setIdAtivo] = useState(0);
   const handleFilterPacientes = (busca: string) => {
     let pacientesFiltrados;
@@ -28,9 +27,9 @@ export default function TabDadosPaciente({
           paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
           paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
       );
-      setListaPacientes(pacientesFiltrados);
+      setPacientes(pacientesFiltrados);
     } else {
-      setListaPacientes(pacientes);
+      setPacientes(pacientes);
     }
   };
 
@@ -43,9 +42,9 @@ export default function TabDadosPaciente({
           paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
           paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
       );
-      setListaNf(pacientesNfFiltrados);
+      setNf(pacientesNfFiltrados);
     } else {
-      setListaNf(nf);
+      setNf(nf);
     }
   };
 
@@ -126,13 +125,13 @@ export default function TabDadosPaciente({
                 title="Adicionar paciente"
                 onClick={() => {
                   router.push("/adicionar-paciente");
-                }}  
+                }}
               >
                 <span>+</span>
               </button>
             </div>
             <ul role="list" className="divide-y divide-gray-100">
-              {listaPacientes?.map((paciente: Paciente) => (
+              {pacientes?.map((paciente: Paciente) => (
                 <ItemListaPaciente
                   paciente={paciente}
                   idAtivo={idAtivo}
@@ -202,7 +201,7 @@ export default function TabDadosPaciente({
               />
             </div>
             <ul role="list" className="divide-y divide-gray-100">
-              {listaNf?.map((paciente: Paciente) => (
+              {nf?.map((paciente: Paciente) => (
                 <ItemListaPaciente
                   paciente={paciente}
                   idAtivo={idAtivo}
