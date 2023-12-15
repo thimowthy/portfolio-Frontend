@@ -72,6 +72,8 @@ const DadosPacientePage = () => {
           <DynamicTabComponent
             pacientes={pacientes}
             nf={nf}
+            setNf={setNf}
+            setPacientes={setPacientes}
             setSelectedPatient={setSelectedPatient}
           />
         </div>
