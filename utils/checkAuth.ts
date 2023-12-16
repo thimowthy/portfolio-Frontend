@@ -15,7 +15,7 @@ const checkAuthentication = (): boolean => {
     const currentTimestamp = Math.floor(Date.now() / 1000);
 
     if (decodedToken.exp && decodedToken.exp < currentTimestamp) {
-      return true;
+      return false;
     }
     return true;
   } catch (error) {

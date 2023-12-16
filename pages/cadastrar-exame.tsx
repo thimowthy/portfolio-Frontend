@@ -1,67 +1,55 @@
 import SeoConfig from "@/components/SeoConfig";
 import CadastrarExameForm from "@/components/CadastrarExame";
 import Header from "@/components/Header";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import fetcher from "@/api/fetcher";
 
 const CadastrarExame = () => {
-  const [pacientes, setPacientes] = useState<Paciente[]>([
-    {
-      id: 0,
-      numeroProntuario: "",
-      nome: "a",
-      cpf: "",
-      cns: "",
-      tipoSanguineo: 0,
-    },
-  ]);
 
-  const [medicos, setMedicos] = useState<Profissional[]>([
-    {
-      id: 2,
-      cpf: "12345678900",
-      nome: "Doutor Hans Chucrute",
-      login: "AAA",
-      cargo: "MEDICO",
-      certificado: "ABFSD%#F",
-    },
-  ]);
+  const [pacientes, setPacientes] = useState<Paciente[]>([]);
+  const [medicos, setMedicos] = useState<Profissional[]>([]);
+
+  const fetchPacientes = async () => {
+    try {
+      const pacientes = await fetcher({
+        metodo: "GET",
+        rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatientsSemAlta",
+      });
+      if (pacientes.length > 0) {
+        setPacientes(pacientes);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchMedicos = async () => {
+    try {
+      const medicos = await fetcher({
+        metodo: "GET",
+        rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/GetListUsers?filtroCargo=MEDICO",
+    });
+      if (medicos.length > 0) {
+        setMedicos(medicos);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const responsePacientes = await fetch(
-          "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatientsSemAlta",
-          { method: "GET" },
-        );
-
-        if (!responsePacientes.ok) throw new Error("Erro na solicitação");
-
-        const pacientes = await responsePacientes.json();
-        setPacientes(pacientes);
-
-        const responseMedicos = await fetch(
-          "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/GetListUsers?filtroCargo=MEDICO",
-          { method: "GET" },
-        );
-
-        if (!responseMedicos.ok) throw new Error("Erro na solicitação");
-
-        const medicos = await responseMedicos.json();
-        setMedicos(medicos);
-      } catch (error) {
-        console.error("Ocorreu um erro durante a solicitação:", error);
-      }
+      fetchPacientes();
+      fetchMedicos();
     };
     fetchData();
   }, []);
+  
   return (
     <div>
       <SeoConfig title="Cadastrar Exame" />
       <Header />
-      {pacientes && (
-        <CadastrarExameForm pacientes={pacientes} medicos={medicos} />
-      )}
+      <CadastrarExameForm pacientes={pacientes} medicos={medicos} />
     </div>
   );
 };
