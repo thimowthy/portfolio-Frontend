@@ -28,7 +28,7 @@ const CadastrarExame: React.FC<CrudExameProps> = ({
 
         </div>
         <div className="flex items-center justify-center h-[630px]">
-          <form className={styles.menuForm}>
+          <div className={styles.menuForm}>
             <div className={styles.menuHeader}>
               <Link
                 id="backBtn"
@@ -46,7 +46,7 @@ const CadastrarExame: React.FC<CrudExameProps> = ({
                 className="ml-auto w-8 h-8 rounded-full flex text-xl text-white justify-center bg-orange-500"
                 type="button"
                 title="Cadastrar novo exame"
-                onClick={() => {setExame(undefined); }}  
+                onClick={() => { setExame(undefined); }}  
               >
                 <span>+</span>
               </button>
@@ -59,7 +59,7 @@ const CadastrarExame: React.FC<CrudExameProps> = ({
                 exame={exame}
               />
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </>
