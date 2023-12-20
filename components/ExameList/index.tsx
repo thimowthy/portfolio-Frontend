@@ -15,26 +15,21 @@ const ExamesList: React.FC<ExameListProps> = ({ id, setExame }) => {
     const fetchExames = async () => {
       if (id) {
         try {
-          const response = await fetch(
-            "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetHemogramasFromPaciente?pacienteId=" +
-              id,
-          );
-          if (response.ok) {
-            const data = await response.json();
-            setExames(data);
-          }
+          const response = await fetcher({
+            rota:"https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetHemogramasFromPaciente?pacienteId="+id,
+            metodo: "GET"
+          });
+          setExames(response);
         } catch (error) {
           console.error("Erro ao buscar exames:", error);
         }
       } else {
         try {
-          const response = await fetch(
-            "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetAllExames",
-          );
-          if (response.ok) {
-            const data = await response.json();
-            setExames(data);
-          }
+          const response = await fetcher({
+            rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetAllExames",
+            metodo: "GET"
+          });
+          setExames(response);
         } catch (error) {
           console.error("Erro ao buscar exames:", error);
         }

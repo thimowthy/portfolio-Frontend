@@ -46,45 +46,41 @@ const Login = () => {
        * A resposta da solicitação de envio do formulário.
        * @type {Response}
        */
-
-      const response: Response = await fetcher({
-        metodo: "POST",
+      const response = await fetcher({
         rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Auth/Autenticacao",
+        metodo: "POST",
         cabecalho: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
       });
+      
+      localStorage.setItem("Authorization", response.token);
 
-      if (response.ok) {
-        const data = await response.json();
-        //console.log(data);
-        localStorage.setItem("Authorization", data.token);
+      const decodedToken: JwtPayload = jwt_decode(response.token);
 
-        const decodedToken: JwtPayload = jwt_decode(data.token);
-
-        switch (decodedToken.cargo) {
-          case "ADMINISTRADOR":
-            Router.push("/menu");
-            break;
-          case "MEDICO":
-            Router.push("/dados-paciente");
-            break;
-          case "ENFERMEIRO":
-            Router.push("/dados-paciente");
-            break;
-          case "LABORATORISTA":
-            Router.push("/cadastrar-exame");
-            break;
-          default:
-            Router.push("/dashboard");
-        }
-        //console.log("Login successful!");
-      } else if (response.status == 401) {
-        setLoginError(true);
-        // console.log("Invalid credentials");
-      } else {
-        setError(true);
-        // console.error("Error occurred during login:", error);
+      switch (decodedToken.cargo) {
+        case "ADMINISTRADOR":
+          Router.push("/menu");
+          break;
+        case "MEDICO":
+          Router.push("/dados-paciente");
+          break;
+        case "ENFERMEIRO":
+          Router.push("/dados-paciente");
+          break;
+        case "LABORATORISTA":
+          Router.push("/cadastrar-exame");
+          break;
+        default:
+          Router.push("/dashboard");
       }
+        //console.log("Login successful!");
+      // } else if (response.status == 401) {
+      //   setLoginError(true);
+      //   // console.log("Invalid credentials");
+      // } else {
+      //   setError(true);
+      //   // console.error("Error occurred during login:", error);
+      // }
     } catch (error) {
       setError(true);
       // console.error("Error occurred during login:", error);

@@ -189,13 +189,14 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
   
   const fetchPacienteData = async () => {
     try {
-      const responseInternamento = await fetcher({
+
+      const internamento = await fetcher({
         metodo: "GET",
         rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetPacientePeloInternamento?internamentoId=${exame?.idInternamento}`,
       });
-      const internamento = await responseInternamento.json();
-      const pacienteEncontrado = internamento?.Paciente;
 
+      const pacienteEncontrado = internamento?.Paciente;
+      
       if (pacienteEncontrado) {
         setIdPaciente(pacienteEncontrado.ID);
         setProntuario(pacienteEncontrado.NumeroProntuario);
@@ -215,6 +216,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
   useEffect(() => {
     const fetchMedicoData = () => {
       const medicoEncontrado = medicos.find((medico) => medico.id === exame!.idSolicitante);
+
       if (medicoEncontrado) {
         setIdMedico(medicoEncontrado.id);
         setCpfMedico(medicoEncontrado.cpf);

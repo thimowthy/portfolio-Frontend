@@ -105,15 +105,21 @@ const MenuFormContent = () => {
   };
 
   useEffect(() => {
-    fetch(
-      "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/GetListProtocolo",
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setListaProtocolos(data);
-      })
-      .catch((error) => console.error("Error ", error));
+    const fetchData = async () => {
+      try {
+        const response = await fetcher({
+          rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/GetListProtocolo",
+          metodo: "GET"
+        });
+        setListaProtocolos(response);
+      } catch (error) {
+        console.error("Error", error);
+      }
+    };
+  
+    fetchData();
   }, []);
+  
 
   useEffect(() => {
     if (listaProtocolos) {
