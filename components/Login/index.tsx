@@ -5,6 +5,7 @@ import Router from "next/router";
 import logo from "@/public/logo.png";
 import ErrorToast from "@/components/toasts/errorToast";
 import styles from "./styles.module.css";
+import fetcher from "@/api/fetcher";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -45,16 +46,13 @@ const Login = () => {
        * A resposta da solicitação de envio do formulário.
        * @type {Response}
        */
-      const response = await fetch(
-        "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Auth/Autenticacao",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(credentials),
-        },
-      );
+
+      const response: Response = await fetcher({
+        metodo: "POST",
+        rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Auth/Autenticacao",
+        cabecalho: { "Content-Type": "application/json" },
+        body: JSON.stringify(credentials),
+      });
 
       if (response.ok) {
         const data = await response.json();

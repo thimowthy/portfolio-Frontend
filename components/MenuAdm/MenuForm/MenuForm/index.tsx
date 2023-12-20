@@ -10,6 +10,7 @@ import Image from "next/image";
 import SuccessToast from "@/components/toasts/successToast";
 import ErrorToast from "@/components/toasts/errorToast";
 import router from "next/router";
+import fetcher from "@/api/fetcher";
 
 type Prot = {
   id: number;
@@ -29,33 +30,26 @@ const MenuFormContent = () => {
   const [ativo, setAtivo] = useState<number>();
   const [selectedItemId, setSelectedItemId] = useState<number>(1);
 
-  const handleEfetivarProtocolo = (id: number) => {
+  const handleEfetivarProtocolo = async (id: number) => {
     if (id) {
       if (id === ativo) {
         setEfetivarEfetivadoError(true);
-      } else {
-        fetch(
-          `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/EfetivarProtocolo/${id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
+      } else {        
+        try {
+          const response: Response = await fetcher({
+            rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/EfetivarProtocolo/${id}`,
+            metodo: "PUT",
+            cabecalho: { "Content-Type": "application/json" },
             body: JSON.stringify(id),
-          },
-        )
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Erro ao efetivar o protocolo");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            setEfetivarSuccess(true);
-          })
-          .catch((error) => {
-            setEfetivarError(true);
           });
+          if (response.ok)
+            setEfetivarSuccess(true);
+          if (!response.ok)
+            throw new Error("Erro ao excluir protocolo");
+        }
+      catch (error) {
+        setEfetivarError(true);
+      };
       }
     } else {
       console.log("Selecione um protocolo!");
@@ -76,7 +70,7 @@ const MenuFormContent = () => {
       }
     }
   };
-  const handleExcluirProtocolo = (id: number) => {
+  const handleExcluirProtocolo = async (id: number) => {
     if (!id) console.log("Selecione um protocolo!");
 
     if (id === ativo)
@@ -87,30 +81,22 @@ const MenuFormContent = () => {
     );
 
     if (shouldDelete) {
-      fetch(
-        `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/DeleteProtocolo?protocoloId=${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
+      try {
+        const response: Response = await fetcher({
+          metodo: "DELETE",
+          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/DeleteProtocolo?protocoloId=${id}`,
+          cabecalho: { "Content-Type": "application/json" },
           body: JSON.stringify(id),
-        },
-      )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Erro ao excluir protocolo");
-          }
-          return response;
-        })
-        .then((data) => {
-          console.log(data);
-          setExcluirSuccess(true);
-        })
-        .catch((error) => {
-          console.log(error);
-          setExcluirError(true);
         });
+        if (response.ok)
+          setExcluirSuccess(true);
+        if (!response.ok)
+          throw new Error("Erro ao excluir protocolo");
+      }
+      catch (error) {
+        console.log(error);
+        setExcluirError(true);
+      };
     }
   };
 

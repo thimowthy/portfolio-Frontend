@@ -70,10 +70,10 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetInternacaoAtual?pacienteId=${idPaciente}`,
-          { method: "GET" },
-        );
+        const response = await fetcher({
+          metodo: "GET",
+          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetInternacaoAtual?pacienteId=${idPaciente}`,
+        });
         if (response.ok) {
           const internacao = await response.json();
           setIdInternacao(internacao.Id);
@@ -111,16 +111,11 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
             idSolicitante: idMedico,
           };
           try {
-            const response = await fetch(
-              "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/AddHemograma",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(hemogramaData),
-              },
-            );
+            const response = await fetcher({
+              metodo: "POST",
+              rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/AddHemograma",
+              body: JSON.stringify(hemogramaData),
+            });
             if (response.ok) {
               const data = await response;
               console.log("Request successful!");
@@ -141,16 +136,14 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
           };
           console.log(hemogramaData);
           try {
-            const response = await fetch(
-              `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/PutExame/${exame.id}`,
-              {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(hemogramaData),
+            const response = await fetcher({
+              metodo: "PUT",
+              rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/PutExame/${exame.id}`,
+              cabecalho: {
+                "Content-Type": "application/json",
               },
-            );
+              body: JSON.stringify(hemogramaData),
+            });
             if (response.ok) {
               const data = await response;
               console.log("Request successful!");
@@ -196,11 +189,10 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
   
   const fetchPacienteData = async () => {
     try {
-      const responseInternamento = await fetch(
-        `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetPacientePeloInternamento?internamentoId=${exame?.idInternamento}`,
-        { method: "GET" },
-      );
-
+      const responseInternamento = await fetcher({
+        metodo: "GET",
+        rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetPacientePeloInternamento?internamentoId=${exame?.idInternamento}`,
+      });
       const internamento = await responseInternamento.json();
       const pacienteEncontrado = internamento?.Paciente;
 

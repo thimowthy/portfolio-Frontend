@@ -8,6 +8,7 @@ import SuccessToast from "@/components/toasts/successToast";
 import ErrorToast from "@/components/toasts/errorToast";
 import { ProtocoloDB } from "@/types/ProtocoloDB";
 import { defaultProtocolo } from "../../nodes/protFlow";
+import fetcher from "@/api/fetcher";
 
 interface ProtocolFormContentProps {
   setOpenWindow: React.Dispatch<React.SetStateAction<string>>;
@@ -39,14 +40,12 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
   const sendProtocolo = async (protocolo: Protocolo) => {
     if (edit) {
       try {
-        const response = await fetch(
-          `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/AtualizaProtocolo/${protocoloDB.id}`,
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(JSON.stringify(protocolo)),
-          },
-        );
+        const response: Response = await fetcher({
+          metodo: "PUT",
+          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/AtualizaProtocolo/${protocoloDB.id}`,
+          cabecalho: { "Content-Type": "application/json" },
+          body: JSON.stringify(JSON.stringify(protocolo)),
+        });
         if (response.ok) {
           setSendToast(true);
           Router.push("/menu");
@@ -58,14 +57,12 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
       }
     } else {
       try {
-        const response = await fetch(
-          "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/CadastrarProtocolo",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(JSON.stringify(protocolo)),
-          },
-        );
+        const response: Response = await fetcher({
+          metodo: "POST",
+          rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/CadastrarProtocolo",
+          cabecalho: { "Content-Type": "application/json" },
+          body: JSON.stringify(JSON.stringify(protocolo)),
+        });
         if (response.ok) {
           setSendToast(true);
           Router.push("/menu");

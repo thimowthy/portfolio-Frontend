@@ -20,6 +20,7 @@ import { UnidadeDosagem } from "@/types/Enum/UnidadeDosagem";
 import { IntervaloTempo } from "@/types/Enum/IntervaloTempo";
 import { Prescricao } from "@/types/Prescricao";
 import PacienteTab from "../PacienteTab";
+import fetcher from "@/api/fetcher";
 /**
  * Renderiza o a página de detalhes do paciente.
  * @category Component
@@ -282,9 +283,10 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
 
   const enviarTemperatura = async () => {
     try {
-      const response = await fetch(`https://localhost:7091/Internacao/CadastrarTemperatura/${paciente.id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetcher({
+        metodo: "POST",
+        rota: `https://localhost:7091/Internacao/CadastrarTemperatura/${paciente.id}`,
+        cabecalho: { "Content-Type": "application/json" },
         body: JSON.stringify(
           { temperatura: temperatura }
         ),
