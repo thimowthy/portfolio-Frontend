@@ -7,11 +7,7 @@ import ExamesList from "../ExameList";
 import { CrudExameProps } from "./CrudExameProps";
 import Link from "next/link";
 
-const CadastrarExame: React.FC<CrudExameProps> = ({
-  pacientes,
-  medicos,
-}) => {
-
+const CadastrarExame: React.FC<CrudExameProps> = ({ pacientes, medicos }) => {
   const [exame, setExame] = useState<Hemograma>();
 
   return (
@@ -20,15 +16,11 @@ const CadastrarExame: React.FC<CrudExameProps> = ({
       <div className="flex">
         <div className="mt-[40px] mr-4 p-2 bg-gray-100 h-[560px] w-96 rounded-lg">
           <div className="overflow-auto h-[540px] px-4">
-            <ExamesList
-              id={""}
-              setExame={setExame}
-            />
+            <ExamesList id={""} setExame={setExame} />
           </div>
-
         </div>
         <div className="flex items-center justify-center h-[630px]">
-          <form className={styles.menuForm}>
+          <div className={styles.menuForm}>
             <div className={styles.menuHeader}>
               <Link
                 id="backBtn"
@@ -46,7 +38,9 @@ const CadastrarExame: React.FC<CrudExameProps> = ({
                 className="ml-auto w-8 h-8 rounded-full flex text-xl text-white justify-center bg-orange-500"
                 type="button"
                 title="Cadastrar novo exame"
-                onClick={() => {setExame(undefined); }}  
+                onClick={() => {
+                  setExame(undefined);
+                }}
               >
                 <span>+</span>
               </button>
@@ -59,7 +53,7 @@ const CadastrarExame: React.FC<CrudExameProps> = ({
                 exame={exame}
               />
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </>

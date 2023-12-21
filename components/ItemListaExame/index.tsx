@@ -3,11 +3,7 @@ import exameIcon from "@/public/medical-report.png";
 import { convertDateFormat } from "../../utils/convertDateFormat";
 import { ItemExameProps } from "./ItemExameProps";
 
-const ItemListaExame: React.FC<ItemExameProps> = ({
-  id,
-  exame,
-  setExame,
-}) => {
+const ItemListaExame: React.FC<ItemExameProps> = ({ id, exame, setExame }) => {
   return (
     <li
       key={1}
@@ -28,7 +24,7 @@ const ItemListaExame: React.FC<ItemExameProps> = ({
             {"Hemograma"}
           </p>
           <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-base">
-            {"Data da solicitação: " + convertDateFormat(exame?.dataSolicitacao)}
+            {"Data da solicitação: " + convertDateFormat(exame.dataSolicitacao)}
           </p>
           <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-base">
             {"Data do resultado: " + convertDateFormat(exame.dataResultado)}
@@ -39,8 +35,7 @@ const ItemListaExame: React.FC<ItemExameProps> = ({
         <button
           className="bg-blue-700 hover:bg-blue-900 px-5 mt-4 py-1 text-sm leading-5 rounded-lg font-semibold text-white"
           onClick={() => {
-            if (setExame)
-              setExame(exame);
+            if (setExame) setExame(exame);
           }}
         >
           Ver Exame

@@ -5,6 +5,7 @@ import { CrudExameProps } from "../CrudExameProps";
 import { getId } from "@/hooks/getId";
 import { TiposExame } from "@/types/Enum/TiposExame";
 import { convertDateFormat } from "@/utils/convertDateFormat";
+import fetcher from "@/api/fetcher";
 
 interface TipoOption {
   id: number;
@@ -28,7 +29,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
   const [cns, setCNS] = useState("");
   const [dataNasc, setDataNasc] = useState("");
   const [dataAdmissao, setDataAdmissao] = useState("");
-  const [unidade, setUnidade] = useState("");
+  const [leito, setLeito] = useState("");
 
   const [idMedico, setIdMedico] = useState<number>();
   const [cpfMedicoFormated, setCpfMedicoFormated] = useState("");
@@ -45,9 +46,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
   );
 
   const [pacienteNaoEncontrado, setPacienteNaoEncontrado] = useState(false);
-  const [neutrofilos, setNeutrofilos] = useState<number>(
-    exame?.neutrofilos || 0,
-  );
+  const [neutrofilos, setNeutrofilos] = useState<number>(0);
 
   const [idInternacao, setIdInternacao] = useState<number>();
 
@@ -72,14 +71,11 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetInternacaoAtual?pacienteId=${idPaciente}`,
-          { method: "GET" },
-        );
-        if (response.ok) {
-          const internacao = await response.json();
-          setIdInternacao(internacao.Id);
-        }
+        const internacao = await fetcher({
+          metodo: "GET",
+          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetInternacaoAtual?pacienteId=${idPaciente}`,
+        });
+        setIdInternacao(internacao.Id);
       } catch (error) {}
     };
     if (idPaciente) fetchData();
@@ -97,162 +93,185 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
     setCpfMedicoFormated(formatCPF(cpfMedico));
   }, [cpfMedico]);
 
-  const handleSubmit = async (): Promise<void> => {
-    if (!exame) {
-      if (tipoExame === TiposExame.HEMORAGRAMA) {
-        const hemogramaData = {
-          neutrofilos: neutrofilos,
-          dataSolicitacao: dataSolicitacao,
-          dataResultado: dataResultado,
-          urgente: true,
-          temperatura: 0,
-          resultado: "string",
-          idInternamento: idInternacao,
-          idSolicitante: idMedico,
-        };
-        try {
-          const response = await fetch(
-            "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/AddHemograma",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
+  const handleSubmit = async (e: any): Promise<void> => {
+    e.preventDefault();
+
+    if (dataSolicitacao && dataResultado && numProntuario && cpfMedico) {
+      if (!exame) {
+        if (tipoExame === TiposExame.HEMORAGRAMA) {
+          const hemogramaData = {
+            neutrofilos: neutrofilos,
+            dataSolicitacao: dataSolicitacao,
+            dataResultado: dataResultado,
+            urgente: true,
+            idInternamento: idInternacao,
+            idSolicitante: idMedico,
+          };
+          try {
+            const response = await fetcher({
+              metodo: "POST",
+              rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/AddHemograma",
               body: JSON.stringify(hemogramaData),
-            },
-          );
-          if (response.ok) {
-            const data = await response;
-            console.log("Request successful!");
-          } else {
-            console.log("Request failed!");
+              cabecalho: { "Content-Type": "application/json" },
+            });
+          } catch (error) {
+            console.error("Error occurred during request:", error);
           }
-        } catch (error) {
-          console.error("Error occurred during request:", error);
+        }
+      } else {
+        if (tipoExame === TiposExame.HEMORAGRAMA) {
+          const hemogramaData = {
+            contagemNeutrofilos: neutrofilos,
+            dataSolicitacao: dataSolicitacao,
+            dataResultado: dataResultado,
+          };
+          try {
+            const response = await fetcher({
+              metodo: "PUT",
+              rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/PutExame/${exame.id}`,
+              cabecalho: { "Content-Type": "application/json" },
+              body: JSON.stringify(hemogramaData),
+            });
+          } catch (error) {
+            console.error("Error occurred during request:", error);
+          }
         }
       }
-    } else {
-      if (tipoExame === TiposExame.HEMORAGRAMA) {
-        const hemogramaData = {
-          contagemNeutrofilos: neutrofilos,
-          dataSolicitacao: dataSolicitacao,
-          dataResultado: dataResultado,
-        };
-        console.log(hemogramaData);
-        try {
-          const response = await fetch(
-            `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/PutExame/${exame.id}`,
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(hemogramaData),
-            },
-          );
-          if (response.ok) {
-            const data = await response;
-            console.log("Request successful!");
-          } else {
-            console.log("Request failed!");
-          }
-        } catch (error) {
-          console.error("Error occurred during request:", error);
-        }
-      }
+      window.location.reload();
     }
   };
 
-  const cleanUseStates = () => {
+  const cleanPacienteUseStates = () => {
     setCPF("");
+    setProntuario("");
     setNomePaciente("");
     setCNS("");
-    setUnidade("");
+    setLeito("");
     setDataNasc("");
     setDataAdmissao("");
+  };
+
+  const cleanMedicoUseStates = () => {
     setCpfMedico("");
     setSolicitadoPor("");
+  };
+
+  const cleanExameUseStates = () => {
     setDataResultadoFormated("");
     setDataSolicitacaoFormated("");
+    setNeutrofilos(0);
+  };
+
+  const cleanUseStates = () => {
+    cleanPacienteUseStates();
+    cleanMedicoUseStates();
+    cleanExameUseStates();
+  };
+
+  const fetchPacienteData = async () => {
+    try {
+      const internamento = await fetcher({
+        metodo: "GET",
+        rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetPacientePeloInternamento?internamentoId=${exame?.idInternamento}`,
+      });
+
+      const pacienteEncontrado = internamento?.Paciente;
+
+      if (pacienteEncontrado) {
+        setIdPaciente(pacienteEncontrado.ID);
+        setProntuario(pacienteEncontrado.NumeroProntuario);
+        setCPF(pacienteEncontrado.CPF);
+        setNomePaciente(pacienteEncontrado.Nome);
+        setCNS(pacienteEncontrado.CNS);
+        setLeito(internamento.Leito);
+        setDataNasc(pacienteEncontrado.DataNascimento);
+        setDataAdmissao(internamento.DataAdmissao);
+        setPacienteNaoEncontrado(false);
+      }
+    } catch (error) {
+      cleanPacienteUseStates();
+    }
   };
 
   useEffect(() => {
-    const fetchPacienteData = async () => {
-      try {
-        const responseInternamento = await fetch(
-          `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetPacientePeloInternamento?internamentoId=${exame?.idInternamento}`,
-          { method: "GET" },
-        );
-
-        const internamento = await responseInternamento.json();
-        const pacienteEncontrado = internamento?.Paciente;
-
-        setIdPaciente(pacienteEncontrado.ID);
-        setProntuario(pacienteEncontrado.NumeroProntuario);
-        setCPF(pacienteEncontrado.CPF || "");
-        setNomePaciente(pacienteEncontrado.Nome || "");
-        setCNS(pacienteEncontrado.CNS || "");
-        setUnidade(internamento.Leito || "");
-        setDataNasc(pacienteEncontrado.DataNascimento || "");
-        setDataAdmissao(internamento.DataAdmissao || "");
-        setPacienteNaoEncontrado(false);
-      } catch (error) {
-        console.error("Ocorreu um erro durante a solicitação:", error);
-      }
-    };
-    if (exame) {
-      fetchPacienteData();
-
+    const fetchMedicoData = () => {
       const medicoEncontrado = medicos.find(
-        (medico) => medico.id === exame.idSolicitante,
+        (medico) => medico.id === exame!.idSolicitante,
       );
 
       if (medicoEncontrado) {
         setIdMedico(medicoEncontrado.id);
         setCpfMedico(medicoEncontrado.cpf);
         setSolicitadoPor(medicoEncontrado.nome);
-        setDataSolicitacao(
-          convertDateFormat(exame.dataSolicitacao, "yyyy-mm-dd"),
-        );
-        setDataResultado(convertDateFormat(exame.dataResultado, "yyyy-mm-dd"));
-      } else cleanUseStates();
-    } else cleanUseStates();
-  }, [exame, medicos, pacientes]);
+      } else cleanMedicoUseStates();
+    };
+    const fetchExameData = () => {
+      setDataSolicitacao(
+        convertDateFormat(exame!.dataSolicitacao, "yyyy-mm-dd"),
+      );
+      setDataResultado(convertDateFormat(exame!.dataResultado, "yyyy-mm-dd"));
+    };
+    if (exame) {
+      fetchPacienteData();
+      fetchMedicoData();
+      fetchExameData();
+    } else {
+      cleanPacienteUseStates();
+      cleanMedicoUseStates();
+      cleanExameUseStates();
+    }
+  }, [exame, medicos]);
 
-  const autoFillPacienteInputs = () => {
+  const autoFillPacienteInputs = async () => {
     const pacienteEncontrado = pacientes.find(
       (paciente) => paciente.numeroProntuario === numProntuario,
     );
 
+    async function getInternamento() {
+      try {
+        const internacaoAtual = await fetcher({
+          metodo: "GET",
+          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetInternacaoAtual?pacienteId=${pacienteEncontrado?.id}`,
+        });
+        return internacaoAtual;
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
     if (pacienteEncontrado) {
-      setPacienteNaoEncontrado(false);
-      setIdPaciente(pacienteEncontrado?.id);
-      setCPF(pacienteEncontrado.cpf || "");
-      setNomePaciente(pacienteEncontrado.nome || "");
-      setCNS(pacienteEncontrado.cns || "");
-      setUnidade(pacienteEncontrado.unidade || "");
-      setDataNasc(pacienteEncontrado.dataNascimento || "");
-      setDataAdmissao(pacienteEncontrado.dataAdmissao || "");
+      try {
+        const internamento = await getInternamento();
+        setPacienteNaoEncontrado(false);
+        setIdPaciente(pacienteEncontrado?.id);
+        setCPF(pacienteEncontrado.cpf || "");
+        setNomePaciente(pacienteEncontrado.nome || "");
+        setCNS(pacienteEncontrado.cns || "");
+        setLeito(internamento?.Leito);
+        setDataNasc(pacienteEncontrado.dataNascimento || "");
+        setDataAdmissao(pacienteEncontrado.dataAdmissao || "");
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       setPacienteNaoEncontrado(true);
-      cleanUseStates();
+      cleanPacienteUseStates();
     }
   };
 
   const autoFillMedicoInputs = () => {
     const medicoEncontrado = medicos.find((medico) => medico.cpf === cpfMedico);
-
     if (medicoEncontrado) {
       setIdMedico(medicoEncontrado?.id);
       setCpfMedico(medicoEncontrado.cpf || "");
       setSolicitadoPor(medicoEncontrado.nome || "");
     } else {
-      cleanUseStates();
+      cleanMedicoUseStates();
     }
   };
 
   return (
-    <div className={styles.form}>
+    <form className={styles.form} onSubmit={handleSubmit}>
       <div className="block">
         <div className="flex mb-4">
           <div>
@@ -294,8 +313,8 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
             <input className="w-40" type="date" value={dataAdmissao} disabled />
           </div>
           <div className="w-32">
-            <label>Unidade</label>
-            <input className="w-full" type="text" value={unidade} disabled />
+            <label>Leito</label>
+            <input className="w-full" type="text" value={leito} disabled />
           </div>
         </div>
         <div className="flex mb-8">
@@ -322,6 +341,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
             type="text"
             value={cpfMedicoFormated}
             maxLength={11}
+            required
             onChange={(e) => {
               setCpfMedico(e.target.value);
             }}
@@ -409,7 +429,6 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
           <button
             type="submit"
             className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-orange-400 transition-colors mt-2 mx-auto font-bold"
-            onClick={handleSubmit}
           >
             Cadastrar Exame
           </button>
@@ -418,13 +437,12 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
           <button
             type="submit"
             className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-orange-400 transition-colors mt-2 mx-auto font-bold"
-            onClick={handleSubmit}
           >
             Salvar Exame
           </button>
         )}
       </div>
-    </div>
+    </form>
   );
 };
 

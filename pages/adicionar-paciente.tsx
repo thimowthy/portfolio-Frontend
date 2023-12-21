@@ -11,6 +11,7 @@ import TiposSanguineos from "@/types/TipoSanguineo";
 import trashIcon from "@/public/trash.svg";
 
 import { useRouter } from "next/router";
+import { format } from "date-fns-tz";
 
 interface FormObject {
   nome: string;
@@ -44,6 +45,7 @@ const AdicionarPaciente = () => {
   const [pacientesCadastrados, setPacientes] = useState<Paciente[]>([]);
   const [paciente, setPaciente] = useState<Paciente>();
   const [internado, setInternado] = useState<Boolean>(false);
+  const [leito, setLeito] = useState("");
 
   useEffect(() => {
     if (internado && paciente) {
@@ -171,7 +173,7 @@ const AdicionarPaciente = () => {
     ];
     for (const field of requiredFields) {
       const fieldValue = formData[field as keyof typeof formData];
-      console.log(fieldValue);
+      //console.log(fieldValue);
       if (!fieldValue) {
         setError(true);
         return false;
@@ -190,6 +192,7 @@ const AdicionarPaciente = () => {
       }
       formDataClone.comorbidades = outputArr;
     }
+    formDataClone.comorbidades = [];
     if (formDataClone.alergias) {
       const alergiasArr = formDataClone.alergias.split(",");
       const outputArr = [];
@@ -201,7 +204,7 @@ const AdicionarPaciente = () => {
         }
       }
       formDataClone.alergias = outputArr;
-    }
+    } else formDataClone.alergias = [];
     formDataClone.tipoSanguineo = parseInt(formDataClone.tipoSanguineo);
     setLoading(true);
     if (!paciente) {
@@ -211,22 +214,62 @@ const AdicionarPaciente = () => {
           metodo: "POST",
           body: formDataClone,
         });
+        setLoading(false);
         if (result) {
           setError(false);
           setSucessFetchStatus(true);
+          setTimeout(() => {
+            router.push("/estratificacao-risco");
+          }, 2000);
         }
-        setLoading(false);
-        setTimeout(() => {
-          router.push("/pacientes");
-        }, 2000);
       } catch (error) {
         console.log(error);
         setLoading(false);
         setError(true);
       }
     } else {
-      // FAZER REQUISIÇÃO PARA INTERNAR PACIENTE JÁ CADASTRADO
-      // setar internado para true quando a requisição for bem sucedida
+      const timeZone = "America/Sao_Paulo";
+      const currentDate = format(new Date(), "yyyy-MM-dd", { timeZone });
+
+      const internamento = {
+        idPaciente: paciente.id,
+        leito: formData.leito,
+        dataAdmissao: currentDate,
+        risco: 0,
+      };
+
+      try {
+        const result = await fetcher({
+          rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/CriarInternamento",
+          metodo: "POST",
+          body: internamento,
+        });
+        if (result) {
+          setError(false);
+          setSucessFetchStatus(true);
+        }
+        setLoading(false);
+        setTimeout(() => {
+          if (internado && paciente) {
+            router.push({
+              pathname: "/estratificacao-risco",
+              query: {
+                id: paciente.id,
+                dataNascimento: paciente.dataNascimento,
+                admissao: paciente.dataAdmissao,
+                nome: paciente.nome,
+                cpf: paciente.cpf,
+                prontuario: paciente.numeroProntuario,
+                cartaoSus: paciente.cns,
+              },
+            });
+          }
+        }, 2000);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+        setError(true);
+      }
       setInternado(true);
     }
   };
@@ -397,7 +440,6 @@ const AdicionarPaciente = () => {
                   type="text"
                   placeholder="Ex: Diabetes, hipertensão"
                   name="comorbidades"
-                  required
                   onChange={handleInput}
                   value={formData.comorbidades}
                   disabled={Boolean(paciente)}
@@ -416,7 +458,6 @@ const AdicionarPaciente = () => {
                   type="text"
                   placeholder="Ex: Dipirona, ovo, amendoim"
                   name="alergias"
-                  required
                   onChange={handleInput}
                   value={formData.alergias}
                   disabled={Boolean(paciente)}
@@ -439,7 +480,6 @@ const AdicionarPaciente = () => {
                   name="leito"
                   onChange={handleInput}
                   value={formData.leito}
-                  disabled={Boolean(paciente)}
                 />
               </div>
               <div className="w-full md:w-1/2 px-3 my-3">
