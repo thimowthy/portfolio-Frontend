@@ -291,9 +291,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
         metodo: "POST",
         rota: `https://localhost:7091/Internacao/CadastrarTemperatura/${paciente.id}`,
         cabecalho: { "Content-Type": "application/json" },
-        body: JSON.stringify(
-          { temperatura: temperatura }
-        ),
+        body: JSON.stringify({ temperatura: temperatura }),
       });
       if (response.ok) {
         //console.log("foi");

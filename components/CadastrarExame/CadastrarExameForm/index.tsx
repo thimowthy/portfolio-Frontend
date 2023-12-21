@@ -20,7 +20,6 @@ const tipos: TipoOption[] = Object.values(TiposExame).map((tipo, index) => ({
 const timeZone = "America/Sao_Paulo";
 const currentDate = format(new Date(), "yyyy-MM-dd", { timeZone });
 
-
 const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
   const [idPaciente, setIdPaciente] = useState<number>();
   const [cpf, setCPF] = useState("");
@@ -42,7 +41,9 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
   const [dataSolicitacaoFormated, setDataSolicitacaoFormated] = useState("");
   const [dataResultado, setDataResultado] = useState(currentDate);
   const [dataResultadoFormated, setDataResultadoFormated] = useState("");
-  const [tipoExame, setTipoExame] = useState<TiposExame>(TiposExame.HEMORAGRAMA);
+  const [tipoExame, setTipoExame] = useState<TiposExame>(
+    TiposExame.HEMORAGRAMA,
+  );
 
   const [pacienteNaoEncontrado, setPacienteNaoEncontrado] = useState(false);
   const [neutrofilos, setNeutrofilos] = useState<number>(0);
@@ -77,8 +78,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
         setIdInternacao(internacao.Id);
       } catch (error) {}
     };
-    if (idPaciente)
-      fetchData();
+    if (idPaciente) fetchData();
   }, [idPaciente]);
 
   useEffect(() => {
@@ -94,7 +94,6 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
   }, [cpfMedico]);
 
   const handleSubmit = async (e: any): Promise<void> => {
-
     e.preventDefault();
 
     if (dataSolicitacao && dataResultado && numProntuario && cpfMedico) {
@@ -119,8 +118,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
             console.error("Error occurred during request:", error);
           }
         }
-      }
-      else {
+      } else {
         if (tipoExame === TiposExame.HEMORAGRAMA) {
           const hemogramaData = {
             contagemNeutrofilos: neutrofilos,
@@ -141,7 +139,6 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
       }
       window.location.reload();
     }
-
   };
 
   const cleanPacienteUseStates = () => {
@@ -170,17 +167,16 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
     cleanMedicoUseStates();
     cleanExameUseStates();
   };
-  
+
   const fetchPacienteData = async () => {
     try {
-
       const internamento = await fetcher({
         metodo: "GET",
         rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetPacientePeloInternamento?internamentoId=${exame?.idInternamento}`,
       });
 
       const pacienteEncontrado = internamento?.Paciente;
-      
+
       if (pacienteEncontrado) {
         setIdPaciente(pacienteEncontrado.ID);
         setProntuario(pacienteEncontrado.NumeroProntuario);
@@ -199,25 +195,27 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
 
   useEffect(() => {
     const fetchMedicoData = () => {
-      const medicoEncontrado = medicos.find((medico) => medico.id === exame!.idSolicitante);
+      const medicoEncontrado = medicos.find(
+        (medico) => medico.id === exame!.idSolicitante,
+      );
 
       if (medicoEncontrado) {
         setIdMedico(medicoEncontrado.id);
         setCpfMedico(medicoEncontrado.cpf);
         setSolicitadoPor(medicoEncontrado.nome);
-      }
-      else cleanMedicoUseStates();
+      } else cleanMedicoUseStates();
     };
     const fetchExameData = () => {
-      setDataSolicitacao(convertDateFormat(exame!.dataSolicitacao, "yyyy-mm-dd"));
+      setDataSolicitacao(
+        convertDateFormat(exame!.dataSolicitacao, "yyyy-mm-dd"),
+      );
       setDataResultado(convertDateFormat(exame!.dataResultado, "yyyy-mm-dd"));
     };
     if (exame) {
       fetchPacienteData();
       fetchMedicoData();
       fetchExameData();
-    }
-    else {
+    } else {
       cleanPacienteUseStates();
       cleanMedicoUseStates();
       cleanExameUseStates();
@@ -228,7 +226,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
     const pacienteEncontrado = pacientes.find(
       (paciente) => paciente.numeroProntuario === numProntuario,
     );
-  
+
     async function getInternamento() {
       try {
         const internacaoAtual = await fetcher({
@@ -240,7 +238,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
         console.log(err);
       }
     }
-  
+
     if (pacienteEncontrado) {
       try {
         const internamento = await getInternamento();
@@ -260,7 +258,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
       cleanPacienteUseStates();
     }
   };
-  
+
   const autoFillMedicoInputs = () => {
     const medicoEncontrado = medicos.find((medico) => medico.cpf === cpfMedico);
     if (medicoEncontrado) {
@@ -271,7 +269,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
       cleanMedicoUseStates();
     }
   };
-  
+
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <div className="block">

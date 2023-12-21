@@ -15,7 +15,6 @@ export const AuthProvider = ({
   const router = useRouter();
   const authRole = useAuthRole();
   const cargo = authRole?.cargo || "";
-  console.log(cargo);
   useEffect(() => {
     if (
       permission &&

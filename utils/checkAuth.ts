@@ -12,12 +12,12 @@ const checkAuthentication = (): boolean => {
   }
   try {
     const decodedToken: JwtPayload = jwt_decode(token || "");
-    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const currentTimestamp = Date.now();
 
-    if (decodedToken.exp && decodedToken.exp < currentTimestamp) {
-      return false;
+    if (decodedToken.exp && decodedToken.exp * 1000 >= currentTimestamp) {
+      return true;
     }
-    return true;
+    return false;
   } catch (error) {
     return false;
   }

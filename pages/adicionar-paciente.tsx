@@ -192,7 +192,7 @@ const AdicionarPaciente = () => {
       }
       formDataClone.comorbidades = outputArr;
     }
-      formDataClone.comorbidades = [];
+    formDataClone.comorbidades = [];
     if (formDataClone.alergias) {
       const alergiasArr = formDataClone.alergias.split(",");
       const outputArr = [];
@@ -204,9 +204,7 @@ const AdicionarPaciente = () => {
         }
       }
       formDataClone.alergias = outputArr;
-    }
-    else
-      formDataClone.alergias = [];
+    } else formDataClone.alergias = [];
     formDataClone.tipoSanguineo = parseInt(formDataClone.tipoSanguineo);
     setLoading(true);
     if (!paciente) {
@@ -229,18 +227,17 @@ const AdicionarPaciente = () => {
         setLoading(false);
         setError(true);
       }
-    }
-    else {
+    } else {
       const timeZone = "America/Sao_Paulo";
       const currentDate = format(new Date(), "yyyy-MM-dd", { timeZone });
-      
+
       const internamento = {
         idPaciente: paciente.id,
         leito: formData.leito,
         dataAdmissao: currentDate,
-        risco: 0
+        risco: 0,
       };
-      
+
       try {
         const result = await fetcher({
           rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/CriarInternamento",
@@ -268,7 +265,6 @@ const AdicionarPaciente = () => {
             });
           }
         }, 2000);
-
       } catch (error) {
         console.log(error);
         setLoading(false);

@@ -52,7 +52,7 @@ const Login = () => {
         cabecalho: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
       });
-      
+
       localStorage.setItem("Authorization", response.token);
       console.log(response.token);
       const decodedToken: JwtPayload = jwt_decode(response.token);
@@ -73,7 +73,7 @@ const Login = () => {
         default:
           Router.push("/dashboard");
       }
-        //console.log("Login successful!");
+      //console.log("Login successful!");
       // } else if (response.status == 401) {
       //   setLoginError(true);
       //   // console.log("Invalid credentials");

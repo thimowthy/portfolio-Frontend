@@ -34,7 +34,7 @@ const MenuFormContent = () => {
     if (id) {
       if (id === ativo) {
         setEfetivarEfetivadoError(true);
-      } else {        
+      } else {
         try {
           const response: Response = await fetcher({
             rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/EfetivarProtocolo/${id}`,
@@ -42,14 +42,11 @@ const MenuFormContent = () => {
             cabecalho: { "Content-Type": "application/json" },
             body: JSON.stringify(id),
           });
-          if (response.ok)
-            setEfetivarSuccess(true);
-          if (!response.ok)
-            throw new Error("Erro ao excluir protocolo");
+          if (response.ok) setEfetivarSuccess(true);
+          if (!response.ok) throw new Error("Erro ao excluir protocolo");
+        } catch (error) {
+          setEfetivarError(true);
         }
-      catch (error) {
-        setEfetivarError(true);
-      };
       }
     } else {
       console.log("Selecione um protocolo!");
@@ -90,11 +87,10 @@ const MenuFormContent = () => {
         });
         console.log(response);
         setExcluirSuccess(true);
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error);
         setExcluirError(true);
-      };
+      }
     }
   };
 
@@ -107,17 +103,16 @@ const MenuFormContent = () => {
       try {
         const response = await fetcher({
           rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/GetListProtocolo",
-          metodo: "GET"
+          metodo: "GET",
         });
         setListaProtocolos(response);
       } catch (error) {
         console.error("Error", error);
       }
     };
-  
+
     fetchData();
   }, []);
-  
 
   useEffect(() => {
     if (listaProtocolos) {
