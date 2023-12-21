@@ -88,10 +88,8 @@ const MenuFormContent = () => {
           cabecalho: { "Content-Type": "application/json" },
           body: JSON.stringify(id),
         });
-        if (response.ok)
-          setExcluirSuccess(true);
-        if (!response.ok)
-          throw new Error("Erro ao excluir protocolo");
+        console.log(response);
+        setExcluirSuccess(true);
       }
       catch (error) {
         console.log(error);

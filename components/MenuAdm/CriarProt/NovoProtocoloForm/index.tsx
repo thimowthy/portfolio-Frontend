@@ -46,12 +46,8 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
           cabecalho: { "Content-Type": "application/json" },
           body: JSON.stringify(JSON.stringify(protocolo)),
         });
-        if (response.ok) {
-          setSendToast(true);
-          Router.push("/menu");
-        } else {
-          setErrorToast(true);
-        }
+        setSendToast(true);
+        Router.push("/menu");
       } catch (error) {
         setSendErrorToast(true);
       }
@@ -63,12 +59,8 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
           cabecalho: { "Content-Type": "application/json" },
           body: JSON.stringify(JSON.stringify(protocolo)),
         });
-        if (response.ok) {
-          setSendToast(true);
-          Router.push("/menu");
-        } else {
-          setErrorToast(true);
-        }
+        setSendToast(true);
+        Router.push("/menu");
       } catch (error) {
         setSendErrorToast(true);
       }

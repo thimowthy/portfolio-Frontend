@@ -70,17 +70,15 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetcher({
+        const internacao = await fetcher({
           metodo: "GET",
           rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetInternacaoAtual?pacienteId=${idPaciente}`,
         });
-        if (response.ok) {
-          const internacao = await response.json();
-          setIdInternacao(internacao.Id);
-        }
+        setIdInternacao(internacao.Id);
       } catch (error) {}
     };
-    if (idPaciente) fetchData();
+    if (idPaciente)
+      fetchData();
   }, [idPaciente]);
 
   useEffect(() => {
@@ -115,13 +113,8 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
               metodo: "POST",
               rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/AddHemograma",
               body: JSON.stringify(hemogramaData),
+              cabecalho: { "Content-Type": "application/json" },
             });
-            if (response.ok) {
-              const data = await response;
-              console.log("Request successful!");
-            } else {
-              console.log("Request failed!");
-            }
           } catch (error) {
             console.error("Error occurred during request:", error);
           }
@@ -134,22 +127,13 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
             dataSolicitacao: dataSolicitacao,
             dataResultado: dataResultado,
           };
-          console.log(hemogramaData);
           try {
             const response = await fetcher({
               metodo: "PUT",
               rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/PutExame/${exame.id}`,
-              cabecalho: {
-                "Content-Type": "application/json",
-              },
+              cabecalho: { "Content-Type": "application/json" },
               body: JSON.stringify(hemogramaData),
             });
-            if (response.ok) {
-              const data = await response;
-              console.log("Request successful!");
-            } else {
-              console.log("Request failed!");
-            }
           } catch (error) {
             console.error("Error occurred during request:", error);
           }
