@@ -10,9 +10,8 @@ export default function usePacienteGravity(paciente: Paciente) {
     const situacaoDiagnostico = situacaoAtual?.situacaoDiagnostico ?? {
       tipoNeutropenia: 0,
     };
-    console.log(situacaoDiagnostico);
     setGravidade(gravityMap.get(situacaoDiagnostico.tipoNeutropenia) || "");
-  }, [paciente]);
+  }, []);
 
   return [gravidade];
 }

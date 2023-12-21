@@ -21,10 +21,7 @@ const ExamesList: React.FC<ExameListProps> = ({ id, setExame }) => {
               id,
             metodo: "GET",
           });
-          if (response.ok) {
-            const data = await response.json();
-            setExames(data);
-          }
+          setExames(response);
         } catch (error) {
           console.error("Erro ao buscar exames:", error);
         }
@@ -34,10 +31,7 @@ const ExamesList: React.FC<ExameListProps> = ({ id, setExame }) => {
             rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetAllExames",
             metodo: "GET",
           });
-          if (response.ok) {
-            const data = await response.json();
-            setExames(data);
-          }
+          setExames(response);
         } catch (error) {
           console.error("Erro ao buscar exames:", error);
         }
