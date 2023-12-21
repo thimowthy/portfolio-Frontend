@@ -3,7 +3,7 @@ type SituacaoDiagnostico = {
   idHemograma?: number;
   temperatura?: number;
   dataVerificacao: number;
-  tipoNeutropenia?: number;
+  tipoNeutropenia: number;
   neutrofilos?: number;
   neutropenia?: boolean;
   febre: boolean;

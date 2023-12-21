@@ -9,11 +9,11 @@ const tabColorMap = new Map(colors);
 
 const gravity: Array<[number, string]> = [
   [0, ""],
-  [1, "leve"],
-  [2, "moderada"],
-  [3, "grave"],
-  [4, "profunda"],
-  [5, "severa"],
+  [1, "Leve"],
+  [2, "Moderada"],
+  [3, "Grave"],
+  [4, "Profunda"],
+  [5, "Severa"],
 ];
 
 const gravityMap = new Map(gravity);

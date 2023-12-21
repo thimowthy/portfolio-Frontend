@@ -8,6 +8,7 @@ import exclamationImg from "../public/exclamation.svg";
 import browserNotification from "../utils/browserNotification";
 import syncNotification from "./syncNotifications";
 import api from "@/helpers";
+import { useAuthRole } from "@/hooks/useAuthRole";
 /**
  * Component that show the notifications in the layout.
  * @component
@@ -17,9 +18,11 @@ export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const router = useRouter();
   const isLoginPage = router.pathname === "/login";
+  const authRole = useAuthRole();
+  const cargo = authRole?.cargo || "";
 
   useEffect(() => {
-    if (!isLoginPage) {
+    if (!isLoginPage && cargo !== "ADMINISTRADOR") {
       const getAllNotifications = async () => {
         const allNotifications = await syncNotification();
         setNotifications(allNotifications);

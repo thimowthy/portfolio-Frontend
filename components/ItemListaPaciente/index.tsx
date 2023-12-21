@@ -2,6 +2,7 @@ import useIcon from "@/hooks/useIcon";
 import useServerityIcon from "@/hooks/useSeverityIcon";
 import Image from "next/image";
 import styles from "./styles.module.css";
+import usePacienteGravity from "@/hooks/usePacienteGravity";
 /**
  * Renderiza um item da listagem de pacientes.
  * @category Component
@@ -15,6 +16,7 @@ const ItemListaPaciente = ({
   selectPatient: Function;
   idAtivo: number;
 }) => {
+  const [gravidade] = usePacienteGravity(paciente);
   return (
     <li
       key={paciente.id}
@@ -39,9 +41,11 @@ const ItemListaPaciente = ({
           <p className="text-xl font-semibold leading-6 text-gray-900 text-2xl">
             {paciente.nome}
           </p>
-          {/* <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-base">
-            Gravidade: 
-          </p> */}
+          {gravidade && (
+            <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-base">
+              Gravidade: {gravidade}
+            </p>
+          )}
           <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-base">
             {/* Prontuário: {paciente.id} */}
           </p>

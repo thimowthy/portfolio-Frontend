@@ -66,42 +66,14 @@ const AdicionarPaciente = () => {
     }
   }, [internado, paciente, router]);
 
-  useEffect(() => {
-    const fetchInternamento = async () => {
-      if (paciente) {
-        try {
-          const responseInternamento = await fetch(
-            `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetInternacaoAtual?pacienteId=${paciente.id}`,
-            { method: "GET" },
-          );
-
-          if (!responseInternamento.ok) throw new Error("Erro na solicitação");
-
-          const internamento = await responseInternamento.json();
-
-          setFormData((prevFormData) => ({
-            ...prevFormData,
-            leito: internamento.Leito,
-          }));
-        } catch (error) {
-          console.error("Ocorreu um erro durante a solicitação:", error);
-        }
-      }
-    };
-    fetchInternamento();
-  }, [paciente]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responsePacientes = await fetch(
-          "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatients",
-          { method: "GET" },
-        );
-
-        if (!responsePacientes.ok) throw new Error("Erro na solicitação");
-
-        const pacientes = await responsePacientes.json();
+        const pacientes = await fetcher({
+          rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatients",
+          metodo: "GET",
+        });
         setPacientes(pacientes);
       } catch (error) {
         console.error("Ocorreu um erro durante a solicitação:", error);
@@ -198,7 +170,7 @@ const AdicionarPaciente = () => {
       }
       formDataClone.comorbidades = outputArr;
     }
-      formDataClone.comorbidades = [];
+    formDataClone.comorbidades = [];
     if (formDataClone.alergias) {
       const alergiasArr = formDataClone.alergias.split(",");
       const outputArr = [];
@@ -217,7 +189,7 @@ const AdicionarPaciente = () => {
     formDataClone.tipoSanguineo = parseInt(formDataClone.tipoSanguineo);
     formDataClone.cpf = formDataClone.cpf.replace(/\D/g, "");
     setLoading(true);
-    console.log(formDataClone);
+
     if (!paciente) {
       try {
         const result = await fetcher({
@@ -230,7 +202,10 @@ const AdicionarPaciente = () => {
           setError(false);
           setSucessFetchStatus(true);
           setTimeout(() => {
-            router.push("/estratificacao-risco");
+            router.push({
+              pathname: "/estratificacao-risco",
+              query: result
+            });
           }, 2000);
         }
       } catch (error) {
@@ -238,46 +213,29 @@ const AdicionarPaciente = () => {
         setLoading(false);
         setError(true);
       }
-    }
-    else {
+    } else {
       const timeZone = "America/Sao_Paulo";
       const currentDate = format(new Date(), "yyyy-MM-dd", { timeZone });
-      
+
       const internamento = {
         idPaciente: paciente.id,
         leito: formData.leito,
         dataAdmissao: currentDate,
-        risco: 0
+        risco: 0,
       };
-      
+
       try {
         const result = await fetcher({
-          rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/CriarInternamento",
+          rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/CriarInternamento",
           metodo: "POST",
-          body: internamento,
+          cabecalho: { "Content-Type": "application/json" },
+          body: internamento,          
         });
         if (result) {
           setError(false);
           setSucessFetchStatus(true);
         }
         setLoading(false);
-        setTimeout(() => {
-          if (internado && paciente) {
-            router.push({
-              pathname: "/estratificacao-risco",
-              query: {
-                id: paciente.id,
-                dataNascimento: paciente.dataNascimento,
-                admissao: paciente.dataAdmissao,
-                nome: paciente.nome,
-                cpf: paciente.cpf,
-                prontuario: paciente.numeroProntuario,
-                cartaoSus: paciente.cns,
-              },
-            });
-          }
-        }, 2000);
-
       } catch (error) {
         console.log(error);
         setLoading(false);
@@ -324,6 +282,7 @@ const AdicionarPaciente = () => {
                 <button
                   className="ml-auto"
                   title="Limpar campos"
+                  type="button"
                   onClick={() => {
                     cleanUseStates();
                     setPaciente(undefined);
@@ -539,7 +498,7 @@ const AdicionarPaciente = () => {
                 type="submit"
                 className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-orange-400 transition-colors mt-2 mx-auto font-bold"
               >
-                {!paciente ? "Cadastrar" : "Internar Paciente"}
+                {!paciente ? "Cadastrar" : "Internar"}
               </button>
             </div>
           </form>

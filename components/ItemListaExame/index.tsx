@@ -3,11 +3,7 @@ import exameIcon from "@/public/medical-report.png";
 import { convertDateFormat } from "../../utils/convertDateFormat";
 import { ItemExameProps } from "./ItemExameProps";
 
-const ItemListaExame: React.FC<ItemExameProps> = ({
-  id,
-  exame,
-  setExame,
-}) => {
+const ItemListaExame: React.FC<ItemExameProps> = ({ id, exame, setExame }) => {
   return (
     <li
       key={1}
@@ -39,8 +35,7 @@ const ItemListaExame: React.FC<ItemExameProps> = ({
         <button
           className="bg-blue-700 hover:bg-blue-900 px-5 mt-4 py-1 text-sm leading-5 rounded-lg font-semibold text-white"
           onClick={() => {
-            if (setExame)
-              setExame(exame);
+            if (setExame) setExame(exame);
           }}
         >
           Ver Exame

@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import fetcher from "@/api/fetcher";
 
 const CadastrarExame = () => {
-
   const [pacientes, setPacientes] = useState<Paciente[]>([]);
   const [medicos, setMedicos] = useState<Profissional[]>([]);
 
@@ -27,8 +26,8 @@ const CadastrarExame = () => {
     try {
       const medicos = await fetcher({
         metodo: "GET",
-        rota: "https://localhost:7091/Usuario/GetListUsers?filtroCargo=MEDICO",
-    });
+        rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/GetListUsers?filtroCargo=MEDICO",
+      });
       if (medicos.length > 0) {
         setMedicos(medicos);
       }
@@ -44,7 +43,7 @@ const CadastrarExame = () => {
     };
     fetchData();
   }, []);
-  
+
   return (
     <div>
       <SeoConfig title="Cadastrar Exame" />

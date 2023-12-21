@@ -20,6 +20,7 @@ import { UnidadeDosagem } from "@/types/Enum/UnidadeDosagem";
 import { IntervaloTempo } from "@/types/Enum/IntervaloTempo";
 import { Prescricao } from "@/types/Prescricao";
 import PacienteTab from "../PacienteTab";
+import fetcher from "@/api/fetcher";
 /**
  * Renderiza o a página de detalhes do paciente.
  * @category Component
@@ -35,9 +36,13 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   const [medicamento, setMedicamento] = useState<Medicamento>();
   const [doseInput, setDoseInput] = useState("1");
   const [dose, setDose] = useState(1);
-  const [dosagem, setDosagem] = useState<UnidadeDosagem>(UnidadeDosagem.COMPRIMIDO);
+  const [dosagem, setDosagem] = useState<UnidadeDosagem>(
+    UnidadeDosagem.COMPRIMIDO,
+  );
   const [tempo, setTempo] = useState(1);
-  const [intervalo, setIntervalo] = useState<IntervaloTempo>(IntervaloTempo.DIAS);
+  const [intervalo, setIntervalo] = useState<IntervaloTempo>(
+    IntervaloTempo.DIAS,
+  );
   const [medicacao, setMedicacao] = useState<ItemMedicamento>();
   const [cuidado, setCuidado] = useState<ItemCuidado>();
 
@@ -269,25 +274,24 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
       dose: dose,
       unidade_dosagem: dosagem,
       intervalo: tempo,
-      intervalo_tempo: intervalo
+      intervalo_tempo: intervalo,
     });
   }, [medicamento, dose, dosagem, tempo, intervalo]);
 
   useEffect(() => {
     setPrescricao({
       medicacoes: medicacoes,
-      cuidados: cuidados
+      cuidados: cuidados,
     });
   }, [medicacoes, cuidados]);
 
   const enviarTemperatura = async () => {
     try {
-      const response = await fetch(`https://localhost:7091/Internacao/CadastrarTemperatura/${paciente.id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(
-          { temperatura: temperatura }
-        ),
+      const response = await fetcher({
+        metodo: "POST",
+        rota: `https://localhost:7091/Internacao/CadastrarTemperatura/${paciente.id}`,
+        cabecalho: { "Content-Type": "application/json" },
+        body: JSON.stringify({ temperatura: temperatura }),
       });
       if (response.ok) {
         //console.log("foi");
@@ -299,9 +303,8 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     }
   };
 
-
   const gerarPrescricao = () => {
-    // FAZER REQUISIÇÃO ENVIANDO A PRESCRIÇÃO PARA O INTERNAMENTO  
+    // FAZER REQUISIÇÃO ENVIANDO A PRESCRIÇÃO PARA O INTERNAMENTO
   };
 
   const listaMedicamentos: Medicamento[] = [
@@ -399,7 +402,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     prescricao.cuidados?.splice(index, 1); */
   };
 
-  const handleDeleteMedicamento = () => { };
+  const handleDeleteMedicamento = () => {};
 
   useEffect(() => {
     const init = async () => {
@@ -444,7 +447,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
         <div id="contents" className="bg-[#DADADA]">
           <TabContents tabId="tabs-neutral" active={true}>
             <PacienteTab paciente={paciente} />
-          </TabContents >
+          </TabContents>
           <TabContents tabId="tab-prescricao" active={false}>
             {paciente.id && (
               <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
@@ -463,7 +466,10 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                   <div className="bg-white w-[50%] min-h-[200px] bg-[#a9aee3] p-4 rounded-lg">
                     <div>
                       <label htmlFor="add-medicacao">Adicionar medicação</label>
-                      <div id="add-medicacao" className="my-2 border p-2 rounded-md shadow-md gap-2">
+                      <div
+                        id="add-medicacao"
+                        className="my-2 border p-2 rounded-md shadow-md gap-2"
+                      >
                         <div className="flex items-center">
                           <label htmlFor="medicamento">Medicamento</label>
                           <select
@@ -471,9 +477,12 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                             id="medicamento"
                             value={medicamento?.nome}
                             onChange={(e) => {
-                              const medicamento = listaMedicamentos.find(med => med.nome === e.target.value);
+                              const medicamento = listaMedicamentos.find(
+                                (med) => med.nome === e.target.value,
+                              );
                               setMedicamento(medicamento);
-                            }}>
+                            }}
+                          >
                             <option value="">Selecione...</option>
                             {listaMedicamentos.map((opcao) => (
                               <option key={opcao.id} value={opcao.nome}>
@@ -503,9 +512,14 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                             id="dosagem"
                             value={dosagem}
                             onChange={(e) => {
-                              const dose = Object.values(UnidadeDosagem).find(dose => dose === e.target.value);
-                              setDosagem(dose ? dose : UnidadeDosagem.COMPRIMIDO);
-                            }}>
+                              const dose = Object.values(UnidadeDosagem).find(
+                                (dose) => dose === e.target.value,
+                              );
+                              setDosagem(
+                                dose ? dose : UnidadeDosagem.COMPRIMIDO,
+                              );
+                            }}
+                          >
                             {Object.values(UnidadeDosagem).map((opcao) => (
                               <option key={opcao} value={opcao}>
                                 {opcao}
@@ -529,9 +543,14 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                             id="intervalo-tempo"
                             value={intervalo}
                             onChange={(e) => {
-                              const intervalo = Object.values(IntervaloTempo).find(dose => dose === e.target.value);
-                              setIntervalo(intervalo ? intervalo : IntervaloTempo.DIAS);
-                            }}>
+                              const intervalo = Object.values(
+                                IntervaloTempo,
+                              ).find((dose) => dose === e.target.value);
+                              setIntervalo(
+                                intervalo ? intervalo : IntervaloTempo.DIAS,
+                              );
+                            }}
+                          >
                             {Object.values(IntervaloTempo).map((opcao) => (
                               <option key={opcao} value={opcao}>
                                 {opcao}
@@ -545,29 +564,48 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                             className="ml-auto mt-2 w-10 h-6 flex items-center justify-center bg-orange-500 text-white rounded-xl"
                             onClick={() => handleAddMedicacao()}
                           >
-                            <span className="text-xl font-bold font-mono">+</span>
+                            <span className="text-xl font-bold font-mono">
+                              +
+                            </span>
                           </button>
                         </div>
                       </div>
                       <label htmlFor="lista-medicacoes">Medicações</label>
-                      <div id="lista-medicacoes" className="p-4 border mt-1 bg-gray-100">
+                      <div
+                        id="lista-medicacoes"
+                        className="p-4 border mt-1 bg-gray-100"
+                      >
                         <ul>
                           {medicacoes.map((item, index) => (
                             <>
-                              <li key={index} className="flex items-center mb-2 mt-1 bg-gray-100 p-2 rounded">
+                              <li
+                                key={index}
+                                className="flex items-center mb-2 mt-1 bg-gray-100 p-2 rounded"
+                              >
                                 <div className="flex items-center">
                                   <button
                                     type="button"
                                     className="mr-4 w-6 h-6 flex items-center justify-center bg-red-500 text-white rounded-full"
                                     onClick={() => handleRemoveMedicacao(index)}
                                   >
-                                    <span className="text-sm font-bold font-mono inline-block">x</span>
+                                    <span className="text-sm font-bold font-mono inline-block">
+                                      x
+                                    </span>
                                   </button>
                                 </div>
-                                <span>{item.medicamento?.nome + " " +
-                                  item.dose + " " + item.unidade_dosagem + " de " +
-                                  item.intervalo + "/" + item.intervalo + " " +
-                                  item.intervalo_tempo}</span>
+                                <span>
+                                  {item.medicamento?.nome +
+                                    " " +
+                                    item.dose +
+                                    " " +
+                                    item.unidade_dosagem +
+                                    " de " +
+                                    item.intervalo +
+                                    "/" +
+                                    item.intervalo +
+                                    " " +
+                                    item.intervalo_tempo}
+                                </span>
                               </li>
                               <div className="border-b border-gray"></div>
                             </>
@@ -602,28 +640,39 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                         className="border-2 border-solid w-full h-8 border-gray-300 focus:border-orange-500 focus:outline-none rounded p-2"
                         id="add-cuidado"
                         type="text"
-                        onChange={(e) => setCuidado({ descricao: e.target.value })}
+                        onChange={(e) =>
+                          setCuidado({ descricao: e.target.value })
+                        }
                         value={cuidado?.descricao || ""}
                         onKeyDown={handleAddCuidado}
                       />
                     </div>
                     <label htmlFor="lista-cuidados">Cuidados</label>
-                    <div id="lista-cuidados" className={"p-4 border mt-1 bg-gray-100"}>
+                    <div
+                      id="lista-cuidados"
+                      className={"p-4 border mt-1 bg-gray-100"}
+                    >
                       <ul>
                         {cuidados.map((item, index) => (
                           <>
-                            <li key={index} className="flex items-center mb-2 mt-1 bg-gray-100 p-2 rounded">
+                            <li
+                              key={index}
+                              className="flex items-center mb-2 mt-1 bg-gray-100 p-2 rounded"
+                            >
                               <div className="flex items-center">
                                 <button
                                   type="button"
                                   className="mr-4 w-6 h-6 flex items-center justify-center bg-red-500 text-white rounded-full"
                                   onClick={() => handleRemoveCuidado(index)}
                                 >
-                                  <span className="text-sm font-bold font-mono inline-block">x</span>
+                                  <span className="text-sm font-bold font-mono inline-block">
+                                    x
+                                  </span>
                                 </button>
                               </div>
                               <span>{item.descricao}</span>
-                            </li><div className="border-b border-gray"></div>
+                            </li>
+                            <div className="border-b border-gray"></div>
                           </>
                         ))}
                       </ul>
@@ -680,9 +729,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
           </TabContents>
           <TabContents tabId="tabs-exames" active={false}>
             <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
-              <ExamesList
-                id={paciente.id?.toString() || ""}
-              />
+              <ExamesList id={paciente.id?.toString() || ""} />
             </div>
           </TabContents>
           <TabContents tabId="tab-sintomas" active={false}>
@@ -690,8 +737,8 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
               <SintomasForm />
             </div>
           </TabContents>
-        </div >
+        </div>
       </>
-    </div >
+    </div>
   );
 }

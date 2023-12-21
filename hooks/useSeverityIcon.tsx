@@ -3,6 +3,7 @@ import good from "../public/good.png";
 import neutral from "../public/neutral.png";
 import bad from "../public/bad.png";
 import veryBad from "../public/very_bad.png";
+import { useState } from "react";
 /**
  * Seleciona a URL da imagem de acordo com o estado do paciente em uma escala com 4 níveis.
  * @param {Paciente} paciente - Paciente.
@@ -10,12 +11,14 @@ import veryBad from "../public/very_bad.png";
  */
 const useServerityIcon = (paciente: Paciente) => {
   let tipo;
-  const tipoNeutropenia =
-    paciente?.internacao?.situacoesPaciente !== undefined &&
-    paciente?.internacao?.situacoesPaciente[0]?.situacaoDiagnostico
-      ?.tipoNeutropenia;
+  const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
+  let situacoesPacienteCopy = [...situacoesPaciente];
+  const situacaoAtual = situacoesPacienteCopy?.pop();
+  const situacaoDiagnostico = situacaoAtual?.situacaoDiagnostico;
+  const tipoNeutropenia = situacaoDiagnostico?.tipoNeutropenia;
   switch (tipoNeutropenia) {
     case 0:
+      tipo = neutral;
       break;
     case 1:
       tipo = very_good;
