@@ -2,9 +2,61 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import exameCinza from "@/public/medical-report-gray.png";
 import Router from "next/router";
+import fetcher from "@/api/fetcher";
 
-const SintomasForm: React.FC = () => {
-  const [sintomas, setSintomas] = useState([]);
+interface SintomasFormProps {
+  id: string;
+}
+const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
+  
+  const formData = {
+    suspeitaInfeccao: false,
+    sintomasRespiratorios: false,
+    //suspeitaSepse: true,
+    //presencaUlceras: true,
+    //presencaDiarreia: true,
+    infeccaoCateter: false,
+    infeccaoPele: false,
+    pneumonia: false,
+    gramCrescente: false,
+    rxToraxAlterado: false,
+    sepseAbdominal: false,
+    tiflite: false,
+    celulitePerianal: false,
+    ulceraBucal: false,
+    diarreia: false,
+  };
+  const labels = ["Suspeita de infeccção relacionada ao catéter",
+                  "Sintomas respiratórios",
+                  "Suspeita de  infeccção relacionada ao catéter",
+                  "Infecção de pele ou partes moles",
+                  "Pneumonia",
+                  "Crescimento de Gram+ na hemocultura",
+                  "RX Tórax alterado",
+                  "Suspeita de sepse de foco abdominal/pelve (solicitar TC)",
+                  "Suspeita de sepse de foco abdominal ou pélvico",
+                  "Enterocolite neutropênica (Tiflite)",
+                  "Presença de úlceras em cavidade oral",
+                  "Diarreia",
+                ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const internacaoAtual = await fetcher({
+          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/ListByPatientId?pacienteId=${id}`,
+          metodo: "GET",
+        });
+        console.log(internacaoAtual);
+        setSintomas(internacaoAtual);
+      } catch (error) {
+        console.error("Ocorreu um erro durante a solicitação:", error);
+      }
+    };
+    fetchData();
+  }, [id]);
+
+  const [sintomas, setSintomas] = useState<Record<string, boolean>>(formData);
   const [instabilidadeH, setInstabilidadeH] = useState(false);
   const [infeccao, setInfeccao] = useState("");
 
@@ -229,27 +281,16 @@ const SintomasForm: React.FC = () => {
     },
   ];
 
-  const handleInfeccao = (infec: string) => {
-    setInfeccao(infec);
-    if (instabilidadeH) {
-      const remedio = infeccoesComInstabilidadeHemodinamica.find(
-        (el) => el.nome === infec,
-      )?.ATBs[0].primeira_opcao;
 
-      if (remedio) {
-        setSintomas([]);
-
-      } else {
-        const remedio = infeccoesSemInstabilidadeHemodinamica.find(
-          (el) => el.nome === infec,
-        )?.ATBs[0].primeira_opcao;
-        if (remedio) {
-          setSintomas([]);
-        }
-      }
-    };
-
+  
+  const handleCheckboxChange = (key: string) => {
+    setSintomas((prevData) => ({
+      ...prevData,
+      [key]: !prevData[key],
+    }));
+    console.log(sintomas);
   };
+
   return (
     <div>
       <div className="flex items-center w-full justify-between">
@@ -258,73 +299,54 @@ const SintomasForm: React.FC = () => {
           Salvar
         </button>
       </div>
-      <div className="flex items-center gap-4 justify-center">
-        <div className="flex flex-col mt-2 gap-6 py-6 bg-[#E1ECEA] px-6 w-[50%] rounded-lg items-center justify-center">
-          <p>Instabilidade Hemodinâmica:</p>
-          <div className="flex gap-3">
+      <div className="pt-8 border-2 p-4 bg-blue-200 mt-4">
+        <div className="gap-4">
+          <div className="flex mb-4 justify-between">
+            <p>Instabilidade Hemodinâmica</p>
             <input
-              type="radio"
+              className="w-8"            
+              type="checkbox"
               name="resposta_form_01_sintomas"
               id="ih_sim"
-              onChange={() => setInstabilidadeH(true)}
+              onChange={() => setInstabilidadeH(!instabilidadeH)}
               checked={instabilidadeH}
             />
-            <label htmlFor="ih_sim">Sim</label>
-            <input
-              type="radio"
-              name="resposta_form_01_sintomas"
-              id="ih_nao"
-              onChange={() => setInstabilidadeH(false)}
-              checked={!instabilidadeH}
-            />
-            <label htmlFor="ih_nao">Não</label>
+          </div>
+          <div className="border-b my-4"/>
+          <div className="flex mb-4 justify-between items-center">
+            <p>Infeccção prévia</p>
+            <select
+              className="h-10 w-1/2 rounded p-2"
+              id="select_infeccao"
+              onChange={(e) => setInfeccao(e.target.value)}
+            >
+              {infeccoesComInstabilidadeHemodinamica.map((el) => (
+                <option
+                  key={el.nome}
+                  defaultChecked={el.nome === "Nenhuma"}
+                  value={el.nome}
+                >
+                  {el.nome}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="border-b my-4"/>
+            {Object.keys(sintomas).map((key, index) => (
+              <>
+              <div key={key} className="flex mb-4 justify-between">
+                <p>{labels[index]}</p>
+                <input
+                  className="w-8"
+                  type="checkbox"
+                  onChange={() => handleCheckboxChange(key)}
+                  checked={sintomas[key]} />
+              </div>
+              <div className="border-b my-4" />
+              </>
+            ))}
           </div>
         </div>
-        {instabilidadeH && (
-          <div className="flex flex-col mt-2 gap-6 p-6 bg-[#E1ECEA] px-6 w-[50%] rounded-lg items-center justify-center">
-            <p>Infeccção prévia:</p>
-            <div className="flex gap-3 box-border">
-              <select
-                id="select_infeccao"
-                style={{ width: "100%", maxWidth: "100%" }}
-                onChange={(e) => handleInfeccao(e.target.value)}
-              >
-                {infeccoesComInstabilidadeHemodinamica.map((el) => (
-                  <option
-                    key={el.nome}
-                    defaultChecked={el.nome === "Nenhuma"}
-                    value={el.nome}
-                  >
-                    {el.nome}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        )}
-        {!instabilidadeH && (
-          <div className="flex flex-col mt-2 gap-6 p-6 bg-[#E1ECEA] px-6 w-[50%] rounded-lg items-center justify-center">
-            <p>Infeccção prévia:</p>
-            <div className="flex gap-3 box-border">
-              <select
-                id="select_infeccao"
-                style={{ width: "100%", maxWidth: "100%" }}
-                onChange={(e) => handleInfeccao(e.target.value)}
-              >
-                {infeccoesSemInstabilidadeHemodinamica.map((el) => (
-                  <option
-                    key={el.nome}
-                    defaultChecked={el.nome === "Nenhuma"}
-                    value={el.nome}
-                  >
-                    {el.nome}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        )}
-      </div>
       <div className="grid grid-cols-2 justify-items-center pb-6">
         {especificidadesMrsa.map((el) => (
           <div
