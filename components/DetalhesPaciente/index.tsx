@@ -289,7 +289,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     try {
       const response = await fetcher({
         metodo: "POST",
-        rota: `https://localhost:7091/Internacao/CadastrarTemperatura/${paciente.id}`,
+        rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/CadastrarTemperatura/${paciente.id}`,
         cabecalho: { "Content-Type": "application/json" },
         body: JSON.stringify({ temperatura: temperatura }),
       });

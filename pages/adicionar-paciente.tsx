@@ -12,6 +12,7 @@ import trashIcon from "@/public/trash.svg";
 
 import { useRouter } from "next/router";
 import { format } from "date-fns-tz";
+import { formatCPF } from "@/utils/formatCPF";
 
 interface FormObject {
   nome: string;
@@ -39,6 +40,7 @@ const AdicionarPaciente = () => {
     alergias: "",
   });
 
+  const [cpfFormated, setCpfFormated] = useState("");
   const [loading, setLoading] = useState(false);
   const [sucessFetchStatus, setSucessFetchStatus] = useState(false);
   const [error, setError] = useState(false);
@@ -64,42 +66,14 @@ const AdicionarPaciente = () => {
     }
   }, [internado, paciente, router]);
 
-  useEffect(() => {
-    const fetchInternamento = async () => {
-      if (paciente) {
-        try {
-          const responseInternamento = await fetch(
-            `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetInternacaoAtual?pacienteId=${paciente.id}`,
-            { method: "GET" },
-          );
-
-          if (!responseInternamento.ok) throw new Error("Erro na solicitação");
-
-          const internamento = await responseInternamento.json();
-
-          setFormData((prevFormData) => ({
-            ...prevFormData,
-            leito: internamento.Leito,
-          }));
-        } catch (error) {
-          console.error("Ocorreu um erro durante a solicitação:", error);
-        }
-      }
-    };
-    fetchInternamento();
-  }, [paciente]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responsePacientes = await fetch(
-          "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatients",
-          { method: "GET" },
-        );
-
-        if (!responsePacientes.ok) throw new Error("Erro na solicitação");
-
-        const pacientes = await responsePacientes.json();
+        const pacientes = await fetcher({
+          rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatients",
+          metodo: "GET",
+        });
         setPacientes(pacientes);
       } catch (error) {
         console.error("Ocorreu um erro durante a solicitação:", error);
@@ -107,6 +81,10 @@ const AdicionarPaciente = () => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    setCpfFormated(formatCPF(formData.cpf));
+  }, [formData.cpf]);
 
   const stringfyList = (lista: any[]) => {
     if (!lista || !lista.length) {
@@ -204,9 +182,14 @@ const AdicionarPaciente = () => {
         }
       }
       formDataClone.alergias = outputArr;
-    } else formDataClone.alergias = [];
+    }
+    else
+      formDataClone.alergias = [];
+
     formDataClone.tipoSanguineo = parseInt(formDataClone.tipoSanguineo);
+    formDataClone.cpf = formDataClone.cpf.replace(/\D/g, "");
     setLoading(true);
+
     if (!paciente) {
       try {
         const result = await fetcher({
@@ -219,7 +202,10 @@ const AdicionarPaciente = () => {
           setError(false);
           setSucessFetchStatus(true);
           setTimeout(() => {
-            router.push("/estratificacao-risco");
+            router.push({
+              pathname: "/estratificacao-risco",
+              query: result
+            });
           }, 2000);
         }
       } catch (error) {
@@ -240,31 +226,16 @@ const AdicionarPaciente = () => {
 
       try {
         const result = await fetcher({
-          rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/CriarInternamento",
+          rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/CriarInternamento",
           metodo: "POST",
-          body: internamento,
+          cabecalho: { "Content-Type": "application/json" },
+          body: internamento,          
         });
         if (result) {
           setError(false);
           setSucessFetchStatus(true);
         }
         setLoading(false);
-        setTimeout(() => {
-          if (internado && paciente) {
-            router.push({
-              pathname: "/estratificacao-risco",
-              query: {
-                id: paciente.id,
-                dataNascimento: paciente.dataNascimento,
-                admissao: paciente.dataAdmissao,
-                nome: paciente.nome,
-                cpf: paciente.cpf,
-                prontuario: paciente.numeroProntuario,
-                cartaoSus: paciente.cns,
-              },
-            });
-          }
-        }, 2000);
       } catch (error) {
         console.log(error);
         setLoading(false);
@@ -273,6 +244,8 @@ const AdicionarPaciente = () => {
       setInternado(true);
     }
   };
+
+  
   return (
     <>
       {sucessFetchStatus && (
@@ -298,7 +271,7 @@ const AdicionarPaciente = () => {
       <SeoConfig title="Adicionar paciente" />
       <Header />
       <div className="flex min-h-full min-w-full justify-center items-center py-9">
-        <div className="bg-white rounded-lg min-h-full w-[65%] pt-8 px-8   flex justify-center mt-12">
+        <div className="bg-white rounded-lg min-h-full w-[65%] pt-6 px-8 flex justify-center mt-12">
           <form className="w-full max-w-3xl" onSubmit={handleSubmit}>
             <div className="flex items-center justify-center">
               <PreviousPageButton href="/pacientes" title="" />
@@ -309,6 +282,7 @@ const AdicionarPaciente = () => {
                 <button
                   className="ml-auto"
                   title="Limpar campos"
+                  type="button"
                   onClick={() => {
                     cleanUseStates();
                     setPaciente(undefined);
@@ -340,6 +314,7 @@ const AdicionarPaciente = () => {
                   placeholder="Número do prontuário"
                   name="numeroProntuario"
                   onChange={handleInput}
+                  maxLength={16}
                   onBlur={autoFillPacienteInputs}
                   required
                   value={formData.numeroProntuario}
@@ -358,9 +333,11 @@ const AdicionarPaciente = () => {
                   type="text"
                   placeholder="CPF"
                   name="cpf"
+                  maxLength={14}
+                  minLength={11}
                   required
                   onChange={handleInput}
-                  value={formData.cpf}
+                  value={cpfFormated}
                   disabled={Boolean(paciente)}
                 />
               </div>
@@ -499,7 +476,7 @@ const AdicionarPaciente = () => {
                     disabled={Boolean(paciente)}
                   >
                     {TiposSanguineos.map((tipo) => (
-                      <option key="tipo.id" value={tipo.id}>
+                      <option key={tipo.id} value={tipo.id}>
                         {tipo.nome}
                       </option>
                     ))}
@@ -521,7 +498,7 @@ const AdicionarPaciente = () => {
                 type="submit"
                 className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-orange-400 transition-colors mt-2 mx-auto font-bold"
               >
-                {!paciente ? "Cadastrar" : "Internar Paciente"}
+                {!paciente ? "Cadastrar" : "Internar"}
               </button>
             </div>
           </form>

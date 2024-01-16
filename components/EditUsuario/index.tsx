@@ -7,9 +7,11 @@ export default function EditUsuario({
   setListUsers,
   setUpdateUser,
   user,
+  cargos,
   setLoading,
 }: any) {
   const [nome, setNome] = useState(user.nome);
+  const [cargoAtual, setCargoAtual] = useState(user.cargo.toLowerCase());
   const [cpf, setCpf] = useState(user.cpf);
   const [certificado, setCertificado] = useState(user.certificado);
   const [userName, setUserName] = useState(user.login);
@@ -23,6 +25,7 @@ export default function EditUsuario({
         login: userName,
         cpf,
         certificado,
+        cargo: cargoAtual,
         senha: user.senha,
         ativo: true,
       };
@@ -36,31 +39,18 @@ export default function EditUsuario({
           rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/PutUser/${user.id}`,
           metodo: "PUT",
           body: formData,
-          // {
-          //   method: "PUT",
-          //   headers: {
-          //     "Content-Type": "application/json",
-          //     Authorization: `Bearer ${token}`,
-          //   },
-          //   body: JSON.stringify(formData),
-          // },
         });
-        setTimeout(() => {
-          setLoading(false);
-          if (response.ok) {
-            alert("Usuário atualizado com sucesso");
-            setUpdateUser(false);
-            setListUsers(true);
-          } else {
-            //console.error()
-            alert("Erro ao atualizar usuário");
-            //setError(true);
-          }
-        }, 1500);
+        setUpdateUser(false);
+        setListUsers(true);
+        alert("Usuário atualizado com sucesso");
       }
     } catch (error) {
       console.error(error);
+      alert("Erro ao atualizar usuário");
+      setUpdateUser(true);
+      // setLoading(false);
     } finally {
+      setLoading(false);
     }
   };
 
@@ -133,6 +123,31 @@ export default function EditUsuario({
                   onChange={(e) => setCpf(e.target.value)}
                   required
                 />
+              </div>
+
+              <div className="flex flex-col p-2 rounded-lg w-full">
+                <label htmlFor="cagos">Selecione o cargo desejado</label>
+                <select
+                  name="cargos"
+                  id="cargos"
+                  className="bg-gray-200 p-2 outline-none rounded-lg"
+                  onChange={(e) => {
+                    setCargoAtual(e.target.value);
+                  }}
+                >
+                  <option disabled value="">
+                    Selecione o cargo
+                  </option>
+                  {cargos.map((cargo: Cargo) => (
+                    <option
+                      value={cargo.valor}
+                      key={cargo.valor}
+                      selected={cargo.valor === cargoAtual}
+                    >
+                      {cargo.nome}
+                    </option>
+                  ))}
+                </select>
               </div>
               {/* <div className="flex flex-col p-2 rounded-lg w-full">
                 <label htmlFor="certificado" className="ml-1">

@@ -6,6 +6,7 @@ import { getId } from "@/hooks/getId";
 import { TiposExame } from "@/types/Enum/TiposExame";
 import { convertDateFormat } from "@/utils/convertDateFormat";
 import fetcher from "@/api/fetcher";
+import { formatCPF } from "@/utils/formatCPF";
 
 interface TipoOption {
   id: number;
@@ -50,14 +51,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
 
   const [idInternacao, setIdInternacao] = useState<number>();
 
-  const formatCPF = (cpf: string) => {
-    const cpfFormatado = cpf.replace(
-      /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
-      "$1.$2.$3-$4",
-    );
 
-    return cpfFormatado;
-  };
 
   useEffect(() => {
     if (dataResultado)
