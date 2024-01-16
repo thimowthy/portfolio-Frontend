@@ -36,6 +36,7 @@ const CrudUsuario = () => {
     { nome: "Enfermeiro", valor: "enfermeiro", codigo: 42 },
     //{ nome: "Odontólogo", valor: "odontologo", codigo: 21 },
     { nome: "Farmacêutico", valor: "farmaceutico", codigo: 38 },
+    { nome: "Laboratório", valor: "laboratorista", codigo: 55 },
     //{ nome: "Nutricionista", valor: "nutricionista", codigo: 12 }
   ];
 
@@ -105,6 +106,7 @@ const CrudUsuario = () => {
           setListUsers={setListUsers}
           setUpdateUser={setUpdateUser}
           user={user}
+          cargos={cargos}
           setLoading={setLoading}
         />
       )}
