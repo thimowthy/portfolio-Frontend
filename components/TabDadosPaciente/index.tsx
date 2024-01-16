@@ -14,6 +14,7 @@ export default function TabDadosPaciente({
   pacientes,
   setSelectedPatient,
   nf,
+  loadPacientes,
   setNf,
   setPacientes,
 }: any) {
@@ -47,22 +48,6 @@ export default function TabDadosPaciente({
       setNf(nf);
     }
   };
-
-  // TODO: REPLACE [] TO PENDETES ARRAY AFTER BACK-END IS FINISHED
-  // const handleFilterPendentes = (busca: string) => {
-  //   let pacientesPendentesFiltrados;
-  //   const sanitizedBusca = busca.toLowerCase();
-  //   if (busca.length > 0) {
-  //     pacientesPendentesFiltrados = [].filter(
-  //       (paciente: Paciente) =>
-  //         paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
-  //         paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
-  //     );
-  //     setListaPendentes(pacientesPendentesFiltrados);
-  //   } else {
-  //     setListaPendentes([]);
-  //   }
-  // };
   /**
    * Função para selecionar um paciente da lista para exibir os detalhes.
    * @param {Paciente} paciente - Paciente selecionado
@@ -83,11 +68,6 @@ export default function TabDadosPaciente({
             title="Todos"
             active={true}
           />
-          {/* <TabItem
-            href="tab-pendentes"
-            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
-            title="Pendentes"
-          /> */}
           <TabItem
             href="tab-NF"
             className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
@@ -128,6 +108,24 @@ export default function TabDadosPaciente({
                 }}
               >
                 <span>+</span>
+              </button>
+              <button
+                className="mr-auto ml-2 font-bold w-8 h-8 px-4 rounded-full flex text-xl text-white justify-center bg-orange-500 items-center"
+                type="button"
+                title="Atualizar pacientes"
+                onClick={loadPacientes}
+              >
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="white"
+                  >
+                    <path d="M13.5 2c-5.621 0-10.211 4.443-10.475 10h-3.025l5 6.625 5-6.625h-2.975c.257-3.351 3.06-6 6.475-6 3.584 0 6.5 2.916 6.5 6.5s-2.916 6.5-6.5 6.5c-1.863 0-3.542-.793-4.728-2.053l-2.427 3.216c1.877 1.754 4.389 2.837 7.155 2.837 5.79 0 10.5-4.71 10.5-10.5s-4.71-10.5-10.5-10.5z" />
+                  </svg>
+                </span>
               </button>
             </div>
             <ul role="list" className="divide-y divide-gray-100">
