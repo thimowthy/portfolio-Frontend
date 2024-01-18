@@ -331,7 +331,7 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
               ))}
             </select>
           </div>
-          <div className="border-b my-4"/>
+          <div className="border-b border-[#cad4d2] my-4"/>
             {Object.keys(sintomas).map((key, index) => (
               <>
               <div key={key} className="flex mb-4 justify-between">
