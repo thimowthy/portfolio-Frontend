@@ -299,7 +299,7 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
           Salvar
         </button>
       </div>
-      <div className="pt-8 border-2 p-4 bg-blue-200 mt-4">
+      <div className="pt-8 border-2 p-4 bg-[#e1ecea] mt-4">
         <div className="gap-4">
           <div className="flex mb-4 justify-between">
             <p>Instabilidade Hemodinâmica</p>
@@ -312,7 +312,7 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
               checked={instabilidadeH}
             />
           </div>
-          <div className="border-b my-4"/>
+          <div className="border-b border-[#cad4d2] my-4"/>
           <div className="flex mb-4 justify-between items-center">
             <p>Infeccção prévia</p>
             <select
@@ -347,7 +347,7 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
             ))}
           </div>
         </div>
-      <div className="grid grid-cols-2 justify-items-center pb-6">
+      {/* <div className="grid grid-cols-2 justify-items-center pb-6">
         {especificidadesMrsa.map((el) => (
           <div
             className="flex flex-col mt-3 gap-6 py-6 bg-[#E1ECEA] px-6 w-[300px] rounded-lg items-center justify-center"
@@ -413,7 +413,7 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
               )}
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

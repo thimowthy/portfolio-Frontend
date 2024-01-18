@@ -36,19 +36,31 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   const [medicamento, setMedicamento] = useState<Medicamento>();
   const [doseInput, setDoseInput] = useState("1");
   const [dose, setDose] = useState(1);
-  const [dosagem, setDosagem] = useState<UnidadeDosagem>(
-    UnidadeDosagem.COMPRIMIDO,
-  );
+  const [dosagem, setDosagem] = useState<UnidadeDosagem>( UnidadeDosagem.COMPRIMIDO);
   const [tempo, setTempo] = useState(1);
-  const [intervalo, setIntervalo] = useState<IntervaloTempo>(
-    IntervaloTempo.DIAS,
-  );
+  const [intervalo, setIntervalo] = useState<IntervaloTempo>(IntervaloTempo.DIAS);
   const [medicacao, setMedicacao] = useState<ItemMedicamento>();
   const [cuidado, setCuidado] = useState<ItemCuidado>();
 
   const [prescricao, setPrescricao] = useState<Prescricao>();
 
   const [temperatura, setTemperatura] = useState<number>(36.5);
+
+  const [internamento, setInternamento] = useState<Internacao>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const internamento = await fetcher({
+          metodo: "GET",
+          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetInternacaoAtual?pacienteId=${paciente.id}`,
+        });
+        setInternamento(internamento);
+      } catch (error) {}
+    };
+    if (paciente) fetchData();
+  }, [paciente]);
+
 
   const infeccoesSemInstabilidadeHemodinamica = [
     {
@@ -148,97 +160,6 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     },
   ];
 
-  const especificidadesMrsa = [
-    {
-      nome: "esp01",
-      opcoes: [
-        "Suspeita de infeccção relacionada ao catéter",
-        "Infecção de pele ou partes moles",
-        "Pneumonia",
-        "Crescimento de Gram + na hemocultura",
-      ],
-      recomendacoes: [
-        "Adicionar Vancomicina 15mg/kg/dose EV 12/12h ao esquema inicial",
-      ],
-      cuidados: [],
-    },
-    {
-      nome: "esp02",
-      opcoes: [
-        "Suspeita de sepse de foco abdominal/pelve (solicitar TC)",
-        "Enterocolite neutropênica (tiflite)",
-        "Celulite perianal",
-      ],
-      recomendacoes: [
-        "Acrescentar cobertura p/ anaeróbio (Metronidazol EV 500mg 8/8h)",
-      ],
-      cuidados: [],
-    },
-    {
-      nome: "esp03",
-      opcoes: ["Sinais/sintomas respiratórios", "RX tórax alterado"],
-      recomendacoes: [
-        "Adicionar Azitromicina 500mg EV/VO 1x/dia",
-        "Considerar tratamento de Pneumocistose (SMT/TMP 15 a 20 mg de TMP/kg/dia ÷ 3/4) em pacientes com hipoxemia grave e uso prolongado de corticoides ou QTX com análogos da purina",
-      ],
-      cuidados: [
-        "Solicitar TC de tórxax",
-        "Considerar influenza, em particular nos meses de inverno",
-      ],
-    },
-    {
-      nome: "esp04",
-      opcoes: ["Presença de úlceras em cavidade oral"],
-      recomendacoes: ["Aciclovir EV 5mg/kg 3x/dia + Fluconazol EV 200mg/dia"],
-      cuidados: [],
-    },
-    {
-      nome: "esp05",
-      opcoes: ["Presença de diarreia"],
-      recomendacoes: [
-        "Solicitar coprocultura, pesquisa de toxina A e B e leucócitos fecais. Se sintomas de colite: Metronidazol 500mg VO, 8/8h",
-      ],
-      cuidados: [],
-    },
-    {
-      nome: "esp06",
-      opcoes: ["Infecção relacionada ao catéter"],
-      recomendacoes: [],
-      cuidados: [
-        "Remover o catéter se houver suspeita de infecção relacionada ao mesmo e choque séptico refratário aos antibióticos",
-        "Coletar culturas e amostra de secreção do sítio de saída se houver secreção purulenta",
-      ],
-    },
-  ];
-
-  // const handleInfeccao = (infec: string) => {
-  //   setInfeccao(infec);
-  //   if (instabilidadeH) {
-  //     const remedio = infeccoesComInstabilidadeHemodinamica.find(
-  //       (el) => el.nome === infec,
-  //     )?.ATBs[0].primeira_opcao;
-
-  //     if (remedio) {
-  //       setPrescricao({
-  //         cuidados: [],
-  //         remedios: [remedio],
-  //         sintomas: [],
-  //       });
-  //     }
-  //   } else {
-  //     const remedio = infeccoesSemInstabilidadeHemodinamica.find(
-  //       (el) => el.nome === infec,
-  //     )?.ATBs[0].primeira_opcao;
-  //     if (remedio) {
-  //       setPrescricao({
-  //         cuidados: [],
-  //         remedios: [remedio],
-  //         sintomas: [],
-  //       });
-  //     }
-  //   }
-  // };
-
   const handleAddCuidado = (e: any) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -303,8 +224,18 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     }
   };
 
-  const gerarPrescricao = () => {
-    // FAZER REQUISIÇÃO ENVIANDO A PRESCRIÇÃO PARA O INTERNAMENTO
+  const gerarPrescricao = async () => {
+    const response = await fetcher({
+      rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Prescricao/CadastrarPrescricao",
+      metodo: "POST",
+      body: JSON.stringify({
+        dataSolicitacao: "2024-01-18T00:32:48.828Z",
+        itensCuidado: prescricao?.cuidados,
+        itensMedicamento: prescricao?.medicacoes,
+        urgente: true,
+        idInternamento: internamento?.id,
+      }),
+  });
   };
 
   const listaMedicamentos: Medicamento[] = [
@@ -320,99 +251,6 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     { id: 9, nome: "Aciclovir" },
     { id: 10, nome: "Fluconazol" },
   ];
-
-  // const handleEspecificidadeRadio = (especificidade: string) => {
-  //   const esp = especificidadesMrsa.find((el) => el.nome === especificidade);
-  //   if (esp) {
-  //     setPrescricao((prevState: Presc) => {
-  //       return {
-  //         sintomas: [...prevState.sintomas, esp?.opcoes[0]],
-  //         cuidados: [...prevState.cuidados, ...esp.cuidados],
-  //         remedios: [...prevState.remedios, ...esp.recomendacoes],
-  //       };
-  //     });
-  //   }
-  // };
-
-  // const removeEspecificidadeRadio = (especificidade: string) => {
-  //   const esp = especificidadesMrsa.find((el) => el.nome === especificidade);
-  //   setPrescricao((prevState: Presc) => {
-  //     const novosSintomas = prevState.sintomas.filter(
-  //       (item) => item !== esp?.opcoes[0],
-  //     );
-  //     const novosCuidados = prevState.cuidados.filter(
-  //       (item) => !esp?.cuidados.includes(item),
-  //     );
-  //     const novosRemedios = prevState.remedios.filter(
-  //       (item) => !esp?.recomendacoes.includes(item),
-  //     );
-  //     return {
-  //       sintomas: novosSintomas,
-  //       cuidados: novosCuidados,
-  //       remedios: novosRemedios,
-  //     };
-  //   });
-  // };
-
-  // const handleEspecificidadeCheck = (especificidade: string) => {
-  //   const esp = especificidadesMrsa.find((el) =>
-  //     el.opcoes.includes(especificidade),
-  //   );
-  //   setPrescricao((prevState: Presc) => {
-  //     if (!prevState.sintomas.includes(especificidade)) {
-  //       var novosSintomas = [...prevState.sintomas, especificidade];
-  //     } else {
-  //       var novosSintomas = prevState.sintomas.filter(
-  //         (item) => item !== especificidade,
-  //       );
-  //     }
-  //     const novosCuidados = prevState.cuidados.filter(
-  //       (item) => !esp?.cuidados.includes(item),
-  //     );
-  //     const novosRemedios = prevState.remedios.filter(
-  //       (item) => !esp?.recomendacoes.includes(item),
-  //     );
-  //     return {
-  //       sintomas: novosSintomas,
-  //       cuidados: novosCuidados,
-  //       remedios: novosRemedios,
-  //     };
-  //   });
-  //   console.log(prescricao);
-  // };
-
-  const openModalCreateMedicamento = () => {
-    setModalMedicamento(true);
-  };
-
-  const openModalCreateCuidado = () => {
-    setModalCuidado(true);
-  };
-
-  const handleDeleteCuidado = (element: any) => {
-    /* const index = prescricao.cuidados?.findIndex((item) => item == element);
-    const newCuidados = prescricao.cuidados?.splice(index, 1);
-    setPrescricao((prevState: Presc) => {
-      return {
-        sintomas: [...prevState.sintomas],
-        cuidados: newCuidados,
-        remedios: [...prevState.remedios],
-      };
-    });
-    prescricao.cuidados?.splice(index, 1); */
-  };
-
-  const handleDeleteMedicamento = () => {};
-
-  useEffect(() => {
-    const init = async () => {
-      const { Ripple, Tooltip, initTE } = await import("tw-elements");
-      setInfeccao("Nenhuma");
-      //handleInfeccao("Nenhuma");
-      initTE({ Ripple, Tooltip });
-    };
-    init();
-  }, []);
 
   return (
     <div>
@@ -455,9 +293,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                   <h1 className="text-3xl mt-3">Prescrição</h1>
                   <button
                     className="flex items-center justify-center ml-auto bg-blue-700 hover:bg-blue-900 text-sm w-32 h-[40px] rounded font-semibold text-white justify-content"
-                    onClick={() => {
-                      console.log(prescricao);
-                    }}
+                    onClick={gerarPrescricao}
                   >
                     Prescrever
                   </button>

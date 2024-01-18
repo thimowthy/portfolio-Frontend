@@ -12,6 +12,7 @@ import TabItem from "../TabItem";
 import TabList from "../TabList";
 import { useState } from "react";
 import { tabColorMap } from "@/utils/maps";
+import { setColor } from "@/utils/colorTransition";
 
 export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   const selectLabelNeutrofilos = (quantidadeNeutrofilos: number) => {
@@ -32,7 +33,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
 
   const [dischargeError, setDischargeError] = useState(false);
   const [sucessDischarge, setSucessDischarge] = useState(false);
-
+  const [temperatura, setTemperatura] = useState<number>(36.5);
   /**
    * Seta alta no paciente
    * @param {Number} pacienteId - Id do paciente
@@ -206,54 +207,28 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
 
               <hr />
               <div className="mt-4">
-                <h1 className="text-xl flex">
-                  Febre?{" "}
-                  <span
-                    className="text-xl"
-                    data-te-toggle="tooltip"
-                    data-te-html="true"
-                    data-te-ripple-init
-                    data-te-ripple-color="light"
-                    title=">38,3°C medida única, OU >38°C por mais de 1h"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="#3FB8FC"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
-                      />
-                    </svg>
-                  </span>
+                <h1 className="text-xl flex" title=">38,3°C medida única, OU >38°C por mais de 1h">
+                  Temperatura (°C) {" "}
                 </h1>
-                <div className="flex mt-2">
-                  <button className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10">
-                    Não
-                  </button>
-
-                  <Link
-                    href={{
-                      pathname: "/estratificacao-risco",
-                      query: {
-                        id: paciente.id,
-                        dataNascimento: paciente.dataNascimento,
-                        admissao: paciente.dataAdmissao,
-                        nome: paciente.nome,
-                        cpf: paciente.cpf,
-                        prontuario: paciente.numeroProntuario,
-                        cartaoSus: paciente.cns,
-                      },
+                <div className="flex mt-2 items-center">
+                  <input
+                    className="w-20 p-1 text-2xl text-right rounded border-2"
+                    maxLength={3}
+                    value={temperatura}
+                    onChange={(e) => {setTemperatura(parseFloat(e.target.value)); }}
+                    type="number"
+                    step={0.1}
+                    min={30}
+                    max={45}
+                    style={{ 
+                      borderColor: setColor(temperatura),
+                      outline: "none",
                     }}
-                    className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10"
-                  >
-                    Sim
-                  </Link>
+                  />
+                  <span className="text-2xl ml-2 mr-8">°C</span>
+                  <button className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 rounded px-4">
+                    Enviar
+                  </button>
                 </div>
               </div>
               <div className="pt-2">
