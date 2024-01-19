@@ -26,6 +26,13 @@ import HistoricoTratamentoList from "../HistoricoTratamento";
  * Renderiza o a página de detalhes do paciente.
  * @category Component
  */
+
+const pageStyles = {
+  tabItem: "block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-200 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#EAEAEA] rounded-lg",
+  tabContentDiv: "flex mx-1 flex-col gap-x-6 py-5 px-6 bg-[#EAEAEA] detalhes-paciente"
+};
+
+
 export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   const [instabilidadeH, setInstabilidadeH] = useState(false);
   const [modalMedicamento, setModalMedicamento] = useState(false);
@@ -421,35 +428,35 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
       <TabList className="flex list-none flex-row flex-wrap border-b-0 pl-0 -mb-1.5 relative z-0">
         <TabItem
           href="tabs-neutral"
-          className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-200 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#EAEAEA] rounded-lg"
+          className={pageStyles.tabItem}
           title="Paciente"
           active={true}
           disabled={!paciente || !paciente.id}
         />
         <TabItem
           href="tabs-exames"
-          className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-200 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#EAEAEA] rounded-lg"
+          className={pageStyles.tabItem}
           title="Exames"
           disabled={!paciente || !paciente.id}
         />
         <TabItem
           href="tab-sintomas"
-          className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-200 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#EAEAEA] rounded-lg"
+          className={pageStyles.tabItem}
           title="Sintomas"
           disabled={!paciente || !paciente.id}
         />
         <TabItem
           href="tab-prescricao"
-          className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-200 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#EAEAEA] rounded-lg"
+          className={pageStyles.tabItem}
           title="Prescrição"
           disabled={!paciente || !paciente.id}
         />
-          <TabItem
-            href="tab-historico"
-            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
-            title="Histórico"
-            disabled={!paciente || !paciente.id}
-          />
+        <TabItem
+          href="tab-historico"
+          className={pageStyles.tabItem}
+          title="Histórico"
+          disabled={!paciente || !paciente.id}
+        />
       </TabList>
       <div id="contents" className="bg-[#EAEAEA] relative rounded-b-xl overflow-y-auto rounded-tr-xl px-1 z-1">
         <div className="overflow-y-auto">
@@ -457,18 +464,18 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
             <PacienteTab paciente={paciente} />
           </TabContents>
           <TabContents tabId="tabs-exames" active={false}>
-            <div className="flex mx-1 flex-col gap-x-6 py-5 px-6 bg-[#EAEAEA] detalhes-paciente">
+            <div className={pageStyles.tabContentDiv}>
               <ExamesList id={paciente.id?.toString() || ""} />
             </div>
           </TabContents>
           <TabContents tabId="tab-sintomas" active={false}>
-            <div className="flex mx-1 flex-col gap-x-6 py-5 px-6 bg-[#EAEAEA] detalhes-paciente">
+            <div className={pageStyles.tabContentDiv}>
               <SintomasForm />
             </div>
           </TabContents>
           <TabContents tabId="tab-prescricao" active={false}>
             {paciente.id && (
-              <div className="flex mx-1 flex-col gap-x-6 py-5 px-6 bg-[#EAEAEA] detalhes-paciente">
+              <div className={pageStyles.tabContentDiv}>
                 <div className="flex items-center w-full">
                   <h1 className="text-3xl mt-3">Prescrição</h1>
                   <button
@@ -744,13 +751,13 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                 )} */}
               </div>
             )}
-          </TabContents>  
-        </div>
+          </TabContents> 
           <TabContents tabId="tab-historico" active={false}>
-            <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
-              <HistoricoTratamentoList id={paciente.id?.toString() || ""} />
+            <div className={pageStyles.tabContentDiv}>
+              <HistoricoTratamentoList id={paciente.id?.toString() || ""}/>
             </div>
           </TabContents>
+        </div>
       </div>
       </>
     </div>

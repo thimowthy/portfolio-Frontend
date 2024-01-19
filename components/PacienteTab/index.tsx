@@ -148,7 +148,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
             </div>
 
             <div>
-              <div className="rounded-md bg-[#c2d8d3] p-2 w-100">
+              <div className="rounded-md bg-[#d9e0df] p-2 w-100">
                 {paciente?.comorbidades &&
                   paciente?.comorbidades?.length > 0 && (
                     <div className="py-1">
