@@ -75,7 +75,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
           }}
         />
       )}
-      <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
+      <div className="flex mx-1 flex-col gap-x-6 py-5 px-6 bg-[#EAEAEA] detalhes-paciente">
         {paciente.id && (
           <>
             <div className="flex gap-x-4 pb-3">
@@ -105,7 +105,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                 </p>
               </div>
             </div>
-            <hr />
+            <hr className="border-[#cacaca] my-2"/>
             <div className="pt-2">
               <h1 className="text-2xl">
                 Dados do paciente{" "}
@@ -148,10 +148,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
             </div>
 
             <div>
-              <div className="rounded-md bg-green-200 p-2 w-100">
-                <p className="text-xl">
-                  Prontuário {paciente.numeroProntuario}
-                </p>
+              <div className="rounded-md bg-[#c2d8d3] p-2 w-100">
                 {paciente?.comorbidades &&
                   paciente?.comorbidades?.length > 0 && (
                     <div className="py-1">
@@ -198,14 +195,13 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
             )}
           </div> */}
                 <div className="flex justify-end">
-                  <a href="#" className="text-right text-sm">
+                  <a href="#" className="text-right text-sm bg-[#eff5f4] border-none hover:bg-[#fff] rounded px-3 py-1">
                     Ver prontuário completo
                   </a>
                 </div>
               </div>
-
-              <hr />
-              <div className="mt-4">
+              <hr className="border-[#cacaca] my-4"/>
+              <div>
                 <h1 className="text-xl flex">
                   Febre?{" "}
                   <span

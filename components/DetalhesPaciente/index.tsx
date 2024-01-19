@@ -417,40 +417,51 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   return (
     <div>
       <>
-        <TabList className="flex list-none flex-row flex-wrap border-b-0 pl-0">
-          <TabItem
-            href="tabs-neutral"
-            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
-            title="Paciente"
-            active={true}
-            disabled={!paciente || !paciente.id}
-          />
-          <TabItem
-            href="tabs-exames"
-            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
-            title="Exames 📝"
-            disabled={!paciente || !paciente.id}
-          />
-          <TabItem
-            href="tab-sintomas"
-            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
-            title="Sintomas"
-            disabled={!paciente || !paciente.id}
-          />
-          <TabItem
-            href="tab-prescricao"
-            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
-            title="Prescrição"
-            disabled={!paciente || !paciente.id}
-          />
-        </TabList>
-        <div id="contents" className="bg-[#DADADA]">
+      <TabList className="flex list-none flex-row flex-wrap border-b-0 pl-0 -mb-1.5 relative z-0">
+        <TabItem
+          href="tabs-neutral"
+          className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-200 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#EAEAEA] rounded-lg"
+          title="Paciente"
+          active={true}
+          disabled={!paciente || !paciente.id}
+        />
+        <TabItem
+          href="tabs-exames"
+          className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-200 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#EAEAEA] rounded-lg"
+          title="Exames"
+          disabled={!paciente || !paciente.id}
+        />
+        <TabItem
+          href="tab-sintomas"
+          className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-200 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#EAEAEA] rounded-lg"
+          title="Sintomas"
+          disabled={!paciente || !paciente.id}
+        />
+        <TabItem
+          href="tab-prescricao"
+          className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-200 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#EAEAEA] rounded-lg"
+          title="Prescrição"
+          disabled={!paciente || !paciente.id}
+        />
+      </TabList>
+      <div id="contents" className="bg-[#EAEAEA] relative rounded-b-xl overflow-y-auto rounded-tr-xl px-1 z-1">
+        <div className="overflow-y-auto">
           <TabContents tabId="tabs-neutral" active={true}>
             <PacienteTab paciente={paciente} />
           </TabContents>
+          <TabContents tabId="tabs-exames" active={false}>
+            <div className="flex mx-1 flex-col gap-x-6 py-5 px-6 bg-[#EAEAEA] detalhes-paciente">
+              <ExamesList id={paciente.id?.toString() || ""} />
+            </div>
+          </TabContents>
+          <TabContents tabId="tab-sintomas" active={false}>
+            <div className="flex mx-1 flex-col gap-x-6 py-5 px-6 bg-[#EAEAEA] detalhes-paciente">
+              <SintomasForm />
+            </div>
+          </TabContents>
           <TabContents tabId="tab-prescricao" active={false}>
             {paciente.id && (
-              <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
+              <div className="flex mx-1 flex-col gap-x-6 py-5 px-6 bg-[#EAEAEA] detalhes-paciente">
                 <div className="flex items-center w-full">
                   <h1 className="text-3xl mt-3">Prescrição</h1>
                   <button
@@ -463,17 +474,17 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                   </button>
                 </div>
                 <div className="pt-4 flex gap-4 pb-8">
-                  <div className="bg-white w-[50%] min-h-[200px] bg-[#a9aee3] p-4 rounded-lg">
+                  <div className="bg-[#d9e0df] w-[50%] min-h-[200px] p-4 rounded">
                     <div>
                       <label htmlFor="add-medicacao">Adicionar medicação</label>
                       <div
                         id="add-medicacao"
-                        className="my-2 border p-2 rounded-md shadow-md gap-2"
+                        className="my-2 border p-2 rounded-md shadow-sm gap-2 bg-[#E8ECEC]"
                       >
                         <div className="flex items-center">
                           <label htmlFor="medicamento">Medicamento</label>
                           <select
-                            className="ml-auto pr-2 py-1 text-right rounded"
+                            className="ml-auto pr-2 py-1 text-right rounded bg-[#E8ECEC]"
                             id="medicamento"
                             value={medicamento?.nome}
                             onChange={(e) => {
@@ -494,7 +505,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                         <div className="flex items-center">
                           <label htmlFor="dose">Dose</label>
                           <input
-                            className="ml-auto w-20 text-right pr-2 py-1 rounded"
+                            className="ml-auto w-20 text-right pr-2 py-1 rounded bg-[#E8ECEC]"
                             id="dose"
                             min={0}
                             type="number"
@@ -508,7 +519,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                             value={doseInput}
                           />
                           <select
-                            className="ml-0 w-28 text-right pr-2 py-1 rounded"
+                            className="ml-0 w-28 text-right pr-2 py-1 rounded bg-[#E8ECEC]"
                             id="dosagem"
                             value={dosagem}
                             onChange={(e) => {
@@ -530,7 +541,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                         <div className="flex items-center">
                           <label htmlFor="tempo">Intervalo de tempo</label>
                           <input
-                            className="ml-auto w-14 text-right pr-2 py-1 rounded"
+                            className="ml-auto w-14 text-right pr-2 py-1 rounded bg-[#E8ECEC]"
                             min={1}
                             id="tempo"
                             type="number"
@@ -539,7 +550,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                             value={tempo}
                           />
                           <select
-                            className="ml-0 w-28 text-right pr-2 py-1 rounded"
+                            className="ml-0 w-28 text-right pr-2 py-1 rounded bg-[#E8ECEC]"
                             id="intervalo-tempo"
                             value={intervalo}
                             onChange={(e) => {
@@ -633,11 +644,11 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                       ))}
                     </ul> */}
                   </div>
-                  <div className="bg-white w-[50%] min-h-[200px] bg-[#a9aee3] p-4 rounded-lg">
+                  <div className="bg-[#d9e0df] w-[50%] min-h-[200px] bg-[#a9aee3] p-4 rounded">
                     <label htmlFor="add-cuidado">Adicionar cuidado</label>
                     <div id="add-cuidado">
                       <input
-                        className="border-2 border-solid w-full h-8 border-gray-300 focus:border-orange-500 focus:outline-none rounded p-2"
+                        className="border-2 border-solid w-full h-8 border-gray-200 focus:border-orange-300 focus:outline-none rounded p-2"
                         id="add-cuidado"
                         type="text"
                         onChange={(e) =>
@@ -726,18 +737,9 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                 )} */}
               </div>
             )}
-          </TabContents>
-          <TabContents tabId="tabs-exames" active={false}>
-            <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
-              <ExamesList id={paciente.id?.toString() || ""} />
-            </div>
-          </TabContents>
-          <TabContents tabId="tab-sintomas" active={false}>
-            <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
-              <SintomasForm />
-            </div>
-          </TabContents>
+          </TabContents>  
         </div>
+      </div>
       </>
     </div>
   );
