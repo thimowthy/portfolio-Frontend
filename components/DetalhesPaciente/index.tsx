@@ -36,9 +36,13 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   const [medicamento, setMedicamento] = useState<Medicamento>();
   const [doseInput, setDoseInput] = useState("1");
   const [dose, setDose] = useState(1);
-  const [dosagem, setDosagem] = useState<UnidadeDosagem>( UnidadeDosagem.COMPRIMIDO);
+  const [dosagem, setDosagem] = useState<UnidadeDosagem>(
+    UnidadeDosagem.COMPRIMIDO,
+  );
   const [tempo, setTempo] = useState(1);
-  const [intervalo, setIntervalo] = useState<IntervaloTempo>(IntervaloTempo.DIAS);
+  const [intervalo, setIntervalo] = useState<IntervaloTempo>(
+    IntervaloTempo.DIAS,
+  );
   const [medicacao, setMedicacao] = useState<ItemMedicamento>();
   const [cuidado, setCuidado] = useState<ItemCuidado>();
 
@@ -60,7 +64,6 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     };
     if (paciente) fetchData();
   }, [paciente]);
-
 
   const infeccoesSemInstabilidadeHemodinamica = [
     {
@@ -235,7 +238,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
         urgente: true,
         idInternamento: internamento?.id,
       }),
-  });
+    });
   };
 
   const listaMedicamentos: Medicamento[] = [
@@ -356,11 +359,13 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                               );
                             }}
                           >
-                            {Object.values(UnidadeDosagem).map((opcao) => (
-                              <option key={opcao} value={opcao}>
-                                {opcao}
-                              </option>
-                            ))}
+                            {Object.values(UnidadeDosagem).map(
+                              (opcao, index) => (
+                                <option key={`${opcao}${index}`} value={opcao}>
+                                  {opcao}
+                                </option>
+                              ),
+                            )}
                           </select>
                         </div>
                         <div className="flex items-center">
@@ -570,7 +575,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
           </TabContents>
           <TabContents tabId="tab-sintomas" active={false}>
             <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
-              <SintomasForm id={paciente.id?.toString() || ""}/>
+              <SintomasForm id={paciente.id?.toString() || ""} />
             </div>
           </TabContents>
         </div>
