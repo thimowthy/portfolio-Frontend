@@ -37,7 +37,7 @@ const MenuFormContent = () => {
       } else {
         try {
           const response: Response = await fetcher({
-            rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/EfetivarProtocolo/${id}`,
+            rota: `/Protocolo/EfetivarProtocolo/${id}`,
             metodo: "PUT",
             cabecalho: { "Content-Type": "application/json" },
             body: JSON.stringify(id),
@@ -81,7 +81,7 @@ const MenuFormContent = () => {
       try {
         const response: Response = await fetcher({
           metodo: "DELETE",
-          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/DeleteProtocolo?protocoloId=${id}`,
+          rota: `/Protocolo/DeleteProtocolo?protocoloId=${id}`,
           cabecalho: { "Content-Type": "application/json" },
           body: JSON.stringify(id),
         });
@@ -102,7 +102,7 @@ const MenuFormContent = () => {
     const fetchData = async () => {
       try {
         const response = await fetcher({
-          rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/GetListProtocolo",
+          rota: "/Protocolo/GetListProtocolo",
           metodo: "GET",
         });
         setListaProtocolos(response);

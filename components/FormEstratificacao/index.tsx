@@ -108,7 +108,7 @@ export default function FormEstratificacao({ paciente, setLoading }: any) {
 
     try {
       const response = await fetch(
-        `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/SetRisco/${paciente.id}?risco=${risco}`,
+        `/Internacao/SetRisco/${paciente.id}?risco=${risco}`,
         {
           method: "PUT",
           headers: {

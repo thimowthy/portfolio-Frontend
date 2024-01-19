@@ -9,7 +9,7 @@ export const usePaciente = () => {
     try {
       const pacientes = await fetcher({
         metodo: "GET",
-        rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatients",
+        rota: "/Paciente/GetListPatients",
       });
       if (pacientes.length > 0) {
         setPacientes(pacientes);

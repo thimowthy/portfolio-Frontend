@@ -12,7 +12,7 @@ const CadastrarExame = () => {
     try {
       const pacientes = await fetcher({
         metodo: "GET",
-        rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatientsSemAlta",
+        rota: "/Paciente/GetListPatientsSemAlta",
       });
       if (pacientes.length > 0) {
         setPacientes(pacientes);
@@ -26,7 +26,7 @@ const CadastrarExame = () => {
     try {
       const medicos = await fetcher({
         metodo: "GET",
-        rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/GetListUsers?filtroCargo=MEDICO",
+        rota: "/Usuario/GetListUsers?filtroCargo=MEDICO",
       });
       if (medicos.length > 0) {
         setMedicos(medicos);
