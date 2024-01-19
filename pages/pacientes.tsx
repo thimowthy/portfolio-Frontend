@@ -24,7 +24,7 @@ export default function Pacientes({
     try {
       const pacientes = await fetcher({
         metodo: "GET",
-        rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatients",
+        rota: "/Paciente/GetListPatients",
       });
       if (pacientes.length > 0) {
         pacientes.sort(function (a: any, b: any) {
@@ -217,7 +217,7 @@ export default function Pacientes({
 //   try {
 //     const listPacientes = await fetcher({
 //       metodo: "GET",
-//       rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatients",
+//       rota: "/Paciente/GetListPatients",
 //     });
 //     if (listPacientes.length > 0) {
 //       listPacientes.sort(function (a: any, b: any) {

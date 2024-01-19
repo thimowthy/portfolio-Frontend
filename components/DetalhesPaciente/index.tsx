@@ -21,6 +21,7 @@ import { IntervaloTempo } from "@/types/Enum/IntervaloTempo";
 import { Prescricao } from "@/types/Prescricao";
 import PacienteTab from "../PacienteTab";
 import fetcher from "@/api/fetcher";
+import HistoricoTratamentoList from "../HistoricoTratamento";
 /**
  * Renderiza o a página de detalhes do paciente.
  * @category Component
@@ -289,7 +290,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     try {
       const response = await fetcher({
         metodo: "POST",
-        rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/CadastrarTemperatura/${paciente.id}`,
+        rota: `/Internacao/CadastrarTemperatura/${paciente.id}`,
         cabecalho: { "Content-Type": "application/json" },
         body: JSON.stringify({ temperatura: temperatura }),
       });
@@ -443,6 +444,12 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
           title="Prescrição"
           disabled={!paciente || !paciente.id}
         />
+          <TabItem
+            href="tab-historico"
+            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
+            title="Histórico"
+            disabled={!paciente || !paciente.id}
+          />
       </TabList>
       <div id="contents" className="bg-[#EAEAEA] relative rounded-b-xl overflow-y-auto rounded-tr-xl px-1 z-1">
         <div className="overflow-y-auto">
@@ -739,6 +746,11 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
             )}
           </TabContents>  
         </div>
+          <TabContents tabId="tab-historico" active={false}>
+            <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
+              <HistoricoTratamentoList id={paciente.id?.toString() || ""} />
+            </div>
+          </TabContents>
       </div>
       </>
     </div>
