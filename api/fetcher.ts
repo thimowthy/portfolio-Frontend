@@ -18,13 +18,7 @@ async function fetcher({
     typeof window != "undefined"
       ? localStorage?.getItem("Authorization")
       : null;
-  let defaultHeader = {
-    "Authorization": `Bearer ${token}`,
-    "AccessControlAllowOrigin": "*",
-    "AccessControlAllowHeaders": "Origin, X-Requested-With, Content-Type, Accept",
-    "Content-Type": "application/json; charset=utf-8",
-    "Transfer-Encoding": "chunked"
-  };
+  let defaultHeader = { "Authorization": `Bearer ${token}` };
   if (token) {
     if (cabecalho && !cabecalho.Authorization) {
       cabecalho.Authorization = `Bearer ${token}`;
