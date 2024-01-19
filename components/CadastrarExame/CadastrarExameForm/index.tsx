@@ -67,7 +67,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
       try {
         const internacao = await fetcher({
           metodo: "GET",
-          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetInternacaoAtual?pacienteId=${idPaciente}`,
+          rota: `/Internacao/GetInternacaoAtual?pacienteId=${idPaciente}`,
         });
         setIdInternacao(internacao.Id);
       } catch (error) {}
@@ -104,7 +104,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
           try {
             const response = await fetcher({
               metodo: "POST",
-              rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/AddHemograma",
+              rota: "/Exame/AddHemograma",
               body: JSON.stringify(hemogramaData),
               cabecalho: { "Content-Type": "application/json" },
             });
@@ -122,7 +122,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
           try {
             const response = await fetcher({
               metodo: "PUT",
-              rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/PutExame/${exame.id}`,
+              rota: `/Exame/PutExame/${exame.id}`,
               cabecalho: { "Content-Type": "application/json" },
               body: JSON.stringify(hemogramaData),
             });
@@ -166,7 +166,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
     try {
       const internamento = await fetcher({
         metodo: "GET",
-        rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetPacientePeloInternamento?internamentoId=${exame?.idInternamento}`,
+        rota: `/Internacao/GetPacientePeloInternamento?internamentoId=${exame?.idInternamento}`,
       });
 
       const pacienteEncontrado = internamento?.Paciente;
@@ -225,7 +225,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
       try {
         const internacaoAtual = await fetcher({
           metodo: "GET",
-          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetInternacaoAtual?pacienteId=${pacienteEncontrado?.id}`,
+          rota: `/Internacao/GetInternacaoAtual?pacienteId=${pacienteEncontrado?.id}`,
         });
         return internacaoAtual;
       } catch (err) {

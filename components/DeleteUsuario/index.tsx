@@ -16,7 +16,7 @@ export default function DeleteUsuario({
     const token = localStorage.getItem("Authorization");
 
     const response = await fetch(
-      `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/DeleteUser/${user.id}`,
+      `/Usuario/DeleteUser/${user.id}`,
       {
         method: "DELETE",
         headers: {

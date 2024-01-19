@@ -19,7 +19,7 @@ const DadosPacientePage = () => {
   const loadPacientes = async () => {
     const pacientes = await fetcher({
       metodo: "GET",
-      rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatientsSemAlta",
+      rota: "/Paciente/GetListPatientsSemAlta",
     });
 
     pacientes.sort(function (a: any, b: any) {
@@ -91,7 +91,7 @@ export default DadosPacientePage;
 // export async function getServerSideProps<GetServerSideProps>() {
 //   const pacientes = await fetcher({
 //     metodo: "GET",
-//     rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatientsSemAlta",
+//     rota: "/Paciente/GetListPatientsSemAlta",
 //   });
 
 //   pacientes.sort(function (a: any, b: any) {

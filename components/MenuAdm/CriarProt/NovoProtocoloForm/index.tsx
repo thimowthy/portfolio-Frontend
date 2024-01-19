@@ -42,7 +42,7 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
       try {
         const response: Response = await fetcher({
           metodo: "PUT",
-          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/AtualizaProtocolo/${protocoloDB.id}`,
+          rota: `/Protocolo/AtualizaProtocolo/${protocoloDB.id}`,
           cabecalho: { "Content-Type": "application/json" },
           body: JSON.stringify(JSON.stringify(protocolo)),
         });
@@ -55,7 +55,7 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
       try {
         const response: Response = await fetcher({
           metodo: "POST",
-          rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Protocolo/CadastrarProtocolo",
+          rota: "/Protocolo/CadastrarProtocolo",
           cabecalho: { "Content-Type": "application/json" },
           body: JSON.stringify(JSON.stringify(protocolo)),
         });

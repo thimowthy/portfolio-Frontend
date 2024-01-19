@@ -12,11 +12,19 @@ async function fetcher({
   cabecalho?: any;
   body?: any;
 }) {
+  const baseURL = "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com";
+  // const baseURL = "http://localhost:5130";
   const token =
     typeof window != "undefined"
       ? localStorage?.getItem("Authorization")
       : null;
-  let defaultHeader = { Authorization: `Bearer ${token}` };
+  let defaultHeader = {
+    "Authorization": `Bearer ${token}`,
+    "AccessControlAllowOrigin": "*",
+    "AccessControlAllowHeaders": "Origin, X-Requested-With, Content-Type, Accept",
+    "Content-Type": "application/json; charset=utf-8",
+    "Transfer-Encoding": "chunked"
+  };
   if (token) {
     if (cabecalho && !cabecalho.Authorization) {
       cabecalho.Authorization = `Bearer ${token}`;
@@ -28,7 +36,7 @@ async function fetcher({
   axios.defaults.httpsAgent = httpsAgent;
   const response = await axios({
     method: metodo,
-    url: rota,
+    url: baseURL + rota,
     data: body,
     headers: cabecalho || defaultHeader,
   }).catch((error) => {
