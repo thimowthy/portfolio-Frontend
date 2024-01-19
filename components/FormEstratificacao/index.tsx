@@ -108,7 +108,7 @@ export default function FormEstratificacao({ paciente, setLoading }: any) {
 
     try {
       const response = await fetch(
-        `Internacao/SetRisco/${paciente.id}?risco=${risco}`,
+        `/Internacao/SetRisco/${paciente.id}?risco=${risco}`,
         {
           method: "PUT",
           headers: {
