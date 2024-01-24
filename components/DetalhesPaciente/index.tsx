@@ -43,10 +43,11 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   const [cuidado, setCuidado] = useState<ItemCuidado>();
 
   const [prescricao, setPrescricao] = useState<Prescricao>();
-
   const [temperatura, setTemperatura] = useState<number>(36.5);
 
   const [internamento, setInternamento] = useState<Internacao>();
+
+  const [listaMedicamentos, setListaMedicamentos] = useState<Medicamento[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,107 +59,21 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
         setInternamento(internamento);
       } catch (error) {}
     };
-    if (paciente) fetchData();
+    if (paciente.id) fetchData();
   }, [paciente]);
 
-
-  const infeccoesSemInstabilidadeHemodinamica = [
-    {
-      nome: "Nenhuma",
-      ATBs: [
-        {
-          primeira_opcao: "Cefepime 2g 8/8h",
-        },
-        {
-          segunda_opcao: "Pipe-Tazo 4,5g 6/6h",
-        },
-      ],
-    },
-    {
-      nome: "ESBL",
-      ATBs: [
-        {
-          primeira_opcao: "Cefepime 2g 8/8h + Amicacina 15mg/kg/dia",
-        },
-        {
-          segunda_opcao: "Meropenem 1g 8/8h (paciente com disfunção renal)",
-        },
-      ],
-    },
-    {
-      nome: "MRSA",
-      ATBs: [
-        {
-          primeira_opcao: "Vancomicina 15mg/kg 12/12h + Cefepime 2g 8/8h",
-        },
-      ],
-    },
-    {
-      nome: "Enterobactéria produtora de carbapenemase (ex: KPC)",
-      ATBs: [
-        {
-          primeira_opcao: "Meropenem 2g 8/8h + Amicacina 15mg/kg/dia",
-        },
-        {
-          segunda_opcao:
-            "Meropenem 2g 8/8h + Polimixina B 25.000UI/kg/dia (÷ 2 ou 3)",
-        },
-      ],
-    },
-    {
-      nome: "Enterococcus resistente à Vancomicina (VRE)",
-      ATBs: [
-        {
-          primeira_opcao:
-            "Cefepime 2g 8/8h (adicionar Linezolida 600mg 12/12h se infecção por VRE nos últimos 30 dias)",
-        },
-      ],
-    },
-  ];
-
-  const infeccoesComInstabilidadeHemodinamica = [
-    {
-      nome: "Nenhuma",
-      ATBs: [
-        {
-          primeira_opcao: "Vancomicina 15mg/kg 12/12h + Meropenem 1g 8/8h",
-        },
-      ],
-    },
-    {
-      nome: "ESBL",
-      ATBs: [
-        {
-          primeira_opcao: "Vancomicina 15mg/kg 12/12h + Meropenem 1g 8/8h",
-        },
-      ],
-    },
-    {
-      nome: "MRSA",
-      ATBs: [
-        {
-          primeira_opcao: "Vancomicina 15mg/kg 12/12h + Meropenem 1g 8/8h",
-        },
-      ],
-    },
-    {
-      nome: "Enterobactéria produtora de carbapenemase (ex: KPC)",
-      ATBs: [
-        {
-          primeira_opcao:
-            "Vancomicina 1g 12/12h + Meropenem 2g 8/8h + Amicacina 15mg/kg/dia",
-        },
-      ],
-    },
-    {
-      nome: "Enterococcus resistente à Vancomicina (VRE)",
-      ATBs: [
-        {
-          primeira_opcao: "Linezolida 600 mg 12/12h + Meropenem 1g 8/8h",
-        },
-      ],
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const listaMedicamentos = await fetcher({
+          metodo: "GET",
+          rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Medicamento/GetAllMedicamentos",
+        });
+        setListaMedicamentos(listaMedicamentos);
+      } catch (error) {}
+    };
+    fetchData();
+  }, []);
 
   const handleAddCuidado = (e: any) => {
     if (e.key === "Enter") {
@@ -237,20 +152,6 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
       }),
   });
   };
-
-  const listaMedicamentos: Medicamento[] = [
-    { id: 0, nome: "Cefepime" },
-    { id: 1, nome: "Pipe-Zato" },
-    { id: 2, nome: "Amicacina" },
-    { id: 3, nome: "Meropenem" },
-    { id: 4, nome: "Vancomicina" },
-    { id: 5, nome: "Poliximina B" },
-    { id: 6, nome: "Linezolida" },
-    { id: 7, nome: "Azitromicina" },
-    { id: 8, nome: "Metronidazol" },
-    { id: 9, nome: "Aciclovir" },
-    { id: 10, nome: "Fluconazol" },
-  ];
 
   return (
     <div>
