@@ -57,8 +57,9 @@ const DadosPacientePage = () => {
 
   useEffect(() => {
     let pacienteAtivo =
-      pacientes?.find((paciente: Paciente) => paciente.id == router.query.id) ||
-      {};
+      pacientes?.find(
+        (paciente: Paciente) => paciente.id.toString() === router.query.id,
+      ) || {};
     setSelectedPatient(pacienteAtivo);
   }, [router]);
   const [selectedPatient, setSelectedPatient] = useState<any>({});

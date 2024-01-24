@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import moment from "moment";
 import TabContents from "../TabContents/index";
 import useServerityIcon from "@/hooks/useSeverityIcon";
@@ -13,6 +12,8 @@ import TabList from "../TabList";
 import { useState } from "react";
 import { tabColorMap } from "@/utils/maps";
 import { setColor } from "@/utils/colorTransition";
+import fetcher from "@/api/fetcher";
+import Swal from "sweetalert2";
 
 export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   const selectLabelNeutrofilos = (quantidadeNeutrofilos: number) => {
@@ -49,6 +50,28 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
     return;
   };
 
+  const submitTemperatura = async (pacienteId: number) => {
+    try {
+      await fetcher({
+        rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/CadastrarTemperatura/${pacienteId}`,
+        metodo: "POST",
+        body: {
+          temperatura,
+        },
+      });
+      return Swal.fire(
+        "Sucesso!",
+        "Temperatura registrada com sucesso!",
+        "success",
+      );
+    } catch (error) {
+      return Swal.fire(
+        "Erro!",
+        "Aconteceu algum erro ao tentar atualizar a temperatura",
+        "error",
+      );
+    }
+  };
   const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
   let situacoesPacienteCopy = [...situacoesPaciente];
   const situacaoAtual = situacoesPacienteCopy?.pop();
@@ -161,7 +184,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                         (comorbidade: any, index: number) => {
                           return (
                             <p
-                              key={`${comorbidade.nome}${index}`}
+                              key={`${comorbidade.id}${index}`}
                               className="text-sm pl-4"
                             >
                               {comorbidade?.nome}
@@ -207,26 +230,34 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
 
               <hr />
               <div className="mt-4">
-                <h1 className="text-xl flex" title=">38,3°C medida única, OU >38°C por mais de 1h">
-                  Temperatura (°C) {" "}
+                <h1
+                  className="text-xl flex"
+                  title=">38,3°C medida única, OU >38°C por mais de 1h"
+                >
+                  Temperatura (°C){" "}
                 </h1>
                 <div className="flex mt-2 items-center">
                   <input
                     className="w-20 p-1 text-2xl text-right rounded border-2"
                     maxLength={3}
                     value={temperatura}
-                    onChange={(e) => {setTemperatura(parseFloat(e.target.value)); }}
+                    onChange={(e) => {
+                      setTemperatura(parseFloat(e.target.value));
+                    }}
                     type="number"
                     step={0.1}
                     min={30}
                     max={45}
-                    style={{ 
+                    style={{
                       borderColor: setColor(temperatura),
                       outline: "none",
                     }}
                   />
                   <span className="text-2xl ml-2 mr-8">°C</span>
-                  <button className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 rounded px-4">
+                  <button
+                    onClick={() => submitTemperatura(paciente.id)}
+                    className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 rounded px-4"
+                  >
                     Enviar
                   </button>
                 </div>
@@ -295,10 +326,6 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                                   )}
                                 ></div>
                               </div>
-
-                              <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
-                                Acessar +exames
-                              </button>
                             </div>
                           </div>
                         </div>

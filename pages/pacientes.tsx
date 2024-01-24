@@ -212,31 +212,3 @@ export default function Pacientes({
     </>
   );
 }
-
-// export async function getServerSideProps<GetServerSideProps>() {
-//   try {
-//     const listPacientes = await fetcher({
-//       metodo: "GET",
-//       rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatients",
-//     });
-//     if (listPacientes.length > 0) {
-//       listPacientes.sort(function (a: any, b: any) {
-//         if (a.nome < b.nome) {
-//           return -1;
-//         }
-//         if (a.nome > b.nome) {
-//           return 1;
-//         }
-//         return 0;
-//       });
-//     }
-//     return {
-//       props: {
-//         listPacientes,
-//       },
-//     };
-//   } catch (error) {
-//     console.log(error);
-//   }
-
-// }
