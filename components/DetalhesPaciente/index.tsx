@@ -35,7 +35,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   const [medicacoes, setMedicacoes] = useState<ItemMedicamento[]>([]);
   const [cuidados, setCuidados] = useState<ItemCuidado[]>([]);
   const [medicamento, setMedicamento] = useState<Medicamento>();
-  const [doseInput, setDoseInput] = useState("1");
+  // const [doseInput, setDoseInput] = useState("1");
   const [dose, setDose] = useState(1);
   const [dosagem, setDosagem] = useState<UnidadeDosagem>(
     UnidadeDosagem.COMPRIMIDO,
@@ -508,11 +508,8 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                             pattern="[0-9]+([\.,][0-9]+)?"
                             step="0.01"
                             maxLength={8}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              setDoseInput(value);
-                            }}
-                            value={doseInput}
+                            onChange={(e) => { setDose(e.target.value); }}
+                            value={dose}
                           />
                           <select
                             className="ml-0 w-28 text-right pr-2 py-1 rounded"
