@@ -17,7 +17,7 @@ const ExamesList: React.FC<ExameListProps> = ({ id, setExame }) => {
         try {
           const response = await fetcher({
             rota:
-              "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetHemogramasFromPaciente?pacienteId=" +
+              "/Exame/GetHemogramasFromPaciente?pacienteId=" +
               id,
             metodo: "GET",
           });
@@ -28,7 +28,7 @@ const ExamesList: React.FC<ExameListProps> = ({ id, setExame }) => {
       } else {
         try {
           const response = await fetcher({
-            rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Exame/GetAllExames",
+            rota: "/Exame/GetAllExames",
             metodo: "GET",
           });
           setExames(response);

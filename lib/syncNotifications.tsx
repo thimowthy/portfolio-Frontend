@@ -8,7 +8,7 @@ import checkAuthentication from "@/utils/checkAuth";
 
 export default async function SyncNotification() {
   const notifications = await fetcher({
-    rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Notificacao/GetAllNotSent",
+    rota: "/Notificacao/GetAllNotSent",
     metodo: "GET",
   });
   let existingNotifications = localStorage["notifications"]

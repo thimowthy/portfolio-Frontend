@@ -36,7 +36,7 @@ export default function EditUsuario({
 
       if (token) {
         const response = await fetcher({
-          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/PutUser/${user.id}`,
+          rota: `/Usuario/PutUser/${user.id}`,
           metodo: "PUT",
           body: formData,
         });

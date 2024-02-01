@@ -22,7 +22,7 @@ async function loadPaciente(id: any) {
   try {
     const paciente = await fetcher({
       metodo: "GET",
-      rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetById?pacienteId=${id}`,
+      rota: `/Paciente/GetById?pacienteId=${id}`,
     });
     return paciente;
   } catch (err) {
@@ -78,7 +78,7 @@ export default function EditUserPage() {
     try {
       const result = await fetcher({
         rota:
-          "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/EditPaciente?pacienteId=" +
+          "/Paciente/EditPaciente?pacienteId=" +
           id,
         metodo: "PUT",
         body: formDataClone,
@@ -103,7 +103,7 @@ export default function EditUserPage() {
       try {
         const paciente2 = await fetcher({
           metodo: "GET",
-          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetById?pacienteId=${id}`,
+          rota: `/Paciente/GetById?pacienteId=${id}`,
         });
         setPaciente(paciente2);
         setFormData((prevState) => ({
