@@ -50,6 +50,21 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
 
   const [temperatura, setTemperatura] = useState<number>(36.5);
 
+  const [internamento, setInternamento] = useState<Internacao>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const internamento = await fetcher({
+          metodo: "GET",
+          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetInternacaoAtual?pacienteId=${paciente.id}`,
+        });
+        setInternamento(internamento);
+      } catch (error) {}
+    };
+    if (paciente && paciente?.id) fetchData();
+  }, [paciente]);
+
   const infeccoesSemInstabilidadeHemodinamica = [
     {
       nome: "Nenhuma",
