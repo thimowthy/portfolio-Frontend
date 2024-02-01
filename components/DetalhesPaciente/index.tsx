@@ -21,6 +21,7 @@ import { IntervaloTempo } from "@/types/Enum/IntervaloTempo";
 import { Prescricao } from "@/types/Prescricao";
 import PacienteTab from "../PacienteTab";
 import fetcher from "@/api/fetcher";
+import HistoricoTratamentoList from "../HistoricoTratamento";
 /**
  * Renderiza o a página de detalhes do paciente.
  * @category Component
@@ -34,7 +35,6 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   const [medicacoes, setMedicacoes] = useState<ItemMedicamento[]>([]);
   const [cuidados, setCuidados] = useState<ItemCuidado[]>([]);
   const [medicamento, setMedicamento] = useState<Medicamento>();
-  const [doseInput, setDoseInput] = useState("1");
   const [dose, setDose] = useState(1);
   const [dosagem, setDosagem] = useState<UnidadeDosagem>(
     UnidadeDosagem.COMPRIMIDO,
@@ -129,7 +129,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     try {
       const response = await fetcher({
         metodo: "POST",
-        rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/CadastrarTemperatura/${paciente.id}`,
+        rota: `/Internacao/CadastrarTemperatura/${paciente.id}`,
         cabecalho: { "Content-Type": "application/json" },
         body: JSON.stringify({ temperatura: temperatura }),
       });
@@ -184,6 +184,12 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
             href="tab-prescricao"
             className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
             title="Prescrição"
+            disabled={!paciente || !paciente.id}
+          />
+          <TabItem
+            href="tab-historico"
+            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
+            title="Histórico"
             disabled={!paciente || !paciente.id}
           />
         </TabList>
@@ -242,11 +248,8 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                             pattern="[0-9]+([\.,][0-9]+)?"
                             step="0.01"
                             maxLength={8}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              setDoseInput(value);
-                            }}
-                            value={doseInput}
+                            onChange={(e) => { setDose(parseFloat(e.target.value)); }}
+                            value={dose}
                           />
                           <select
                             className="ml-0 w-28 text-right pr-2 py-1 rounded"
@@ -478,6 +481,11 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
           <TabContents tabId="tab-sintomas" active={false}>
             <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
               <SintomasForm id={paciente.id?.toString() || ""} />
+            </div>
+          </TabContents>
+          <TabContents tabId="tab-historico" active={false}>
+            <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
+              <HistoricoTratamentoList id={paciente.id?.toString() || ""} />
             </div>
           </TabContents>
         </div>

@@ -47,7 +47,7 @@ const Login = () => {
        * @type {Response}
        */
       const response = await fetcher({
-        rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Auth/Autenticacao",
+        rota: "/Auth/Autenticacao",
         metodo: "POST",
         cabecalho: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),

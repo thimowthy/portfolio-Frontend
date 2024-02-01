@@ -1,10 +1,9 @@
 import fetcher from "../api/fetcher";
 
-const apiURL = "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com";
 const confirmNotification = async (notificationId: string) => {
   try {
     await fetcher({
-      rota: `${apiURL}/Notificacao/ConfirmReading/${notificationId}`,
+      rota: `/Notificacao/ConfirmReading/${notificationId}`,
       metodo: "GET",
     });
     let existingNotifications = localStorage["notifications"]
@@ -29,7 +28,7 @@ const confirmNotification = async (notificationId: string) => {
 const setDischargePatient = async (pacienteId: number) => {
   try {
     await fetcher({
-      rota: `${apiURL}/Internacao/SetAlta/${pacienteId}`,
+      rota: `/Internacao/SetAlta/${pacienteId}`,
       metodo: "PUT",
     });
     return true;
