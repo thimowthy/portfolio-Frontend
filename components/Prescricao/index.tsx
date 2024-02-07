@@ -251,14 +251,14 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                   <select
                     className="ml-0 w-28 text-right pr-2 py-1 rounded"
                     id="intervalo-tempo"
-                    value={obterValorNumericoIntervaloTempo(intervalo)}
+                    value={intervalo}
                     onChange={(e) => {
                       const valorSelecionado: string = e.target.value;
                       const novoIntervalo: IntervaloTempo | undefined = Object.values(IntervaloTempo)
                         .find(opcao => opcao === valorSelecionado);
 
                       if (novoIntervalo !== undefined) {
-                        setIntervalo(obterValorNumericoIntervaloTempo(intervalo));
+                        setIntervalo(intervalo);
                       }
                     }}
                   >
@@ -371,7 +371,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 };
