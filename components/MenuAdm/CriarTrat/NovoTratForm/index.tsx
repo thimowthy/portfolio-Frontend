@@ -143,9 +143,9 @@ const TratFormContent: React.FC<TratFormContentProps> = ({ onTratamentoSubmit, t
     setMedicacao({
       medicamento: medicamento,
       dose: dose,
-      unidade_dosagem: dosagem,
+      unidadeDosagem: dosagem,
       intervalo: tempo,
-      intervalo_tempo: intervalo,
+      intervaloTempo: intervalo,
     });
   }, [medicamento, dose, dosagem, tempo, intervalo]);
 
@@ -425,13 +425,13 @@ const TratFormContent: React.FC<TratFormContentProps> = ({ onTratamentoSubmit, t
                               " " +
                               item.dose +
                               " " +
-                              item.unidade_dosagem +
+                              item.unidadeDosagem +
                               " de " +
                               item.intervalo +
                               "/" +
                               item.intervalo +
                               " " +
-                              item.intervalo_tempo}
+                              item.intervaloTempo}
                           </span>
                         </li>
                         <div className="border-b border-gray"></div>
