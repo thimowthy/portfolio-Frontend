@@ -3,10 +3,11 @@ import { Prescricao } from "@/types/Prescricao";
 import { ItemMedicamento } from "@/types/ItemMedicamento";
 import { ItemCuidado } from "@/types/ItemCuidado";
 import { Medicamento } from "@/types/Medicamento";
-import { UnidadeDosagem } from "@/types/Enum/UnidadeDosagem";
+import { UnidadeDosagem, obterValorNumericoDosagem } from "@/types/Enum/UnidadeDosagem";
 import { IntervaloTempo, obterValorNumericoIntervaloTempo } from "@/types/Enum/IntervaloTempo";
 import fetcher from "@/api/fetcher";
 import Loader from "../Loader";
+import moment from "moment";
 
 interface PrescricaoFormProps {
   id: string;
@@ -31,7 +32,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
 
   const [loading, setLoading] = useState(false);
 
-  const [intervalo, setIntervalo] = useState(0);
+  const [intervalo, setIntervalo] = useState<IntervaloTempo>(IntervaloTempo.DIAS);
 
   const [dose, setDose] = useState(1);
   const [dosagem, setDosagem] = useState<UnidadeDosagem>(
@@ -60,10 +61,9 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
           metodo: "GET",
           rota: `/Internacao/GetInternacaoAtual?pacienteId=${id}`,
         });
-        console.log("internamento", internamento);
         setInternamento(internamento);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     if (id) fetchData();
@@ -89,6 +89,10 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
   const handleAddMedicacao = () => {
     if (medicacao && medicacao.medicamento && medicacao.dose) {
       setMedicacoes((prevMedicacoes) => [medicacao, ...prevMedicacoes]);
+      setDosagem(UnidadeDosagem.COMPRIMIDO);
+      setDose(1);
+      setIntervalo(IntervaloTempo.DIAS);
+      setTempo(1);
     }
   };
 
@@ -118,34 +122,44 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
     });
   };
 
+  const formatarMedicamentos = () => {
+    if (prescricao?.medicacoes) {
+      const medicamentosFormatados = prescricao.medicacoes.map((item) => {
+        return {
+          intervaloTempo: obterValorNumericoIntervaloTempo(item.intervalo_tempo),
+          unidadeDosagem: obterValorNumericoDosagem(item.unidade_dosagem),
+          intervalo: item.intervalo,
+          dose: item.dose,
+          idMedicamento: item.medicamento ? item.medicamento.id : 0,
+        };
+      });
+      return medicamentosFormatados;
+    }
+
+  };
+
   const gerarPrescricao = async () => {
     setLoading(true);
-    console.log(internamento);
-    console.log(JSON.stringify({
-      dataSolicitacao: Date.now(),
-      itensCuidado: prescricao?.cuidados,
-      itensMedicamento: prescricao?.medicacoes,
-      urgente: true,
-      idInternamento: internamento?.Id,
-    }));
-    /* try {
+
+    const meds = formatarMedicamentos();
+    try {
       const response = await fetcher({
         rota: "/Prescricao/CadastrarPrescricao",
         metodo: "POST",
-        body: JSON.stringify({
-          dataSolicitacao: Date.now(),
+        body: {
+          dataSolicitacao: moment().toISOString(),
           itensCuidado: prescricao?.cuidados,
-          itensMedicamento: prescricao?.medicacoes,
+          itensMedicamento: meds,
           urgente: true,
           idInternamento: internamento?.id,
-        })
+        }
       });
       console.log("resp1", response);
     } catch (error) {
       console.error(error);
-    } */
+    }
 
-    /* try {
+    try {
 
       const reponseGetPrescricao = await fetcher({
         metodo: "GET",
@@ -156,8 +170,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
       console.error(error);
     } finally {
       setLoading(false);
-    } */
-    setLoading(false);
+    }
   };
 
   return (
@@ -207,7 +220,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                   <input
                     className="ml-auto w-20 text-right pr-2 py-1 rounded"
                     id="dose"
-                    min={0}
+                    min={1}
                     type="number"
                     pattern="[0-9]+([\.,][0-9]+)?"
                     step="0.01"
@@ -253,13 +266,12 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                     id="intervalo-tempo"
                     value={intervalo}
                     onChange={(e) => {
-                      const valorSelecionado: string = e.target.value;
-                      const novoIntervalo: IntervaloTempo | undefined = Object.values(IntervaloTempo)
-                        .find(opcao => opcao === valorSelecionado);
-
-                      if (novoIntervalo !== undefined) {
-                        setIntervalo(intervalo);
-                      }
+                      const intervalo = Object.values(
+                        IntervaloTempo,
+                      ).find((dose) => dose === e.target.value);
+                      setIntervalo(
+                        intervalo ? intervalo : IntervaloTempo.DIAS,
+                      );
                     }}
                   >
                     {Object.values(IntervaloTempo).map((opcao) => (
