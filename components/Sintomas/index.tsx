@@ -7,6 +7,21 @@ import { getEnums } from "@/utils/getEnums";
 import ListaSintomas from "../ListaSintomas";
 import { stringify } from "querystring";
 
+const sintomasDefault = {
+  "SuspeitaInfeccao": false,
+  "SintomasRespiratorios": false,
+  "InfeccaoCateter": false,
+  "InfeccaoPele": false,
+  "Pneumonia": false,
+  "GramCrescente": false,
+  "RxToraxAlterado": false,
+  "SepseAbdominal": false,
+  "Tiflite": false,
+  "CelulitePerianal": false,
+  "UlceraBucal": false,
+  "Diarreia": false
+};
+
 interface SintomasFormProps {
   id: string;
 }
@@ -59,6 +74,9 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
   }, [situacaoTratamento]);
 
   useEffect(() => {
+    setSituacaoTratamento(sintomasDefault);
+    setInstabilidadeH(false);
+    setInfeccao(0);
     const fetchData = async () => {
       try {
         const situacaoTratamento = await fetcher({
@@ -69,9 +87,6 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
         setInstabilidadeH(situacaoTratamento.InstabilidadeHemodinamica);
         setInfeccao(situacaoTratamento.InfeccaoPrevia);
       } catch (error) {
-        setSituacaoTratamento(undefined);
-        setInstabilidadeH(false);
-        setInfeccao(0);
       }
     };
     if (id)
@@ -124,7 +139,7 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
           Salvar
         </button>
       </div>
-      <div className="pt-8 border-2 p-4 bg-[#e1ecea] mt-4">
+      <div className="pt-8 border-2 p-4 bg-[#d9e0df] mt-4">
         <div className="gap-4">
           <div className="flex mb-4 justify-between">
             <p>Instabilidade Hemodinâmica</p>

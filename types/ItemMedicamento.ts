@@ -5,7 +5,7 @@ import { Medicamento } from "./Medicamento";
 export type ItemMedicamento = {
   medicamento: Medicamento | undefined;
   dose: number;
-  unidade_dosagem: UnidadeDosagem;
+  unidadeDosagem: UnidadeDosagem | string;
   intervalo: number;
-  intervalo_tempo: IntervaloTempo | number;
+  intervaloTempo: IntervaloTempo | string;
 };

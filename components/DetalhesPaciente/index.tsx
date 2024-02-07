@@ -33,7 +33,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
       try {
         const internamento = await fetcher({
           metodo: "GET",
-          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/GetInternacaoAtual?pacienteId=${paciente.id}`,
+          rota: `/Internacao/GetInternacaoAtual?pacienteId=${paciente.id}`,
         });
         setInternamento(internamento);
       } catch (error) { }

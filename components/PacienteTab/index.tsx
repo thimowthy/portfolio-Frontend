@@ -53,7 +53,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   const submitTemperatura = async (pacienteId: number) => {
     try {
       await fetcher({
-        rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/CadastrarTemperatura/${pacienteId}`,
+        rota: `/Internacao/CadastrarTemperatura/${pacienteId}`,
         metodo: "POST",
         body: {
           temperatura,

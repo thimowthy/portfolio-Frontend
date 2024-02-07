@@ -3,10 +3,12 @@ import { Prescricao } from "@/types/Prescricao";
 import { ItemMedicamento } from "@/types/ItemMedicamento";
 import { ItemCuidado } from "@/types/ItemCuidado";
 import { Medicamento } from "@/types/Medicamento";
-import { UnidadeDosagem } from "@/types/Enum/UnidadeDosagem";
+import { UnidadeDosagem, obterValorNumericoDosagem } from "@/types/Enum/UnidadeDosagem";
 import { IntervaloTempo, obterValorNumericoIntervaloTempo } from "@/types/Enum/IntervaloTempo";
 import fetcher from "@/api/fetcher";
 import Loader from "../Loader";
+import moment from "moment";
+import { getEnums } from "@/utils/getEnums";
 
 interface PrescricaoFormProps {
   id: string;
@@ -27,16 +29,33 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
   const [medicamento, setMedicamento] = useState<Medicamento>();
   const [listaMedicamentos, setListaMedicamentos] = useState<Medicamento[]>([]);
 
-  const [tempo, setTempo] = useState(1);
 
   const [loading, setLoading] = useState(false);
 
-  const [intervalo, setIntervalo] = useState(0);
+  const [tempo, setTempo] = useState(1);
+  const [intervalo, setIntervalo] = useState<IntervaloTempo>(IntervaloTempo.DIAS);
+  const [intervalos, setIntervalos] = useState<IntervaloTempo[]>([]);
 
   const [dose, setDose] = useState(1);
-  const [dosagem, setDosagem] = useState<UnidadeDosagem>(
-    UnidadeDosagem.COMPRIMIDO,
-  );
+  const [dosagem, setDosagem] = useState<UnidadeDosagem>(UnidadeDosagem.COMPRIMIDO);
+  const [dosagens, setDosagens] = useState<UnidadeDosagem[]>([]);
+  
+  const [sugestoes, setSugestoes] = useState<{itensCuidado:ItemCuidado[], itensMedicamento: ItemSugestaoMedicamento[]}>({ itensCuidado:[], itensMedicamento:[] });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const enunsData = await getEnums();
+        Object.keys(enunsData.TiposInfeccaoPreviaEnum).map(key => ({
+          nome: key.replace(/_/g, " "),
+          valor: enunsData.TiposInfeccaoPreviaEnum[key]
+        }));
+        setDosagens(enunsData.UnidadesDosagemEnum);
+        setIntervalos(enunsData.UnidadesIntervaloTempoEnum);
+      } catch (error) { }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetchDataMedicamentos = async () => {
@@ -60,10 +79,9 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
           metodo: "GET",
           rota: `/Internacao/GetInternacaoAtual?pacienteId=${id}`,
         });
-        console.log("internamento", internamento);
         setInternamento(internamento);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     if (id) fetchData();
@@ -73,9 +91,9 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
     setMedicacao({
       medicamento: medicamento,
       dose: dose,
-      unidade_dosagem: dosagem,
+      unidadeDosagem: dosagem,
       intervalo: tempo,
-      intervalo_tempo: intervalo,
+      intervaloTempo: intervalo,
     });
   }, [medicamento, dose, dosagem, tempo, intervalo]);
 
@@ -89,6 +107,10 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
   const handleAddMedicacao = () => {
     if (medicacao && medicacao.medicamento && medicacao.dose) {
       setMedicacoes((prevMedicacoes) => [medicacao, ...prevMedicacoes]);
+      setDosagem(UnidadeDosagem.COMPRIMIDO);
+      setDose(1);
+      setIntervalo(IntervaloTempo.DIAS);
+      setTempo(1);
     }
   };
 
@@ -118,87 +140,113 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
     });
   };
 
+  const formatarMedicamentos = () => {
+    if (prescricao?.medicacoes) {
+      const medicamentosFormatados = prescricao.medicacoes.map((item) => {
+        return {
+          intervaloTempo: item.intervaloTempo,
+          unidadeDosagem: obterValorNumericoDosagem(UnidadeDosagem[item.unidadeDosagem as keyof typeof UnidadeDosagem]),
+          intervalo: item.intervalo,
+          dose: item.dose,
+          idMedicamento: item.medicamento ? item.medicamento.id : 0,
+        };
+      });
+      return medicamentosFormatados;
+    }
+  };
+
   const gerarPrescricao = async () => {
     setLoading(true);
-    console.log(internamento);
-    console.log(JSON.stringify({
-      dataSolicitacao: Date.now(),
-      itensCuidado: prescricao?.cuidados,
-      itensMedicamento: prescricao?.medicacoes,
-      urgente: true,
-      idInternamento: internamento?.Id,
-    }));
-    /* try {
+
+    const meds = formatarMedicamentos();
+    try {
       const response = await fetcher({
         rota: "/Prescricao/CadastrarPrescricao",
         metodo: "POST",
-        body: JSON.stringify({
-          dataSolicitacao: Date.now(),
+        body: {
+          dataSolicitacao: moment().toISOString(),
           itensCuidado: prescricao?.cuidados,
-          itensMedicamento: prescricao?.medicacoes,
+          itensMedicamento: meds,
           urgente: true,
-          idInternamento: internamento?.id,
-        })
+          idInternamento: internamento?.Id,
+        }
       });
-      console.log("resp1", response);
+      setCuidados([]);
+      setMedicacoes([]);
+      setPrescricao({
+        medicacoes: medicacoes,
+        cuidados: cuidados,
+      });
     } catch (error) {
       console.error(error);
-    } */
+    }
 
-    /* try {
-
-      const reponseGetPrescricao = await fetcher({
-        metodo: "GET",
-        rota: `/Prescricao/GetPrescricaoMedica?pacienteId=${id}`,
+    const filePath =
+      `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Prescricao/GetPrescricaoMedica?pacienteId=${id}`;
+    fetch(filePath).then((res) => {
+      res.arrayBuffer().then((bytes) => {
+        const blob = new Blob([bytes], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+        window.open(url, "_blank");
       });
-      console.log("resp2", reponseGetPrescricao);
-    } catch (error) {
+    }).catch((error) => {
       console.error(error);
-    } finally {
+    }).finally(() => {
       setLoading(false);
-    } */
-    setLoading(false);
+    });
   };
 
   useEffect(() => {
+    setMedicacoes([]);
+    setCuidados([]);
     const fetchData = async () => {
       try {
         const internacao = await fetcher({
           metodo: "GET",
           rota: `/Internacao/GetInternacaoAtual?pacienteId=${id}`,
         });
-        atribuirDados(internacao.sugestoes);
-        console.log(internacao.sugestoes);
+        setSugestoes(internacao.sugestoes);
       } catch (error) {}
     };
     if (id) fetchData();
   }, [id]);
 
-  function atribuirDados(receita: {
-    itensCuidado: ItemCuidado[];
-    itensMedicamento: ItemMedicamento[];
-  }) {
-
-    const itensCuidado: ItemCuidado[] = receita.itensCuidado
-      .filter((item) => item.descricao !== "")
-      .map((item) => ({
-        descricao: item.descricao,
-      }));
-    
-    setCuidados(itensCuidado);
+  useEffect(() => {
+    console.log(medicacoes);
+  }, [medicacoes]);
   
-    const itensMedicamento: ItemMedicamento[] = receita.itensMedicamento.map(
-      (item) => ({
-        medicamento: item.medicamento,
-        dose: item.dose,
-        unidade_dosagem: item.unidade_dosagem,
-        intervalo: item.intervalo,
-        intervalo_tempo: item.intervalo_tempo,
-      })
-    );
-    console.log(itensMedicamento);
-    setMedicacoes(itensMedicamento);
-  }
+  type ItemSugestaoMedicamento = {
+    idMedicamento?: number;
+    medicamento: string;
+    dose: number;
+    unidadeDosagem: UnidadeDosagem | string;
+    intervalo: number;
+    intervaloTempo: IntervaloTempo | string;
+  };
+
+  useEffect(() => {
+    const setFormData = (() => {
+      const itensCuidado: ItemCuidado[] = sugestoes.itensCuidado
+        .filter((item) => item.descricao !== "")
+        .map((item) => ({
+          descricao: item.descricao,
+        }));
+      
+      setCuidados(itensCuidado);
+      
+      const itensMedicamento: ItemMedicamento[] = sugestoes.itensMedicamento.map(
+        (item: ItemSugestaoMedicamento) => ({
+          medicamento: { id: item.idMedicamento, nome: item.medicamento },
+          dose: item.dose,
+          unidadeDosagem: UnidadeDosagem[item.unidadeDosagem as keyof typeof UnidadeDosagem],
+          intervalo: item.intervalo,
+          intervaloTempo: IntervaloTempo[item.intervaloTempo as keyof typeof IntervaloTempo],
+        })
+      );
+      setMedicacoes(itensMedicamento);
+    }); 
+    if (sugestoes) setFormData();
+  }, [sugestoes]);
 
   return (
     <>
@@ -247,7 +295,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                   <input
                     className="ml-auto w-20 text-right pr-2 py-1 rounded"
                     id="dose"
-                    min={0}
+                    min={1}
                     type="number"
                     pattern="[0-9]+([\.,][0-9]+)?"
                     step="0.01"
@@ -293,13 +341,12 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                     id="intervalo-tempo"
                     value={intervalo}
                     onChange={(e) => {
-                      const valorSelecionado: string = e.target.value;
-                      const novoIntervalo: IntervaloTempo | undefined = Object.values(IntervaloTempo)
-                        .find(opcao => opcao === valorSelecionado);
-
-                      if (novoIntervalo !== undefined) {
-                        setIntervalo(intervalo);
-                      }
+                      const intervalo = Object.values(
+                        IntervaloTempo,
+                      ).find((dose) => dose === e.target.value);
+                      setIntervalo(
+                        intervalo ? intervalo : IntervaloTempo.DIAS,
+                      );
                     }}
                   >
                     {Object.values(IntervaloTempo).map((opcao) => (
@@ -349,13 +396,13 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                             " " +
                             item.dose +
                             " " +
-                            item.unidade_dosagem +
+                            item.unidadeDosagem +
                             " de " +
                             item.intervalo +
                             "/" +
                             item.intervalo +
                             " " +
-                            item.intervalo_tempo}
+                            item.intervaloTempo}
                         </span>
                       </li>
                       <div className="border-b border-gray"></div>
