@@ -155,22 +155,29 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
         }
       });
       console.log("resp1", response);
-    } catch (error) {
-      console.error(error);
-    }
-
-    try {
-
-      const reponseGetPrescricao = await fetcher({
-        metodo: "GET",
-        rota: `/Prescricao/GetPrescricaoMedica?pacienteId=${id}`,
+      setCuidados([]);
+      setMedicacoes([]);
+      setPrescricao({
+        medicacoes: medicacoes,
+        cuidados: cuidados,
       });
-      console.log("resp2", reponseGetPrescricao);
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoading(false);
     }
+
+    const filePath =
+      `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Prescricao/GetPrescricaoMedica?pacienteId=${id}`;
+    fetch(filePath).then((res) => {
+      res.arrayBuffer().then((bytes) => {
+        const blob = new Blob([bytes], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+        window.open(url, "_blank");
+      });
+    }).catch((error) => {
+      console.error(error);
+    }).finally(() => {
+      setLoading(false);
+    });
   };
 
   return (
