@@ -3,7 +3,7 @@ import Image from "next/image";
 import exameCinza from "@/public/medical-report-gray.png";
 import Router from "next/router";
 import fetcher from "@/api/fetcher";
-import { getEnuns } from "@/utils/getEnums";
+import { getEnums } from "@/utils/getEnums";
 import ListaSintomas from "../ListaSintomas";
 import { stringify } from "querystring";
 
@@ -13,21 +13,18 @@ interface SintomasFormProps {
 const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
 
   const formData = {
-    suspeitaInfeccao: false,
-    sintomasRespiratorios: false,
-    //suspeitaSepse: true,
-    //presencaUlceras: true,
-    //presencaDiarreia: true,
-    infeccaoCateter: false,
-    infeccaoPele: false,
-    pneumonia: false,
-    gramCrescente: false,
-    rxToraxAlterado: false,
-    sepseAbdominal: false,
-    tiflite: false,
-    celulitePerianal: false,
-    ulceraBucal: false,
-    diarreia: false,
+    SuspeitaInfeccao: false,
+    SintomasRespiratorios: false,
+    InfeccaoCateter: false,
+    InfeccaoPele: false,
+    Pneumonia: false,
+    GramCrescente: false,
+    RxToraxAlterado: false,
+    SepseAbdominal: false,
+    Tiflite: false,
+    CelulitePerianal: false,
+    UlceraBucal: false,
+    Diarreia: false,
   };
   const labels = ["Suspeita de infeccção relacionada ao catéter",
     "Sintomas respiratórios",
@@ -53,12 +50,10 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
     if (situacaoTratamento) {
       const sintomasFiltrados = Object.fromEntries(
         Object.entries(situacaoTratamento)
-          .filter(([chave]) => !["dataVerificacao", "instabilidadeHemodinamica",
-            "infeccaoPrevia", "id", "idPaciente", "itensReceita",
-            "paciente", "situacaoPaciente", "suspeitaSepse",
-            "presencaUlceras", "presencaDiarreia"].includes(chave))
+          .filter(([chave]) => !["DataVerificacao", "InstabilidadeHemodinamica",
+            "InfeccaoPrevia", "Id", "IdPaciente", "ReceitasItens",
+            "paciente", "situacaoPaciente"].includes(chave))
       );
-
       setSintomas(sintomasFiltrados);
     }
   }, [situacaoTratamento]);
@@ -71,9 +66,13 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
           metodo: "GET",
         });
         setSituacaoTratamento(situacaoTratamento);
-        setInstabilidadeH(situacaoTratamento.instabilidadeHemodinamica);
-        setInfeccao(situacaoTratamento.infeccaoPrevia);
-      } catch (error) { }
+        setInstabilidadeH(situacaoTratamento.InstabilidadeHemodinamica);
+        setInfeccao(situacaoTratamento.InfeccaoPrevia);
+      } catch (error) {
+        setSituacaoTratamento(undefined);
+        setInstabilidadeH(false);
+        setInfeccao(0);
+      }
     };
     if (id)
       fetchData();
@@ -82,7 +81,7 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const enunsData = await getEnuns();
+        const enunsData = await getEnums();
         setInfeccaoEnum(Object.keys(enunsData.TiposInfeccaoPreviaEnum).map(key => ({
           nome: key.replace(/_/g, " "),
           valor: enunsData.TiposInfeccaoPreviaEnum[key]
@@ -102,20 +101,16 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
   const handleSubmit = () => {
     const now = new Date();
     const response = fetcher({
-      rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Prescricao/AddSituacaoTratamento?pacienteId=${id}`,
+      rota: `/Prescricao/AddSituacaoTratamento?pacienteId=${id}`,
       metodo: "POST",
       cabecalho: { "Content-Type": "application/json" },
       body: JSON.stringify({
         dataVerificacao: now.toISOString(),
         instabilidadeHemodinamica: instabilidadeH,
         infeccaoPrevia: infeccao,
-        suspeitaSepse: false,
-        presencaUlceras: false,
-        presencaDiarreia: false,
         ...sintomas
       })
     });
-    console.log(response);
   };
 
   return (
@@ -163,7 +158,7 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
             </select>
           </div>
           <div className="border-b border-[#cad4d2] my-4" />
-          <ListaSintomas sintomas={sintomas} labels={labels} handleCheckboxChange={handleCheckboxChange} />
+            <ListaSintomas sintomas={sintomas} labels={labels} handleCheckboxChange={handleCheckboxChange} />
         </div>
       </div>
     </div>

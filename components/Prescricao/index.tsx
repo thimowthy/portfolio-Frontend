@@ -160,10 +160,50 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
     setLoading(false);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const internacao = await fetcher({
+          metodo: "GET",
+          rota: `/Internacao/GetInternacaoAtual?pacienteId=${id}`,
+        });
+        atribuirDados(internacao.sugestoes);
+        console.log(internacao.sugestoes);
+      } catch (error) {}
+    };
+    if (id) fetchData();
+  }, [id]);
+
+  function atribuirDados(receita: {
+    itensCuidado: ItemCuidado[];
+    itensMedicamento: ItemMedicamento[];
+  }) {
+
+    const itensCuidado: ItemCuidado[] = receita.itensCuidado
+      .filter((item) => item.descricao !== "")
+      .map((item) => ({
+        descricao: item.descricao,
+      }));
+    
+    setCuidados(itensCuidado);
+  
+    const itensMedicamento: ItemMedicamento[] = receita.itensMedicamento.map(
+      (item) => ({
+        medicamento: item.medicamento,
+        dose: item.dose,
+        unidade_dosagem: item.unidade_dosagem,
+        intervalo: item.intervalo,
+        intervalo_tempo: item.intervalo_tempo,
+      })
+    );
+    console.log(itensMedicamento);
+    setMedicacoes(itensMedicamento);
+  }
+
   return (
     <>
       {loading && <Loader />}
-      <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
+      <div className="flex mx-1 flex-col gap-x-6 py-5 px-6 bg-[#EAEAEA] detalhes-paciente">
         <div className="flex items-center w-full">
           <h1 className="text-3xl mt-3">Prescrição</h1>
           <button

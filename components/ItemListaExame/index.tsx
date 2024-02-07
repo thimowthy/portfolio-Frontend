@@ -7,7 +7,7 @@ const ItemListaExame: React.FC<ItemExameProps> = ({ id, exame, setExame }) => {
   return (
     <li
       key={1}
-      className={"flex justify-between gap-x-6 py-5 px-4 my-2 bg-[#E1ECEA]"}
+      className={"flex justify-between gap-x-6 py-5 px-4 my-2 bg-[#d9e0df]"}
     >
       <div className="flex gap-x-4">
         {

@@ -1,4 +1,4 @@
-export async function getEnuns(): Promise<any> {
+export async function getEnums(): Promise<any> {
     const url = "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Auxilio/GetEnuns";
   
     try {

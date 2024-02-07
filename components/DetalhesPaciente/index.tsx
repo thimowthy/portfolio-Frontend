@@ -15,6 +15,13 @@ import PrescricaoForm from "../Prescricao";
  * Renderiza o a página de detalhes do paciente.
  * @category Component
  */
+
+const pageStyles = {
+  tabItem: "block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-200 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#EAEAEA] rounded-lg",
+  tabContentDiv: "flex mx-1 flex-col gap-x-6 py-5 px-6 bg-[#EAEAEA] detalhes-paciente"
+};
+
+
 export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
 
   const [temperatura, setTemperatura] = useState<number>(36.5);
@@ -55,62 +62,64 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   return (
     <div>
       <>
-        <TabList className="flex list-none flex-row flex-wrap border-b-0 pl-0">
-          <TabItem
-            href="tabs-neutral"
-            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
-            title="Paciente"
-            active={true}
-            disabled={!paciente || !paciente.id}
-          />
-          <TabItem
-            href="tabs-exames"
-            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
-            title="Exames 📝"
-            disabled={!paciente || !paciente.id}
-          />
-          <TabItem
-            href="tab-sintomas"
-            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
-            title="Sintomas"
-            disabled={!paciente || !paciente.id}
-          />
-          <TabItem
-            href="tab-prescricao"
-            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
-            title="Prescrição"
-            disabled={!paciente || !paciente.id}
-          />
-          <TabItem
-            href="tab-historico"
-            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#DADADA]"
-            title="Histórico"
-            disabled={!paciente || !paciente.id}
-          />
-        </TabList>
-        <div id="contents" className="bg-[#DADADA]">
+      <TabList className="flex list-none flex-row flex-wrap border-b-0 pl-0 -mb-1.5 relative z-0">
+        <TabItem
+          href="tabs-neutral"
+          className={pageStyles.tabItem}
+          title="Paciente"
+          active={true}
+          disabled={!paciente || !paciente.id}
+        />
+        <TabItem
+          href="tabs-exames"
+          className={pageStyles.tabItem}
+          title="Exames"
+          disabled={!paciente || !paciente.id}
+        />
+        <TabItem
+          href="tab-sintomas"
+          className={pageStyles.tabItem}
+          title="Sintomas"
+          disabled={!paciente || !paciente.id}
+        />
+        <TabItem
+          href="tab-prescricao"
+          className={pageStyles.tabItem}
+          title="Prescrição"
+          disabled={!paciente || !paciente.id}
+        />
+        <TabItem
+          href="tab-historico"
+          className={pageStyles.tabItem}
+          title="Histórico"
+          disabled={!paciente || !paciente.id}
+        />
+      </TabList>
+      <div id="contents" className="bg-[#EAEAEA] relative rounded-b-xl overflow-y-auto rounded-tr-xl px-1 z-1">
+        <div className="overflow-y-auto">
           <TabContents tabId="tabs-neutral" active={true}>
             <PacienteTab paciente={paciente} />
           </TabContents>
-          <TabContents tabId="tab-prescricao" active={false}>
-            <PrescricaoForm id={paciente.id?.toString() || ""} />
-          </TabContents>
           <TabContents tabId="tabs-exames" active={false}>
-            <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
+            <div className={pageStyles.tabContentDiv}>
               <ExamesList id={paciente.id?.toString() || ""} />
             </div>
           </TabContents>
           <TabContents tabId="tab-sintomas" active={false}>
-            <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
+            <div className={pageStyles.tabContentDiv}>
               <SintomasForm id={paciente.id?.toString() || ""} />
             </div>
           </TabContents>
+          <TabContents tabId="tab-prescricao" active={false}>
+            <PrescricaoForm id={paciente.id?.toString() || ""} />
+          </TabContents>
           <TabContents tabId="tab-historico" active={false}>
-            <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
-              <HistoricoTratamentoList id={paciente.id?.toString() || ""} />
+            <div className={pageStyles.tabContentDiv}>
+              <HistoricoTratamentoList id={paciente.id?.toString() || ""}/>
             </div>
           </TabContents>
         </div>
+      </div>
       </>
     </div>
   );
