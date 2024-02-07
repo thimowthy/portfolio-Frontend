@@ -3,6 +3,7 @@ import useServerityIcon from "@/hooks/useSeverityIcon";
 import Image from "next/image";
 import styles from "./styles.module.css";
 import usePacienteGravity from "@/hooks/usePacienteGravity";
+import { formatName } from "@/utils/formatName";
 /**
  * Renderiza um item da listagem de pacientes.
  * @category Component
@@ -20,7 +21,7 @@ const ItemListaPaciente = ({
   return (
     <li
       key={paciente.id}
-      className={`flex justify-between gap-x-6 py-5 px-4 my-2 bg-[#E1ECEA]   ${
+      className={`flex justify-between gap-x-6 py-5 px-4 my-2 bg-[#D9E0DF] rounded ${
         paciente?.id && idAtivo && paciente?.id == idAtivo
           ? styles.card_prontuario_ativo
           : ""
@@ -39,7 +40,7 @@ const ItemListaPaciente = ({
         }
         <div className="min-w-0 flex-auto">
           <p className="text-xl font-semibold leading-6 text-gray-900 text-2xl">
-            {paciente.nome}
+            {formatName(paciente.nome || "")}
           </p>
           {gravidade && (
             <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-base">

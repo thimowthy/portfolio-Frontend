@@ -1,4 +1,5 @@
 type Internacao = {
+  Id?: number;
   dataAdmissao?: string;
   dataAlta?: string;
   leito?: string;

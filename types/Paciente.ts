@@ -1,5 +1,5 @@
 type Paciente = {
-  id?: number;
+  id: number;
   nome?: string;
   numeroProntuario?: string;
   cpf?: string;
