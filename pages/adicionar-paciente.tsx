@@ -71,7 +71,7 @@ const AdicionarPaciente = () => {
     const fetchData = async () => {
       try {
         const pacientes = await fetcher({
-          rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/GetListPatients",
+          rota: "/Paciente/GetListPatients",
           metodo: "GET",
         });
         setPacientes(pacientes);
@@ -193,7 +193,7 @@ const AdicionarPaciente = () => {
     if (!paciente) {
       try {
         const result = await fetcher({
-          rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Paciente/AddPaciente",
+          rota: "/Paciente/AddPaciente",
           metodo: "POST",
           body: formDataClone,
         });
@@ -226,7 +226,7 @@ const AdicionarPaciente = () => {
 
       try {
         const result = await fetcher({
-          rota: "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Internacao/CriarInternamento",
+          rota: "/Internacao/CriarInternamento",
           metodo: "POST",
           cabecalho: { "Content-Type": "application/json" },
           body: internamento,          

@@ -12,7 +12,7 @@ export default function ModalCriacaoCuidado({
 
     //const token = localStorage.getItem("Authorization");
 
-    /* const response = await fetch(`https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Usuario/DeleteUser/${user.id}`, {
+    /* const response = await fetch(`/Usuario/DeleteUser/${user.id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
