@@ -7,5 +7,5 @@ export type ItemMedicamento = {
   dose: number;
   unidade_dosagem: UnidadeDosagem;
   intervalo: number;
-  intervalo_tempo: IntervaloTempo;
+  intervalo_tempo: IntervaloTempo | number;
 };

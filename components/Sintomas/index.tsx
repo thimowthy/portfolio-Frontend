@@ -11,7 +11,7 @@ interface SintomasFormProps {
   id: string;
 }
 const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
-  
+
   const formData = {
     suspeitaInfeccao: false,
     sintomasRespiratorios: false,
@@ -30,35 +30,35 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
     diarreia: false,
   };
   const labels = ["Suspeita de infeccção relacionada ao catéter",
-                  "Sintomas respiratórios",
-                  "Infeccção relacionada ao catéter",
-                  "Infecção de pele ou partes moles",
-                  "Pneumonia",
-                  "Crescimento de Gram+ na hemocultura",
-                  "RX Tórax alterado",
-                  "Suspeita de sepse de foco abdominal ou pélvico",
-                  "Enterocolite neutropênica (Tiflite)",
-                  "Celulite Perianal",
-                  "Presença de úlceras em cavidade oral",
-                  "Diarreia",
-                ];
+    "Sintomas respiratórios",
+    "Infeccção relacionada ao catéter",
+    "Infecção de pele ou partes moles",
+    "Pneumonia",
+    "Crescimento de Gram+ na hemocultura",
+    "RX Tórax alterado",
+    "Suspeita de sepse de foco abdominal ou pélvico",
+    "Enterocolite neutropênica (Tiflite)",
+    "Celulite Perianal",
+    "Presença de úlceras em cavidade oral",
+    "Diarreia",
+  ];
 
   const [infeccaoEnum, setInfeccaoEnum] = useState([{ nome: "", valor: 0 }]);
   const [sintomas, setSintomas] = useState<Record<string, boolean>>(formData);
   const [situacaoTratamento, setSituacaoTratamento] = useState<Record<string, boolean>>();
   const [instabilidadeH, setInstabilidadeH] = useState(false);
   const [infeccao, setInfeccao] = useState<number>();
-  
+
   useEffect(() => {
     if (situacaoTratamento) {
       const sintomasFiltrados = Object.fromEntries(
         Object.entries(situacaoTratamento)
           .filter(([chave]) => !["dataVerificacao", "instabilidadeHemodinamica",
-                                "infeccaoPrevia", "id", "idPaciente", "itensReceita",
-                                "paciente", "situacaoPaciente", "suspeitaSepse",
-                                "presencaUlceras", "presencaDiarreia"].includes(chave))
+            "infeccaoPrevia", "id", "idPaciente", "itensReceita",
+            "paciente", "situacaoPaciente", "suspeitaSepse",
+            "presencaUlceras", "presencaDiarreia"].includes(chave))
       );
-  
+
       setSintomas(sintomasFiltrados);
     }
   }, [situacaoTratamento]);
@@ -67,7 +67,7 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
     const fetchData = async () => {
       try {
         const situacaoTratamento = await fetcher({
-          rota: `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Prescricao/GetCurrentSituacaoTratamento?pacienteId=${id}`,
+          rota: `/Prescricao/GetCurrentSituacaoTratamento?pacienteId=${id}`,
           metodo: "GET",
         });
         setSituacaoTratamento(situacaoTratamento);
@@ -87,7 +87,7 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
           nome: key.replace(/_/g, " "),
           valor: enunsData.TiposInfeccaoPreviaEnum[key]
         })));
-      } catch (error) {}
+      } catch (error) { }
     };
     fetchData();
   }, []);
@@ -98,7 +98,7 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
       [key]: !prevData[key],
     }));
   };
-  
+
   const handleSubmit = () => {
     const now = new Date();
     const response = fetcher({
@@ -134,7 +134,7 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
           <div className="flex mb-4 justify-between">
             <p>Instabilidade Hemodinâmica</p>
             <input
-              className="w-8"            
+              className="w-8"
               type="checkbox"
               name="resposta_form_01_sintomas"
               id="ih_sim"
@@ -142,13 +142,13 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
               checked={instabilidadeH}
             />
           </div>
-          <div className="border-b border-[#cad4d2] my-4"/>
+          <div className="border-b border-[#cad4d2] my-4" />
           <div className="flex mb-4 justify-between items-center">
             <p>Infeccção prévia</p>
             <select
               className="h-10 w-1/2 rounded p-2"
               id="select_infeccao"
-              onChange={(e) => setInfeccao(parseInt(e.target.value)) }
+              onChange={(e) => setInfeccao(parseInt(e.target.value))}
               value={infeccao}
             >
               {infeccaoEnum.map((el) => (
@@ -162,10 +162,10 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
               ))}
             </select>
           </div>
-          <div className="border-b border-[#cad4d2] my-4"/>
-            <ListaSintomas sintomas={sintomas} labels={labels} handleCheckboxChange={handleCheckboxChange} />
-          </div>
+          <div className="border-b border-[#cad4d2] my-4" />
+          <ListaSintomas sintomas={sintomas} labels={labels} handleCheckboxChange={handleCheckboxChange} />
         </div>
+      </div>
     </div>
   );
 };
