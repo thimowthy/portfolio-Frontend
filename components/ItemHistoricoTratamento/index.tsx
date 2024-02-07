@@ -6,7 +6,7 @@ const ItemHistoricoTratamento: React.FC<ItemHistoricoTratamentoProps> = ({
   historico,
 }) => {
   return (
-    <li className="flex justify-between gap-x-6 py-5 px-4 my-2 bg-[#E1ECEA]">
+    <li className="flex justify-between gap-x-6 py-5 px-4 my-2 bg-[#d9e0df]">
       <div className="flex gap-x-4">
         <div className="min-w-0 flex-auto">
           <h2 className="text-xl font-semibold leading-6 text-gray-900 text-2xl mb-4">

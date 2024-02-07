@@ -78,9 +78,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Amicacina",
           },
           dose: 2,
-          unidade_dosagem: UnidadeDosagem.G,
+          unidadeDosagem: UnidadeDosagem.GRAMA,
           intervalo: 8,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
         // {
         //   medicamento: {
@@ -88,9 +88,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
         //     nome: "Pipe-Zato"
         //   },
         //   dose: 4.5,
-        //   unidade_dosagem: UnidadeDosagem.G,
+        //   unidadeDosagem: UnidadeDosagem.GRAMA,
         //   intervalo: 6,
-        //   intervalo_tempo: IntervaloTempo.HORAS
+        //   intervaloTempo: IntervaloTempo.HORAS
         // }
       ],
       cuidados: [],
@@ -114,9 +114,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Amicacina",
           },
           dose: 2,
-          unidade_dosagem: UnidadeDosagem.G,
+          unidadeDosagem: UnidadeDosagem.GRAMA,
           intervalo: 8,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
         {
           medicamento: {
@@ -124,9 +124,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Amicacina",
           },
           dose: 15,
-          unidade_dosagem: UnidadeDosagem.MG_KG,
+          unidadeDosagem: UnidadeDosagem.MILIGRAMA_POR_QUILO,
           intervalo: 1,
-          intervalo_tempo: IntervaloTempo.DIAS,
+          intervaloTempo: IntervaloTempo.DIAS,
         },
         {
           medicamento: {
@@ -134,9 +134,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Meropenem",
           },
           dose: 1,
-          unidade_dosagem: UnidadeDosagem.G,
+          unidadeDosagem: UnidadeDosagem.GRAMA,
           intervalo: 8,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
       ],
       cuidados: [],
@@ -161,9 +161,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Vancomicina",
           },
           dose: 15,
-          unidade_dosagem: UnidadeDosagem.MG_KG,
+          unidadeDosagem: UnidadeDosagem.MILIGRAMA_POR_QUILO,
           intervalo: 12,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
         {
           medicamento: {
@@ -171,9 +171,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Amicacina",
           },
           dose: 2,
-          unidade_dosagem: UnidadeDosagem.G,
+          unidadeDosagem: UnidadeDosagem.GRAMA,
           intervalo: 8,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
       ],
       cuidados: [],
@@ -197,9 +197,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Meropenem",
           },
           dose: 2,
-          unidade_dosagem: UnidadeDosagem.G,
+          unidadeDosagem: UnidadeDosagem.GRAMA,
           intervalo: 8,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
         {
           medicamento: {
@@ -207,9 +207,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Amicacina",
           },
           dose: 15,
-          unidade_dosagem: UnidadeDosagem.MG_KG,
+          unidadeDosagem: UnidadeDosagem.MILIGRAMA_POR_QUILO,
           intervalo: 1,
-          intervalo_tempo: IntervaloTempo.DIAS,
+          intervaloTempo: IntervaloTempo.DIAS,
         },
         //{
         //   medicamento: {
@@ -217,9 +217,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
         //     nome: "Meropenem"
         //   },
         //   dose: 2,
-        //   unidade_dosagem: UnidadeDosagem.G,
+        //   unidadeDosagem: UnidadeDosagem.GRAMA,
         //   intervalo: 8,
-        //   intervalo_tempo: IntervaloTempo.HORAS
+        //   intervaloTempo: IntervaloTempo.HORAS
         // },
         // {
         //   medicamento: {
@@ -227,9 +227,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
         //     nome: "Poliximina B"
         //   },
         //   dose: 25000,
-        //   unidade_dosagem: UnidadeDosagem.UI_KG,
+        //   unidadeDosagem: UnidadeDosagem.UI_KG,
         //   intervalo: 1,
-        //   intervalo_tempo: IntervaloTempo.DIAS
+        //   intervaloTempo: IntervaloTempo.DIAS
         // }
       ],
       cuidados: [],
@@ -254,9 +254,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Amicacina",
           },
           dose: 2,
-          unidade_dosagem: UnidadeDosagem.G,
+          unidadeDosagem: UnidadeDosagem.GRAMA,
           intervalo: 8,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
         // {
         //   medicamento: {
@@ -264,9 +264,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
         //     nome: "Linezolida"
         //   },
         //   dose: 2,
-        //   unidade_dosagem: UnidadeDosagem.G,
+        //   unidadeDosagem: UnidadeDosagem.GRAMA,
         //   intervalo: 8,
-        //   intervalo_tempo: IntervaloTempo.HORAS
+        //   intervaloTempo: IntervaloTempo.HORAS
         // }
       ],
       cuidados: [],
@@ -291,9 +291,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Vancomicina",
           },
           dose: 15,
-          unidade_dosagem: UnidadeDosagem.MG_KG,
+          unidadeDosagem: UnidadeDosagem.MILIGRAMA_POR_QUILO,
           intervalo: 12,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
         {
           medicamento: {
@@ -301,9 +301,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Meropenem",
           },
           dose: 1,
-          unidade_dosagem: UnidadeDosagem.G,
+          unidadeDosagem: UnidadeDosagem.GRAMA,
           intervalo: 8,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
       ],
       cuidados: [],
@@ -327,9 +327,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Vancomicina",
           },
           dose: 15,
-          unidade_dosagem: UnidadeDosagem.MG_KG,
+          unidadeDosagem: UnidadeDosagem.MILIGRAMA_POR_QUILO,
           intervalo: 12,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
         {
           medicamento: {
@@ -337,9 +337,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Meropenem",
           },
           dose: 1,
-          unidade_dosagem: UnidadeDosagem.G,
+          unidadeDosagem: UnidadeDosagem.GRAMA,
           intervalo: 8,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
       ],
       cuidados: [],
@@ -363,9 +363,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Vancomicina",
           },
           dose: 15,
-          unidade_dosagem: UnidadeDosagem.MG_KG,
+          unidadeDosagem: UnidadeDosagem.MILIGRAMA_POR_QUILO,
           intervalo: 12,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
         {
           medicamento: {
@@ -373,9 +373,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Meropenem",
           },
           dose: 1,
-          unidade_dosagem: UnidadeDosagem.G,
+          unidadeDosagem: UnidadeDosagem.GRAMA,
           intervalo: 8,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
       ],
       cuidados: [],
@@ -399,9 +399,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Vancomicina",
           },
           dose: 1,
-          unidade_dosagem: UnidadeDosagem.G,
+          unidadeDosagem: UnidadeDosagem.GRAMA,
           intervalo: 12,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
         {
           medicamento: {
@@ -409,9 +409,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Meropenem",
           },
           dose: 1,
-          unidade_dosagem: UnidadeDosagem.G,
+          unidadeDosagem: UnidadeDosagem.GRAMA,
           intervalo: 8,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
         {
           medicamento: {
@@ -419,9 +419,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Amicacina",
           },
           dose: 15,
-          unidade_dosagem: UnidadeDosagem.MG_KG,
+          unidadeDosagem: UnidadeDosagem.MILIGRAMA_POR_QUILO,
           intervalo: 1,
-          intervalo_tempo: IntervaloTempo.DIAS,
+          intervaloTempo: IntervaloTempo.DIAS,
         },
       ],
       cuidados: [],
@@ -446,9 +446,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Linezolida",
           },
           dose: 600,
-          unidade_dosagem: UnidadeDosagem.MG,
+          unidadeDosagem: UnidadeDosagem.MILIGRAMA,
           intervalo: 12,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
         {
           medicamento: {
@@ -456,9 +456,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Meropenem",
           },
           dose: 1,
-          unidade_dosagem: UnidadeDosagem.G,
+          unidadeDosagem: UnidadeDosagem.GRAMA,
           intervalo: 8,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
       ],
       cuidados: [],
@@ -502,9 +502,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Vancomicina",
           },
           dose: 15,
-          unidade_dosagem: UnidadeDosagem.MG_KG,
+          unidadeDosagem: UnidadeDosagem.MILIGRAMA_POR_QUILO,
           intervalo: 12,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
       ],
       cuidados: [],
@@ -544,9 +544,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Azitromicina",
           },
           dose: 500,
-          unidade_dosagem: UnidadeDosagem.MG,
+          unidadeDosagem: UnidadeDosagem.MILIGRAMA,
           intervalo: 1,
-          intervalo_tempo: IntervaloTempo.DIAS,
+          intervaloTempo: IntervaloTempo.DIAS,
         },
       ],
       cuidados: [
@@ -597,9 +597,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Metronidazol",
           },
           dose: 500,
-          unidade_dosagem: UnidadeDosagem.MG,
+          unidadeDosagem: UnidadeDosagem.MILIGRAMA,
           intervalo: 8,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
       ],
       cuidados: [],
@@ -637,9 +637,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Aciclovir",
           },
           dose: 5,
-          unidade_dosagem: UnidadeDosagem.MG_KG,
+          unidadeDosagem: UnidadeDosagem.MILIGRAMA_POR_QUILO,
           intervalo: 8,
-          intervalo_tempo: IntervaloTempo.HORAS,
+          intervaloTempo: IntervaloTempo.HORAS,
         },
         {
           medicamento: {
@@ -647,9 +647,9 @@ const graphTratamento: Record<string, TratamentoNode> = {
             nome: "Fluconazol",
           },
           dose: 200,
-          unidade_dosagem: UnidadeDosagem.MG,
+          unidadeDosagem: UnidadeDosagem.MILIGRAMA,
           intervalo: 1,
-          intervalo_tempo: IntervaloTempo.DIAS,
+          intervaloTempo: IntervaloTempo.DIAS,
         },
       ],
       cuidados: [],

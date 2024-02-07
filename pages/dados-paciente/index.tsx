@@ -15,6 +15,7 @@ const DynamicTabComponent = dynamic(
 
 const DadosPacientePage = () => {
   const [pacientes, setPacientes] = useState([]);
+  const [listaPacientes, setListaPacientes] = useState([]);
   const [nf, setNf] = useState([]);
   const loadPacientes = async () => {
     const pacientes = await fetcher({
@@ -46,6 +47,7 @@ const DadosPacientePage = () => {
     });
 
     setPacientes(pacientes);
+    setListaPacientes(pacientes);
     return pacientes;
   };
 
@@ -57,8 +59,9 @@ const DadosPacientePage = () => {
 
   useEffect(() => {
     let pacienteAtivo =
-      pacientes?.find((paciente: Paciente) => paciente.id == router.query.id) ||
-      {};
+      pacientes?.find(
+        (paciente: Paciente) => paciente.id.toString() === router.query.id,
+      ) || {};
     setSelectedPatient(pacienteAtivo);
   }, [router]);
   const [selectedPatient, setSelectedPatient] = useState<any>({});
@@ -71,6 +74,7 @@ const DadosPacientePage = () => {
         <div className="basis-2/5 mr-2">
           <DynamicTabComponent
             pacientes={pacientes}
+            listaPacientes={listaPacientes}
             nf={nf}
             loadPacientes={loadPacientes}
             setNf={setNf}
