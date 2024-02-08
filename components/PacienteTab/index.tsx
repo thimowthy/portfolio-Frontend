@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import moment from "moment";
 import TabContents from "../TabContents/index";
 import useServerityIcon from "@/hooks/useSeverityIcon";
@@ -10,8 +9,11 @@ import ErrorToast from "../toasts/errorToast";
 import SuccessToast from "../toasts/successToast";
 import TabItem from "../TabItem";
 import TabList from "../TabList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { tabColorMap } from "@/utils/maps";
+import { setColor } from "@/utils/colorTransition";
+import fetcher from "@/api/fetcher";
+import Swal from "sweetalert2";
 
 export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   const selectLabelNeutrofilos = (quantidadeNeutrofilos: number) => {
@@ -32,7 +34,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
 
   const [dischargeError, setDischargeError] = useState(false);
   const [sucessDischarge, setSucessDischarge] = useState(false);
-
+  const [temperatura, setTemperatura] = useState<number>(36.5);
   /**
    * Seta alta no paciente
    * @param {Number} pacienteId - Id do paciente
@@ -48,6 +50,28 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
     return;
   };
 
+  const submitTemperatura = async (pacienteId: number) => {
+    try {
+      await fetcher({
+        rota: `/Internacao/CadastrarTemperatura/${pacienteId}`,
+        metodo: "POST",
+        body: {
+          temperatura,
+        },
+      });
+      return Swal.fire(
+        "Sucesso!",
+        "Temperatura registrada com sucesso!",
+        "success",
+      );
+    } catch (error) {
+      return Swal.fire(
+        "Erro!",
+        "Aconteceu algum erro ao tentar atualizar a temperatura",
+        "error",
+      );
+    }
+  };
   const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
   let situacoesPacienteCopy = [...situacoesPaciente];
   const situacaoAtual = situacoesPacienteCopy?.pop();
@@ -75,7 +99,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
           }}
         />
       )}
-      <div className="flex flex-col gap-x-6 py-5 px-6 bg-[#DADADA] detalhes-paciente">
+      <div className="flex mx-1 flex-col gap-x-6 py-5 px-6 bg-[#EAEAEA] detalhes-paciente">
         {paciente.id && (
           <>
             <div className="flex gap-x-4 pb-3">
@@ -105,7 +129,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                 </p>
               </div>
             </div>
-            <hr />
+            <hr className="border-[#cacaca] my-2" />
             <div className="pt-2">
               <h1 className="text-2xl">
                 Dados do paciente{" "}
@@ -148,10 +172,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
             </div>
 
             <div>
-              <div className="rounded-md bg-green-200 p-2 w-100">
-                <p className="text-xl">
-                  Prontuário {paciente.numeroProntuario}
-                </p>
+              <div className="rounded-md bg-[#d9e0df] p-2 w-100">
                 {paciente?.comorbidades &&
                   paciente?.comorbidades?.length > 0 && (
                     <div className="py-1">
@@ -160,7 +181,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                         (comorbidade: any, index: number) => {
                           return (
                             <p
-                              key={`${comorbidade.nome}${index}`}
+                              key={`${comorbidade.id}${index}`}
                               className="text-sm pl-4"
                             >
                               {comorbidade?.nome}
@@ -198,62 +219,46 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
             )}
           </div> */}
                 <div className="flex justify-end">
-                  <a href="#" className="text-right text-sm">
+                  <a
+                    href="#"
+                    className="text-right text-sm bg-[#eff5f4] border-none hover:bg-[#fff] rounded px-3 py-1"
+                  >
                     Ver prontuário completo
                   </a>
                 </div>
               </div>
-
-              <hr />
-              <div className="mt-4">
-                <h1 className="text-xl flex">
-                  Febre?{" "}
-                  <span
-                    className="text-xl"
-                    data-te-toggle="tooltip"
-                    data-te-html="true"
-                    data-te-ripple-init
-                    data-te-ripple-color="light"
-                    title=">38,3°C medida única, OU >38°C por mais de 1h"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="#3FB8FC"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
-                      />
-                    </svg>
-                  </span>
+              <hr className="border-[#cacaca] my-4" />
+              <div>
+                <h1
+                  className="text-xl flex"
+                  title=">38,3°C medida única, OU >38°C por mais de 1h"
+                >
+                  Temperatura (°C){" "}
                 </h1>
-                <div className="flex mt-2">
-                  <button className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10">
-                    Não
-                  </button>
-
-                  <Link
-                    href={{
-                      pathname: "/estratificacao-risco",
-                      query: {
-                        id: paciente.id,
-                        dataNascimento: paciente.dataNascimento,
-                        admissao: paciente.dataAdmissao,
-                        nome: paciente.nome,
-                        cpf: paciente.cpf,
-                        prontuario: paciente.numeroProntuario,
-                        cartaoSus: paciente.cns,
-                      },
+                <div className="flex mt-2 items-center">
+                  <input
+                    className="w-20 p-1 text-2xl text-right rounded border-2"
+                    maxLength={3}
+                    value={temperatura}
+                    onChange={(e) => {
+                      setTemperatura(parseFloat(e.target.value));
                     }}
-                    className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3 px-10"
+                    type="number"
+                    step={0.1}
+                    min={30}
+                    max={45}
+                    style={{
+                      borderColor: setColor(temperatura),
+                      outline: "none",
+                    }}
+                  />
+                  <span className="text-2xl ml-2 mr-8">°C</span>
+                  <button
+                    onClick={() => submitTemperatura(paciente.id)}
+                    className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 rounded px-4"
                   >
-                    Sim
-                  </Link>
+                    Enviar
+                  </button>
                 </div>
               </div>
               <div className="pt-2">
@@ -262,11 +267,11 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                 {/* TODO: for (paciente.situacoesPaciente as situacao) */}
 
                 <TabList className="flex flex-row rounded-full bg-white mt-4">
-                  {situacaoPaciente?.map((item, index) => {
-                    return (
+                  {paciente?.internacao?.situacoesPaciente?.map(
+                    (item: any, index: any) => (
                       <TabItem
-                        key={item.id}
-                        href={`tab-${item.id}`}
+                        key={`tab-${paciente.id}-${item.id}`}
+                        href={`tab-${paciente.id}-${item.id}`}
                         liClassName={`basis-1/5 ${tabColorMap.get(
                           index,
                         )} py-2 pl-2 ${
@@ -282,55 +287,58 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                           )}
                         </p>
                       </TabItem>
-                    );
-                  })}
+                    ),
+                  )}
                 </TabList>
-                {situacaoPaciente?.map((item, index) => {
-                  return (
-                    <TabContents
-                      key={item.id}
-                      tabId={`tab-${item.id}`}
-                      active={index === situacaoPaciente.length - 1 || false}
-                    >
-                      <div className="pt-2 flex flex-row gap-x-2">
-                        <div className="basis-1/2">
-                          <p>
-                            Data de verificação:{" "}
-                            {moment(
-                              item?.situacaoDiagnostico?.dataVerificacao,
-                            ).format("DD/MM/YYYY h:mm:ss")}
-                          </p>
-                          <p>
-                            Temperatura:{" "}
-                            {item?.situacaoDiagnostico?.temperatura}
-                          </p>
-                        </div>
-                        <div className="basis-1/2">
-                          <div className="flex justify-center flex-col items-end text-center">
-                            <div>
-                              <p className="text-center">Neutrófilos:</p>
-                              <p className="text-red-500">
-                                {item?.situacaoDiagnostico?.neutrofilos}
-                                /mm3
-                              </p>
-                              <div className="flex justify-center">
-                                <div
-                                  className={selectLabelNeutrofilos(
-                                    item?.situacaoDiagnostico?.neutrofilos || 0,
-                                  )}
-                                ></div>
-                              </div>
+                {paciente?.internacao?.situacoesPaciente?.map(
+                  (item: any, index: any) => {
+                    return (
+                      <TabContents
+                        key={`tab-${paciente.id}-${item.id}`}
+                        tabId={`tab-${paciente.id}-${item.id}`}
+                        active={index === situacoesPaciente.length - 1 || false}
+                      >
+                        <div className="pt-2 flex flex-row gap-x-2">
+                          <div className="basis-1/2">
+                            <p>
+                              Data de verificação:{" "}
+                              {moment(
+                                item?.situacaoDiagnostico?.dataVerificacao,
+                              ).format("DD/MM/YYYY h:mm:ss")}
+                            </p>
+                            <p>
+                              Temperatura:{" "}
+                              {item?.situacaoDiagnostico?.temperatura}
+                            </p>
+                          </div>
+                          <div className="basis-1/2">
+                            <div className="flex justify-center flex-col items-end text-center">
+                              <div>
+                                <p className="text-center">Neutrófilos:</p>
+                                <p className="text-red-500">
+                                  {item?.situacaoDiagnostico?.neutrofilos}
+                                  /mm3
+                                </p>
+                                <div className="flex justify-center">
+                                  <div
+                                    className={selectLabelNeutrofilos(
+                                      item?.situacaoDiagnostico?.neutrofilos ||
+                                        0,
+                                    )}
+                                  ></div>
+                                </div>
 
-                              <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
-                                Acessar +exames
-                              </button>
+                                <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
+                                  Acessar +exames
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </TabContents>
-                  );
-                })}
+                      </TabContents>
+                    );
+                  },
+                )}
               </div>
             </div>
           </>
