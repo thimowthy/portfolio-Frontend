@@ -3,8 +3,14 @@ import { Prescricao } from "@/types/Prescricao";
 import { ItemMedicamento } from "@/types/ItemMedicamento";
 import { ItemCuidado } from "@/types/ItemCuidado";
 import { Medicamento } from "@/types/Medicamento";
-import { UnidadeDosagem, obterValorNumericoDosagem } from "@/types/Enum/UnidadeDosagem";
-import { IntervaloTempo, obterValorNumericoIntervaloTempo } from "@/types/Enum/IntervaloTempo";
+import {
+  UnidadeDosagem,
+  obterValorNumericoDosagem,
+} from "@/types/Enum/UnidadeDosagem";
+import {
+  IntervaloTempo,
+  obterValorNumericoIntervaloTempo,
+} from "@/types/Enum/IntervaloTempo";
 import fetcher from "@/api/fetcher";
 import Loader from "../Loader";
 import moment from "moment";
@@ -15,7 +21,6 @@ interface PrescricaoFormProps {
 }
 
 const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
-
   const [prescricao, setPrescricao] = useState<Prescricao>();
 
   const [internamento, setInternamento] = useState<Internacao>();
@@ -29,30 +34,36 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
   const [medicamento, setMedicamento] = useState<Medicamento>();
   const [listaMedicamentos, setListaMedicamentos] = useState<Medicamento[]>([]);
 
-
   const [loading, setLoading] = useState(false);
 
   const [tempo, setTempo] = useState(1);
-  const [intervalo, setIntervalo] = useState<IntervaloTempo>(IntervaloTempo.DIAS);
+  const [intervalo, setIntervalo] = useState<IntervaloTempo>(
+    IntervaloTempo.DIAS,
+  );
   const [intervalos, setIntervalos] = useState<IntervaloTempo[]>([]);
 
   const [dose, setDose] = useState(1);
-  const [dosagem, setDosagem] = useState<UnidadeDosagem>(UnidadeDosagem.COMPRIMIDO);
+  const [dosagem, setDosagem] = useState<UnidadeDosagem>(
+    UnidadeDosagem.COMPRIMIDO,
+  );
   const [dosagens, setDosagens] = useState<UnidadeDosagem[]>([]);
-  
-  const [sugestoes, setSugestoes] = useState<{itensCuidado:ItemCuidado[], itensMedicamento: ItemSugestaoMedicamento[]}>({ itensCuidado:[], itensMedicamento:[] });
+
+  const [sugestoes, setSugestoes] = useState<{
+    itensCuidado: ItemCuidado[];
+    itensMedicamento: ItemSugestaoMedicamento[];
+  }>({ itensCuidado: [], itensMedicamento: [] });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const enunsData = await getEnums();
-        Object.keys(enunsData.TiposInfeccaoPreviaEnum).map(key => ({
+        Object.keys(enunsData.TiposInfeccaoPreviaEnum).map((key) => ({
           nome: key.replace(/_/g, " "),
-          valor: enunsData.TiposInfeccaoPreviaEnum[key]
+          valor: enunsData.TiposInfeccaoPreviaEnum[key],
         }));
         setDosagens(enunsData.UnidadesDosagemEnum);
         setIntervalos(enunsData.UnidadesIntervaloTempoEnum);
-      } catch (error) { }
+      } catch (error) {}
     };
     fetchData();
   }, []);
@@ -62,7 +73,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
       try {
         const listaMedicamentos = await fetcher({
           metodo: "GET",
-          rota: "/Medicamento/GetAllMedicamentos"
+          rota: "/Medicamento/GetAllMedicamentos",
         });
         setListaMedicamentos(listaMedicamentos);
       } catch (error) {
@@ -145,7 +156,9 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
       const medicamentosFormatados = prescricao.medicacoes.map((item) => {
         return {
           intervaloTempo: item.intervaloTempo,
-          unidadeDosagem: obterValorNumericoDosagem(UnidadeDosagem[item.unidadeDosagem as keyof typeof UnidadeDosagem]),
+          unidadeDosagem: obterValorNumericoDosagem(
+            UnidadeDosagem[item.unidadeDosagem as keyof typeof UnidadeDosagem],
+          ),
           intervalo: item.intervalo,
           dose: item.dose,
           idMedicamento: item.medicamento ? item.medicamento.id : 0,
@@ -169,7 +182,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
           itensMedicamento: meds,
           urgente: true,
           idInternamento: internamento?.Id,
-        }
+        },
       });
       setCuidados([]);
       setMedicacoes([]);
@@ -181,19 +194,21 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
       console.error(error);
     }
 
-    const filePath =
-      `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Prescricao/GetPrescricaoMedica?pacienteId=${id}`;
-    fetch(filePath).then((res) => {
-      res.arrayBuffer().then((bytes) => {
-        const blob = new Blob([bytes], { type: "application/pdf" });
-        const url = URL.createObjectURL(blob);
-        window.open(url, "_blank");
+    const filePath = `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Prescricao/GetPrescricaoMedica?pacienteId=${id}`;
+    fetch(filePath)
+      .then((res) => {
+        res.arrayBuffer().then((bytes) => {
+          const blob = new Blob([bytes], { type: "application/pdf" });
+          const url = URL.createObjectURL(blob);
+          window.open(url, "_blank");
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-    }).catch((error) => {
-      console.error(error);
-    }).finally(() => {
-      setLoading(false);
-    });
   };
 
   useEffect(() => {
@@ -214,7 +229,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
   useEffect(() => {
     console.log(medicacoes);
   }, [medicacoes]);
-  
+
   type ItemSugestaoMedicamento = {
     idMedicamento?: number;
     medicamento: string;
@@ -225,26 +240,27 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
   };
 
   useEffect(() => {
-    const setFormData = (() => {
+    const setFormData = () => {
       const itensCuidado: ItemCuidado[] = sugestoes.itensCuidado
         .filter((item) => item.descricao !== "")
         .map((item) => ({
           descricao: item.descricao,
         }));
-      
+
       setCuidados(itensCuidado);
-      
-      const itensMedicamento: ItemMedicamento[] = sugestoes.itensMedicamento.map(
-        (item: ItemSugestaoMedicamento) => ({
+
+      const itensMedicamento: ItemMedicamento[] =
+        sugestoes.itensMedicamento.map((item: ItemSugestaoMedicamento) => ({
           medicamento: { id: item.idMedicamento, nome: item.medicamento },
           dose: item.dose,
-          unidadeDosagem: UnidadeDosagem[item.unidadeDosagem as keyof typeof UnidadeDosagem],
+          unidadeDosagem:
+            UnidadeDosagem[item.unidadeDosagem as keyof typeof UnidadeDosagem],
           intervalo: item.intervalo,
-          intervaloTempo: IntervaloTempo[item.intervaloTempo as keyof typeof IntervaloTempo],
-        })
-      );
+          intervaloTempo:
+            IntervaloTempo[item.intervaloTempo as keyof typeof IntervaloTempo],
+        }));
       setMedicacoes(itensMedicamento);
-    }); 
+    };
     if (sugestoes) setFormData();
   }, [sugestoes]);
 
@@ -300,7 +316,9 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                     pattern="[0-9]+([\.,][0-9]+)?"
                     step="0.01"
                     maxLength={8}
-                    onChange={(e) => { setDose(parseFloat(e.target.value)); }}
+                    onChange={(e) => {
+                      setDose(parseFloat(e.target.value));
+                    }}
                     value={dose}
                   />
                   <select
@@ -311,18 +329,14 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                       const dose = Object.values(UnidadeDosagem).find(
                         (dose) => dose === e.target.value,
                       );
-                      setDosagem(
-                        dose ? dose : UnidadeDosagem.COMPRIMIDO,
-                      );
+                      setDosagem(dose ? dose : UnidadeDosagem.COMPRIMIDO);
                     }}
                   >
-                    {Object.values(UnidadeDosagem).map(
-                      (opcao, index) => (
-                        <option key={`${opcao}${index}`} value={opcao}>
-                          {opcao}
-                        </option>
-                      ),
-                    )}
+                    {Object.values(UnidadeDosagem).map((opcao, index) => (
+                      <option key={`${opcao}${index}`} value={opcao}>
+                        {opcao}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="flex items-center">
@@ -341,12 +355,10 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                     id="intervalo-tempo"
                     value={intervalo}
                     onChange={(e) => {
-                      const intervalo = Object.values(
-                        IntervaloTempo,
-                      ).find((dose) => dose === e.target.value);
-                      setIntervalo(
-                        intervalo ? intervalo : IntervaloTempo.DIAS,
+                      const intervalo = Object.values(IntervaloTempo).find(
+                        (dose) => dose === e.target.value,
                       );
+                      setIntervalo(intervalo ? intervalo : IntervaloTempo.DIAS);
                     }}
                   >
                     {Object.values(IntervaloTempo).map((opcao) => (
@@ -362,9 +374,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                     className="ml-auto mt-2 w-10 h-6 flex items-center justify-center bg-orange-500 text-white rounded-xl"
                     onClick={() => handleAddMedicacao()}
                   >
-                    <span className="text-xl font-bold font-mono">
-                      +
-                    </span>
+                    <span className="text-xl font-bold font-mono">+</span>
                   </button>
                 </div>
               </div>
@@ -419,18 +429,13 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                 className="border-2 border-solid w-full h-8 border-gray-300 focus:border-orange-500 focus:outline-none rounded p-2"
                 id="add-cuidado"
                 type="text"
-                onChange={(e) =>
-                  setCuidado({ descricao: e.target.value })
-                }
+                onChange={(e) => setCuidado({ descricao: e.target.value })}
                 value={cuidado?.descricao || ""}
                 onKeyDown={handleAddCuidado}
               />
             </div>
             <label htmlFor="lista-cuidados">Cuidados</label>
-            <div
-              id="lista-cuidados"
-              className={"p-4 border mt-1 bg-gray-100"}
-            >
+            <div id="lista-cuidados" className={"p-4 border mt-1 bg-gray-100"}>
               <ul>
                 {cuidados.map((item, index) => (
                   <>
@@ -458,7 +463,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
             </div>
           </div>
         </div>
-      </div >
+      </div>
     </>
   );
 };

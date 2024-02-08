@@ -72,7 +72,7 @@ export default function TabDadosPaciente({
           <TabItem
             href="tab-NF"
             className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#EAEAEA] rounded-lg"
-            title="Neutropenia Febril" 
+            title="Neutropenia Febril"
           />
         </TabList>
         <div className="bg-[#EAEAEA] lista-pacientes_tab-content overflow-y-auto px-6 relative rounded-b-xl rounded-tr-xl py-2 z-1">
@@ -177,7 +177,7 @@ export default function TabDadosPaciente({
               </ul>
             </TabContents> */}
 
-            <TabContents tabId="tab-NF" active={false}> 
+            <TabContents tabId="tab-NF" active={false}>
               <div className="flex mx-1 bg-white rounded-xl p-2 mt-5 mb-4">
                 <div className="pr-2">
                   <svg

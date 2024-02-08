@@ -31,8 +31,14 @@ const ItemHistoricoTratamento: React.FC<ItemHistoricoTratamentoProps> = ({
                 <li key={index}>
                   <strong>{`- ${medicamento.nomeMedicamento}:`}</strong>
                   <ul className="list-disc pl-5">
-                    <li><strong>Dose:</strong> {medicamento.dose} {medicamento.unidadeDosagem}</li>
-                    <li><strong>Intervalo:</strong> {medicamento.intervalo} {medicamento.intervaloTempo}</li>
+                    <li>
+                      <strong>Dose:</strong> {medicamento.dose}{" "}
+                      {medicamento.unidadeDosagem}
+                    </li>
+                    <li>
+                      <strong>Intervalo:</strong> {medicamento.intervalo}{" "}
+                      {medicamento.intervaloTempo}
+                    </li>
                   </ul>
                 </li>
               ))}

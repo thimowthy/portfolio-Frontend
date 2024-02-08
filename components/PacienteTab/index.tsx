@@ -9,7 +9,7 @@ import ErrorToast from "../toasts/errorToast";
 import SuccessToast from "../toasts/successToast";
 import TabItem from "../TabItem";
 import TabList from "../TabList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { tabColorMap } from "@/utils/maps";
 import { setColor } from "@/utils/colorTransition";
 import fetcher from "@/api/fetcher";
@@ -129,7 +129,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                 </p>
               </div>
             </div>
-            <hr className="border-[#cacaca] my-2"/>
+            <hr className="border-[#cacaca] my-2" />
             <div className="pt-2">
               <h1 className="text-2xl">
                 Dados do paciente{" "}
@@ -219,12 +219,15 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
             )}
           </div> */}
                 <div className="flex justify-end">
-                  <a href="#" className="text-right text-sm bg-[#eff5f4] border-none hover:bg-[#fff] rounded px-3 py-1">
+                  <a
+                    href="#"
+                    className="text-right text-sm bg-[#eff5f4] border-none hover:bg-[#fff] rounded px-3 py-1"
+                  >
                     Ver prontuário completo
                   </a>
                 </div>
               </div>
-              <hr className="border-[#cacaca] my-4"/>
+              <hr className="border-[#cacaca] my-4" />
               <div>
                 <h1
                   className="text-xl flex"
@@ -264,11 +267,11 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                 {/* TODO: for (paciente.situacoesPaciente as situacao) */}
 
                 <TabList className="flex flex-row rounded-full bg-white mt-4">
-                  {situacaoPaciente?.map((item, index) => {
-                    return (
+                  {paciente?.internacao?.situacoesPaciente?.map(
+                    (item: any, index: any) => (
                       <TabItem
-                        key={item.id}
-                        href={`tab-${item.id}`}
+                        key={`tab-${paciente.id}-${item.id}`}
+                        href={`tab-${paciente.id}-${item.id}`}
                         liClassName={`basis-1/5 ${tabColorMap.get(
                           index,
                         )} py-2 pl-2 ${
@@ -284,51 +287,58 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                           )}
                         </p>
                       </TabItem>
-                    );
-                  })}
+                    ),
+                  )}
                 </TabList>
-                {situacaoPaciente?.map((item, index) => {
-                  return (
-                    <TabContents
-                      key={item.id}
-                      tabId={`tab-${item.id}`}
-                      active={index === situacaoPaciente.length - 1 || false}
-                    >
-                      <div className="pt-2 flex flex-row gap-x-2">
-                        <div className="basis-1/2">
-                          <p>
-                            Data de verificação:{" "}
-                            {moment(
-                              item?.situacaoDiagnostico?.dataVerificacao,
-                            ).format("DD/MM/YYYY h:mm:ss")}
-                          </p>
-                          <p>
-                            Temperatura:{" "}
-                            {item?.situacaoDiagnostico?.temperatura}
-                          </p>
-                        </div>
-                        <div className="basis-1/2">
-                          <div className="flex justify-center flex-col items-end text-center">
-                            <div>
-                              <p className="text-center">Neutrófilos:</p>
-                              <p className="text-red-500">
-                                {item?.situacaoDiagnostico?.neutrofilos}
-                                /mm3
-                              </p>
-                              <div className="flex justify-center">
-                                <div
-                                  className={selectLabelNeutrofilos(
-                                    item?.situacaoDiagnostico?.neutrofilos || 0,
-                                  )}
-                                ></div>
+                {paciente?.internacao?.situacoesPaciente?.map(
+                  (item: any, index: any) => {
+                    return (
+                      <TabContents
+                        key={`tab-${paciente.id}-${item.id}`}
+                        tabId={`tab-${paciente.id}-${item.id}`}
+                        active={index === situacoesPaciente.length - 1 || false}
+                      >
+                        <div className="pt-2 flex flex-row gap-x-2">
+                          <div className="basis-1/2">
+                            <p>
+                              Data de verificação:{" "}
+                              {moment(
+                                item?.situacaoDiagnostico?.dataVerificacao,
+                              ).format("DD/MM/YYYY h:mm:ss")}
+                            </p>
+                            <p>
+                              Temperatura:{" "}
+                              {item?.situacaoDiagnostico?.temperatura}
+                            </p>
+                          </div>
+                          <div className="basis-1/2">
+                            <div className="flex justify-center flex-col items-end text-center">
+                              <div>
+                                <p className="text-center">Neutrófilos:</p>
+                                <p className="text-red-500">
+                                  {item?.situacaoDiagnostico?.neutrofilos}
+                                  /mm3
+                                </p>
+                                <div className="flex justify-center">
+                                  <div
+                                    className={selectLabelNeutrofilos(
+                                      item?.situacaoDiagnostico?.neutrofilos ||
+                                        0,
+                                    )}
+                                  ></div>
+                                </div>
+
+                                <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
+                                  Acessar +exames
+                                </button>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </TabContents>
-                  );
-                })}
+                      </TabContents>
+                    );
+                  },
+                )}
               </div>
             </div>
           </>

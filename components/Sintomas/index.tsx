@@ -8,25 +8,28 @@ import ListaSintomas from "../ListaSintomas";
 import { stringify } from "querystring";
 
 const sintomasDefault = {
-  "SuspeitaInfeccao": false,
-  "SintomasRespiratorios": false,
-  "InfeccaoCateter": false,
-  "InfeccaoPele": false,
-  "Pneumonia": false,
-  "GramCrescente": false,
-  "RxToraxAlterado": false,
-  "SepseAbdominal": false,
-  "Tiflite": false,
-  "CelulitePerianal": false,
-  "UlceraBucal": false,
-  "Diarreia": false
+  SuspeitaInfeccao: false,
+  SintomasRespiratorios: false,
+  InfeccaoCateter: false,
+  InfeccaoPele: false,
+  Pneumonia: false,
+  GramCrescente: false,
+  RxToraxAlterado: false,
+  SepseAbdominal: false,
+  Tiflite: false,
+  CelulitePerianal: false,
+  UlceraBucal: false,
+  Diarreia: false,
 };
 
 interface SintomasFormProps {
   id: string;
+  prescricaoTabRef: any;
 }
-const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
-
+const SintomasForm: React.FC<SintomasFormProps> = ({
+  id,
+  prescricaoTabRef,
+}) => {
   const formData = {
     SuspeitaInfeccao: false,
     SintomasRespiratorios: false,
@@ -41,7 +44,8 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
     UlceraBucal: false,
     Diarreia: false,
   };
-  const labels = ["Suspeita de infeccção relacionada ao catéter",
+  const labels = [
+    "Suspeita de infeccção relacionada ao catéter",
     "Sintomas respiratórios",
     "Infeccção relacionada ao catéter",
     "Infecção de pele ou partes moles",
@@ -57,17 +61,27 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
 
   const [infeccaoEnum, setInfeccaoEnum] = useState([{ nome: "", valor: 0 }]);
   const [sintomas, setSintomas] = useState<Record<string, boolean>>(formData);
-  const [situacaoTratamento, setSituacaoTratamento] = useState<Record<string, boolean>>();
+  const [situacaoTratamento, setSituacaoTratamento] =
+    useState<Record<string, boolean>>();
   const [instabilidadeH, setInstabilidadeH] = useState(false);
   const [infeccao, setInfeccao] = useState<number>();
 
   useEffect(() => {
     if (situacaoTratamento) {
       const sintomasFiltrados = Object.fromEntries(
-        Object.entries(situacaoTratamento)
-          .filter(([chave]) => !["DataVerificacao", "InstabilidadeHemodinamica",
-            "InfeccaoPrevia", "Id", "IdPaciente", "ReceitasItens",
-            "paciente", "situacaoPaciente"].includes(chave))
+        Object.entries(situacaoTratamento).filter(
+          ([chave]) =>
+            ![
+              "DataVerificacao",
+              "InstabilidadeHemodinamica",
+              "InfeccaoPrevia",
+              "Id",
+              "IdPaciente",
+              "ReceitasItens",
+              "paciente",
+              "situacaoPaciente",
+            ].includes(chave),
+        ),
       );
       setSintomas(sintomasFiltrados);
     }
@@ -86,22 +100,22 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
         setSituacaoTratamento(situacaoTratamento);
         setInstabilidadeH(situacaoTratamento.InstabilidadeHemodinamica);
         setInfeccao(situacaoTratamento.InfeccaoPrevia);
-      } catch (error) {
-      }
+      } catch (error) {}
     };
-    if (id)
-      fetchData();
+    if (id) fetchData();
   }, [id]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const enunsData = await getEnums();
-        setInfeccaoEnum(Object.keys(enunsData.TiposInfeccaoPreviaEnum).map(key => ({
-          nome: key.replace(/_/g, " "),
-          valor: enunsData.TiposInfeccaoPreviaEnum[key]
-        })));
-      } catch (error) { }
+        setInfeccaoEnum(
+          Object.keys(enunsData.TiposInfeccaoPreviaEnum).map((key) => ({
+            nome: key.replace(/_/g, " "),
+            valor: enunsData.TiposInfeccaoPreviaEnum[key],
+          })),
+        );
+      } catch (error) {}
     };
     fetchData();
   }, []);
@@ -113,19 +127,25 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const now = new Date();
-    const response = fetcher({
-      rota: `/Prescricao/AddSituacaoTratamento?pacienteId=${id}`,
-      metodo: "POST",
-      cabecalho: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        dataVerificacao: now.toISOString(),
-        instabilidadeHemodinamica: instabilidadeH,
-        infeccaoPrevia: infeccao,
-        ...sintomas
-      })
-    });
+    try {
+      await fetcher({
+        rota: `/Prescricao/AddSituacaoTratamento?pacienteId=${id}`,
+        metodo: "POST",
+        cabecalho: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          dataVerificacao: now.toISOString(),
+          instabilidadeHemodinamica: instabilidadeH,
+          infeccaoPrevia: infeccao,
+          ...sintomas,
+        }),
+      });
+      console.log(prescricaoTabRef);
+      prescricaoTabRef.current.click();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -173,7 +193,11 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
             </select>
           </div>
           <div className="border-b border-[#cad4d2] my-4" />
-            <ListaSintomas sintomas={sintomas} labels={labels} handleCheckboxChange={handleCheckboxChange} />
+          <ListaSintomas
+            sintomas={sintomas}
+            labels={labels}
+            handleCheckboxChange={handleCheckboxChange}
+          />
         </div>
       </div>
     </div>

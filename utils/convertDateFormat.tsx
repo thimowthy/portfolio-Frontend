@@ -14,7 +14,7 @@
  */
 export function convertDateFormat(
   inputDate: string,
-  format: string = "dd/mm/yyyy"
+  format: string = "dd/mm/yyyy",
 ): string {
   const originalDate = new Date(inputDate);
 

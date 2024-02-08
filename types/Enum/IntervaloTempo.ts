@@ -5,7 +5,7 @@ export enum IntervaloTempo {
 }
 
 export function obterValorNumericoIntervaloTempo(
-  intervalo: IntervaloTempo | undefined
+  intervalo: IntervaloTempo | undefined,
 ): number {
   switch (intervalo) {
     case IntervaloTempo.MINUTOS:

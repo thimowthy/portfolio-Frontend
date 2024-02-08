@@ -8,7 +8,7 @@ export enum UnidadeDosagem {
 }
 
 export function obterValorNumericoDosagem(
-  dosagem: UnidadeDosagem | undefined
+  dosagem: UnidadeDosagem | undefined,
 ): number {
   switch (dosagem) {
     case UnidadeDosagem.COMPRIMIDO:
