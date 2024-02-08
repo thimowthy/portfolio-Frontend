@@ -24,8 +24,12 @@ const sintomasDefault = {
 
 interface SintomasFormProps {
   id: string;
+  prescricaoTabRef: any;
 }
-const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
+const SintomasForm: React.FC<SintomasFormProps> = ({
+  id,
+  prescricaoTabRef,
+}) => {
   const formData = {
     SuspeitaInfeccao: false,
     SintomasRespiratorios: false,
@@ -123,19 +127,25 @@ const SintomasForm: React.FC<SintomasFormProps> = ({ id }) => {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const now = new Date();
-    const response = fetcher({
-      rota: `/Prescricao/AddSituacaoTratamento?pacienteId=${id}`,
-      metodo: "POST",
-      cabecalho: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        dataVerificacao: now.toISOString(),
-        instabilidadeHemodinamica: instabilidadeH,
-        infeccaoPrevia: infeccao,
-        ...sintomas,
-      }),
-    });
+    try {
+      await fetcher({
+        rota: `/Prescricao/AddSituacaoTratamento?pacienteId=${id}`,
+        metodo: "POST",
+        cabecalho: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          dataVerificacao: now.toISOString(),
+          instabilidadeHemodinamica: instabilidadeH,
+          infeccaoPrevia: infeccao,
+          ...sintomas,
+        }),
+      });
+      console.log(prescricaoTabRef);
+      prescricaoTabRef.current.click();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

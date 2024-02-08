@@ -1,16 +1,14 @@
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import React, { useEffect, useRef, useState } from "react";
 import TabList from "../TabList";
 import TabItem from "../TabItem";
 import TabContents from "../TabContents/index";
 import ExamesList from "../ExameList";
-import Link from "next/link";
-import useServerityIcon from "@/hooks/useSeverityIcon";
 import SintomasForm from "../Sintomas";
 import PacienteTab from "../PacienteTab";
 import fetcher from "@/api/fetcher";
 import HistoricoTratamentoList from "../HistoricoTratamento";
 import PrescricaoForm from "../Prescricao";
+
 /**
  * Renderiza o a página de detalhes do paciente.
  * @category Component
@@ -25,8 +23,13 @@ const pageStyles = {
 
 export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
   const [temperatura, setTemperatura] = useState<number>(36.5);
-
   const [internamento, setInternamento] = useState<Internacao>();
+  const prescricaoTabRef = useRef<any>(null);
+
+  useEffect(() => {
+    const element = prescricaoTabRef.current;
+    console.log(element);
+  }, [prescricaoTabRef]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,14 +52,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
         cabecalho: { "Content-Type": "application/json" },
         body: JSON.stringify({ temperatura: temperatura }),
       });
-      if (response.ok) {
-        //console.log("foi");
-      } else {
-        //console.log(" nfoi");
-      }
-    } catch (error) {
-      //console.log("n foi");
-    }
+    } catch (error) {}
   };
 
   return (
@@ -82,12 +78,24 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
             title="Sintomas"
             disabled={!paciente || !paciente.id}
           />
-          <TabItem
-            href="tab-prescricao"
-            className={pageStyles.tabItem}
-            title="Prescrição"
-            disabled={!paciente || !paciente.id}
-          />
+          <li role="presentation">
+            <a
+              href={"#tab-prescricao"}
+              className={`${pageStyles.tabItem} ${
+                !paciente || !paciente.id ? "disabled" : ""
+              }`}
+              data-te-toggle="pill"
+              data-te-target={"#tab-prescricao"}
+              role="tab"
+              aria-controls={"#tab-prescricao"}
+              aria-selected={!paciente || !paciente.id || undefined}
+              ref={(el) => {
+                prescricaoTabRef.current = el;
+              }}
+            >
+              Prescrição
+            </a>
+          </li>
           <TabItem
             href="tab-historico"
             className={pageStyles.tabItem}
@@ -110,7 +118,10 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
             </TabContents>
             <TabContents tabId="tab-sintomas" active={false}>
               <div className={pageStyles.tabContentDiv}>
-                <SintomasForm id={paciente.id?.toString() || ""} />
+                <SintomasForm
+                  id={paciente.id?.toString() || ""}
+                  prescricaoTabRef={prescricaoTabRef}
+                />
               </div>
             </TabContents>
             <TabContents tabId="tab-prescricao" active={false}>
