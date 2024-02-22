@@ -1,3 +1,5 @@
+import fetcher from "@/api/fetcher";
+
 export default function DeleteUsuario({
   user,
   setDeleteUser,
@@ -13,32 +15,23 @@ export default function DeleteUsuario({
     closeModal();
     setLoading(true);
 
-    const token = localStorage.getItem("Authorization");
+    try {
+      const response = await fetcher({
+        metodo: "DELETE",
+        rota: `/Usuario/DeleteUser/${user.id}`
+      });
 
-    const response = await fetch(
-      `/Usuario/DeleteUser/${user.id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-
-    setTimeout(() => {
+      alert("Usuário removido com sucesso");
+      setDeleteUser(false);
+    } catch (error) {
+      alert("Erro ao remover usuário");
+      console.error(error);
+    } finally {
       setLoading(false);
-      if (response.ok) {
-        alert("Usuário removido com sucesso");
-        setDeleteUser(false);
-      } else {
-        alert("Erro ao remover usuário");
-      }
-    }, 1000);
+    }
 
-    setTimeout(async () => {
-      await fetchUsers();
-    }, 1000);
+    await fetchUsers();
+
   };
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
