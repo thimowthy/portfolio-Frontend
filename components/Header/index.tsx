@@ -23,7 +23,7 @@ const Header = () => {
               <Link href="/login">Acesso ao Sistema</Link>
             </li>
             <li className="font-light text-base mx-4">
-              <Link href="/about">Sobre o OncoCare</Link>
+              <Link href="https://oncocaresystem.nicepage.io/">Sobre o OncoCare</Link>
             </li>
           </ul>
         </nav>
