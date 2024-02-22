@@ -67,7 +67,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
           metodo: "GET",
           rota: `/Internacao/GetInternacaoAtual?pacienteId=${idPaciente}`,
         });
-        setIdInternacao(internacao.Id);
+        setIdInternacao(internacao.id);
       } catch (error) {}
     };
     if (idPaciente) fetchData();
