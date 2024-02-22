@@ -6,9 +6,17 @@ export enum UnidadeDosagem {
   GRAMA = "g",
   MILIGRAMA_POR_QUILO = "mg/kg",
 }
+export const dosagemNumericaMapping: Record<string, number> = {
+  ["Comprimido"]: 0,
+  ["Gotas"]: 1,
+  ["mL"]: 2,
+  ["mg"]: 3,
+  ["g"]: 4,
+  ["mg/kg"]: 5,
+};
 
 export function obterValorNumericoDosagem(
-  dosagem: UnidadeDosagem | undefined,
+  dosagem: UnidadeDosagem | string | undefined,
 ): number {
   switch (dosagem) {
     case UnidadeDosagem.COMPRIMIDO:
@@ -24,6 +32,6 @@ export function obterValorNumericoDosagem(
     case UnidadeDosagem.MILIGRAMA_POR_QUILO:
       return 5;
     default:
-      throw new Error("Intervalo de tempo inválido");
+      throw new Error("Dosagem inválida");
   }
 }

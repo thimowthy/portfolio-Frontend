@@ -3,6 +3,11 @@ export enum IntervaloTempo {
   HORAS = "Horas",
   DIAS = "Dias",
 }
+export const IntervaloTempoMapping: Record<string, number> = {
+  ["Minutos"]: 0,
+  ["Horas"]: 1,
+  ["Dias"]: 2,
+};
 
 export function obterValorNumericoIntervaloTempo(
   intervalo: IntervaloTempo | undefined,
