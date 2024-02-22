@@ -6,13 +6,13 @@ export enum UnidadeDosagem {
   GRAMA = "g",
   MILIGRAMA_POR_QUILO = "mg/kg",
 }
-export const dosagemNumericaMapping: Record<UnidadeDosagem, number> = {
-  [UnidadeDosagem.COMPRIMIDO]: 0,
-  [UnidadeDosagem.GOTAS]: 1,
-  [UnidadeDosagem.MILILITRO]: 2,
-  [UnidadeDosagem.MILIGRAMA]: 3,
-  [UnidadeDosagem.GRAMA]: 4,
-  [UnidadeDosagem.MILIGRAMA_POR_QUILO]: 5,
+export const dosagemNumericaMapping: Record<string, number> = {
+  ["Comprimido"]: 0,
+  ["Gotas"]: 1,
+  ["mL"]: 2,
+  ["mg"]: 3,
+  ["g"]: 4,
+  ["mg/kg"]: 5,
 };
 
 export function obterValorNumericoDosagem(
