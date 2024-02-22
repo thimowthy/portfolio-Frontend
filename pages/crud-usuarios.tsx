@@ -58,8 +58,6 @@ const CrudUsuario = () => {
         },
       });
 
-      console.log(usersList);
-      //const filteredList = usersList.filter((u: Usuario) => u.ativo); ativo não está sendo retornado
       setUsers(usersList);
     } catch (error) {
       console.error(error);

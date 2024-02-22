@@ -5,6 +5,7 @@ import ArrowLeft from "../../public/arrow_left.svg";
 import Image from "next/image";
 import { set } from "date-fns";
 import { formatCPF } from "@/utils/formatCPF";
+import fetcher from "@/api/fetcher";
 
 export default function FormUsuario({
   cargo,
@@ -56,32 +57,26 @@ export default function FormUsuario({
         const token = localStorage.getItem("Authorization");
 
         if (token) {
-          const response = await fetch(
-            "/Usuario/Create",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify(formData),
-            },
-          );
+          const response = await fetcher({
+            metodo: "POST",
+            body: formData,
+            rota: "/Usuario/Create"
+          });
 
-          setTimeout(() => {
-            setLoading(false);
-            if (response.ok) {
-              alert("Usuário criado com sucesso");
-              setCreateUser(false);
-              setListUsers(true);
-            } else {
-              alert("Erro ao criar usuário");
-              //setError(true);
-            }
-          }, 1500);
+          if (response.id) {
+            alert("Usuário criado com sucesso");
+            setCreateUser(false);
+            setListUsers(true);
+          } else {
+            alert("Erro ao criar usuário");
+            //setError(true);
+          }
         }
       } catch (error) {
         console.error(error);
+        alert("Erro ao criar usuário");
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -159,19 +154,19 @@ export default function FormUsuario({
             </div>
           </div>
           <div className="flex flex-col w-full mb-2 gap-y-1 rounded">
-                <label htmlFor="nome" className="ml-1">
-                  Usuário
-                </label>
-                <input
-                  className="bg-gray-200 p-2 outline-none rounded w-full"
-                  type="text"
-                  name="username"
-                  id="username"
-                  placeholder="Usuário"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  required
-                />
+            <label htmlFor="nome" className="ml-1">
+              Usuário
+            </label>
+            <input
+              className="bg-gray-200 p-2 outline-none rounded w-full"
+              type="text"
+              name="username"
+              id="username"
+              placeholder="Usuário"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              required
+            />
           </div>
           <div className="flex flex-col mb-2 gap-y-1 rounded">
             <label htmlFor="senha" className="ml-1">
@@ -205,13 +200,13 @@ export default function FormUsuario({
             />
           </div>
           <div className="flex w-full items-center mt-3">
-          <button
-            type="submit"
-            className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-[#ED7C31] transition-colors mt-2 mx-auto font-bold"
-          >
-            Cadastrar
-          </button>
-        </div>
+            <button
+              type="submit"
+              className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-[#ED7C31] transition-colors mt-2 mx-auto font-bold"
+            >
+              Cadastrar
+            </button>
+          </div>
         </div>
 
       </form>

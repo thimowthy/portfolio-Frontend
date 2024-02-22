@@ -51,8 +51,6 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
 
   const [idInternacao, setIdInternacao] = useState<number>();
 
-
-
   useEffect(() => {
     if (dataResultado)
       setDataResultadoFormated(convertDateFormat(dataResultado, "yyyy-mm-dd"));
@@ -240,6 +238,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
         setIdPaciente(pacienteEncontrado?.id);
         setCPF(pacienteEncontrado.cpf || "");
         setNomePaciente(pacienteEncontrado.nome || "");
+        setIdInternacao(internamento.id);
         setCNS(pacienteEncontrado.cns || "");
         setLeito(internamento?.Leito);
         setDataNasc(pacienteEncontrado.dataNascimento || "");
