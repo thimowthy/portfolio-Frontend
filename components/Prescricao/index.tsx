@@ -5,10 +5,12 @@ import { ItemCuidado } from "@/types/ItemCuidado";
 import { Medicamento } from "@/types/Medicamento";
 import {
   UnidadeDosagem,
+  dosagemNumericaMapping,
   obterValorNumericoDosagem,
 } from "@/types/Enum/UnidadeDosagem";
 import {
   IntervaloTempo,
+  IntervaloTempoMapping,
   obterValorNumericoIntervaloTempo,
 } from "@/types/Enum/IntervaloTempo";
 import fetcher from "@/api/fetcher";
@@ -155,10 +157,8 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
     if (prescricao?.medicacoes) {
       const medicamentosFormatados = prescricao.medicacoes.map((item) => {
         return {
-          intervaloTempo: item.intervaloTempo,
-          unidadeDosagem: obterValorNumericoDosagem(
-            UnidadeDosagem[item.unidadeDosagem as keyof typeof UnidadeDosagem],
-          ),
+          intervaloTempo: IntervaloTempoMapping[item.intervaloTempo],
+          unidadeDosagem: dosagemNumericaMapping[item.unidadeDosagem],
           intervalo: item.intervalo,
           dose: item.dose,
           idMedicamento: item.medicamento ? item.medicamento.id : 0,
@@ -170,9 +170,17 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
 
   const gerarPrescricao = async () => {
     setLoading(true);
-
+    // console.log(dosagemNumericaMapping["mg"]);
+    // console.log(obterValorNumericoDosagem("mg"));
     const meds = formatarMedicamentos();
     try {
+      console.log({
+        dataSolicitacao: moment().toISOString(),
+        itensCuidado: prescricao?.cuidados,
+        itensMedicamento: meds,
+        urgente: true,
+        idInternamento: internamento?.id,
+      });
       const response = await fetcher({
         rota: "/Prescricao/CadastrarPrescricao",
         metodo: "POST",
@@ -181,7 +189,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
           itensCuidado: prescricao?.cuidados,
           itensMedicamento: meds,
           urgente: true,
-          idInternamento: internamento?.Id,
+          idInternamento: internamento?.id,
         },
       });
       setCuidados([]);
@@ -225,10 +233,6 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
     };
     if (id) fetchData();
   }, [id]);
-
-  useEffect(() => {
-    console.log(medicacoes);
-  }, [medicacoes]);
 
   type ItemSugestaoMedicamento = {
     idMedicamento?: number;
