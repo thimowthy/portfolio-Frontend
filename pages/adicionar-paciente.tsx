@@ -201,12 +201,6 @@ const AdicionarPaciente = () => {
         if (result) {
           setError(false);
           setSucessFetchStatus(true);
-          setTimeout(() => {
-            router.push({
-              pathname: "/estratificacao-risco",
-              query: result
-            });
-          }, 2000);
         }
       } catch (error) {
         console.log(error);
