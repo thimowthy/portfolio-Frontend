@@ -69,31 +69,31 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
             onSelect={handleTabSelect}
           />
           <TabItem
-            href="tab-sintomas"
+            href="tabs-sintomas"
             className={pageStyles.tabItem}
             title="Sintomas"
-            selected={activeTab === "tab-sintomas"}
+            selected={activeTab === "tabs-sintomas"}
             disabled={!paciente || !paciente.id}
             onSelect={handleTabSelect}
           />
           <TabItem
-            href="tab-prescricao"
+            href="tabs-prescricao"
             className={pageStyles.tabItem}
             title="Prescrição"
-            selected={activeTab === "tab-prescricao"}
+            selected={activeTab === "tabs-prescricao"}
             disabled={!paciente || !paciente.id}
             onSelect={handleTabSelect}
           />
           {/* <li role="presentation">
             <a
-              href={"#tab-prescricao"}
+              href={"#tabs-prescricao"}
               className={`${pageStyles.tabItem} ${
                 !paciente || !paciente.id ? "disabled" : ""
               }`}
               data-te-toggle="pill"
-              data-te-target={"#tab-prescricao"}
+              data-te-target={"#tabs-prescricao"}
               role="tab"
-              aria-controls={"#tab-prescricao"}
+              aria-controls={"#tabs-prescricao"}
               aria-selected={!paciente || !paciente.id || undefined}
               ref={(el) => {
                 prescricaoTabRef.current = el;
@@ -103,10 +103,10 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
             </a>
           </li> */}
           <TabItem
-            href="tab-historico"
+            href="tabs-historico"
             className={pageStyles.tabItem}
             title="Histórico"
-            selected={activeTab === "tab-historico"}
+            selected={activeTab === "tabs-historico"}
             disabled={!paciente || !paciente.id}
             onSelect={handleTabSelect}
           />
@@ -136,7 +136,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
             )}
             {activeTab === "tabs-sintomas" && (
               <TabContents
-                tabId="tab-sintomas"
+                tabId="tabs-sintomas"
                 active={activeTab === "tabs-sintomas"}
               >
                 <div className={pageStyles.tabContentDiv}>
@@ -149,7 +149,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
             )}
             {activeTab === "tabs-prescricao" && (
               <TabContents
-                tabId="tab-prescricao"
+                tabId="tabs-prescricao"
                 active={activeTab === "tabs-prescricao"}
               >
                 <PrescricaoForm id={paciente.id?.toString() || ""} />
@@ -157,7 +157,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
             )}
             {activeTab === "tabs-historico" && (
               <TabContents
-                tabId="tab-historico"
+                tabId="tabs-historico"
                 active={activeTab === "tabs-historico"}
               >
                 <div className={pageStyles.tabContentDiv}>
