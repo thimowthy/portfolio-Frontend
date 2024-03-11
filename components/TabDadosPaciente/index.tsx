@@ -20,12 +20,11 @@ export default function TabDadosPaciente({
   setPacientes,
 }: any) {
   const [idAtivo, setIdAtivo] = useState(0);
-  const [activeTab, setActiveTab] = useState("Todos");
+  const [activeTab, setActiveTab] = useState("tab-todos");
 
   const handleTabSelect = (selectedRef: string | React.ReactNode) => {
     setActiveTab(selectedRef as string);
   };
-
 
   const handleFilterPacientes = (busca: string) => {
     let pacientesFiltrados;
@@ -34,7 +33,7 @@ export default function TabDadosPaciente({
       pacientesFiltrados = pacientes.filter(
         (paciente: Paciente) =>
           paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
-          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
+          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca)
       );
       setPacientes(pacientesFiltrados);
     } else {
@@ -49,7 +48,7 @@ export default function TabDadosPaciente({
       pacientesNfFiltrados = nf.filter(
         (paciente: Paciente) =>
           paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
-          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
+          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca)
       );
       setNf(pacientesNfFiltrados);
     } else {
@@ -74,7 +73,7 @@ export default function TabDadosPaciente({
             href="tab-todos"
             className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab rounded-lg"
             title="Todos"
-            active={activeTab === "tab-todos"}
+            selected={activeTab === "tab-todos"}
             onSelect={handleTabSelect}
             disabled={false}
           />
@@ -82,7 +81,7 @@ export default function TabDadosPaciente({
             href="tab-NF"
             className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab rounded-lg"
             title="Neutropenia Febril"
-            active={activeTab === "tab-NF"}
+            selected={activeTab === "tab-NF"}
             onSelect={handleTabSelect}
             disabled={false}
           />
