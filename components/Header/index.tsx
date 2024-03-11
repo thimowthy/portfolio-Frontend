@@ -7,7 +7,7 @@ import sairIcon from "@/public/sair.svg";
 import { clearLocalStorage } from "@/utils/clearLocalStorage";
 import { useAuthRole } from "@/hooks/useAuthRole";
 import checkAuthentication from "@/utils/checkAuth";
-import { useLoggedUser } from "@/hooks/useLoggedUser";
+// import { useLoggedUser } from "@/hooks/useLoggedUser";
 
 const Header = () => {
   // useLoggedUser();

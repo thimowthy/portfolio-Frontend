@@ -80,7 +80,7 @@ export default function Dashboard() {
               <TabContents
                 tabId="tabs-barra"
                 active={true}
-                className="h-full w-full flex justify-center items-center"
+                className="h-full w-full flex justify-center items-center flex-column column"
               >
                 <Bar
                   data={data}
@@ -108,12 +108,16 @@ export default function Dashboard() {
               <TabList className="flex list-none flex-row flex-wrap border-b-0 justify-center items-center mt-5">
                 <TabItem
                   href="tabs-barra"
+                  tooltiptext="Alterar para visualização em gráfico de barras"
+                  showTooltip={true}
                   className="px-5 mx-3 rounded border-x-0 border-b-2 border-t-0 border-transparent p-1 font-medium uppercase hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] bg-[#CCDBD8] data-[te-nav-active]:bg-[#90D8C7]"
                   title=""
                   active={true}
                 />
                 <TabItem
                   href="tabs-pie"
+                  tooltiptext="Alterar para visualização de gráfico em pizza"
+                  showTooltip={true}
                   className="px-5 mx-3 rounded border-x-0 border-b-2 border-t-0 border-transparent p-1 font-medium uppercase hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] bg-[#CCDBD8] data-[te-nav-active]:bg-[#90D8C7]"
                   title=""
                 />

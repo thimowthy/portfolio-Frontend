@@ -4,6 +4,8 @@
  */
 const TabItem = ({
   href,
+  tooltiptext,
+  showTooltip,
   className,
   title,
   active,
@@ -12,6 +14,8 @@ const TabItem = ({
   disabled,
 }: {
   href: string;
+  tooltiptext?: string;
+  showTooltip?: boolean;
   className?: string;
   title?: string;
   active?: boolean;
@@ -30,6 +34,8 @@ const TabItem = ({
         role="tab"
         aria-controls={href}
         aria-selected={active || undefined}
+        data-twe-toggle={showTooltip ? "tooltip" : ""}
+        title={tooltiptext}
       >
         {title || children}
       </a>
