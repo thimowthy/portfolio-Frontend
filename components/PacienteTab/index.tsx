@@ -279,7 +279,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                         } ${
                           index === 4 ? "rounded-br-full rounded-tr-full" : ""
                         }`}
-                        active={index === 1 || undefined}
+                        active={index === 1 ? true : false}
                       >
                         <p className="text-white">
                           {moment(item?.dataVerificacao).format(
