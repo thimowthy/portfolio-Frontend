@@ -25,7 +25,6 @@ const TabItem = ({
     if (!disabled) {
       e.preventDefault(); // Evita o redirecionamento automático
       if (onSelect && typeof onSelect === "function") {
-        console.log("Active tab: ", title);
         onSelect(href || children);
       }
     }

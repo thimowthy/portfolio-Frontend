@@ -20,7 +20,7 @@ const HistoricoTratamentoList: React.FC<HistoricoTratamentoProps> = ({
             rota: "/Internacao/GetInternacaoAtual?pacienteId=" + id,
             metodo: "GET",
           });
-          return response["Id"];
+          return response["id"];
         } catch (error) {
           console.error("Erro ao buscar histórico:", error);
           return null;
