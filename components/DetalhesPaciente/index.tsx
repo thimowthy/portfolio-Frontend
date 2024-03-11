@@ -56,7 +56,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
             href="tabs-neutral"
             className={pageStyles.tabItem}
             title="Paciente"
-            active={activeTab === "tabs-neutral"}
+            selected={activeTab === "tabs-neutral"}
             disabled={!paciente || !paciente.id}
             onSelect={handleTabSelect}
           />
@@ -64,7 +64,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
             href="tabs-exames"
             className={pageStyles.tabItem}
             title="Exames"
-            active={activeTab === "tabs-exames"}
+            selected={activeTab === "tabs-exames"}
             disabled={!paciente || !paciente.id}
             onSelect={handleTabSelect}
           />
@@ -72,7 +72,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
             href="tab-sintomas"
             className={pageStyles.tabItem}
             title="Sintomas"
-            active={activeTab === "tab-sintomas"}
+            selected={activeTab === "tab-sintomas"}
             disabled={!paciente || !paciente.id}
             onSelect={handleTabSelect}
           />
@@ -80,15 +80,33 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
             href="tab-prescricao"
             className={pageStyles.tabItem}
             title="Prescrição"
-            active={activeTab === "tab-prescricao"}
+            selected={activeTab === "tab-prescricao"}
             disabled={!paciente || !paciente.id}
             onSelect={handleTabSelect}
           />
+          {/* <li role="presentation">
+            <a
+              href={"#tab-prescricao"}
+              className={`${pageStyles.tabItem} ${
+                !paciente || !paciente.id ? "disabled" : ""
+              }`}
+              data-te-toggle="pill"
+              data-te-target={"#tab-prescricao"}
+              role="tab"
+              aria-controls={"#tab-prescricao"}
+              aria-selected={!paciente || !paciente.id || undefined}
+              ref={(el) => {
+                prescricaoTabRef.current = el;
+              }}
+            >
+              Prescrição
+            </a>
+          </li> */}
           <TabItem
             href="tab-historico"
             className={pageStyles.tabItem}
             title="Histórico"
-            active={activeTab === "tab-historico"}
+            selected={activeTab === "tab-historico"}
             disabled={!paciente || !paciente.id}
             onSelect={handleTabSelect}
           />
@@ -143,9 +161,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
                 active={activeTab === "tabs-historico"}
               >
                 <div className={pageStyles.tabContentDiv}>
-                  <HistoricoTratamentoList
-                    id={paciente.id?.toString() || ""}
-                  />
+                  <HistoricoTratamentoList id={paciente.id?.toString() || ""} />
                 </div>
               </TabContents>
             )}
