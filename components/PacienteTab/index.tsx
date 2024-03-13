@@ -87,9 +87,6 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
     setPermissaoEnfermeiro(cargoFromStorage === "ENFERMEIRO");
   }, []);
 
-  useEffect(() => {
-    console.log(permissaoMedico);
-  }, [permissaoMedico]);
   return (
     <>
       {dischargeError && (

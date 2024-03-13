@@ -2,8 +2,13 @@ import Image from "next/image";
 import exameIcon from "@/public/medical-report.png";
 import { convertDateFormat } from "../../utils/convertDateFormat";
 import { ItemExameProps } from "./ItemExameProps";
+import ExameForm from "../CadastrarExame/CadastrarExameForm";
+import { useState } from "react";
 
-const ItemListaExame: React.FC<ItemExameProps> = ({ id, exame, setExame }) => {
+const ItemListaExame: React.FC<ItemExameProps> = ({ exame, setExame }) => {
+  
+  const [exameFormVisible, setExameFormVisible] = useState<boolean>(false);
+  
   return (
     <li
       key={1}
@@ -35,12 +40,29 @@ const ItemListaExame: React.FC<ItemExameProps> = ({ id, exame, setExame }) => {
         <button
           className="bg-blue-700 hover:bg-blue-900 px-5 mt-4 py-1 text-sm leading-5 rounded-lg font-semibold text-white"
           onClick={() => {
-            if (setExame) setExame(exame);
+            setExameFormVisible((prevVisibility) => !prevVisibility);
+            if (setExame) {
+              setExame(exame);
+            }
           }}
         >
           Ver Exame
         </button>
       </div>
+      {exameFormVisible && (
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#eee] py-4 px-10 rounded border-2 border-gray-300">
+          <button
+            className="flex ml-auto text-5xl mb-4"
+            onClick={() => { setExameFormVisible(false); }}
+          >
+            x
+          </button>
+          <div className="border-b w-full border-gray-300 my-4"></div>
+          <ExameForm
+            exame={exame}
+          />
+        </div>
+      )}
     </li>
   );
 };
