@@ -63,13 +63,13 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
       return Swal.fire(
         "Sucesso!",
         "Temperatura registrada com sucesso!",
-        "success",
+        "success"
       );
     } catch (error) {
       return Swal.fire(
         "Erro!",
         "Aconteceu algum erro ao tentar atualizar a temperatura",
-        "error",
+        "error"
       );
     }
   };
@@ -180,7 +180,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                 <p className="my-1">
                   Data internação:{" "}
                   {moment(paciente?.internacao?.dataAdmissao).format(
-                    "DD/MM/YYYY h:mm:ss",
+                    "DD/MM/YYYY h:mm:ss"
                   )}
                 </p>
                 {/* <p>Unidade: {paciente.unidade}</p> */}
@@ -203,7 +203,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                               {comorbidade?.nome}
                             </p>
                           );
-                        },
+                        }
                       )}
                     </div>
                   )}
@@ -289,21 +289,21 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                         key={`tab-${paciente.id}-${item.id}`}
                         href={`tab-${paciente.id}-${item.id}`}
                         liClassName={`basis-1/5 ${tabColorMap.get(
-                          index,
+                          index
                         )} py-2 pl-2 ${
                           index === 0 ? "rounded-bl-full rounded-tl-full" : ""
                         } ${
                           index === 4 ? "rounded-br-full rounded-tr-full" : ""
                         }`}
-                        active={index === 1 || undefined}
+                        selected={index === 1 ? true : false}
                       >
                         <p className="text-white">
                           {moment(item?.dataVerificacao).format(
-                            "DD/MM/YYYY h:mm:ss",
+                            "DD/MM/YYYY h:mm:ss"
                           )}
                         </p>
                       </TabItem>
-                    ),
+                    )
                   )}
                 </TabList>
                 {paciente?.internacao?.situacoesPaciente?.map(
@@ -319,7 +319,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                             <p>
                               Data de verificação:{" "}
                               {moment(
-                                item?.situacaoDiagnostico?.dataVerificacao,
+                                item?.situacaoDiagnostico?.dataVerificacao
                               ).format("DD/MM/YYYY h:mm:ss")}
                             </p>
                             <p>
@@ -339,7 +339,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                                   <div
                                     className={selectLabelNeutrofilos(
                                       item?.situacaoDiagnostico?.neutrofilos ||
-                                        0,
+                                        0
                                     )}
                                   ></div>
                                 </div>
@@ -353,7 +353,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                         </div>
                       </TabContents>
                     );
-                  },
+                  }
                 )}
               </div>
             </div>

@@ -6,30 +6,44 @@ const TabItem = ({
   href,
   className,
   title,
-  active,
+  selected: selected,
   children,
   liClassName,
-  disabled,
+  disabled = false,
+  onSelect,
 }: {
   href: string;
   className?: string;
   title?: string;
-  active?: boolean;
-  children?: any;
+  selected: boolean;
+  children?: React.ReactNode;
   liClassName?: string;
   disabled?: boolean;
+  onSelect?: (selectedTitle: string | React.ReactNode) => void;
 }) => {
+  const handleClick = (e: React.MouseEvent) => {
+    if (!disabled) {
+      e.preventDefault(); // Evita o redirecionamento automático
+      if (onSelect && typeof onSelect === "function") {
+        onSelect(href || children);
+      }
+    }
+  };
+
   return (
     <li role="presentation" className={liClassName}>
       <a
         href={`#${href}`}
-        className={`${className} ${disabled ? "disabled" : ""}`}
+        className={`${className} ${disabled ? "disabled" : ""} ${
+          selected ? "data-[te-nav-active]:bg-[#EAEAEA]" : ""
+        } `}
         data-te-toggle="pill"
         data-te-target={`#${href}`}
-        data-te-nav-active={active}
+        data-te-nav-active={selected}
         role="tab"
         aria-controls={href}
-        aria-selected={active || undefined}
+        aria-selected={selected || undefined}
+        onClick={handleClick}
       >
         {title || children}
       </a>
