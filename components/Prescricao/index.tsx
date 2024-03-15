@@ -6,12 +6,10 @@ import { Medicamento } from "@/types/Medicamento";
 import {
   UnidadeDosagem,
   dosagemNumericaMapping,
-  obterValorNumericoDosagem,
 } from "@/types/Enum/UnidadeDosagem";
 import {
   IntervaloTempo,
   IntervaloTempoMapping,
-  obterValorNumericoIntervaloTempo,
 } from "@/types/Enum/IntervaloTempo";
 import fetcher from "@/api/fetcher";
 import Loader from "../Loader";
