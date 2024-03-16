@@ -141,27 +141,30 @@ const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit, 
         </div>
         <div className={styles.editDiv}>
           <div className={styles.inputDiv}>
-            <div className={styles.nameInput}>
-              <label className={styles.label}>Nome</label>
-              <input
-                className={styles.input}
-                id="name"
-                type="text"
-                placeholder="Febre"
-                value={selectedNodeData?.nome || ""}
-                disabled={true}
-              />
-            </div>
-            <div className={styles.varInput}>
-              <label className={styles.label}>Variável</label>
-              <p className={styles.input} id="var" placeholder="febre">
-                {selectedNodeData?.variavel || ""}
-              </p>
-            </div>
-            <div className={styles.condInput}>
+          {(selectedNodeData && 
+            <div>
+              <div className={styles.nameInput}>
+                <label className={styles.label}>Nome</label>
+                <input
+                  className={styles.input}
+                  id="name"
+                  type="text"
+                  placeholder="Febre"
+                  value={selectedNodeData?.nome || ""}
+                  disabled={true}
+                />
+              </div>
+              <div className={styles.varInput}>
+                  <label className={styles.label}>Variável</label>
+                  <p className={styles.input} id="var" placeholder="febre">
+                    {selectedNodeData?.variavel || ""}
+                  </p>
+              </div>
+              <div className={styles.condInput}>
+              </div>
               <label className={styles.label}>Condição</label>
               <div className={styles.input}>
-                <p>{selectedNodeData.condicao.slice(0, -1)}</p>
+                <p>{selectedNodeData?.condicao.slice(0, -1)}</p>
                 <input
                   className="w-16 h-8 ml-2 text-left pl-2 border rounded"
                   id="condition"
@@ -179,6 +182,12 @@ const DiagFormContent: React.FC<DiagFormContentProps> = ({ onDiagnosticoSubmit, 
                 />
               </div>
             </div>
+          )}
+          {(!selectedNodeData && 
+            <div className="flex items-center justify-center text-center h-full">
+              <p className="text-gray-400 font-bold text-2xl">Selecione um <br/> evento</p>
+            </div>
+          )}
           </div>
           <div className={styles.saveDiv}>
             <button
