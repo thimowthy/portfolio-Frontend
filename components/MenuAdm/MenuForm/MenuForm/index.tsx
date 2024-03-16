@@ -68,13 +68,20 @@ const MenuFormContent = () => {
     }
   };
   const handleExcluirProtocolo = async (id: number) => {
-    if (!id) console.log("Selecione um protocolo!");
-
+    if (!id)
+      console.log("Selecione um protocolo!");
     if (id === ativo)
       console.log("Você não pode excluir o protocolo em execução");
 
+    const protocoloSelecionado = protocolos.find(protocolo => protocolo.id === id);
+    
+    if (!protocoloSelecionado) {
+      console.log("Protocolo não encontrado");
+      return;
+    };
+  
     const shouldDelete = window.confirm(
-      "Tem certeza de que deseja excluir este protocolo?",
+      `Tem certeza de que deseja excluir o protocolo ${protocoloSelecionado.descricao.nome} v${protocoloSelecionado.descricao.versao}?`,
     );
 
     if (shouldDelete) {
@@ -85,10 +92,11 @@ const MenuFormContent = () => {
           cabecalho: { "Content-Type": "application/json" },
           body: JSON.stringify(id),
         });
-        console.log(response);
+        //console.log(response);
         setExcluirSuccess(true);
+        window.location.reload(); 
       } catch (error) {
-        console.log(error);
+        //console.log(error);
         setExcluirError(true);
       }
     }
@@ -154,7 +162,7 @@ const MenuFormContent = () => {
           </button>
           <button
             className={styles.button}
-            type="submit"
+            type="button"
             onClick={() => {
               handleExcluirProtocolo(selectedItemId);
             }}
