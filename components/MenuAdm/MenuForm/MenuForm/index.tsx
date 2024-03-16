@@ -34,17 +34,27 @@ const MenuFormContent = () => {
     if (id) {
       if (id === ativo) {
         setEfetivarEfetivadoError(true);
-      } else {
+      }
+      else {
         try {
-          const response: Response = await fetcher({
-            rota: `/Protocolo/EfetivarProtocolo/${id}`,
-            metodo: "PUT",
-            cabecalho: { "Content-Type": "application/json" },
-            body: JSON.stringify(id),
-          });
-          if (response.ok) setEfetivarSuccess(true);
-          if (!response.ok) throw new Error("Erro ao excluir protocolo");
-        } catch (error) {
+          const protocoloSelecionado = protocolos.find(protocolo => protocolo.id === id);
+          if (protocoloSelecionado) {
+            const shouldEfetivar = window.confirm(
+              `Tem certeza de que deseja efetivar o protocolo ${protocoloSelecionado.descricao.nome} v${protocoloSelecionado.descricao.versao}?`,
+            );
+            if (shouldEfetivar) {
+              const response: Response = await fetcher({
+                rota: `/Protocolo/EfetivarProtocolo/${id}`,
+                metodo: "PUT",
+                cabecalho: { "Content-Type": "application/json" },
+                body: JSON.stringify(id),
+              });
+              setEfetivarSuccess(true);
+              window.location.reload(); 
+            }
+          }
+        }
+        catch (error) {
           setEfetivarError(true);
         }
       }
@@ -67,6 +77,7 @@ const MenuFormContent = () => {
       }
     }
   };
+
   const handleExcluirProtocolo = async (id: number) => {
     if (!id)
       console.log("Selecione um protocolo!");
@@ -155,7 +166,7 @@ const MenuFormContent = () => {
           </button>
           <button
             className={styles.button}
-            type="submit"
+            type="button"
             onClick={() => handleEfetivarProtocolo(selectedItemId)}
           >
             Efetivar Protocolo
