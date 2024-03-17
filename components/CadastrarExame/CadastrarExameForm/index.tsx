@@ -409,6 +409,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
                 <label>Contagem de Neutrófilos</label>
                 <input
                   type="number"
+                  min="0"
                   maxLength={5}
                   value={neutrofilos}
                   onChange={(e) =>
