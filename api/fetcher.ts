@@ -12,8 +12,8 @@ async function fetcher({
   cabecalho?: any;
   body?: any;
 }) {
-  const baseURL = "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com";
-  // const baseURL = "http://localhost:5130";
+  //const baseURL = "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com";
+  const baseURL = "http://localhost:5130";
   const token =
     typeof window != "undefined"
       ? localStorage?.getItem("Authorization")

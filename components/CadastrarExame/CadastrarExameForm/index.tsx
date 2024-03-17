@@ -68,7 +68,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
     try {
       const pacientes = await fetcher({
         metodo: "GET",
-        rota: "/Paciente/GetListPatientsSemAlta",
+        rota: "/Paciente/GetListPatients",
       });
       if (pacientes.length > 0) {
         setPacientes(pacientes);
@@ -97,8 +97,15 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
       fetchPacientes();
       fetchMedicos();
     };
-    fetchData();
-  }, []);
+    if (!exame)
+      fetchData();
+    else {
+      //fetchPacientes();
+      setCpfMedico(exame.cpfSolicitante);
+      setSolicitadoPor(exame.nomeSolicitante);
+      //setCpfMedico(exame.)
+    }
+  }, [exame]);
 
   useEffect(() => {
     if (dataResultado)
@@ -119,7 +126,8 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
         setIdInternacao(internacao.id);
       } catch (error) {}
     };
-    if (idPaciente) fetchData();
+    if (idPaciente)
+      fetchData();
   }, [idPaciente]);
 
   useEffect(() => {
@@ -230,40 +238,18 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
         setPacienteNaoEncontrado(false);
       }
     } catch (error) {
-      cleanPacienteUseStates();
+      //cleanPacienteUseStates();
     }
   };
-  useEffect(() => {
-    console.log(exame);
-  }, [exame]);
-
 
   useEffect(() => {
-    const fetchMedicoData = () => {
-      const medicoEncontrado = medicos.find(
-        (medico) => medico.id === exame!.idSolicitante,
-      );
-      if (medicoEncontrado) {
-        setIdMedico(medicoEncontrado.id);
-        setCpfMedico(medicoEncontrado.cpf);
-        setSolicitadoPor(medicoEncontrado.nome);
-      } else cleanMedicoUseStates();
-    };
-    const fetchExameData = () => {
-      setDataSolicitacao(
-        convertDateFormat(exame!.dataSolicitacao, "yyyy-mm-dd"),
-      );
-      setDataResultado(convertDateFormat(exame!.dataResultado, "yyyy-mm-dd"));
-      setNeutrofilos(exame!.neutrofilos);
-    };
     if (exame) {
       fetchPacienteData();
-      fetchMedicoData();
-      fetchExameData();
+      setDataSolicitacao(convertDateFormat(exame.dataSolicitacao, "yyyy-mm-dd"));
+      setDataResultado(convertDateFormat(exame.dataResultado, "yyyy-mm-dd"));
+      setNeutrofilos(exame.neutrofilos);
     } else {
-      cleanPacienteUseStates();
-      cleanMedicoUseStates();
-      cleanExameUseStates();
+      cleanUseStates();
     }
   }, [exame, medicos]);
 
@@ -271,7 +257,9 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
     const pacienteEncontrado = pacientes.find(
       (paciente) => paciente.numeroProntuario === numProntuario,
     );
-
+    setIdPaciente(pacienteEncontrado?.id);
+    console.log(pacientes);
+    console.log(numProntuario);
     async function getInternamento() {
       try {
         const internacaoAtual = await fetcher({
@@ -283,7 +271,6 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
         console.log(err);
       }
     }
-
     if (pacienteEncontrado) {
       try {
         const internamento = await getInternamento();
