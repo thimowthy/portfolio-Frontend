@@ -40,6 +40,13 @@ const AdicionarPaciente = () => {
     alergias: "",
   });
 
+  const isEmptyFormData = () => {
+    for (let key in formData) {
+      if (formData[key as keyof typeof formData]) return false;
+    }
+    return true;
+  };
+
   const [cpfFormated, setCpfFormated] = useState("");
   const [loading, setLoading] = useState(false);
   const [sucessFetchStatus, setSucessFetchStatus] = useState(false);
@@ -133,10 +140,16 @@ const AdicionarPaciente = () => {
   const handleInput = (e: any) => {
     const fieldName = e.target.name;
     const fieldValue = e.target.value;
+
     setFormData((prevState) => ({
       ...prevState,
       [fieldName]: fieldValue,
     }));
+
+    if (fieldName === "numeroProntuario" && !isEmptyFormData()) {
+      cleanUseStates();
+      setPaciente(undefined);
+    }
   };
 
   const handleSubmit = async (e: any) => {
@@ -181,7 +194,9 @@ const AdicionarPaciente = () => {
         }
       }
       formDataClone.alergias = outputArr;
-    } else formDataClone.alergias = [];
+    } else {
+      formDataClone.alergias = [];
+    }
 
     formDataClone.tipoSanguineo = parseInt(formDataClone.tipoSanguineo);
     formDataClone.cpf = formDataClone.cpf.replace(/\D/g, "");
@@ -205,6 +220,13 @@ const AdicionarPaciente = () => {
         setError(true);
       }
     } else {
+      if (!formData.leito) {
+        alert("O campo leito é obrigatório");
+        setError(true);
+        setLoading(false);
+        return;
+      }
+
       const timeZone = "America/Sao_Paulo";
       const currentDate = format(new Date(), "yyyy-MM-dd", { timeZone });
 
