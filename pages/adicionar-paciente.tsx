@@ -66,7 +66,6 @@ const AdicionarPaciente = () => {
     }
   }, [internado, paciente, router]);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -182,9 +181,7 @@ const AdicionarPaciente = () => {
         }
       }
       formDataClone.alergias = outputArr;
-    }
-    else
-      formDataClone.alergias = [];
+    } else formDataClone.alergias = [];
 
     formDataClone.tipoSanguineo = parseInt(formDataClone.tipoSanguineo);
     formDataClone.cpf = formDataClone.cpf.replace(/\D/g, "");
@@ -201,12 +198,6 @@ const AdicionarPaciente = () => {
         if (result) {
           setError(false);
           setSucessFetchStatus(true);
-          setTimeout(() => {
-            router.push({
-              pathname: "/estratificacao-risco",
-              query: result
-            });
-          }, 2000);
         }
       } catch (error) {
         console.log(error);
@@ -229,7 +220,7 @@ const AdicionarPaciente = () => {
           rota: "/Internacao/CriarInternamento",
           metodo: "POST",
           cabecalho: { "Content-Type": "application/json" },
-          body: internamento,          
+          body: internamento,
         });
         if (result) {
           setError(false);
@@ -245,7 +236,6 @@ const AdicionarPaciente = () => {
     }
   };
 
-  
   return (
     <>
       {sucessFetchStatus && (

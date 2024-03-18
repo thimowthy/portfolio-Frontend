@@ -112,7 +112,7 @@ export default function Dashboard() {
                   showTooltip={true}
                   className="px-5 mx-3 rounded border-x-0 border-b-2 border-t-0 border-transparent p-1 font-medium uppercase hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] bg-[#CCDBD8] data-[te-nav-active]:bg-[#90D8C7]"
                   title=""
-                  active={true}
+                  selected={true}
                 />
                 <TabItem
                   href="tabs-pie"
@@ -120,6 +120,7 @@ export default function Dashboard() {
                   showTooltip={true}
                   className="px-5 mx-3 rounded border-x-0 border-b-2 border-t-0 border-transparent p-1 font-medium uppercase hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] bg-[#CCDBD8] data-[te-nav-active]:bg-[#90D8C7]"
                   title=""
+                  selected={false}
                 />
               </TabList>
             </div>
