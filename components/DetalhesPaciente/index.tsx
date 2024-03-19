@@ -5,7 +5,6 @@ import TabContents from "../TabContents/index";
 import ExamesList from "../ExameList";
 import SintomasForm from "../Sintomas";
 import PacienteTab from "../PacienteTab";
-import fetcher from "@/api/fetcher";
 import HistoricoTratamentoList from "../HistoricoTratamento";
 import PrescricaoForm from "../Prescricao";
 
@@ -22,7 +21,6 @@ const pageStyles = {
 };
 
 export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
-  const [internamento, setInternamento] = useState<Internacao>();
   const prescricaoTabRef = useRef<any>(null);
   const [activeTab, setActiveTab] = useState("tabs-neutral");
 
@@ -35,23 +33,10 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
     console.log(element);
   }, [prescricaoTabRef]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const internamento = await fetcher({
-          metodo: "GET",
-          rota: `/Internacao/GetInternacaoAtual?pacienteId=${paciente.id}`,
-        });
-        setInternamento(internamento);
-      } catch (error) {}
-    };
-    if (paciente.id) fetchData();
-  }, [paciente]);
-
   return (
     <div>
       <>
-        <TabList className="flex list-none flex-row flex-wrap border-b-0 pl-0 -mb-1.5 relative z-0">
+        <TabList className="flex list-none flex-row flex-wrap border-b-0 pl-0 -mb-1.5 relative">
           <TabItem
             href="tabs-neutral"
             className={pageStyles.tabItem}
@@ -113,7 +98,7 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
         </TabList>
         <div
           id="contents"
-          className="bg-[#EAEAEA] relative rounded-b-xl overflow-y-auto rounded-tr-xl px-1 z-1"
+          className="bg-[#EAEAEA] relative rounded-b-xl overflow-y-auto rounded-tr-xl"
         >
           <div className="overflow-y-auto">
             {activeTab === "tabs-neutral" && (
