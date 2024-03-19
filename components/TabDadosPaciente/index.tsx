@@ -7,6 +7,7 @@ import { Tab, initTE } from "tw-elements";
 import TabList from "../TabList";
 import ItemListaPaciente from "../ItemListaPaciente";
 import router from "next/router";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 initTE({ Tab });
 
@@ -35,6 +36,8 @@ export default function TabDadosPaciente({
   const handleTabSelect = (selectedRef: string | React.ReactNode) => {
     setActiveTab(selectedRef as string);
   };
+  const authRole = useAuthRole();
+  const cargo = authRole?.cargo || "";
 
   const [pacientesNfFiltrados, setPacientesNfFiltrados] = useState<any>();
   const handleFilterPacientes = (busca: string) => {
@@ -124,16 +127,18 @@ export default function TabDadosPaciente({
                     onChange={(e) => handleFilterPacientes(e.target.value)}
                   />
                 </div>
-                <button
-                  className="ml-auto font-bold w-8 h-8 px-4 rounded-full flex text-xl text-white justify-center bg-orange-500"
-                  type="button"
-                  title="Adicionar paciente"
-                  onClick={() => {
-                    router.push("/adicionar-paciente");
-                  }}
-                >
-                  <span>+</span>
-                </button>
+                {cargo && cargo === "MEDICO" && (
+                  <button
+                    className="ml-auto font-bold w-8 h-8 px-4 rounded-full flex text-xl text-white justify-center bg-orange-500"
+                    type="button"
+                    title="Adicionar paciente"
+                    onClick={() => {
+                      router.push("/adicionar-paciente");
+                    }}
+                  >
+                    <span>+</span>
+                  </button>
+                )}
                 <button
                   className="mr-auto ml-2 font-bold w-8 h-8 px-4 rounded-full flex text-xl text-white justify-center bg-orange-500 items-center"
                   type="button"
