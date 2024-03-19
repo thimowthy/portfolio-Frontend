@@ -13,17 +13,39 @@ const DynamicTabComponent = dynamic(
   },
 );
 
+const isNeutropenico = (paciente: Paciente) => {
+  const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
+  let situacoesPacienteCopy = [...situacoesPaciente];
+  situacoesPacienteCopy.reverse();
+  const situacaoAtual = situacoesPacienteCopy?.pop();
+  if (situacaoAtual?.situacaoDiagnostico?.neutropenia) {
+    return true;
+  }
+  return false;
+};
+const febre = (paciente: Paciente) => {
+  const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
+  let situacoesPacienteCopy = [...situacoesPaciente];
+  situacoesPacienteCopy.reverse();
+  const situacaoAtual = situacoesPacienteCopy?.pop();
+  if (situacaoAtual?.situacaoDiagnostico?.febre) {
+    return true;
+  }
+  return false;
+};
+
 const DadosPacientePage = () => {
   const [pacientes, setPacientes] = useState([]);
   const [listaPacientes, setListaPacientes] = useState([]);
-  const [nf, setNf] = useState([]);
+  const [nf, setNf] = useState<any>([]);
+  const [listaNf, setListaNf] = useState<any>([]);
   const loadPacientes = async () => {
-    const pacientes = await fetcher({
+    const data = await fetcher({
       metodo: "GET",
       rota: "/Paciente/GetListPatientsSemAlta",
     });
 
-    pacientes.sort(function (a: any, b: any) {
+    data.sort(function (a: any, b: any) {
       const situacoesPaciente1 = a?.internacao?.situacoesPaciente || [];
       let situacoesPacienteCopy1 = [...situacoesPaciente1];
       const situacaoAtual1 = situacoesPacienteCopy1?.pop();
@@ -46,9 +68,22 @@ const DadosPacientePage = () => {
       return 0;
     });
 
-    setPacientes(pacientes);
-    setListaPacientes(pacientes);
-    return pacientes;
+    data.map((paciente: any) => {
+      let nfIdArr;
+      const neutropenico: boolean = isNeutropenico(paciente);
+      const hasFebre: boolean = febre(paciente);
+      if (neutropenico && hasFebre) {
+        nfIdArr = nf.map((item: any) => item.id);
+        if (nfIdArr.indexOf(paciente.id) == -1) {
+          setNf([...nf, paciente]);
+          setListaNf([...listaNf, paciente]);
+        }
+      }
+    });
+
+    setPacientes(data);
+    setListaPacientes(data);
+    return data;
   };
 
   const router = useRouter();
@@ -77,6 +112,7 @@ const DadosPacientePage = () => {
             listaPacientes={listaPacientes}
             nf={nf}
             loadPacientes={loadPacientes}
+            listaNf={listaNf}
             setNf={setNf}
             setPacientes={setPacientes}
             setSelectedPatient={setSelectedPatient}
