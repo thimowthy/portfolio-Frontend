@@ -22,17 +22,6 @@ const CadastrarExame: React.FC<CrudExameProps> = ({ pacientes, medicos }) => {
         <div className="flex items-center justify-center h-[630px]">
           <div className={styles.menuForm}>
             <div className={styles.menuHeader}>
-              <Link
-                id="backBtn"
-                type="button"
-                href={{
-                  pathname: "/dados-paciente",
-                }}
-              >
-                <label htmlFor="backBtn" className={styles.backButton}>
-                  <BackIcon width={40} height={40} color="#333" />
-                </label>
-              </Link>
               <h1 className={styles.headerTitle}>Cadastrar Exame</h1>
               <button
                 className="ml-auto w-8 h-8 rounded-full flex text-xl text-white justify-center bg-orange-500"

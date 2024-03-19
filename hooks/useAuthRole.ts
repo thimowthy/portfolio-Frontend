@@ -15,5 +15,5 @@ export const useAuthRole = () => {
     }
     return { cargo };
   }
-  return null;
+  return { cargo: null };
 };
