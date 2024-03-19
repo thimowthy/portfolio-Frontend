@@ -2,16 +2,25 @@ import Image from "next/image";
 import exameIcon from "@/public/medical-report.png";
 import { convertDateFormat } from "../../utils/convertDateFormat";
 import { ItemExameProps } from "./ItemExameProps";
-import ExameForm from "../CadastrarExame/CadastrarExameForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getUserCargo } from "@/utils/getCargo";
+import ExameFormMedico from "../ExameFormMedico";
 
 const ItemListaExame: React.FC<ItemExameProps> = ({ exame, setExame }) => {
   
-  const [exameFormVisible, setExameFormVisible] = useState<boolean>(false);
+  const [exameFormVisible, setExameFormVisible] = useState<Boolean>(false);
+  const [permissaoMedico, setPermissaoMedico] = useState<boolean>(false);
   
+  useEffect(() => {
+    const cargo = getUserCargo();
+    if (cargo == "MEDICO") {
+      setPermissaoMedico(true);
+    }
+  }, []);
+
   return (
     <li
-      key={1}
+      key={exame.id}
       className={"flex justify-between gap-x-6 py-5 px-4 my-2 bg-[#d9e0df]"}
     >
       <div className="flex gap-x-4">
@@ -49,19 +58,11 @@ const ItemListaExame: React.FC<ItemExameProps> = ({ exame, setExame }) => {
           Ver Exame
         </button>
       </div>
-      {exameFormVisible && (
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#eee] py-4 px-10 rounded border-2 border-gray-300">
-          <button
-            className="flex ml-auto text-5xl mb-4"
-            onClick={() => { setExameFormVisible(false); }}
-          >
-            x
-          </button>
-          <div className="border-b w-full border-gray-300 my-4"></div>
-          <ExameForm
-            exame={exame}
-          />
-        </div>
+      {exameFormVisible && permissaoMedico && (
+        <ExameFormMedico
+          exame={exame}
+          setExameFormVisibility={setExameFormVisible}
+        />
       )}
     </li>
   );

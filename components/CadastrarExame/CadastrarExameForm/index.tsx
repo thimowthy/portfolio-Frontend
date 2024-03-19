@@ -59,7 +59,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
   
   useEffect(() => {
     const cargo = getUserCargo();
-    if (cargo == "LABORATORIO") {
+    if (cargo == "LABORATORISTA") {
       setPermissaoLab(true);
     }
   }, []);
@@ -79,16 +79,18 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
   };
 
   const fetchMedicos = async () => {
-    try {
-      const medicos = await fetcher({
-        metodo: "GET",
-        rota: "/Usuario/GetListUsers?filtroCargo=MEDICO",
-      });
-      if (medicos.length > 0) {
-        setMedicos(medicos);
+    if (permissaoLab) {
+      try {
+        const medicos = await fetcher({
+          metodo: "GET",
+          rota: "/Usuario/GetListUsers?filtroCargo=MEDICO",
+        });
+        if (medicos.length > 0) {
+          setMedicos(medicos);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 
