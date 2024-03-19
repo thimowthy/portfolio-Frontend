@@ -13,6 +13,7 @@ const useServerityIcon = (paciente: Paciente) => {
   let tipo;
   const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
   let situacoesPacienteCopy = [...situacoesPaciente];
+  situacoesPacienteCopy.reverse();
   const situacaoAtual = situacoesPacienteCopy?.pop();
   const situacaoDiagnostico = situacaoAtual?.situacaoDiagnostico;
   const tipoNeutropenia = situacaoDiagnostico?.tipoNeutropenia;
