@@ -49,6 +49,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
       return;
     }
     setSucessDischarge(true);
+    window.location.reload();
     return;
   };
 
