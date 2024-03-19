@@ -17,7 +17,7 @@ export function convertDateFormat(
   format: string = "dd/mm/yyyy",
 ): string {
   const originalDate = new Date(inputDate);
-
+  //console.log(originalDate);
   if (isNaN(originalDate.getTime())) {
     throw new Error("Data de entrada inválida.");
   }
