@@ -33,7 +33,7 @@ export default function TabDadosPaciente({
       pacientesFiltrados = pacientes.filter(
         (paciente: Paciente) =>
           paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
-          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca)
+          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
       );
       setPacientes(pacientesFiltrados);
     } else {
@@ -48,7 +48,7 @@ export default function TabDadosPaciente({
       pacientesNfFiltrados = nf.filter(
         (paciente: Paciente) =>
           paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
-          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca)
+          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
       );
       setNf(pacientesNfFiltrados);
     } else {
