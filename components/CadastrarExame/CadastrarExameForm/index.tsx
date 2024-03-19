@@ -50,6 +50,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
   );
 
   const [pacienteNaoEncontrado, setPacienteNaoEncontrado] = useState(false);
+  const [medicoNaoEncontrado, setMedicoNaoEncontrado] = useState(false);
   const [neutrofilos, setNeutrofilos] = useState<number>(exame?.neutrofilos || 0);
 
   const [idInternacao, setIdInternacao] = useState<number>();
@@ -69,6 +70,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
         rota: "/Paciente/GetListPatientsSemAlta",
       });
       if (pacientes.length > 0) {
+        console.log(pacientes);
         setPacientes(pacientes);
       }
     } catch (error) {
@@ -285,19 +287,26 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
       }
     } else {
       setPacienteNaoEncontrado(true);
+      setTimeout(() => {
+        setPacienteNaoEncontrado(false);
+      }, 3000);
       cleanPacienteUseStates();
     }
   };
 
   const autoFillMedicoInputs = () => {
     const medicoEncontrado = medicos.find((medico) => medico.cpf === cpfMedico);
-    console.log(cpfMedico);
     if (medicoEncontrado) {
+      setMedicoNaoEncontrado(false);
       setIdMedico(medicoEncontrado?.id);
       setCpfMedico(medicoEncontrado.cpf || "");
       setSolicitadoPor(medicoEncontrado.nome || "");
     } else {
       cleanMedicoUseStates();
+      setMedicoNaoEncontrado(true);
+      setTimeout(() => {
+        setMedicoNaoEncontrado(false);
+      }, 3000);
     }
   };
 
@@ -379,6 +388,9 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
             onBlur={autoFillMedicoInputs}
             disabled={Boolean(exame)}
           />
+          {medicoNaoEncontrado && (
+            <span className="text-red-500">Médico não encontrado</span>
+          )}
         </div>
         <div className="w-4/5 ml-2">
           <label>Solicitante</label>
