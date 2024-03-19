@@ -332,6 +332,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                     step="0.01"
                     maxLength={8}
                     onChange={(e) => {
+                      if (parseFloat(e.target.value) <= 10000)
                       setDose(parseFloat(e.target.value));
                     }}
                     value={dose}
@@ -362,7 +363,10 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                     id="tempo"
                     type="number"
                     maxLength={6}
-                    onChange={(e) => setTempo(parseInt(e.target.value))}
+                    onChange={(e) => {
+                      if (parseInt(e.target.value) <= 300)
+                        setTempo(parseInt(e.target.value));
+                    }}
                     value={tempo}
                   />
                   <select
