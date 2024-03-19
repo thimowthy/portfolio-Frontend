@@ -1,4 +1,4 @@
-import { convertDateFormat } from "@/utils/convertDateFormat";
+import { convertDateTime } from "@/utils/dateFormats";
 import { ItemHistoricoTratamentoProps } from "./ItemHistoricoTratamentoProps";
 import styles from "./styles.module.css";
 
@@ -14,7 +14,7 @@ const ItemHistoricoTratamento: React.FC<ItemHistoricoTratamentoProps> = ({
           </h2>
           <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-base">
             <strong>Data da solicitação: </strong>{" "}
-            {convertDateFormat(historico.dataSolicitacao)}
+            {convertDateTime(historico.dataSolicitacao)}
           </p>
           <div className="mt-1 truncate text-xs leading-5 text-gray-500 text-base">
             <strong>Cuidados:</strong>
@@ -33,11 +33,13 @@ const ItemHistoricoTratamento: React.FC<ItemHistoricoTratamentoProps> = ({
                   <ul className="list-disc pl-5">
                     <li>
                       <strong>Dose:</strong> {medicamento.dose}{" "}
-                      {medicamento.unidadeDosagem}
+                      {capitalizeFirstLetter(
+                        medicamento.unidadeDosagem,
+                      ).replace(/_/g, " ")}
                     </li>
                     <li>
                       <strong>Intervalo:</strong> {medicamento.intervalo}{" "}
-                      {medicamento.intervaloTempo}
+                      {capitalizeFirstLetter(medicamento.intervaloTempo)}
                     </li>
                   </ul>
                 </li>
@@ -51,3 +53,7 @@ const ItemHistoricoTratamento: React.FC<ItemHistoricoTratamentoProps> = ({
 };
 
 export default ItemHistoricoTratamento;
+
+function capitalizeFirstLetter(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}

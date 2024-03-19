@@ -20,6 +20,12 @@ export default function TabDadosPaciente({
   setPacientes,
 }: any) {
   const [idAtivo, setIdAtivo] = useState(0);
+  const [activeTab, setActiveTab] = useState("tab-todos");
+
+  const handleTabSelect = (selectedRef: string | React.ReactNode) => {
+    setActiveTab(selectedRef as string);
+  };
+
   const handleFilterPacientes = (busca: string) => {
     let pacientesFiltrados;
     const sanitizedBusca = busca.toLowerCase();
@@ -65,14 +71,19 @@ export default function TabDadosPaciente({
         <TabList className="flex list-none flex-row flex-wrap border-b-0 pl-0 -mb-1.5 relative z-0">
           <TabItem
             href="tab-todos"
-            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#EAEAEA] rounded-lg"
+            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab rounded-lg"
             title="Todos"
-            active={true}
+            selected={activeTab === "tab-todos"}
+            onSelect={handleTabSelect}
+            disabled={false}
           />
           <TabItem
             href="tab-NF"
-            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab data-[te-nav-active]:bg-[#EAEAEA] rounded-lg"
+            className="block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-gray-300 focus:isolate focus:border-transparent dark:text-[#16161D] default-tab rounded-lg"
             title="Neutropenia Febril"
+            selected={activeTab === "tab-NF"}
+            onSelect={handleTabSelect}
+            disabled={false}
           />
         </TabList>
         <div className="bg-[#EAEAEA] lista-pacientes_tab-content overflow-y-auto px-6 relative rounded-b-xl rounded-tr-xl py-2 z-1">
