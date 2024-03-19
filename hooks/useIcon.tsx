@@ -13,7 +13,7 @@ const useIcon = (paciente: Paciente) => {
 
   const isNeutropenico = (paciente: Paciente) => {
     const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
-    let situacoesPacienteCopy = [...situacoesPaciente];
+    let situacoesPacienteCopy = [...situacoesPaciente.reverse()];
     const situacaoAtual = situacoesPacienteCopy?.pop();
 
     if (situacaoAtual?.situacaoDiagnostico?.neutropenia) {
@@ -23,9 +23,8 @@ const useIcon = (paciente: Paciente) => {
   };
   const febre = (paciente: Paciente) => {
     const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
-    let situacoesPacienteCopy = [...situacoesPaciente];
+    let situacoesPacienteCopy = [...situacoesPaciente.reverse()];
     const situacaoAtual = situacoesPacienteCopy?.pop();
-
     if (situacaoAtual?.situacaoDiagnostico?.febre) {
       return true;
     }
