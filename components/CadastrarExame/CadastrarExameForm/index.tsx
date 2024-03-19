@@ -115,6 +115,8 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
   };
 
   const cleanExameUseStates = () => {
+    setDataResultado("");
+    setDataSolicitacao("");
     setDataResultadoFormated("");
     setDataSolicitacaoFormated("");
     setNeutrofilos(0);
@@ -139,11 +141,9 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
 
   useEffect(() => {
     if (dataResultado)
-      setDataResultadoFormated(convertDateFormat(dataResultado, "yyyy-mm-dd"));
+      setDataResultadoFormated(dataResultado);//convertDateFormat(dataResultado, "yyyy-mm-dd"));
     if (dataSolicitacao)
-      setDataSolicitacaoFormated(
-        convertDateFormat(dataSolicitacao, "yyyy-mm-dd"),
-      );
+      setDataSolicitacaoFormated(dataSolicitacao);//convertDateFormat(dataSolicitacao, "yyyy-mm-dd"));
   }, [dataSolicitacao, dataResultado]);
 
   useEffect(() => {
@@ -261,7 +261,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
     }
   }, [exame]);
 
-  const autoFillPacienteInputs = async () => {
+  const autoFillPacienteInputs = () => {
     
     const pacienteEncontrado = pacientes.find(
       (paciente) => paciente.numeroProntuario === numProntuario,
@@ -405,7 +405,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
           <input
             type="date"
             onChange={(e) => setDataSolicitacao(e.target.value)}
-            value={dataSolicitacaoFormated}
+            value={dataSolicitacao}
             disabled={!permissaoLab}
             required
           />
@@ -414,7 +414,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
           <label>Data do Resultado</label>
           <input
             type="date"
-            value={dataResultadoFormated}
+            value={dataResultado}
             onChange={(e) => {
               setDataResultado(e.target.value);
             }}
