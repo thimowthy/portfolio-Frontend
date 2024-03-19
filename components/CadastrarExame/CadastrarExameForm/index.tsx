@@ -47,7 +47,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
   );
 
   const [pacienteNaoEncontrado, setPacienteNaoEncontrado] = useState(false);
-  const [neutrofilos, setNeutrofilos] = useState<number>(0);
+  const [neutrofilos, setNeutrofilos] = useState<number>();
 
   const [idInternacao, setIdInternacao] = useState<number>();
 
@@ -215,34 +215,26 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
   }, [exame, medicos]);
 
   const autoFillPacienteInputs = async () => {
+    
+    console.log(pacientes, numProntuario);
+
     const pacienteEncontrado = pacientes.find(
       (paciente) => paciente.numeroProntuario === numProntuario,
-    );
+    );  
+    
+    const internamento = pacienteEncontrado?.internacao;
 
-    async function getInternamento() {
+    if (pacienteEncontrado && internamento) {
       try {
-        const internacaoAtual = await fetcher({
-          metodo: "GET",
-          rota: `/Internacao/GetInternacaoAtual?pacienteId=${pacienteEncontrado?.id}`,
-        });
-        return internacaoAtual;
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
-    if (pacienteEncontrado) {
-      try {
-        const internamento = await getInternamento();
         setPacienteNaoEncontrado(false);
         setIdPaciente(pacienteEncontrado?.id);
         setCPF(pacienteEncontrado.cpf || "");
         setNomePaciente(pacienteEncontrado.nome || "");
         setIdInternacao(internamento.id);
         setCNS(pacienteEncontrado.cns || "");
-        setLeito(internamento?.Leito);
+        setLeito(internamento.leito || "");
         setDataNasc(pacienteEncontrado.dataNascimento || "");
-        setDataAdmissao(pacienteEncontrado.dataAdmissao || "");
+        setDataAdmissao(internamento.dataAdmissao || "");
       } catch (error) {
         console.log(error);
       }
