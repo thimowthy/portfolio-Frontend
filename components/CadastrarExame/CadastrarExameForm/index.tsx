@@ -7,6 +7,7 @@ import { TiposExame } from "@/types/Enum/TiposExame";
 import { convertDateFormat } from "@/utils/convertDateFormat";
 import fetcher from "@/api/fetcher";
 import { formatCPF } from "@/utils/formatCPF";
+import { getUserCargo } from "@/utils/getCargo";
 
 interface TipoOption {
   id: number;
@@ -21,7 +22,11 @@ const tipos: TipoOption[] = Object.values(TiposExame).map((tipo, index) => ({
 const timeZone = "America/Sao_Paulo";
 const currentDate = format(new Date(), "yyyy-MM-dd", { timeZone });
 
-const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
+const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
+
+  const [pacientes, setPacientes] = useState<Paciente[]>([]);
+  const [medicos, setMedicos] = useState<Profissional[]>([]);
+
   const [idPaciente, setIdPaciente] = useState<number>();
   const [cpf, setCPF] = useState("");
   const [cpfFormated, setCpfFormated] = useState("");
@@ -50,6 +55,59 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
   const [neutrofilos, setNeutrofilos] = useState<number>(0);
 
   const [idInternacao, setIdInternacao] = useState<number>();
+  const [permissaoLab, setPermissaoLab] = useState<boolean>(false);
+  
+  useEffect(() => {
+    const cargo = getUserCargo();
+    if (cargo == "LABORATORISTA") {
+      setPermissaoLab(true);
+    }
+  }, []);
+  
+  const fetchPacientes = async () => {
+    try {
+      const pacientes = await fetcher({
+        metodo: "GET",
+        rota: "/Paciente/GetListPatients",
+      });
+      if (pacientes.length > 0) {
+        setPacientes(pacientes);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchMedicos = async () => {
+    if (permissaoLab) {
+      try {
+        const medicos = await fetcher({
+          metodo: "GET",
+          rota: "/Usuario/GetListUsers?filtroCargo=MEDICO",
+        });
+        if (medicos.length > 0) {
+          setMedicos(medicos);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      fetchPacientes();
+      fetchMedicos();
+    };
+    if (!exame)
+      fetchData();
+    else {
+      //fetchPacientes();
+      setCpfMedico(exame.cpfSolicitante);
+      setSolicitadoPor(exame.nomeSolicitante);
+      //setCpfMedico(exame.)
+    }
+  }, [exame]);
 
   useEffect(() => {
     if (dataResultado)
@@ -70,7 +128,8 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
         setIdInternacao(internacao.id);
       } catch (error) {}
     };
-    if (idPaciente) fetchData();
+    if (idPaciente)
+      fetchData();
   }, [idPaciente]);
 
   useEffect(() => {
@@ -191,36 +250,18 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
         setPacienteNaoEncontrado(false);
       }
     } catch (error) {
-      cleanPacienteUseStates();
+      //cleanPacienteUseStates();
     }
   };
 
   useEffect(() => {
-    const fetchMedicoData = () => {
-      const medicoEncontrado = medicos.find(
-        (medico) => medico.id === exame!.idSolicitante,
-      );
-
-      if (medicoEncontrado) {
-        setIdMedico(medicoEncontrado.id);
-        setCpfMedico(medicoEncontrado.cpf);
-        setSolicitadoPor(medicoEncontrado.nome);
-      } else cleanMedicoUseStates();
-    };
-    const fetchExameData = () => {
-      setDataSolicitacao(
-        convertDateFormat(exame!.dataSolicitacao, "yyyy-mm-dd"),
-      );
-      setDataResultado(convertDateFormat(exame!.dataResultado, "yyyy-mm-dd"));
-    };
     if (exame) {
       fetchPacienteData();
-      fetchMedicoData();
-      fetchExameData();
+      setDataSolicitacao(convertDateFormat(exame.dataSolicitacao, "yyyy-mm-dd"));
+      setDataResultado(convertDateFormat(exame.dataResultado, "yyyy-mm-dd"));
+      setNeutrofilos(exame.neutrofilos);
     } else {
-      cleanPacienteUseStates();
-      cleanMedicoUseStates();
-      cleanExameUseStates();
+      cleanUseStates();
     }
   }, [exame, medicos]);
 
@@ -228,7 +269,9 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
     const pacienteEncontrado = pacientes.find(
       (paciente) => paciente.numeroProntuario === numProntuario,
     );
-
+    setIdPaciente(pacienteEncontrado?.id);
+    console.log(pacientes);
+    console.log(numProntuario);
     async function getInternamento() {
       try {
         const internacaoAtual = await fetcher({
@@ -240,7 +283,6 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
         console.log(err);
       }
     }
-
     if (pacienteEncontrado) {
       try {
         const internamento = await getInternamento();
@@ -264,6 +306,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
 
   const autoFillMedicoInputs = () => {
     const medicoEncontrado = medicos.find((medico) => medico.cpf === cpfMedico);
+    console.log(medicoEncontrado);
     if (medicoEncontrado) {
       setIdMedico(medicoEncontrado?.id);
       setCpfMedico(medicoEncontrado.cpf || "");
@@ -428,24 +471,26 @@ const ExameForm: React.FC<CrudExameProps> = ({ pacientes, medicos, exame }) => {
           </div>
         </div>
       </div>
-      <div className={styles.btnDiv}>
-        {!Boolean(exame) && (
-          <button
-            type="submit"
-            className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-orange-400 transition-colors mt-2 mx-auto font-bold"
-          >
-            Cadastrar Exame
-          </button>
-        )}
-        {Boolean(exame) && (
-          <button
-            type="submit"
-            className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-orange-400 transition-colors mt-2 mx-auto font-bold"
-          >
-            Salvar Exame
-          </button>
-        )}
-      </div>
+      {(permissaoLab && 
+        <div className={styles.btnDiv}>
+          {!Boolean(exame) && (
+            <button
+              type="submit"
+              className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-orange-400 transition-colors mt-2 mx-auto font-bold"
+            >
+              Cadastrar Exame
+            </button>
+          )}
+          {Boolean(exame) && (
+            <button
+              type="submit"
+              className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-orange-400 transition-colors mt-2 mx-auto font-bold"
+            >
+              Salvar Exame
+            </button>
+          )}
+        </div>
+      )}
     </form>
   );
 };
