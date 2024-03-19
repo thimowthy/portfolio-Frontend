@@ -36,9 +36,7 @@ const CadastrarExame: React.FC<CrudExameProps> = () => {
             </div>
             <div className={styles.sep}></div>
             <div className="w-min">
-              <ExameForm
-                exame={exame}
-              />
+              <ExameForm exame={exame} />
             </div>
           </div>
         </div>

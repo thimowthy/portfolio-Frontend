@@ -21,19 +21,23 @@ export const CenterButton = () => {
     const nodes: Node[] = Array.from(nodeInternals).map(([, node]) => node);
     console.log(nodes);
 
-    if (nodes.length > 0) {            
-        const node = nodes[0];
-        const x = node.position.x;
-        const y = node.position.y;
-        const zoom = 1;
-        setCenter(x, y, { zoom, duration: 1000 });
+    if (nodes.length > 0) {
+      const node = nodes[0];
+      const x = node.position.x;
+      const y = node.position.y;
+      const zoom = 1;
+      setCenter(x, y, { zoom, duration: 1000 });
     }
   };
 
   return (
     <Panel position="top-right" style={panelStyle}>
       <div>
-        <button type="button" className="h-2 border-2 p-4 items-center justify-center flex rounded-full" onClick={focusNode}>
+        <button
+          type="button"
+          className="h-2 border-2 p-4 items-center justify-center flex rounded-full"
+          onClick={focusNode}
+        >
           Centralizar
         </button>
       </div>

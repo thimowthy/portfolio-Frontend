@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import ReactFlow, { Node, Edge, Position, MarkerType, ReactFlowProvider } from "reactflow";
+import ReactFlow, {
+  Node,
+  Edge,
+  Position,
+  MarkerType,
+  ReactFlowProvider,
+} from "reactflow";
 import { CenterButton } from "../centerButton";
 
 import "reactflow/dist/style.css";
@@ -141,7 +147,7 @@ const TratFormContent: React.FC<TratFormContentProps> = ({
   );
   const [medicacao, setMedicacao] = useState<ItemMedicamento>();
   const [cuidado, setCuidado] = useState<ItemCuidado>();
-  
+
   const [borderColor, setBorderColor] = useState("border-none");
   const [showAddMedicacao, setShowAddMedicacao] = useState(false);
 
@@ -218,11 +224,10 @@ const TratFormContent: React.FC<TratFormContentProps> = ({
   const handleAddMedicacao = () => {
     if (medicacao && medicacao.medicamento)
       setMedicacoes((prevMedicacoes) => [medicacao, ...prevMedicacoes]);
-    else
-      setBorderColor("border border-red-500");
-      setTimeout(() => {
-        setBorderColor("border-none");
-      }, 5000);
+    else setBorderColor("border border-red-500");
+    setTimeout(() => {
+      setBorderColor("border-none");
+    }, 5000);
   };
 
   const handleRemoveCuidado = (index: number) => {
@@ -265,7 +270,7 @@ const TratFormContent: React.FC<TratFormContentProps> = ({
               minZoom={0.2}
               fitView={true}
             >
-              <CenterButton/>
+              <CenterButton />
             </ReactFlow>
           </ReactFlowProvider>
         </div>
@@ -311,115 +316,118 @@ const TratFormContent: React.FC<TratFormContentProps> = ({
                   <label htmlFor="add-medicacao">Adicionar medicação</label>
                   <button
                     type="button"
-                    className="pb-2 flex font-bold" 
+                    className="pb-2 flex font-bold"
                     onClick={() => setShowAddMedicacao(!showAddMedicacao)}
                   >
-                    {`${showAddMedicacao?"-":"+"}`}
+                    {`${showAddMedicacao ? "-" : "+"}`}
                   </button>
                 </div>
                 <div
                   id="add-medicacao"
                   className="mb-2 border p-2 rounded-md shadow-md gap-2"
                 >
-
-                { showAddMedicacao && (<>
-                  <div className="flex items-center">
-                    <label htmlFor="medicamento">Medicamento</label>
-                    <select
-                      className={`ml-auto pr-2 py-1 text-right rounded ${borderColor}`}
-                      id="medicamento"
-                      value={medicamento?.nome}
-                      onChange={(e) => {
-                        const medicamento = listaMedicamentos.find(
-                          (med) => med.nome === e.target.value
-                        );
-                        setMedicamento(medicamento);
-                      } }
-                    >
-                      <option value="">Selecione...</option>
-                      {listaMedicamentos.map((opcao) => (
-                        <option key={opcao.id} value={opcao.nome}>
-                          {opcao.nome}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex items-center">
-                    <label htmlFor="dose">Dose</label>
-                    <input
-                      className="ml-auto w-20 text-right pr-2 py-1 rounded"
-                      id="dose"
-                      min={0}
-                      type="number"
-                      pattern="[0-9]+([\.,][0-9]+)?"
-                      step="0.01"
-                      maxLength={8}
-                      onChange={(e) => {
-                        if (parseInt(e.target.value) <= 10000)
-                          setDoseInput(e.target.value);
-                      } }
-                      value={doseInput} />
-                    <select
-                      className="ml-0 w-28 text-right pr-2 py-1 rounded"
-                      id="dosagem"
-                      value={dosagem}
-                      onChange={(e) => {
-                        const dose = Object.values(UnidadeDosagem).find(
-                          (dose) => dose === e.target.value
-                        );
-                        setDosagem(dose ? dose : UnidadeDosagem.COMPRIMIDO);
-                      } }
-                    >
-                      {Object.values(UnidadeDosagem).map((opcao) => (
-                        <option key={opcao} value={opcao}>
-                          {opcao}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex items-center">
-                    <label htmlFor="tempo">Intervalo de tempo</label>
-                    <input
-                      className="ml-auto w-14 text-right pr-2 py-1 rounded"
-                      min={1}
-                      id="tempo"
-                      type="number"
-                      maxLength={6}
-                      onChange={(e) => {
-                        if (parseInt(e.target.value) <= 300)
-                          setTempo(parseInt(e.target.value));
-                      } }
-                      value={tempo} />
-                    <select
-                      className="ml-0 w-28 text-right pr-2 py-1 rounded"
-                      id="intervalo-tempo"
-                      value={intervalo}
-                      onChange={(e) => {
-                        const intervalo = Object.values(IntervaloTempo).find(
-                          (dose) => dose === e.target.value
-                        );
-                        setIntervalo(
-                          intervalo ? intervalo : IntervaloTempo.DIAS
-                        );
-                      } }
-                    >
-                      {Object.values(IntervaloTempo).map((opcao) => (
-                        <option key={opcao} value={opcao}>
-                          {opcao}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex items-center">
-                    <button
-                      type="button"
-                      className="ml-auto mt-2 w-10 h-6 flex items-center justify-center bg-orange-500 text-white rounded-xl"
-                      onClick={() => handleAddMedicacao()}
-                    >
-                      <span className="text-xl font-bold font-mono">+</span>
-                    </button>
-                  </div>
-                </>)}
+                  {showAddMedicacao && (
+                    <>
+                      <div className="flex items-center">
+                        <label htmlFor="medicamento">Medicamento</label>
+                        <select
+                          className={`ml-auto pr-2 py-1 text-right rounded ${borderColor}`}
+                          id="medicamento"
+                          value={medicamento?.nome}
+                          onChange={(e) => {
+                            const medicamento = listaMedicamentos.find(
+                              (med) => med.nome === e.target.value,
+                            );
+                            setMedicamento(medicamento);
+                          }}
+                        >
+                          <option value="">Selecione...</option>
+                          {listaMedicamentos.map((opcao) => (
+                            <option key={opcao.id} value={opcao.nome}>
+                              {opcao.nome}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="flex items-center">
+                        <label htmlFor="dose">Dose</label>
+                        <input
+                          className="ml-auto w-20 text-right pr-2 py-1 rounded"
+                          id="dose"
+                          min={0}
+                          type="number"
+                          pattern="[0-9]+([\.,][0-9]+)?"
+                          step="0.01"
+                          maxLength={8}
+                          onChange={(e) => {
+                            if (parseInt(e.target.value) <= 10000)
+                              setDoseInput(e.target.value);
+                          }}
+                          value={doseInput}
+                        />
+                        <select
+                          className="ml-0 w-28 text-right pr-2 py-1 rounded"
+                          id="dosagem"
+                          value={dosagem}
+                          onChange={(e) => {
+                            const dose = Object.values(UnidadeDosagem).find(
+                              (dose) => dose === e.target.value,
+                            );
+                            setDosagem(dose ? dose : UnidadeDosagem.COMPRIMIDO);
+                          }}
+                        >
+                          {Object.values(UnidadeDosagem).map((opcao) => (
+                            <option key={opcao} value={opcao}>
+                              {opcao}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="flex items-center">
+                        <label htmlFor="tempo">Intervalo de tempo</label>
+                        <input
+                          className="ml-auto w-14 text-right pr-2 py-1 rounded"
+                          min={1}
+                          id="tempo"
+                          type="number"
+                          maxLength={6}
+                          onChange={(e) => {
+                            if (parseInt(e.target.value) <= 300)
+                              setTempo(parseInt(e.target.value));
+                          }}
+                          value={tempo}
+                        />
+                        <select
+                          className="ml-0 w-28 text-right pr-2 py-1 rounded"
+                          id="intervalo-tempo"
+                          value={intervalo}
+                          onChange={(e) => {
+                            const intervalo = Object.values(
+                              IntervaloTempo,
+                            ).find((dose) => dose === e.target.value);
+                            setIntervalo(
+                              intervalo ? intervalo : IntervaloTempo.DIAS,
+                            );
+                          }}
+                        >
+                          {Object.values(IntervaloTempo).map((opcao) => (
+                            <option key={opcao} value={opcao}>
+                              {opcao}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="flex items-center">
+                        <button
+                          type="button"
+                          className="ml-auto mt-2 w-10 h-6 flex items-center justify-center bg-orange-500 text-white rounded-xl"
+                          onClick={() => handleAddMedicacao()}
+                        >
+                          <span className="text-xl font-bold font-mono">+</span>
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </div>
                 {/* <textarea
                     className={styles.input}

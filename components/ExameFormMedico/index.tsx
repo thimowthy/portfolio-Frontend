@@ -2,11 +2,12 @@ import React, { Dispatch, useEffect, useState } from "react";
 import ExameForm from "../CadastrarExame/CadastrarExameForm";
 
 interface ExameFormMedicoProps {
-    exame: Hemograma | undefined;
-    setExameFormVisibility: React.Dispatch<React.SetStateAction<Boolean>>;
-  }
+  exame: Hemograma | undefined;
+  setExameFormVisibility: React.Dispatch<React.SetStateAction<Boolean>>;
+}
 const ExameFormMedico: React.FC<ExameFormMedicoProps> = ({
-    exame, setExameFormVisibility
+  exame,
+  setExameFormVisibility,
 }) => {
   return (
     <div className="fixed z-0 top-[55%] left-2/3 transform -translate-x-1/2 -translate-y-1/2 bg-[#eee] py-4 px-10 rounded border-2 border-gray-300">

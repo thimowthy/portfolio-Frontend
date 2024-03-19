@@ -61,32 +61,30 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
             disabled={!paciente || !paciente.id}
             onSelect={handleTabSelect}
           />
-          <TabItem
-            href="tabs-prescricao"
-            className={pageStyles.tabItem}
-            title="Prescrição"
-            selected={activeTab === "tabs-prescricao"}
-            disabled={!paciente || !paciente.id}
-            onSelect={handleTabSelect}
-          />
-          {/* <li role="presentation">
+          <li role="presentation">
             <a
               href={"#tabs-prescricao"}
-              className={`${pageStyles.tabItem} ${
+              className={`${pageStyles.tabItem}  ${
                 !paciente || !paciente.id ? "disabled" : ""
+              } ${
+                activeTab === "tabs-prescricao"
+                  ? "data-[te-nav-active]:bg-[#EAEAEA]"
+                  : ""
               }`}
               data-te-toggle="pill"
               data-te-target={"#tabs-prescricao"}
               role="tab"
               aria-controls={"#tabs-prescricao"}
+              data-te-nav-active={activeTab === "tabs-prescricao"}
               aria-selected={!paciente || !paciente.id || undefined}
+              onClick={() => setActiveTab("tabs-prescricao")}
               ref={(el) => {
                 prescricaoTabRef.current = el;
               }}
             >
               Prescrição
             </a>
-          </li> */}
+          </li>
           <TabItem
             href="tabs-historico"
             className={pageStyles.tabItem}

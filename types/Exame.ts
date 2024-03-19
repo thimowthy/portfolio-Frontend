@@ -8,6 +8,6 @@ type Exame = {
   idInternamento: number;
 };
 
-type Hemograma = Exame & { 
-  neutrofilos: number
-}
+type Hemograma = Exame & {
+  neutrofilos: number;
+};

@@ -23,7 +23,6 @@ const timeZone = "America/Sao_Paulo";
 const currentDate = format(new Date(), "yyyy-MM-dd", { timeZone });
 
 const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
-
   const [pacientes, setPacientes] = useState<Paciente[]>([]);
   const [medicos, setMedicos] = useState<Profissional[]>([]);
 
@@ -56,14 +55,14 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
 
   const [idInternacao, setIdInternacao] = useState<number>();
   const [permissaoLab, setPermissaoLab] = useState<boolean>(false);
-  
+
   useEffect(() => {
     const cargo = getUserCargo();
     if (cargo == "LABORATORISTA") {
       setPermissaoLab(true);
     }
   }, []);
-  
+
   const fetchPacientes = async () => {
     try {
       const pacientes = await fetcher({
@@ -99,8 +98,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
       fetchPacientes();
       fetchMedicos();
     };
-    if (!exame)
-      fetchData();
+    if (!exame) fetchData();
     else {
       //fetchPacientes();
       setCpfMedico(exame.cpfSolicitante);
@@ -128,8 +126,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
         setIdInternacao(internacao.id);
       } catch (error) {}
     };
-    if (idPaciente)
-      fetchData();
+    if (idPaciente) fetchData();
   }, [idPaciente]);
 
   useEffect(() => {
@@ -257,7 +254,9 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
   useEffect(() => {
     if (exame) {
       fetchPacienteData();
-      setDataSolicitacao(convertDateFormat(exame.dataSolicitacao, "yyyy-mm-dd"));
+      setDataSolicitacao(
+        convertDateFormat(exame.dataSolicitacao, "yyyy-mm-dd"),
+      );
       setDataResultado(convertDateFormat(exame.dataResultado, "yyyy-mm-dd"));
       setNeutrofilos(exame.neutrofilos);
     } else {
@@ -471,7 +470,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
           </div>
         </div>
       </div>
-      {(permissaoLab && 
+      {permissaoLab && (
         <div className={styles.btnDiv}>
           {!Boolean(exame) && (
             <button

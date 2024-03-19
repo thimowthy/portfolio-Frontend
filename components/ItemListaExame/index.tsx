@@ -7,10 +7,9 @@ import { getUserCargo } from "@/utils/getCargo";
 import ExameFormMedico from "../ExameFormMedico";
 
 const ItemListaExame: React.FC<ItemExameProps> = ({ exame, setExame }) => {
-  
   const [exameFormVisible, setExameFormVisible] = useState<Boolean>(false);
   const [permissaoMedico, setPermissaoMedico] = useState<boolean>(false);
-  
+
   useEffect(() => {
     const cargo = getUserCargo();
     if (cargo == "MEDICO") {

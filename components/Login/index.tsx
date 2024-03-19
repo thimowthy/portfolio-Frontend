@@ -7,7 +7,7 @@ import ErrorToast from "@/components/toasts/errorToast";
 import styles from "./styles.module.css";
 import fetcher from "@/api/fetcher";
 
-const Login = () => {  
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [LoginError, setLoginError] = useState(false);

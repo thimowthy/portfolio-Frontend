@@ -9,7 +9,7 @@ const CadastrarExame = () => {
     <div>
       <SeoConfig title="Cadastrar Exame" />
       <Header />
-      <CadastrarExameForm/>
+      <CadastrarExameForm />
     </div>
   );
 };
