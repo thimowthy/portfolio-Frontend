@@ -14,7 +14,7 @@
  */
 export function convertDate(
   inputDate: string,
-  format: string = "dd/mm/yyyy"
+  format: string = "dd/mm/yyyy",
 ): string {
   const originalDate = new Date(inputDate);
 
@@ -49,7 +49,7 @@ export function convertDate(
  */
 export function convertDateTime(
   inputDateTime: string,
-  format: string = "dd/mm/yyyy HH:mm"
+  format: string = "dd/mm/yyyy HH:mm",
 ): string {
   const originalDateTime = new Date(inputDateTime);
 

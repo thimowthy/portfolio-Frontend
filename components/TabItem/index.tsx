@@ -4,6 +4,8 @@
  */
 const TabItem = ({
   href,
+  tooltiptext,
+  showTooltip,
   className,
   title,
   selected: selected,
@@ -13,6 +15,8 @@ const TabItem = ({
   onSelect,
 }: {
   href: string;
+  tooltiptext?: string;
+  showTooltip?: boolean;
   className?: string;
   title?: string;
   selected: boolean;
@@ -42,6 +46,8 @@ const TabItem = ({
         data-te-nav-active={selected}
         role="tab"
         aria-controls={href}
+        data-twe-toggle={showTooltip ? "tooltip" : ""}
+        title={tooltiptext}
         aria-selected={selected || undefined}
         onClick={handleClick}
       >
