@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "./styles.module.css";
 import usePacienteGravity from "@/hooks/usePacienteGravity";
 import { formatName } from "@/utils/formatName";
+import { v4 as uuidv4 } from "uuid";
 /**
  * Renderiza um item da listagem de pacientes.
  * @category Component
@@ -20,7 +21,7 @@ const ItemListaPaciente = ({
   const [gravidade] = usePacienteGravity(paciente);
   return (
     <li
-      key={paciente.id}
+      key={uuidv4()}
       className={`flex justify-between gap-x-6 py-5 px-4 my-2 bg-[#D9E0DF] rounded ${
         paciente?.id && idAtivo && paciente?.id == idAtivo
           ? styles.card_prontuario_ativo

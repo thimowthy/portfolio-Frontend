@@ -76,7 +76,14 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
       return updatedProtocolo;
     });
   };
-
+  const handleSubmit = () => {
+    if (protocolo.nome && protocolo.versao && protocolo.ano) {
+      onSave(protocolo);
+      sendProtocolo(protocolo);
+    } else {
+      setSendErrorToast(true);
+    }
+  };
   return (
     <div className={styles.formContainer}>
       <div className={styles.nameInput}>
@@ -104,7 +111,8 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
       <div className={styles.yearInput}>
         <label>Ano:</label>
         <input
-          type="text"
+          type="number"
+          min="1900"
           className={styles.inputField}
           placeholder="2023"
           value={protocolo.ano || ""}
@@ -165,8 +173,7 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
           className={styles.saveButton}
           type="button"
           onClick={() => {
-            onSave(protocolo);
-            sendProtocolo(protocolo);
+            handleSubmit();
           }}
         >
           Salvar Protocolo
@@ -193,8 +200,8 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
         )}
         {sendErrorToast && (
           <ErrorToast
-            title="Erro"
-            message="Erro ao enviar protocolo"
+            title="Campos Obrigatórios"
+            message="Todos os campos devem ser preenchidos."
             onClose={() => {
               setSendErrorToast(false);
             }}

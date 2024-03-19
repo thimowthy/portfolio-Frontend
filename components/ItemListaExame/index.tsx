@@ -2,11 +2,24 @@ import Image from "next/image";
 import exameIcon from "@/public/medical-report.png";
 import { convertDateFormat } from "../../utils/convertDateFormat";
 import { ItemExameProps } from "./ItemExameProps";
+import { useEffect, useState } from "react";
+import { getUserCargo } from "@/utils/getCargo";
+import ExameFormMedico from "../ExameFormMedico";
 
-const ItemListaExame: React.FC<ItemExameProps> = ({ id, exame, setExame }) => {
+const ItemListaExame: React.FC<ItemExameProps> = ({ exame, setExame }) => {
+  const [exameFormVisible, setExameFormVisible] = useState<Boolean>(false);
+  const [permissaoMedico, setPermissaoMedico] = useState<boolean>(false);
+
+  useEffect(() => {
+    const cargo = getUserCargo();
+    if (cargo == "MEDICO") {
+      setPermissaoMedico(true);
+    }
+  }, []);
+
   return (
     <li
-      key={1}
+      key={exame.id}
       className={"flex justify-between gap-x-6 py-5 px-4 my-2 bg-[#d9e0df]"}
     >
       <div className="flex gap-x-4">
@@ -35,12 +48,21 @@ const ItemListaExame: React.FC<ItemExameProps> = ({ id, exame, setExame }) => {
         <button
           className="bg-blue-700 hover:bg-blue-900 px-5 mt-4 py-1 text-sm leading-5 rounded-lg font-semibold text-white"
           onClick={() => {
-            if (setExame) setExame(exame);
+            setExameFormVisible((prevVisibility) => !prevVisibility);
+            if (setExame) {
+              setExame(exame);
+            }
           }}
         >
           Ver Exame
         </button>
       </div>
+      {exameFormVisible && permissaoMedico && (
+        <ExameFormMedico
+          exame={exame}
+          setExameFormVisibility={setExameFormVisible}
+        />
+      )}
     </li>
   );
 };

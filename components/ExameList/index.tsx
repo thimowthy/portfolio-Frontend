@@ -31,7 +31,7 @@ const ExamesList: React.FC<ExameListProps> = ({ id, setExame }) => {
             rota: "/Exame/GetAllExames",
             metodo: "GET",
           });
-          setExames(response);
+          setExames(response.reverse());
         } catch (error) {
           console.error("Erro ao buscar exames:", error);
         }

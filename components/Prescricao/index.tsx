@@ -6,12 +6,10 @@ import { Medicamento } from "@/types/Medicamento";
 import {
   UnidadeDosagem,
   dosagemNumericaMapping,
-  obterValorNumericoDosagem,
 } from "@/types/Enum/UnidadeDosagem";
 import {
   IntervaloTempo,
   IntervaloTempoMapping,
-  obterValorNumericoIntervaloTempo,
 } from "@/types/Enum/IntervaloTempo";
 import fetcher from "@/api/fetcher";
 import Loader from "../Loader";
@@ -54,6 +52,8 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
     itensCuidado: ItemCuidado[];
     itensMedicamento: ItemSugestaoMedicamento[];
   }>({ itensCuidado: [], itensMedicamento: [] });
+
+  const [borderColor, setBorderColor] = useState<string>("border-none");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -118,12 +118,17 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
   }, [medicacoes, cuidados]);
 
   const handleAddMedicacao = () => {
-    if (medicacao && medicacao.medicamento && medicacao.dose) {
+    if (medicacao && medicacao.medicamento) {
       setMedicacoes((prevMedicacoes) => [medicacao, ...prevMedicacoes]);
       setDosagem(UnidadeDosagem.COMPRIMIDO);
       setDose(1);
       setIntervalo(IntervaloTempo.DIAS);
       setTempo(1);
+    } else {
+      setBorderColor("border-red-300");
+      setTimeout(() => {
+        setBorderColor("border-none");
+      }, 5000);
     }
   };
 
@@ -136,12 +141,17 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
   };
 
   const handleAddCuidado = (e: any) => {
-    if (e.key === "Enter") {
+    var addCuidado = false;
+    var addButtonClick = !e.key;
+    var enterClick = e.key && e.key == "Enter";
+    
+    if (addButtonClick || enterClick) {
       e.preventDefault();
-      if (cuidado && cuidado?.descricao.trim() !== "") {
-        setCuidados((prevCuidados) => [cuidado, ...prevCuidados]);
-        setCuidado({ descricao: "" });
-      }
+      addCuidado = true;
+    };
+    if (addCuidado && cuidado && cuidado?.descricao.trim() !== "") {
+      setCuidados((prevCuidados) => [cuidado, ...prevCuidados]);
+      setCuidado({ descricao: "" });
     }
   };
 
@@ -155,7 +165,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
 
   const formatarMedicamentos = () => {
     if (prescricao?.medicacoes) {
-      const medicamentosFormatados = prescricao.medicacoes.map((item) => {
+      const medicamentosFormatados = prescricao.medicacoes?.map((item) => {
         return {
           intervaloTempo: IntervaloTempoMapping[item.intervaloTempo],
           unidadeDosagem: dosagemNumericaMapping[item.unidadeDosagem],
@@ -231,7 +241,8 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
         setSugestoes(internacao.sugestoes);
       } catch (error) {}
     };
-    if (id) fetchData();
+    if (id)
+      fetchData();
   }, [id]);
 
   type ItemSugestaoMedicamento = {
@@ -245,16 +256,16 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
 
   useEffect(() => {
     const setFormData = () => {
-      const itensCuidado: ItemCuidado[] = sugestoes.itensCuidado
-        .filter((item) => item.descricao !== "")
-        .map((item) => ({
+      const itensCuidado: ItemCuidado[] = sugestoes?.itensCuidado
+        ?.filter((item) => item.descricao !== "")
+        ?.map((item) => ({
           descricao: item.descricao,
         }));
 
       setCuidados(itensCuidado);
 
       const itensMedicamento: ItemMedicamento[] =
-        sugestoes.itensMedicamento.map((item: ItemSugestaoMedicamento) => ({
+        sugestoes?.itensMedicamento?.map((item: ItemSugestaoMedicamento) => ({
           medicamento: { id: item.idMedicamento, nome: item.medicamento },
           dose: item.dose,
           unidadeDosagem:
@@ -292,7 +303,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                 <div className="flex items-center">
                   <label htmlFor="medicamento">Medicamento</label>
                   <select
-                    className="ml-auto pr-2 py-1 text-right rounded"
+                    className={`ml-auto pr-2 py-1 text-right rounded border-2 ${borderColor}`}
                     id="medicamento"
                     value={medicamento?.nome}
                     onChange={(e) => {
@@ -321,6 +332,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                     step="0.01"
                     maxLength={8}
                     onChange={(e) => {
+                      if (parseFloat(e.target.value) <= 10000)
                       setDose(parseFloat(e.target.value));
                     }}
                     value={dose}
@@ -351,7 +363,10 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                     id="tempo"
                     type="number"
                     maxLength={6}
-                    onChange={(e) => setTempo(parseInt(e.target.value))}
+                    onChange={(e) => {
+                      if (parseInt(e.target.value) <= 300)
+                        setTempo(parseInt(e.target.value));
+                    }}
                     value={tempo}
                   />
                   <select
@@ -376,7 +391,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                   <button
                     type="button"
                     className="ml-auto mt-2 w-10 h-6 flex items-center justify-center bg-orange-500 text-white rounded-xl"
-                    onClick={() => handleAddMedicacao()}
+                    onClick={handleAddMedicacao}
                   >
                     <span className="text-xl font-bold font-mono">+</span>
                   </button>
@@ -388,7 +403,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                 className="p-4 border mt-1 bg-gray-100"
               >
                 <ul>
-                  {medicacoes.map((item, index) => (
+                  {medicacoes?.map((item, index) => (
                     <>
                       <li
                         key={index}
@@ -428,20 +443,28 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
           </div>
           <div className="bg-white w-[50%] min-h-[200px] bg-[#a9aee3] p-4 rounded-lg">
             <label htmlFor="add-cuidado">Adicionar cuidado</label>
-            <div id="add-cuidado">
-              <input
-                className="border-2 border-solid w-full h-8 border-gray-300 focus:border-orange-500 focus:outline-none rounded p-2"
-                id="add-cuidado"
-                type="text"
-                onChange={(e) => setCuidado({ descricao: e.target.value })}
-                value={cuidado?.descricao || ""}
-                onKeyDown={handleAddCuidado}
-              />
-            </div>
+              <div id="add-cuidado">
+                <textarea
+                  className="resize-none border-2 border-solid w-full h-28 border-gray-300 focus:border-orange-500 focus:outline-none rounded p-2"
+                  id="add-cuidado"
+                  onChange={(e) => setCuidado({ descricao: e.target.value })}
+                  value={cuidado?.descricao || ""}
+                  onKeyDown={handleAddCuidado}
+                />
+              </div>
+              <div className="flex items-center">
+                <button
+                  type="button"
+                  className="ml-auto my-2 w-10 h-6 flex items-center justify-center bg-orange-500 text-white rounded-xl"
+                  onClick={handleAddCuidado}
+                >
+                  <span className="text-xl font-bold font-mono">+</span>
+                </button>
+              </div>
             <label htmlFor="lista-cuidados">Cuidados</label>
-            <div id="lista-cuidados" className={"p-4 border mt-1 bg-gray-100"}>
+            <div id="lista-cuidados" className="p-4 border bg-gray-100 mt-1">
               <ul>
-                {cuidados.map((item, index) => (
+                {cuidados?.map((item, index) => (
                   <>
                     <li
                       key={index}

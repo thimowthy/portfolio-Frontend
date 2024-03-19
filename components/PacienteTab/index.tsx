@@ -14,6 +14,7 @@ import { tabColorMap } from "@/utils/maps";
 import { setColor } from "@/utils/colorTransition";
 import fetcher from "@/api/fetcher";
 import Swal from "sweetalert2";
+import { getUserCargo } from "@/utils/getCargo";
 
 export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   const selectLabelNeutrofilos = (quantidadeNeutrofilos: number) => {
@@ -28,13 +29,14 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
     }
   };
 
-  const ImageURL = (paciente: Paciente) => {
+  const GetPacienteIcon = (paciente: any) => {
     return useServerityIcon(paciente);
   };
 
   const [dischargeError, setDischargeError] = useState(false);
   const [sucessDischarge, setSucessDischarge] = useState(false);
   const [temperatura, setTemperatura] = useState<number>(36.5);
+  const [pacienteIcon, setPacienteIcon] = useState<any>();
   /**
    * Seta alta no paciente
    * @param {Number} pacienteId - Id do paciente
@@ -47,6 +49,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
       return;
     }
     setSucessDischarge(true);
+    window.location.reload();
     return;
   };
 
@@ -77,6 +80,17 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   const situacaoAtual = situacoesPacienteCopy?.pop();
   const situacaoPaciente = paciente?.internacao?.situacoesPaciente || [];
 
+  const [permissaoMedico, setPermissaoMedico] = useState<boolean>(false);
+  const [permissaoEnfermeiro, setPermissaoEnfermeiro] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    setPacienteIcon(GetPacienteIcon(paciente));
+    const cargoFromStorage = getUserCargo();
+    setPermissaoMedico(cargoFromStorage === "MEDICO");
+    setPermissaoEnfermeiro(cargoFromStorage === "ENFERMEIRO");
+  }, []);
+
   return (
     <>
       {dischargeError && (
@@ -105,7 +119,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
             <div className="flex gap-x-4 pb-3">
               <Image
                 className="h-12 w-12 flex-none rounded-full"
-                src={ImageURL(paciente)}
+                src={pacienteIcon}
                 width="250"
                 height="250"
                 alt="Estado do paciente"
@@ -115,14 +129,16 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                   <p className="text-xl font-semibold leading-6 text-gray-900 align-middle">
                     {paciente.nome}
                   </p>
-                  <button
-                    className="bg-green-500 hover:bg-green-700 text-white py-2 px-6 rounded"
-                    onClick={() =>
-                      handleDischargePatient(paciente.id as number)
-                    }
-                  >
-                    Dar alta
-                  </button>
+                  {permissaoMedico && (
+                    <button
+                      className="bg-green-500 hover:bg-green-700 text-white py-2 px-6 rounded"
+                      onClick={() =>
+                        handleDischargePatient(paciente.id as number)
+                      }
+                    >
+                      Dar alta
+                    </button>
+                  )}
                 </div>
                 <p className="mt-1 truncate text-xs leading-5 text-gray-500">
                   Prontuário: {paciente.numeroProntuario}
@@ -267,78 +283,75 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                 {/* TODO: for (paciente.situacoesPaciente as situacao) */}
 
                 <TabList className="flex flex-row rounded-full bg-white mt-4">
-                  {paciente?.internacao?.situacoesPaciente?.map(
-                    (item: any, index: any) => (
-                      <TabItem
-                        key={`tab-${paciente.id}-${item.id}`}
-                        href={`tab-${paciente.id}-${item.id}`}
-                        liClassName={`basis-1/5 ${tabColorMap.get(
-                          index,
-                        )} py-2 pl-2 ${
-                          index === 0 ? "rounded-bl-full rounded-tl-full" : ""
-                        } ${
-                          index === 4 ? "rounded-br-full rounded-tr-full" : ""
-                        }`}
-                        active={index === 1 || undefined}
-                      >
-                        <p className="text-white">
-                          {moment(item?.dataVerificacao).format(
-                            "DD/MM/YYYY h:mm:ss",
-                          )}
-                        </p>
-                      </TabItem>
-                    ),
-                  )}
+                  {situacoesPacienteCopy?.map((item: any, index: any) => (
+                    <TabItem
+                      key={`tab-${paciente.id}-${item.id}`}
+                      href={`tab-${paciente.id}-${item.id}`}
+                      liClassName={`basis-1/5 ${tabColorMap.get(
+                        index,
+                      )} py-2 pl-2 ${
+                        index === 0 ? "rounded-bl-full rounded-tl-full" : ""
+                      } ${
+                        index === 4 ? "rounded-br-full rounded-tr-full" : ""
+                      }`}
+                      selected={index === situacoesPacienteCopy.length - 1}
+                    >
+                      <p className="text-white">
+                        {moment(item?.dataVerificacao).format(
+                          "DD/MM/YYYY h:mm:ss",
+                        )}
+                      </p>
+                    </TabItem>
+                  ))}
                 </TabList>
-                {paciente?.internacao?.situacoesPaciente?.map(
-                  (item: any, index: any) => {
-                    return (
-                      <TabContents
-                        key={`tab-${paciente.id}-${item.id}`}
-                        tabId={`tab-${paciente.id}-${item.id}`}
-                        active={index === situacoesPaciente.length - 1 || false}
-                      >
-                        <div className="pt-2 flex flex-row gap-x-2">
-                          <div className="basis-1/2">
-                            <p>
-                              Data de verificação:{" "}
-                              {moment(
-                                item?.situacaoDiagnostico?.dataVerificacao,
-                              ).format("DD/MM/YYYY h:mm:ss")}
-                            </p>
-                            <p>
-                              Temperatura:{" "}
-                              {item?.situacaoDiagnostico?.temperatura}
-                            </p>
-                          </div>
-                          <div className="basis-1/2">
-                            <div className="flex justify-center flex-col items-end text-center">
-                              <div>
-                                <p className="text-center">Neutrófilos:</p>
-                                <p className="text-red-500">
-                                  {item?.situacaoDiagnostico?.neutrofilos}
-                                  /mm3
-                                </p>
-                                <div className="flex justify-center">
-                                  <div
-                                    className={selectLabelNeutrofilos(
-                                      item?.situacaoDiagnostico?.neutrofilos ||
-                                        0,
-                                    )}
-                                  ></div>
-                                </div>
-
-                                <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
-                                  Acessar +exames
-                                </button>
+                {situacoesPacienteCopy?.map((item: any, index: any) => {
+                  return (
+                    <TabContents
+                      key={`tab-${paciente.id}-${item.id}`}
+                      tabId={`tab-${paciente.id}-${item.id}`}
+                      active={
+                        index === situacoesPacienteCopy.length - 1 || false
+                      }
+                    >
+                      <div className="pt-2 flex flex-row gap-x-2">
+                        <div className="basis-1/2">
+                          <p>
+                            Data de verificação:{" "}
+                            {moment(
+                              item?.situacaoDiagnostico?.dataVerificacao,
+                            ).format("DD/MM/YYYY h:mm:ss")}
+                          </p>
+                          <p>
+                            Temperatura:{" "}
+                            {item?.situacaoDiagnostico?.temperatura}
+                          </p>
+                        </div>
+                        <div className="basis-1/2">
+                          <div className="flex justify-center flex-col items-end text-center">
+                            <div>
+                              <p className="text-center">Neutrófilos:</p>
+                              <p className="text-red-500">
+                                {item?.situacaoDiagnostico?.neutrofilos}
+                                /mm3
+                              </p>
+                              <div className="flex justify-center">
+                                <div
+                                  className={selectLabelNeutrofilos(
+                                    item?.situacaoDiagnostico?.neutrofilos || 0,
+                                  )}
+                                ></div>
                               </div>
+
+                              <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
+                                Acessar +exames
+                              </button>
                             </div>
                           </div>
                         </div>
-                      </TabContents>
-                    );
-                  },
-                )}
+                      </div>
+                    </TabContents>
+                  );
+                })}
               </div>
             </div>
           </>
