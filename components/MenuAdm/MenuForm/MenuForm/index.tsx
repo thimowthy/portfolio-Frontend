@@ -80,14 +80,14 @@ const MenuFormContent = () => {
 
   const handleExcluirProtocolo = async (id: number) => {
     if (!id)
-      console.log("Selecione um protocolo!");
+      alert("Selecione um protocolo!");
     if (id === ativo)
-      console.log("Você não pode excluir o protocolo em execução");
+      alert("Você não pode excluir o protocolo em execução");
 
     const protocoloSelecionado = protocolos.find(protocolo => protocolo.id === id);
     
     if (!protocoloSelecionado) {
-      console.log("Protocolo não encontrado");
+      alert("Protocolo não encontrado");
       return;
     };
   
@@ -103,11 +103,9 @@ const MenuFormContent = () => {
           cabecalho: { "Content-Type": "application/json" },
           body: JSON.stringify(id),
         });
-        //console.log(response);
         setExcluirSuccess(true);
         window.location.reload(); 
       } catch (error) {
-        //console.log(error);
         setExcluirError(true);
       }
     }
