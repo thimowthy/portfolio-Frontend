@@ -14,6 +14,7 @@ import { tabColorMap } from "@/utils/maps";
 import { setColor } from "@/utils/colorTransition";
 import fetcher from "@/api/fetcher";
 import Swal from "sweetalert2";
+import { getUserCargo } from "@/utils/getCargo";
 
 export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   const selectLabelNeutrofilos = (quantidadeNeutrofilos: number) => {
@@ -77,6 +78,18 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   const situacaoAtual = situacoesPacienteCopy?.pop();
   const situacaoPaciente = paciente?.internacao?.situacoesPaciente || [];
 
+  const [permissaoMedico, setPermissaoMedico] = useState<boolean>(false);
+  const [permissaoEnfermeiro, setPermissaoEnfermeiro] = useState<boolean>(false);
+
+  useEffect(() => {
+    const cargoFromStorage = getUserCargo();
+    setPermissaoMedico(cargoFromStorage === "MEDICO");
+    setPermissaoEnfermeiro(cargoFromStorage === "ENFERMEIRO");
+  }, []);
+
+  useEffect(() => {
+    console.log(permissaoMedico);
+  }, [permissaoMedico]);
   return (
     <>
       {dischargeError && (
@@ -115,14 +128,17 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                   <p className="text-xl font-semibold leading-6 text-gray-900 align-middle">
                     {paciente.nome}
                   </p>
-                  <button
-                    className="bg-green-500 hover:bg-green-700 text-white py-2 px-6 rounded"
-                    onClick={() =>
-                      handleDischargePatient(paciente.id as number)
-                    }
-                  >
-                    Dar alta
-                  </button>
+                  {permissaoMedico && (
+                    <button
+                      className="bg-green-500 hover:bg-green-700 text-white py-2 px-6 rounded"
+                      onClick={() =>
+                        handleDischargePatient(paciente.id as number)
+                      }
+                    >
+                      Dar alta
+                    </button>
+                  )}
+
                 </div>
                 <p className="mt-1 truncate text-xs leading-5 text-gray-500">
                   Prontuário: {paciente.numeroProntuario}
@@ -311,7 +327,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                               {item?.situacaoDiagnostico?.temperatura}
                             </p>
                           </div>
-                          <div className="basis-1/2">
+                          <div className="basis-1/2 mr-8">
                             <div className="flex justify-center flex-col items-end text-center">
                               <div>
                                 <p className="text-center">Neutrófilos:</p>
@@ -328,9 +344,9 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                                   ></div>
                                 </div>
 
-                                <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
+                                {/* <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
                                   Acessar +exames
-                                </button>
+                                </button> */}
                               </div>
                             </div>
                           </div>
