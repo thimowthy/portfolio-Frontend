@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, MouseEventHandler } from "react";
 import TabItem from "../TabItem/index";
 import TabContents from "../TabContents/index";
 
@@ -7,6 +7,7 @@ import { Tab, initTE } from "tw-elements";
 import TabList from "../TabList";
 import ItemListaPaciente from "../ItemListaPaciente";
 import router from "next/router";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 initTE({ Tab });
 
@@ -17,15 +18,28 @@ export default function TabDadosPaciente({
   nf,
   loadPacientes,
   setNf,
+  listaNf,
   setPacientes,
-}: any) {
+}: {
+  pacientes: Paciente[];
+  listaPacientes: Paciente[];
+  nf: Paciente[];
+  loadPacientes: MouseEventHandler<HTMLButtonElement>;
+  setNf: Function;
+  listaNf?: Paciente[];
+  setPacientes: Function;
+  setSelectedPatient: Function;
+}) {
   const [idAtivo, setIdAtivo] = useState(0);
   const [activeTab, setActiveTab] = useState("tab-todos");
 
   const handleTabSelect = (selectedRef: string | React.ReactNode) => {
     setActiveTab(selectedRef as string);
   };
+  const authRole = useAuthRole();
+  const cargo = authRole?.cargo || "";
 
+  const [pacientesNfFiltrados, setPacientesNfFiltrados] = useState<any>();
   const handleFilterPacientes = (busca: string) => {
     let pacientesFiltrados;
     const sanitizedBusca = busca.toLowerCase();
@@ -33,7 +47,7 @@ export default function TabDadosPaciente({
       pacientesFiltrados = pacientes.filter(
         (paciente: Paciente) =>
           paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
-          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca)
+          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
       );
       setPacientes(pacientesFiltrados);
     } else {
@@ -42,26 +56,27 @@ export default function TabDadosPaciente({
   };
 
   const handleFilterNf = (busca: string) => {
-    let pacientesNfFiltrados;
+    let nfFiltrados;
     const sanitizedBusca = busca.toLowerCase();
     if (busca.length > 0) {
-      pacientesNfFiltrados = nf.filter(
+      nfFiltrados = nf.filter(
         (paciente: Paciente) =>
           paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
-          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca)
+          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
       );
-      setNf(pacientesNfFiltrados);
+      setNf(nfFiltrados);
     } else {
-      setNf(nf);
+      setNf(listaNf);
     }
   };
+
   /**
    * Função para selecionar um paciente da lista para exibir os detalhes.
    * @param {Paciente} paciente - Paciente selecionado
    * @returns {void} seta no estado da aplicação o paciente selecionado assim como seu ID ativo.
    */
   const selectPatient = (paciente: Paciente) => {
-    setIdAtivo(paciente?.id || 0);
+    setIdAtivo(paciente?.id);
     setSelectedPatient(paciente);
   };
   return (
@@ -112,16 +127,18 @@ export default function TabDadosPaciente({
                     onChange={(e) => handleFilterPacientes(e.target.value)}
                   />
                 </div>
-                <button
-                  className="ml-auto font-bold w-8 h-8 px-4 rounded-full flex text-xl text-white justify-center bg-orange-500"
-                  type="button"
-                  title="Adicionar paciente"
-                  onClick={() => {
-                    router.push("/adicionar-paciente");
-                  }}
-                >
-                  <span>+</span>
-                </button>
+                {cargo && cargo === "MEDICO" && (
+                  <button
+                    className="ml-auto font-bold w-8 h-8 px-4 rounded-full flex text-xl text-white justify-center bg-orange-500"
+                    type="button"
+                    title="Adicionar paciente"
+                    onClick={() => {
+                      router.push("/adicionar-paciente");
+                    }}
+                  >
+                    <span>+</span>
+                  </button>
+                )}
                 <button
                   className="mr-auto ml-2 font-bold w-8 h-8 px-4 rounded-full flex text-xl text-white justify-center bg-orange-500 items-center"
                   type="button"
@@ -152,41 +169,6 @@ export default function TabDadosPaciente({
                 ))}
               </ul>
             </TabContents>
-
-            {/* <TabContents tabId="tab-pendentes" active={false}>
-              <div className="flex bg-white rounded-xl p-2 mt-5 mb-4">
-                <div className="pr-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    className="h-5 w-5"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <input
-                  className="block w-full focus:border-none active:border-none focus:outline-none"
-                  type="text"
-                  placeholder="Busque por nome ou prontuário do paciente"
-                  onChange={(e) => handleFilterPendentes(e.target.value)}
-                />
-              </div>
-              <ul role="list" className="divide-y divide-gray-100">
-                {listaPendetes?.map((paciente: Paciente) => (
-                  <ItemListaPaciente
-                    paciente={paciente}
-                    idAtivo={idAtivo}
-                    selectPatient={selectPatient}
-                    key={paciente.id}
-                  />
-                ))}
-              </ul>
-            </TabContents> */}
 
             <TabContents tabId="tab-NF" active={false}>
               <div className="flex mx-1 bg-white rounded-xl p-2 mt-5 mb-4">

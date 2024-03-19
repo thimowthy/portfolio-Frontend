@@ -34,7 +34,7 @@ const ItemHistoricoTratamento: React.FC<ItemHistoricoTratamentoProps> = ({
                     <li>
                       <strong>Dose:</strong> {medicamento.dose}{" "}
                       {capitalizeFirstLetter(
-                        medicamento.unidadeDosagem
+                        medicamento.unidadeDosagem,
                       ).replace(/_/g, " ")}
                     </li>
                     <li>

@@ -34,17 +34,27 @@ const MenuFormContent = () => {
     if (id) {
       if (id === ativo) {
         setEfetivarEfetivadoError(true);
-      } else {
+      }
+      else {
         try {
-          const response: Response = await fetcher({
-            rota: `/Protocolo/EfetivarProtocolo/${id}`,
-            metodo: "PUT",
-            cabecalho: { "Content-Type": "application/json" },
-            body: JSON.stringify(id),
-          });
-          if (response.ok) setEfetivarSuccess(true);
-          if (!response.ok) throw new Error("Erro ao excluir protocolo");
-        } catch (error) {
+          const protocoloSelecionado = protocolos.find(protocolo => protocolo.id === id);
+          if (protocoloSelecionado) {
+            const shouldEfetivar = window.confirm(
+              `Tem certeza de que deseja efetivar o protocolo ${protocoloSelecionado.descricao.nome} v${protocoloSelecionado.descricao.versao}?`,
+            );
+            if (shouldEfetivar) {
+              const response: Response = await fetcher({
+                rota: `/Protocolo/EfetivarProtocolo/${id}`,
+                metodo: "PUT",
+                cabecalho: { "Content-Type": "application/json" },
+                body: JSON.stringify(id),
+              });
+              setEfetivarSuccess(true);
+              window.location.reload(); 
+            }
+          }
+        }
+        catch (error) {
           setEfetivarError(true);
         }
       }
@@ -67,14 +77,22 @@ const MenuFormContent = () => {
       }
     }
   };
+
   const handleExcluirProtocolo = async (id: number) => {
-    if (!id) console.log("Selecione um protocolo!");
-
+    if (!id)
+      alert("Selecione um protocolo!");
     if (id === ativo)
-      console.log("Você não pode excluir o protocolo em execução");
+      alert("Você não pode excluir o protocolo em execução");
 
+    const protocoloSelecionado = protocolos.find(protocolo => protocolo.id === id);
+    
+    if (!protocoloSelecionado) {
+      alert("Protocolo não encontrado");
+      return;
+    };
+  
     const shouldDelete = window.confirm(
-      "Tem certeza de que deseja excluir este protocolo?",
+      `Tem certeza de que deseja excluir o protocolo ${protocoloSelecionado.descricao.nome} v${protocoloSelecionado.descricao.versao}?`,
     );
 
     if (shouldDelete) {
@@ -85,10 +103,9 @@ const MenuFormContent = () => {
           cabecalho: { "Content-Type": "application/json" },
           body: JSON.stringify(id),
         });
-        console.log(response);
         setExcluirSuccess(true);
+        window.location.reload(); 
       } catch (error) {
-        console.log(error);
         setExcluirError(true);
       }
     }
@@ -147,14 +164,14 @@ const MenuFormContent = () => {
           </button>
           <button
             className={styles.button}
-            type="submit"
+            type="button"
             onClick={() => handleEfetivarProtocolo(selectedItemId)}
           >
             Efetivar Protocolo
           </button>
           <button
             className={styles.button}
-            type="submit"
+            type="button"
             onClick={() => {
               handleExcluirProtocolo(selectedItemId);
             }}

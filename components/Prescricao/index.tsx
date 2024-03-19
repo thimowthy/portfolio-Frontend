@@ -165,7 +165,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
 
   const formatarMedicamentos = () => {
     if (prescricao?.medicacoes) {
-      const medicamentosFormatados = prescricao.medicacoes.map((item) => {
+      const medicamentosFormatados = prescricao.medicacoes?.map((item) => {
         return {
           intervaloTempo: IntervaloTempoMapping[item.intervaloTempo],
           unidadeDosagem: dosagemNumericaMapping[item.unidadeDosagem],
@@ -256,16 +256,16 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
 
   useEffect(() => {
     const setFormData = () => {
-      const itensCuidado: ItemCuidado[] = sugestoes.itensCuidado
-        .filter((item) => item.descricao !== "")
-        .map((item) => ({
+      const itensCuidado: ItemCuidado[] = sugestoes?.itensCuidado
+        ?.filter((item) => item.descricao !== "")
+        ?.map((item) => ({
           descricao: item.descricao,
         }));
 
       setCuidados(itensCuidado);
 
       const itensMedicamento: ItemMedicamento[] =
-        sugestoes.itensMedicamento.map((item: ItemSugestaoMedicamento) => ({
+        sugestoes?.itensMedicamento?.map((item: ItemSugestaoMedicamento) => ({
           medicamento: { id: item.idMedicamento, nome: item.medicamento },
           dose: item.dose,
           unidadeDosagem:
@@ -399,7 +399,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                 className="p-4 border mt-1 bg-gray-100"
               >
                 <ul>
-                  {medicacoes.map((item, index) => (
+                  {medicacoes?.map((item, index) => (
                     <>
                       <li
                         key={index}
@@ -460,7 +460,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
             <label htmlFor="lista-cuidados">Cuidados</label>
             <div id="lista-cuidados" className="p-4 border bg-gray-100 mt-1">
               <ul>
-                {cuidados.map((item, index) => (
+                {cuidados?.map((item, index) => (
                   <>
                     <li
                       key={index}
