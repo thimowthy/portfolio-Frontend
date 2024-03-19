@@ -54,6 +54,8 @@ const Login = () => {
       });
 
       localStorage.setItem("Authorization", response.token);
+      localStorage.setItem("Cargo", response.token);
+
       const decodedToken: JwtPayload = jwt_decode(response.token);
 
       switch (decodedToken.cargo) {

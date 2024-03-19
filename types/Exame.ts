@@ -3,10 +3,11 @@ type Exame = {
   dataSolicitacao: string;
   dataResultado: string;
   idSolicitante: number;
-  solicitante: string;
+  cpfSolicitante: string;
+  nomeSolicitante: string;
   idInternamento: number;
 };
 
-type Hemograma = Exame & { 
-  neutrofilos: number
-}
+type Hemograma = Exame & {
+  neutrofilos: number;
+};

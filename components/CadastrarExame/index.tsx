@@ -7,7 +7,7 @@ import ExamesList from "../ExameList";
 import { CrudExameProps } from "./CrudExameProps";
 import Link from "next/link";
 
-const CadastrarExame: React.FC<CrudExameProps> = ({ pacientes, medicos }) => {
+const CadastrarExame: React.FC<CrudExameProps> = () => {
   const [exame, setExame] = useState<Hemograma>();
 
   return (
@@ -36,11 +36,7 @@ const CadastrarExame: React.FC<CrudExameProps> = ({ pacientes, medicos }) => {
             </div>
             <div className={styles.sep}></div>
             <div className="w-min">
-              <ExameForm
-                pacientes={pacientes}
-                medicos={medicos}
-                exame={exame}
-              />
+              <ExameForm exame={exame} />
             </div>
           </div>
         </div>
