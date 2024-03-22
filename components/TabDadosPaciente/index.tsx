@@ -39,35 +39,30 @@ export default function TabDadosPaciente({
   const authRole = useAuthRole();
   const cargo = authRole?.cargo || "";
 
-  const [pacientesNfFiltrados, setPacientesNfFiltrados] = useState<any>();
   const handleFilterPacientes = (busca: string) => {
-    let pacientesFiltrados;
     const sanitizedBusca = busca.toLowerCase();
-    if (busca.length > 0) {
-      pacientesFiltrados = pacientes.filter(
-        (paciente: Paciente) =>
-          paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
-          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
-      );
-      setPacientes(pacientesFiltrados);
-    } else {
-      setPacientes(listaPacientes);
-    }
+    setPacientes(
+      sanitizedBusca.length === 0
+        ? listaPacientes
+        : listaPacientes.filter(
+            (paciente: Paciente) =>
+              paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
+              paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca)
+          )
+    );
   };
 
   const handleFilterNf = (busca: string) => {
-    let nfFiltrados;
     const sanitizedBusca = busca.toLowerCase();
-    if (busca.length > 0) {
-      nfFiltrados = nf.filter(
-        (paciente: Paciente) =>
-          paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
-          paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
-      );
-      setNf(nfFiltrados);
-    } else {
-      setNf(listaNf);
-    }
+    setNf(
+      sanitizedBusca.length === 0
+        ? listaNf
+        : listaNf?.filter(
+            (paciente: Paciente) =>
+              paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
+              paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca)
+          )
+    );
   };
 
   /**
