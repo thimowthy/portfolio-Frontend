@@ -10,14 +10,13 @@ const confirmNotification = async (notificationId: string) => {
       ? JSON.parse(localStorage.getItem("notifications") || "")
       : [];
     const index = existingNotifications.findIndex(
-      (notificacao: Notificacao) => notificacao.id == parseInt(notificationId),
+      (notificacao: Notificacao) => notificacao.id == parseInt(notificationId)
     );
     existingNotifications[index].isLida = true;
     localStorage.setItem(
       "notifications",
-      JSON.stringify(existingNotifications),
+      JSON.stringify(existingNotifications)
     );
-    console.log(existingNotifications[index]);
     return true;
   } catch (error) {
     console.error(error);
