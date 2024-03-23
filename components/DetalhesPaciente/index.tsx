@@ -30,7 +30,6 @@ export default function DetalhesPaciente({ paciente }: { paciente: Paciente }) {
 
   useEffect(() => {
     const element = prescricaoTabRef.current;
-    console.log(element);
   }, [prescricaoTabRef]);
 
   return (

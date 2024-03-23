@@ -38,13 +38,13 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
 
   const [tempo, setTempo] = useState(1);
   const [intervalo, setIntervalo] = useState<IntervaloTempo>(
-    IntervaloTempo.DIAS,
+    IntervaloTempo.DIAS
   );
   const [intervalos, setIntervalos] = useState<IntervaloTempo[]>([]);
 
   const [dose, setDose] = useState(1);
   const [dosagem, setDosagem] = useState<UnidadeDosagem>(
-    UnidadeDosagem.COMPRIMIDO,
+    UnidadeDosagem.COMPRIMIDO
   );
   const [dosagens, setDosagens] = useState<UnidadeDosagem[]>([]);
 
@@ -144,11 +144,11 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
     var addCuidado = false;
     var addButtonClick = !e.key;
     var enterClick = e.key && e.key == "Enter";
-    
+
     if (addButtonClick || enterClick) {
       e.preventDefault();
       addCuidado = true;
-    };
+    }
     if (addCuidado && cuidado && cuidado?.descricao.trim() !== "") {
       setCuidados((prevCuidados) => [cuidado, ...prevCuidados]);
       setCuidado({ descricao: "" });
@@ -180,17 +180,9 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
 
   const gerarPrescricao = async () => {
     setLoading(true);
-    // console.log(dosagemNumericaMapping["mg"]);
-    // console.log(obterValorNumericoDosagem("mg"));
     const meds = formatarMedicamentos();
+    console.log(meds);
     try {
-      console.log({
-        dataSolicitacao: moment().toISOString(),
-        itensCuidado: prescricao?.cuidados,
-        itensMedicamento: meds,
-        urgente: true,
-        idInternamento: internamento?.id,
-      });
       const response = await fetcher({
         rota: "/Prescricao/CadastrarPrescricao",
         metodo: "POST",
@@ -241,8 +233,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
         setSugestoes(internacao.sugestoes);
       } catch (error) {}
     };
-    if (id)
-      fetchData();
+    if (id) fetchData();
   }, [id]);
 
   type ItemSugestaoMedicamento = {
@@ -308,7 +299,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                     value={medicamento?.nome}
                     onChange={(e) => {
                       const medicamento = listaMedicamentos.find(
-                        (med) => med.nome === e.target.value,
+                        (med) => med.nome === e.target.value
                       );
                       setMedicamento(medicamento);
                     }}
@@ -333,7 +324,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                     maxLength={8}
                     onChange={(e) => {
                       if (parseFloat(e.target.value) <= 10000)
-                      setDose(parseFloat(e.target.value));
+                        setDose(parseFloat(e.target.value));
                     }}
                     value={dose}
                   />
@@ -343,7 +334,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                     value={dosagem}
                     onChange={(e) => {
                       const dose = Object.values(UnidadeDosagem).find(
-                        (dose) => dose === e.target.value,
+                        (dose) => dose === e.target.value
                       );
                       setDosagem(dose ? dose : UnidadeDosagem.COMPRIMIDO);
                     }}
@@ -375,7 +366,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                     value={intervalo}
                     onChange={(e) => {
                       const intervalo = Object.values(IntervaloTempo).find(
-                        (dose) => dose === e.target.value,
+                        (dose) => dose === e.target.value
                       );
                       setIntervalo(intervalo ? intervalo : IntervaloTempo.DIAS);
                     }}
@@ -443,24 +434,24 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
           </div>
           <div className="bg-white w-[50%] min-h-[200px] bg-[#a9aee3] p-4 rounded-lg">
             <label htmlFor="add-cuidado">Adicionar cuidado</label>
-              <div id="add-cuidado">
-                <textarea
-                  className="resize-none border-2 border-solid w-full h-28 border-gray-300 focus:border-orange-500 focus:outline-none rounded p-2"
-                  id="add-cuidado"
-                  onChange={(e) => setCuidado({ descricao: e.target.value })}
-                  value={cuidado?.descricao || ""}
-                  onKeyDown={handleAddCuidado}
-                />
-              </div>
-              <div className="flex items-center">
-                <button
-                  type="button"
-                  className="ml-auto my-2 w-10 h-6 flex items-center justify-center bg-orange-500 text-white rounded-xl"
-                  onClick={handleAddCuidado}
-                >
-                  <span className="text-xl font-bold font-mono">+</span>
-                </button>
-              </div>
+            <div id="add-cuidado">
+              <textarea
+                className="resize-none border-2 border-solid w-full h-28 border-gray-300 focus:border-orange-500 focus:outline-none rounded p-2"
+                id="add-cuidado"
+                onChange={(e) => setCuidado({ descricao: e.target.value })}
+                value={cuidado?.descricao || ""}
+                onKeyDown={handleAddCuidado}
+              />
+            </div>
+            <div className="flex items-center">
+              <button
+                type="button"
+                className="ml-auto my-2 w-10 h-6 flex items-center justify-center bg-orange-500 text-white rounded-xl"
+                onClick={handleAddCuidado}
+              >
+                <span className="text-xl font-bold font-mono">+</span>
+              </button>
+            </div>
             <label htmlFor="lista-cuidados">Cuidados</label>
             <div id="lista-cuidados" className="p-4 border bg-gray-100 mt-1">
               <ul>
