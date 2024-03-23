@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, MouseEventHandler } from "react";
+import { useState, useEffect, MouseEventHandler, useRef } from "react";
 import TabItem from "../TabItem/index";
 import TabContents from "../TabContents/index";
 
@@ -33,6 +33,8 @@ export default function TabDadosPaciente({
   const [idAtivo, setIdAtivo] = useState(0);
   const [activeTab, setActiveTab] = useState("tab-todos");
 
+  const inputPacienteRef = useRef<HTMLInputElement>(null);
+
   const handleTabSelect = (selectedRef: string | React.ReactNode) => {
     setActiveTab(selectedRef as string);
   };
@@ -63,6 +65,13 @@ export default function TabDadosPaciente({
               paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca)
           )
     );
+  };
+
+  const onRefresh = () => {
+    loadPacientes;
+    setNf(listaNf);
+    setPacientes(listaPacientes);
+    inputPacienteRef.current && (inputPacienteRef.current.value = "");
   };
 
   /**
@@ -120,6 +129,7 @@ export default function TabDadosPaciente({
                     type="text"
                     placeholder="Busque por nome ou prontuário do paciente"
                     onChange={(e) => handleFilterPacientes(e.target.value)}
+                    ref={inputPacienteRef}
                   />
                 </div>
                 {cargo && cargo === "MEDICO" && (
@@ -138,7 +148,7 @@ export default function TabDadosPaciente({
                   className="mr-auto ml-2 font-bold w-8 h-8 px-4 rounded-full flex text-xl text-white justify-center bg-orange-500 items-center"
                   type="button"
                   title="Atualizar pacientes"
-                  onClick={loadPacientes}
+                  onClick={onRefresh}
                 >
                   <span>
                     <svg
