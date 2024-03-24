@@ -32,7 +32,6 @@ export default function Notifications() {
       getAllNotifications();
     }
   }, []);
-
   return (
     <>
       {notifications?.map((notification: Notificacao) => {
@@ -64,26 +63,32 @@ export default function Notifications() {
                   </div>
                 </div>
                 <div className="flex border-l border-gray-200 flex-col">
-                  <button
-                    onClick={() =>
-                      api.confirmNotification(`${notification.id}`).then(() => {
-                        toast.dismiss(t.id);
-                      })
-                    }
-                    className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  >
-                    Confirmar leitura
-                  </button>
+                  {cargo !== "LABORATORISTA" && cargo !== "ADMINISTRADOR" && (
+                    <>
+                      <button
+                        onClick={() =>
+                          api
+                            .confirmNotification(`${notification.id}`)
+                            .then(() => {
+                              toast.dismiss(t.id);
+                            })
+                        }
+                        className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      >
+                        Confirmar leitura
+                      </button>
 
-                  <Link
-                    href={{
-                      pathname: "/dados-paciente",
-                      query: { id: notification?.idPaciente },
-                    }}
-                    className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  >
-                    Visualizar
-                  </Link>
+                      <Link
+                        href={{
+                          pathname: "/dados-paciente",
+                          query: { id: notification?.idPaciente },
+                        }}
+                        className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      >
+                        Visualizar
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             ),
