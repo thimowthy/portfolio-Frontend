@@ -6,6 +6,7 @@ import Image from "next/image";
 import { set } from "date-fns";
 import { formatCPF } from "@/utils/formatCPF";
 import fetcher from "@/api/fetcher";
+import { validateCPF } from "@/utils/validateCPF";
 
 export default function FormUsuario({
   cargo,
@@ -21,9 +22,9 @@ export default function FormUsuario({
   const [confirmar, setConfirmar] = useState("");
   const [certificado, setCertificado] = useState("");
   const [userName, setUserName] = useState("");
-  const [ativo, setAtivo] = useState(true);
   const [error, setError] = useState(false);
-  const [ok, setOK] = useState<Boolean>(false);
+  const [cpfOk, setCpfOk] = useState<Boolean>(true);
+  const [senhaOk, setSenhaOK] = useState<Boolean>(true);
 
   function backToList() {
     setCreateUser(false);
@@ -35,12 +36,12 @@ export default function FormUsuario({
   }, [cpf]);
 
   useEffect(() => {
-    setOK(confirmar === senha);
-    console.log(confirmar === senha);
+    setSenhaOK(confirmar === senha);
   }, [confirmar, senha]);
 
+  
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    if (ok) {
+    if (senhaOk) {
       event.preventDefault();
       try {
         setLoading(true);
@@ -119,7 +120,7 @@ export default function FormUsuario({
               required
             />
           </div>
-          <div className="flex space-x-4 justify-center mb-2 items-center w-full">
+          <div className="flex space-x-4 justify-center mb-2 items-start w-full">
             <div className="flex flex-col rounded gap-y-1 w-full">
               <label htmlFor="certificado" className="ml-1">
                 Certificado
@@ -144,13 +145,17 @@ export default function FormUsuario({
                 name="cpf"
                 id="cpf"
                 placeholder="CPF"
-                className="bg-gray-200 p-2 outline-none rounded"
+                className={`bg-gray-200 p-2 border-2 outline-none rounded ${cpfOk === false ? "border-red-500 " : ""}`}
                 value={cpfFormated}
                 minLength={11}
                 maxLength={14}
                 onChange={(e) => setCpf(e.target.value)}
+                onBlur={() => setCpfOk(validateCPF(cpf))}
                 required
               />
+              { !cpfOk && (<span className="text-red-500 font-bold">
+                CPF Inválido
+              </span> )}
             </div>
           </div>
           <div className="flex flex-col w-full mb-2 gap-y-1 rounded">
@@ -193,7 +198,7 @@ export default function FormUsuario({
               name="senha"
               id="confirmar"
               placeholder="Senha"
-              className={`bg-gray-200 p-2 border-2 rounded ${ok === false ? "border-red-500 " : ""}`}
+              className={`bg-gray-200 p-2 border-2 rounded ${senhaOk === false ? "border-red-500 " : ""}`}
               value={confirmar}
               onChange={(e) => setConfirmar(e.target.value)}
               required
@@ -208,7 +213,6 @@ export default function FormUsuario({
             </button>
           </div>
         </div>
-
       </form>
     </div>
   );
