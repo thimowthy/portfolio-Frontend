@@ -5,6 +5,7 @@ import fetcher from "@/api/fetcher";
 import SeoConfig from "../../components/SeoConfig/index";
 import DetalhesPaciente from "../../components/DetalhesPaciente";
 import Header from "@/components/Header";
+import { useAuthRole } from "@/hooks/useAuthRole";
 
 const DynamicTabComponent = dynamic(
   () => import("../../components/TabDadosPaciente"),
@@ -35,6 +36,7 @@ const febre = (paciente: Paciente) => {
 };
 
 const DadosPacientePage = () => {
+  const { cargo } = useAuthRole();
   const [pacientes, setPacientes] = useState([]);
   const [listaPacientes, setListaPacientes] = useState([]);
   const [nf, setNf] = useState<any>([]);
@@ -101,6 +103,14 @@ const DadosPacientePage = () => {
   }, [router]);
   const [selectedPatient, setSelectedPatient] = useState<any>({});
   4;
+
+  if (cargo === "LABORATORISTA") {
+    router.push("/cadastrar-exame");
+  }
+
+  if (cargo === "ADMINISTRADOR") {
+    router.push("/menu");
+  }
   return (
     <>
       <SeoConfig title="Lista de pacientes" />

@@ -134,7 +134,7 @@ const Header = () => {
             <nav className={styles.nav}>
               <ul className="flex">
                 <li className="font-light text-base mx-4">
-                  <Link href="/cadastar-exame">Home</Link>
+                  <Link href="/cadastrar-exame">Home</Link>
                 </li>
                 <li className="font-light text-base mx-4">
                   <Link

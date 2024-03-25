@@ -13,7 +13,6 @@ const requestPermission = () => {
           Notification.requestPermission();
         }
         Notification.requestPermission();
-        console.log(Notification.permission);
       } else if (Notification.permission === "granted") {
         console.log("Notification permission already granted!");
       }
