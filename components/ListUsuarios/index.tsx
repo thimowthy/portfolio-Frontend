@@ -3,6 +3,7 @@ import Image from "next/image";
 import AddUser from "../../public/add_user.svg";
 import EditUser from "../../public/pencil.svg";
 import DeleteUser from "../../public/trash.svg";
+import { formatCPF } from "@/utils/formatCPF";
 
 export default function ListUsuarios({
   setCreateUser,
@@ -68,7 +69,7 @@ export default function ListUsuarios({
                   >
                     <p style={{ width: "20%" }}>{user.nome}</p>
                     <p style={{ width: "15%" }}>{user.login}</p>
-                    <p style={{ width: "15%" }}>{user.cpf}</p>
+                    <p style={{ width: "15%" }}>{formatCPF(user.cpf)}</p>
                     <p style={{ width: "15%" }}>{user.cargo}</p>
                     <p style={{ width: "15%" }}>{user.certificado}</p>
                     <p

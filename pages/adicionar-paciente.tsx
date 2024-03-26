@@ -13,6 +13,7 @@ import trashIcon from "@/public/trash.svg";
 import { useRouter } from "next/router";
 import { format } from "date-fns-tz";
 import { formatCPF } from "@/utils/formatCPF";
+import { validateCPF } from "@/utils/validateCPF";
 
 interface FormObject {
   nome: string;
@@ -35,7 +36,7 @@ const AdicionarPaciente = () => {
     dataNascimento: "",
     numeroProntuario: "",
     leito: "",
-    tipoSanguineo: "",
+    tipoSanguineo: "0",
     comorbidades: "",
     alergias: "",
   });
@@ -47,6 +48,7 @@ const AdicionarPaciente = () => {
     return true;
   };
 
+  const [cpfOk, setCpfOk] = useState<Boolean>(true);
   const [cpfFormated, setCpfFormated] = useState("");
   const [loading, setLoading] = useState(false);
   const [sucessFetchStatus, setSucessFetchStatus] = useState(false);
@@ -146,7 +148,7 @@ const AdicionarPaciente = () => {
       [fieldName]: fieldValue,
     }));
 
-    if (fieldName === "numeroProntuario" && !isEmptyFormData()) {
+    if (paciente && !isEmptyFormData()) {
       cleanUseStates();
       setPaciente(undefined);
     }
@@ -154,107 +156,108 @@ const AdicionarPaciente = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const requiredFields = [
-      "nome",
-      "cns",
-      "cpf",
-      "numeroProntuario",
-      "dataNascimento",
-    ];
-    for (const field of requiredFields) {
-      const fieldValue = formData[field as keyof typeof formData];
-      //console.log(fieldValue);
-      if (!fieldValue) {
-        setError(true);
-        return false;
+    if (cpfOk) {
+      const requiredFields = [
+        "nome",
+        "cns",
+        "cpf",
+        "numeroProntuario",
+        "dataNascimento",
+      ];
+      for (const field of requiredFields) {
+        const fieldValue = formData[field as keyof typeof formData];
+        if (!fieldValue) {
+          setError(true);
+          return false;
+        }
       }
-    }
-    const formDataClone = { ...formData };
-    if (formDataClone.comorbidades) {
-      const comorbidadesArr = formDataClone.comorbidades.split(",");
-      const outputArr = [];
-      if (comorbidadesArr.length > 0) {
-        for (let comorbidade of comorbidadesArr) {
-          outputArr.push({
-            nome: comorbidade.trim(),
+      const formDataClone = { ...formData };
+      if (formDataClone.comorbidades) {
+        const comorbidadesArr = formDataClone.comorbidades.split(",");
+        const outputArr = [];
+        if (comorbidadesArr.length > 0) {
+          for (let comorbidade of comorbidadesArr) {
+            outputArr.push({
+              nome: comorbidade.trim(),
+            });
+          }
+        }
+        formDataClone.comorbidades = outputArr;
+      }
+      formDataClone.comorbidades = [];
+      if (formDataClone.alergias) {
+        const alergiasArr = formDataClone.alergias.split(",");
+        const outputArr = [];
+        if (alergiasArr.length > 0) {
+          for (let alergia of alergiasArr) {
+            outputArr.push({
+              nome: alergia.trim(),
+            });
+          }
+        }
+        formDataClone.alergias = outputArr;
+      } else {
+        formDataClone.alergias = [];
+      }
+
+      formDataClone.tipoSanguineo = parseInt(formDataClone.tipoSanguineo);
+      formDataClone.cpf = formDataClone.cpf.replace(/\D/g, "");
+      setLoading(true);
+
+      if (!paciente) {
+        try {
+          const result = await fetcher({
+            rota: "/Paciente/AddPaciente",
+            metodo: "POST",
+            body: formDataClone,
           });
+          setLoading(false);
+          if (result) {
+            setError(false);
+            setSucessFetchStatus(true);
+          }
+        } catch (error) {
+          console.log(error);
+          setLoading(false);
+          setError(true);
         }
-      }
-      formDataClone.comorbidades = outputArr;
-    }
-    formDataClone.comorbidades = [];
-    if (formDataClone.alergias) {
-      const alergiasArr = formDataClone.alergias.split(",");
-      const outputArr = [];
-      if (alergiasArr.length > 0) {
-        for (let alergia of alergiasArr) {
-          outputArr.push({
-            nome: alergia.trim(),
+      } else {
+        if (!formData.leito) {
+          alert("O campo leito é obrigatório");
+          setError(true);
+          setLoading(false);
+          return;
+        }
+
+        const timeZone = "America/Sao_Paulo";
+        const currentDate = format(new Date(), "yyyy-MM-dd", { timeZone });
+
+        const internamento = {
+          idPaciente: paciente.id,
+          leito: formData.leito,
+          dataAdmissao: currentDate,
+          risco: 0,
+        };
+
+        try {
+          const result = await fetcher({
+            rota: "/Internacao/CriarInternamento",
+            metodo: "POST",
+            cabecalho: { "Content-Type": "application/json" },
+            body: internamento,
           });
+          if (result) {
+            setError(false);
+            setSucessFetchStatus(true);
+          }
+          setLoading(false);
+        } catch (error) {
+          console.log(error);
+          setLoading(false);
+          setError(true);
         }
+        setInternado(true);
       }
-      formDataClone.alergias = outputArr;
-    } else {
-      formDataClone.alergias = [];
-    }
-
-    formDataClone.tipoSanguineo = parseInt(formDataClone.tipoSanguineo);
-    formDataClone.cpf = formDataClone.cpf.replace(/\D/g, "");
-    setLoading(true);
-
-    if (!paciente) {
-      try {
-        const result = await fetcher({
-          rota: "/Paciente/AddPaciente",
-          metodo: "POST",
-          body: formDataClone,
-        });
-        setLoading(false);
-        if (result) {
-          setError(false);
-          setSucessFetchStatus(true);
-        }
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-        setError(true);
-      }
-    } else {
-      if (!formData.leito) {
-        alert("O campo leito é obrigatório");
-        setError(true);
-        setLoading(false);
-        return;
-      }
-
-      const timeZone = "America/Sao_Paulo";
-      const currentDate = format(new Date(), "yyyy-MM-dd", { timeZone });
-
-      const internamento = {
-        idPaciente: paciente.id,
-        leito: formData.leito,
-        dataAdmissao: currentDate,
-        risco: 0,
-      };
-
-      try {
-        const result = await fetcher({
-          rota: "/Internacao/CriarInternamento",
-          metodo: "POST",
-          cabecalho: { "Content-Type": "application/json" },
-          body: internamento,
-        });
-        if (result) {
-          setError(false);
-          setSucessFetchStatus(true);
-        }
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-        setError(true);
-      }
-      setInternado(true);
     }
   };
 
@@ -350,8 +353,12 @@ const AdicionarPaciente = () => {
                   required
                   onChange={handleInput}
                   value={cpfFormated}
+                  onBlur={() => setCpfOk(validateCPF(formData.cpf))}
                   disabled={Boolean(paciente)}
                 />
+                { !cpfOk && (<span className="text-red-500 font-bold">
+                  CPF Inválido
+                </span> )}
               </div>
             </div>
             <div className="flex flex-wrap -mx-3">
