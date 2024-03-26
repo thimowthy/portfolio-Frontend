@@ -170,7 +170,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
           unidadeDosagem: dosagemNumericaMapping[item.unidadeDosagem],
           intervalo: item.intervalo,
           dose: item.dose,
-          idMedicamento: item!.medicamento,
+          idMedicamento: typeof item.medicamento === "number" ? item.medicamento : item.medicamento!.id,
         };
       });
       return medicamentosFormatados || [];
@@ -183,8 +183,6 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
     const moment = require("moment-timezone");
     const dataHoraAtual = moment.tz("America/Sao_Paulo").toISOString();
     const meds = formatarMedicamentos() || [];
-
-      console.log(prescricao.cuidados.length > 0 || meds.length > 0);
 
       if (prescricao.cuidados.length > 0 || meds.length > 0) {
         try {
@@ -418,17 +416,9 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
                           </button>
                         </div>
                         <span>
-                          {item.medicamento?.nome +
-                            " " +
-                            item.dose +
-                            " " +
-                            item.unidadeDosagem +
-                            " de " +
-                            item.intervalo +
-                            "/" +
-                            item.intervalo +
-                            " " +
-                            item.intervaloTempo}
+                          {typeof item.medicamento === "number" ? item.medicamento : item.medicamento!.nome}{" "}
+                          {item.dose} {item.unidadeDosagem} de {item.intervalo}/{item.intervalo}{" "}
+                          {item.intervaloTempo}
                         </span>
                       </li>
                       <div className="border-b border-gray"></div>

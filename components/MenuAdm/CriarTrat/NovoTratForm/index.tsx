@@ -467,17 +467,9 @@ const TratFormContent: React.FC<TratFormContentProps> = ({
                             </button>
                           </div>
                           <span>
-                            {item.medicamento?.nome +
-                              " " +
-                              item.dose +
-                              " " +
-                              item.unidadeDosagem +
-                              " de " +
-                              item.intervalo +
-                              "/" +
-                              item.intervalo +
-                              " " +
-                              item.intervaloTempo}
+                            {typeof item.medicamento === "number" ? item.medicamento : item.medicamento!.nome}{" "}
+                            {item.dose} {item.unidadeDosagem} de {item.intervalo}/{item.intervalo}{" "}
+                            {item.intervaloTempo}
                           </span>
                         </li>
                         <div className="border-b border-gray"></div>
