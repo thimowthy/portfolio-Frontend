@@ -70,6 +70,7 @@ const AdicionarPaciente = () => {
           cpf: paciente.cpf,
           prontuario: paciente.numeroProntuario,
           cartaoSus: paciente.cns,
+          leito: formData.leito
         },
       });
     }
@@ -148,10 +149,10 @@ const AdicionarPaciente = () => {
       [fieldName]: fieldValue,
     }));
 
-    if (paciente && !isEmptyFormData()) {
+    /* if (paciente && !isEmptyFormData()) {
       cleanUseStates();
       setPaciente(undefined);
-    }
+    } */
   };
 
   const handleSubmit = async (e: any) => {
@@ -320,7 +321,7 @@ const AdicionarPaciente = () => {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-last-name"
                 >
-                  Número prontuário
+                  Número prontuário *
                 </label>
                 <input
                   className="appearance-none block w-full text-gray-700 border-2 border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -340,7 +341,7 @@ const AdicionarPaciente = () => {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-last-name"
                 >
-                  CPF
+                  CPF *
                 </label>
                 <input
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -356,9 +357,9 @@ const AdicionarPaciente = () => {
                   onBlur={() => setCpfOk(validateCPF(formData.cpf))}
                   disabled={Boolean(paciente)}
                 />
-                { !cpfOk && (<span className="text-red-500 font-bold">
+                {!cpfOk && (<span className="text-red-500 font-bold">
                   CPF Inválido
-                </span> )}
+                </span>)}
               </div>
             </div>
             <div className="flex flex-wrap -mx-3">
@@ -367,7 +368,7 @@ const AdicionarPaciente = () => {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-last-name"
                 >
-                  Nome
+                  Nome *
                 </label>
                 <input
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -388,7 +389,7 @@ const AdicionarPaciente = () => {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-last-name"
                 >
-                  Data de nascimento
+                  Data de nascimento *
                 </label>
                 <input
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -407,7 +408,7 @@ const AdicionarPaciente = () => {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-last-name"
                 >
-                  CNS
+                  CNS *
                 </label>
                 <input
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"

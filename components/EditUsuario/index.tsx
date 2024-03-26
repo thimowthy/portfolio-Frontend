@@ -127,9 +127,8 @@ export default function EditUsuario({
                   name="cpf"
                   id="cpf"
                   placeholder="CPF"
-                  className={`bg-gray-200 p-2 border-2 outline-none rounded-lg ${
-                    cpfOk === false ? "border-red-500 " : ""
-                  }`}
+                  className={`bg-gray-200 p-2 border-2 outline-none rounded-lg ${cpfOk === false ? "border-red-500 " : ""
+                    }`}
                   value={cpfFormated}
                   minLength={11}
                   maxLength={14}
@@ -161,6 +160,41 @@ export default function EditUsuario({
                   </select>
                 </div>
               )}
+            </div>
+            <div className="flex items-center w-full">
+              <div className="flex flex-col p-2 rounded-lg w-full">
+                <label htmlFor="cpf" className="ml-1">
+                  Certificado
+                </label>
+                <input
+                  type="text"
+                  name="certificado"
+                  id="certificado"
+                  placeholder="Certificado"
+                  className={`bg-gray-200 p-2 border-2 outline-none rounded-lg 
+                  }`}
+                  value={certificado}
+                  onChange={(e) => setCertificado(e.target.value)}
+                />
+              </div>
+              {/* <div className="flex flex-col p-2 rounded-lg w-full">
+                <label htmlFor="cpf" className="ml-1">
+                  Senha
+                </label>
+                <input
+                  type="password"
+                  name="senha"
+                  id="senha"
+                  placeholder="Senha"
+                  className={"bg-gray-200 p-2 border-2 outline-none rounded-lg "}
+                  value={"ttt"}
+                  minLength={11}
+                  maxLength={14}
+                  onChange={(e) => setCpf(e.target.value)}
+                  onBlur={() => setCpfOk(validateCPF(cpf))}
+                  required
+                />
+              </div> */}
             </div>
           </div>
           <div className="flex w-full items-center mt-3">
