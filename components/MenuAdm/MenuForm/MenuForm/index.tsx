@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import Link from "next/link";
@@ -29,6 +28,7 @@ const MenuFormContent = () => {
   const [editarError, setEditarError] = useState<Boolean>(false);
   const [ativo, setAtivo] = useState<number>();
   const [selectedItemId, setSelectedItemId] = useState<number>(1);
+
 
   const handleEfetivarProtocolo = async (id: number) => {
     if (id) {
@@ -62,6 +62,7 @@ const MenuFormContent = () => {
       console.log("Selecione um protocolo!");
     }
   };
+
   const handleEditarProtocolo = (id: number) => {
     if (id) {
       if (id === ativo) {
@@ -135,10 +136,11 @@ const MenuFormContent = () => {
     if (listaProtocolos) {
       const protocolos = listaProtocolos?.map((protocoloDB) => ({
         ...protocoloDB,
+        nome: protocoloDB.nome,
         descricao: JSON.parse(protocoloDB.descricao),
       }));
       setProtocolos(protocolos);
-      setAtivo(listaProtocolos?.find((item) => item.ativo)?.id);
+      setAtivo(listaProtocolos?.find((item) => item.efetivado)?.id);
     }
   }, [listaProtocolos]);
 
@@ -186,7 +188,7 @@ const MenuFormContent = () => {
         <div className={styles.textDiv}>
           {listaProtocolos && (
             <ul>
-              {protocolos.map((protocolo) => (
+              {listaProtocolos.map((protocolo) => (
                 <li
                   key={protocolo.id}
                   onClick={() => handleItemClick(protocolo.id)}
@@ -196,12 +198,11 @@ const MenuFormContent = () => {
                 >
                   <span className={styles.marker}>
                     •
-                    {"   " +
-                      protocolo.descricao.nome +
-                      "  v" +
-                      protocolo.descricao.versao}
+                    {" " + protocolo.nome +
+                     " " + JSON.parse(protocolo.descricao).ano +
+                     " v" + JSON.parse(protocolo.descricao).versao}
                   </span>
-                  {protocolo.ativo && (
+                  {protocolo.efetivado && (
                     <Image
                       src={loading}
                       style={{
