@@ -47,11 +47,14 @@ export function convertDate(
  * const formattedDateTime = convertDateTime(inputDateTime, "dd/mm/yyyy HH:mm:ss");
  * console.log(formattedDateTime); // Saída: "07/02/2024 03:22:12"
  */
+const diminuirHoras = (data: Date, horas: number): Date => new Date(data.getTime() - horas * 3600000);
+
 export function convertDateTime(
   inputDateTime: string,
   format: string = "dd/mm/yyyy HH:mm",
 ): string {
-  const originalDateTime = new Date(inputDateTime);
+  let originalDateTime = new Date(inputDateTime);
+  originalDateTime = diminuirHoras(new Date(originalDateTime), 3);
 
   if (isNaN(originalDateTime.getTime())) {
     throw new Error("Data e hora de entrada inválida.");

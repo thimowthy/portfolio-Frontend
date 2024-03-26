@@ -19,7 +19,7 @@ export default function EditUsuario({
   const [cpfOk, setCpfOk] = useState<Boolean>(true);
   const [certificado, setCertificado] = useState(user.certificado);
   const [userName, setUserName] = useState(user.login);
-  
+
   useEffect(() => {
     setCpfFormated(formatCPF(cpf));
   }, [cpf]);
@@ -54,7 +54,6 @@ export default function EditUsuario({
           alert("Usuário atualizado com sucesso");
         }
       } catch (error) {
-        console.error(error);
         alert("Erro ao atualizar usuário");
         setUpdateUser(true);
         // setLoading(false);
@@ -128,7 +127,9 @@ export default function EditUsuario({
                   name="cpf"
                   id="cpf"
                   placeholder="CPF"
-                  className={`bg-gray-200 p-2 border-2 outline-none rounded-lg ${cpfOk === false ? "border-red-500 " : ""}`}
+                  className={`bg-gray-200 p-2 border-2 outline-none rounded-lg ${
+                    cpfOk === false ? "border-red-500 " : ""
+                  }`}
                   value={cpfFormated}
                   minLength={11}
                   maxLength={14}
@@ -136,78 +137,31 @@ export default function EditUsuario({
                   onBlur={() => setCpfOk(validateCPF(cpf))}
                   required
                 />
-              { !cpfOk && (<span className="text-red-500 font-bold">
-                CPF Inválido
-              </span> )}
+                {!cpfOk && (
+                  <span className="text-red-500 font-bold">CPF Inválido</span>
+                )}
               </div>
-              <div className="flex flex-col p-2 rounded-lg w-full">
-                <label htmlFor="cagos">Selecione o cargo desejado</label>
-                <select
-                  name="cargos"
-                  id="cargos"
-                  className="bg-gray-200 p-2 outline-none rounded-lg"
-                  onChange={(e) => {
-                    setCargoAtual(e.target.value);
-                  }}
-                  value={cargoAtual}
-                >
-                  {cargos.map((cargo: Cargo) => (
-                    <option
-                      value={cargo.valor}
-                      key={cargo.valor}
-                    >
-                      {cargo.nome}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {/* <div className="flex flex-col p-2 rounded-lg w-full">
-                <label htmlFor="certificado" className="ml-1">
-                  Certificado
-                </label>
-                <input
-                  type="text"
-                  name="certificado"
-                  id="certificado"
-                  placeholder="Certificado"
-                  className="bg-gray-200 p-2 outline-none rounded-lg"
-                  value={certificado}
-                  onChange={(e) => setCertificado(e.target.value)}
-                  required
-                />
-              </div> */}
+              {cargoAtual?.toUpperCase() !== "ADMINISTRADOR" && (
+                <div className="flex flex-col p-2 rounded-lg w-full">
+                  <label htmlFor="cagos">Selecione o cargo desejado</label>
+                  <select
+                    name="cargos"
+                    id="cargos"
+                    className="bg-gray-200 p-2 outline-none rounded-lg"
+                    onChange={(e) => {
+                      setCargoAtual(e.target.value);
+                    }}
+                    value={cargoAtual}
+                  >
+                    {cargos.map((cargo: Cargo) => (
+                      <option value={cargo.valor} key={cargo.valor}>
+                        {cargo.nome}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
-
-            <div className="flex items-center">
-              {/* <div className="flex flex-col p-2 rounded-lg">
-                <label htmlFor="codigo" className="ml-1">
-                  Código
-                </label>
-                <input
-                  type="number"
-                  className="bg-gray-200 p-2 outline-none rounded-lg w-14"
-                  name="codigo"
-                  id="codigo"
-                  disabled
-                  value={cargo.codigo}
-                  required
-                />
-              </div> */}
-            </div>
-
-            {/* <div className="flex p-2 rounded-lg items-center">
-              <label htmlFor="ativo" className="ml-1">
-                Ativo
-              </label>
-              <input
-                type="checkbox"
-                id="ativo"
-                name="ativo"
-                className="bg-gray-200 p-2 outline-none rounded-lg ml-2"
-                checked={ativo}
-                onChange={() => setAtivo(!ativo)}
-              />
-            </div> */}
           </div>
           <div className="flex w-full items-center mt-3">
             <button

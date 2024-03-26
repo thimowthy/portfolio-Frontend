@@ -13,7 +13,6 @@ import {
 } from "@/types/Enum/IntervaloTempo";
 import fetcher from "@/api/fetcher";
 import Loader from "../Loader";
-import moment from "moment";
 import { getEnums } from "@/utils/getEnums";
 
 interface PrescricaoFormProps {
@@ -180,14 +179,16 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
 
   const gerarPrescricao = async () => {
     setLoading(true);
+
+    const moment = require("moment-timezone");
+    const dataHoraAtual = moment.tz("America/Sao_Paulo").toISOString();
     const meds = formatarMedicamentos();
-    console.log(meds);
     try {
       const response = await fetcher({
         rota: "/Prescricao/CadastrarPrescricao",
         metodo: "POST",
         body: {
-          dataSolicitacao: moment().toISOString(),
+          dataSolicitacao: dataHoraAtual,
           itensCuidado: prescricao?.cuidados,
           itensMedicamento: meds,
           urgente: true,
@@ -203,7 +204,6 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
     } catch (error) {
       console.error(error);
     }
-
     const filePath = `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Prescricao/GetPrescricaoMedica?pacienteId=${id}`;
     fetch(filePath)
       .then((res) => {
