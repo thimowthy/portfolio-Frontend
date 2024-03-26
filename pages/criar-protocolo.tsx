@@ -40,7 +40,7 @@ const Protocolo = () => {
       setTratamento(protocolo.tratamento);
     }
     else {
-      setProtocoloDB({ id: 0, descricao: JSON.stringify(defaultProtocolo) });
+      setProtocoloDB({ id: 0, nome: "", efetivado:false, descricao: JSON.stringify(defaultProtocolo) });
       setProtocolo(defaultProtocolo);
       setDiagnostico(defaultDiagnostico);
       setTratamento(defaultTratamento);
