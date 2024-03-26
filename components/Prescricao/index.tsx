@@ -184,31 +184,31 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
     const dataHoraAtual = moment.tz("America/Sao_Paulo").toISOString();
     const meds = formatarMedicamentos() || [];
 
-    console.log(prescricao.cuidados.length > 0 || meds.length > 0);
+      console.log(prescricao.cuidados.length > 0 || meds.length > 0);
 
-    if (prescricao.cuidados.length > 0 || meds.length > 0) {
-      try {
-        const response = await fetcher({
-          rota: "/Prescricao/CadastrarPrescricao",
-          metodo: "POST",
-          body: {
-            dataSolicitacao: dataHoraAtual,
-            itensCuidado: prescricao?.cuidados,
-            itensMedicamento: meds,
-            urgente: true,
-            idInternamento: internamento?.id,
-          },
-        });
-        setCuidados([]);
-        setMedicacoes([]);
-        setPrescricao({
-          medicacoes: medicacoes,
-          cuidados: cuidados,
-        });
-      } catch (error) {
-        console.error(error);
+      if (prescricao.cuidados.length > 0 || meds.length > 0) {
+        try {
+          const response = await fetcher({
+            rota: "/Prescricao/CadastrarPrescricao",
+            metodo: "POST",
+            body: {
+              dataSolicitacao: dataHoraAtual,
+              itensCuidado: prescricao?.cuidados,
+              itensMedicamento: meds,
+              urgente: true,
+              idInternamento: internamento?.id,
+            },
+          });
+          setCuidados([]);
+          setMedicacoes([]);
+          setPrescricao({
+            medicacoes: medicacoes,
+            cuidados: cuidados,
+          });
+        } catch (error) {
+          console.error(error);
+        }
       }
-    }
 
     const filePath = `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Prescricao/GetPrescricaoMedica?pacienteId=${id}`;
     fetch(filePath)
