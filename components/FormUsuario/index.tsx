@@ -18,12 +18,12 @@ export default function FormUsuario({
   const [nome, setNome] = useState("");
   const [cpfFormated, setCpfFormated] = useState("");
   const [cpf, setCpf] = useState("");
+  const [cpfOk, setCpfOk] = useState<Boolean>(true);
   const [senha, setSenha] = useState("");
   const [confirmar, setConfirmar] = useState("");
   const [certificado, setCertificado] = useState("");
   const [userName, setUserName] = useState("");
   const [error, setError] = useState(false);
-  const [cpfOk, setCpfOk] = useState<Boolean>(true);
   const [senhaOk, setSenhaOK] = useState<Boolean>(true);
 
   function backToList() {

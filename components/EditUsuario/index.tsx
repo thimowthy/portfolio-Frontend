@@ -1,7 +1,9 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import ArrowLeft from "../../public/arrow_left.svg";
 import Image from "next/image";
 import fetcher from "@/api/fetcher";
+import { formatCPF } from "@/utils/formatCPF";
+import { validateCPF } from "@/utils/validateCPF";
 
 export default function EditUsuario({
   setListUsers,
@@ -13,44 +15,52 @@ export default function EditUsuario({
   const [nome, setNome] = useState(user.nome);
   const [cargoAtual, setCargoAtual] = useState(user.cargo.toLowerCase());
   const [cpf, setCpf] = useState(user.cpf);
+  const [cpfFormated, setCpfFormated] = useState("");
+  const [cpfOk, setCpfOk] = useState<Boolean>(true);
   const [certificado, setCertificado] = useState(user.certificado);
   const [userName, setUserName] = useState(user.login);
+  
+  useEffect(() => {
+    setCpfFormated(formatCPF(cpf));
+  }, [cpf]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      const formData = {
-        id: user.id,
-        nome,
-        login: userName,
-        cpf,
-        certificado,
-        cargo: cargoAtual,
-        senha: user.senha,
-        ativo: true,
-      };
+    if (cpfOk) {
+      try {
+        const formData = {
+          id: user.id,
+          nome,
+          login: userName,
+          cpf,
+          certificado,
+          cargo: cargoAtual,
+          senha: user.senha,
+          ativo: true,
+        };
 
-      setLoading(true);
+        setLoading(true);
 
-      const token = localStorage.getItem("Authorization");
+        const token = localStorage.getItem("Authorization");
 
-      if (token) {
-        const response = await fetcher({
-          rota: `/Usuario/PutUser/${user.id}`,
-          metodo: "PUT",
-          body: formData,
-        });
-        setUpdateUser(false);
-        setListUsers(true);
-        alert("Usuário atualizado com sucesso");
+        if (token) {
+          const response = await fetcher({
+            rota: `/Usuario/PutUser/${user.id}`,
+            metodo: "PUT",
+            body: formData,
+          });
+          setUpdateUser(false);
+          setListUsers(true);
+          alert("Usuário atualizado com sucesso");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Erro ao atualizar usuário");
+        setUpdateUser(true);
+        // setLoading(false);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error(error);
-      alert("Erro ao atualizar usuário");
-      setUpdateUser(true);
-      // setLoading(false);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -118,13 +128,18 @@ export default function EditUsuario({
                   name="cpf"
                   id="cpf"
                   placeholder="CPF"
-                  className="bg-gray-200 p-2 outline-none rounded-lg"
-                  value={cpf}
+                  className={`bg-gray-200 p-2 border-2 outline-none rounded-lg ${cpfOk === false ? "border-red-500 " : ""}`}
+                  value={cpfFormated}
+                  minLength={11}
+                  maxLength={14}
                   onChange={(e) => setCpf(e.target.value)}
+                  onBlur={() => setCpfOk(validateCPF(cpf))}
                   required
                 />
+              { !cpfOk && (<span className="text-red-500 font-bold">
+                CPF Inválido
+              </span> )}
               </div>
-
               <div className="flex flex-col p-2 rounded-lg w-full">
                 <label htmlFor="cagos">Selecione o cargo desejado</label>
                 <select
@@ -134,15 +149,12 @@ export default function EditUsuario({
                   onChange={(e) => {
                     setCargoAtual(e.target.value);
                   }}
+                  value={cargoAtual}
                 >
-                  <option disabled value="">
-                    Selecione o cargo
-                  </option>
                   {cargos.map((cargo: Cargo) => (
                     <option
                       value={cargo.valor}
                       key={cargo.valor}
-                      selected={cargo.valor === cargoAtual}
                     >
                       {cargo.nome}
                     </option>
