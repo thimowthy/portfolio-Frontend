@@ -1,11 +1,19 @@
-export const formatCPF = (cpf: string) => {
-  if (cpf) {
-    const cpfNumerico = cpf.replace(/\D/g, "");
-    const cpfFormatado = cpfNumerico.replace(
-      /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
-      "$1.$2.$3-$4",
-    );
-    return cpfFormatado;
+export const formatCPF = (cpf: string): string => {
+  let formatted = cpf.replace(/\D/g, "");
+
+  if (formatted.length > 11) {
+    formatted = formatted.substring(0, 11);
   }
-  return "";
+
+  if (formatted.length >= 4) {
+    formatted = `${formatted.substring(0, 3)}.${formatted.substring(3)}`;
+  }
+  if (formatted.length >= 8) {
+    formatted = `${formatted.substring(0, 7)}.${formatted.substring(7)}`;
+  }
+  if (formatted.length >= 12) {
+    formatted = `${formatted.substring(0, 11)}-${formatted.substring(11)}`;
+  }
+
+  return formatted;
 };

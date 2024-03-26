@@ -22,7 +22,7 @@ export default function Notifications() {
   const cargo = authRole?.cargo || "";
 
   useEffect(() => {
-    if (!isLoginPage && cargo !== "ADMINISTRADOR") {
+    if (!isLoginPage && (cargo !== "ADMINISTRADOR") && (cargo !== "LABORATORISTA")) {
       const getAllNotifications = async () => {
         const allNotifications = await syncNotification();
         setNotifications(allNotifications);
@@ -31,7 +31,7 @@ export default function Notifications() {
 
       getAllNotifications();
     }
-  }, []);
+  }, [cargo]);
   return (
     <>
       {notifications?.map((notification: Notificacao) => {

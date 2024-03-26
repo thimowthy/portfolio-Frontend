@@ -8,6 +8,8 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import ErrorToast from "@/components/toasts/errorToast";
 import SuccessToast from "@/components/toasts/successToast";
+import { validateCPF } from "@/utils/validateCPF";
+import { formatCPF } from "@/utils/formatCPF";
 
 interface FormObject {
   nome: string;
@@ -18,17 +20,17 @@ interface FormObject {
   tipoSanguineo: any;
 }
 
-async function loadPaciente(id: any) {
-  try {
-    const paciente = await fetcher({
-      metodo: "GET",
-      rota: `/Paciente/GetById?pacienteId=${id}`,
-    });
-    return paciente;
-  } catch (err) {
-    console.log(err);
-  }
-}
+// async function loadPaciente(id: any) {
+//   try {
+//     const paciente = await fetcher({
+//       metodo: "GET",
+//       rota: `/Paciente/GetById?pacienteId=${id}`,
+//     });
+//     return paciente;
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
 
 export default function EditUserPage() {
   const router = useRouter();
@@ -38,6 +40,9 @@ export default function EditUserPage() {
   const [error, setError] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [paciente, setPaciente] = useState<any>({});
+  const [cpfOk, setCpfOk] = useState<Boolean>(true);
+  const [cpfFormated, setCpfFormated] = useState("");
+
   const [formData, setFormData] = useState<FormObject>({
     nome: "",
     cpf: "",
@@ -47,6 +52,10 @@ export default function EditUserPage() {
     tipoSanguineo: "",
   });
 
+  useEffect(() => {
+    setCpfFormated(formatCPF(formData.cpf));
+  }, [formData.cpf]);
+  
   const handleInput = (e: any) => {
     const fieldName = e.target.name;
     const fieldValue = e.target.value;
@@ -58,43 +67,46 @@ export default function EditUserPage() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const requiredFields = [
-      "nome",
-      "cns",
-      "cpf",
-      "numeroProntuario",
-      "dataNascimento",
-    ];
-    for (const field of requiredFields) {
-      const fieldValue = formData[field as keyof typeof formData];
-      if (!fieldValue) {
+    if (cpfOk) {
+      const requiredFields = [
+        "nome",
+        "cns",
+        "cpf",
+        "numeroProntuario",
+        "dataNascimento",
+      ];
+      for (const field of requiredFields) {
+        const fieldValue = formData[field as keyof typeof formData];
+        if (!fieldValue) {
+          setError(true);
+          return false;
+        }
+      }
+      const formDataClone = { ...formData };
+      formDataClone.cpf = formDataClone.cpf.replace(/\D/g, "");
+      formDataClone.tipoSanguineo = parseInt(formDataClone.tipoSanguineo);
+      setLoading(true);
+      try {
+        const result = await fetcher({
+          rota:
+            "/Paciente/EditPaciente?pacienteId=" +
+            id,
+          metodo: "PUT",
+          body: formDataClone,
+        });
+        if (result) {
+          setError(false);
+          setSucessFetchStatus(true);
+        }
+        setLoading(false);
+        setTimeout(() => {
+          router.push("/pacientes");
+        }, 2000);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
         setError(true);
-        return false;
       }
-    }
-    const formDataClone = { ...formData };
-    formDataClone.tipoSanguineo = parseInt(formDataClone.tipoSanguineo);
-    setLoading(true);
-    try {
-      const result = await fetcher({
-        rota:
-          "/Paciente/EditPaciente?pacienteId=" +
-          id,
-        metodo: "PUT",
-        body: formDataClone,
-      });
-      if (result) {
-        setError(false);
-        setSucessFetchStatus(true);
-      }
-      setLoading(false);
-      setTimeout(() => {
-        router.push("/pacientes");
-      }, 2000);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-      setError(true);
     }
   };
   useEffect(() => {
@@ -162,8 +174,8 @@ export default function EditUserPage() {
           onClose={() => setError(false)}
         />
       )}
-      <div className="flex min-h-full min-w-full justify-center items-center py-9">
-        <div className="bg-white rounded-lg min-h-full w-[70%] py-9 px-4 flex justify-center">
+      <div className="flex min-h-full justify-center items-center py-9">
+        <div className="bg-white rounded-lg min-h-full w-[50%] p-10 flex justify-center">
           {paciente ? (
             <form className="w-full max-w-3xl" onSubmit={handleSubmit}>
               <PreviousPageButton
@@ -171,9 +183,10 @@ export default function EditUserPage() {
                 title="Voltar para lista de pacientes"
                 href="/pacientes"
               />
-              <h1 className="text-lg text-center font-bold">
+              <h1 className="text-2xl text-center font-bold">
                 Adicionar paciente
               </h1>
+              <div className="border-b border-gray-200 my-4 mx-12"/>
               <div className="flex flex-wrap -mx-3">
                 <div className="w-full px-3 my-3">
                   <label
@@ -210,8 +223,12 @@ export default function EditUserPage() {
                     name="cpf"
                     required
                     onChange={handleInput}
-                    value={formData.cpf}
+                    value={cpfFormated}
+                    onBlur={() => setCpfOk(validateCPF(formData.cpf))}
                   />
+                  { !cpfOk && (<span className="text-red-500 font-bold">
+                    CPF Inválido
+                  </span> )}
                 </div>
               </div>
               <div className="flex flex-wrap -mx-3">
@@ -244,7 +261,7 @@ export default function EditUserPage() {
                   <input
                     className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="grid-last-name"
-                    type="text"
+                    type="date"
                     placeholder="Data de nascimento, ex: 10/12/1988"
                     name="dataNascimento"
                     onChange={handleInput}
@@ -306,7 +323,6 @@ export default function EditUserPage() {
                         <option
                           key={tipo.id}
                           value={tipo.id}
-                          selected={paciente.tipoSanguineo === tipo.id}
                         >
                           {tipo.nome}
                         </option>
@@ -325,7 +341,7 @@ export default function EditUserPage() {
                 </div>
               </div>
 
-              <div className="w-full my-3">
+              <div className="flex justify-center my-3">
                 <button
                   type="submit"
                   className="w-48 h-12 rounded-lg bg-orange-500 text-[#fff] hover:bg-[#ED7C31] transition-colors mt-2 mx-auto font-bold"

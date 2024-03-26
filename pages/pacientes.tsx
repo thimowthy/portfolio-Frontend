@@ -17,7 +17,7 @@ export default function Pacientes({
   listPacientes?: Paciente[];
 }) {
   const [pacientes, setPacientes] = useState(listPacientes || []);
-  const [pacientesFiltrados, setPacientesFiltrados] = useState<Paciente[]>();
+  const [pacientesFiltrados, setPacientesFiltrados] = useState<Paciente[]>([]);
 
   const loadPacientes = async () => {
     setPacientes([]);
@@ -47,7 +47,7 @@ export default function Pacientes({
   useEffect(() => {
     loadPacientes();
   }, []);
-
+  
   const handleFilterPacientes = (busca: string) => {
     if (busca !== "") {
       let filtrados;
@@ -121,7 +121,7 @@ export default function Pacientes({
                     onChange={(e) => handleFilterPacientes(e.target.value)}
                   />
                 </div>
-                {!pacientesFiltrados || pacientesFiltrados?.length <= 0 ? (
+                {!pacientesFiltrados || (pacientesFiltrados?.length <= 0) ? (
                   <RowLoading />
                 ) : (
                   <table className="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -148,7 +148,7 @@ export default function Pacientes({
                     </thead>
                     <tbody>
                       {pacientesFiltrados.map(
-                        (paciente: Paciente, index: number) => (
+                        (paciente: Paciente, _: number) => (
                           <>
                             <tr
                               key={paciente.id}
