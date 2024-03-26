@@ -39,7 +39,11 @@ export default function FormUsuario({
     setSenhaOK(confirmar === senha);
   }, [confirmar, senha]);
 
-  
+
+  const removeMask = (str: string) => {
+    return str.replace(/[-.]/g, "");
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     if (senhaOk) {
       event.preventDefault();
@@ -50,7 +54,7 @@ export default function FormUsuario({
           nome,
           senha,
           login: userName,
-          cpf,
+          cpf: removeMask(cpf),
           profissao: cargo.valor,
           certificado,
         };
@@ -73,6 +77,11 @@ export default function FormUsuario({
             //setError(true);
           }
         }
+        setNome("");
+        setSenha("");
+        setUserName("");
+        setCertificado("");
+
       } catch (error) {
         console.error(error);
         alert("Erro ao criar usuário");
@@ -153,9 +162,9 @@ export default function FormUsuario({
                 onBlur={() => setCpfOk(validateCPF(cpf))}
                 required
               />
-              { !cpfOk && (<span className="text-red-500 font-bold">
+              {!cpfOk && (<span className="text-red-500 font-bold">
                 CPF Inválido
-              </span> )}
+              </span>)}
             </div>
           </div>
           <div className="flex flex-col w-full mb-2 gap-y-1 rounded">

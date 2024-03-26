@@ -44,7 +44,10 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
           metodo: "PUT",
           rota: `/Protocolo/AtualizaProtocolo/${protocoloDB.id}`,
           cabecalho: { "Content-Type": "application/json" },
-          body: JSON.stringify(JSON.stringify(protocolo)),
+          body: {
+            nome: protocolo.nome,
+            descricao: JSON.stringify(protocolo)
+          }
         });
         setSendToast(true);
         Router.push("/menu");
@@ -57,7 +60,10 @@ const ProtocolFormContent: React.FC<ProtocolFormContentProps> = ({
           metodo: "POST",
           rota: "/Protocolo/CadastrarProtocolo",
           cabecalho: { "Content-Type": "application/json" },
-          body: JSON.stringify(JSON.stringify(protocolo)),
+          body: {
+            nome: protocolo.nome,
+            descricao: JSON.stringify(protocolo)
+          },
         });
         setSendToast(true);
         Router.push("/menu");

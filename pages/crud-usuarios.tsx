@@ -37,6 +37,7 @@ const CrudUsuario = () => {
     //{ nome: "Odontólogo", valor: "odontologo", codigo: 21 },
     { nome: "Farmacêutico", valor: "farmaceutico", codigo: 38 },
     { nome: "Laboratório", valor: "laboratorista", codigo: 55 },
+    { nome: "Administrador", valor: "administrador", codigo: 11 },
     //{ nome: "Nutricionista", valor: "nutricionista", codigo: 12 }
   ];
 
