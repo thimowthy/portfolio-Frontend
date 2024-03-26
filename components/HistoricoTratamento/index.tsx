@@ -40,7 +40,7 @@ const HistoricoTratamentoList: React.FC<HistoricoTratamentoProps> = ({
               internacaoId,
             metodo: "GET",
           });
-          console.log("Historico:", response);
+          //console.log("Historico:", response);
           setHistorico(response);
         } catch (error) {
           console.error("Erro ao buscar histórico:", error);

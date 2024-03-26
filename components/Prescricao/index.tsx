@@ -181,8 +181,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
     setLoading(true);
 
     const moment = require("moment-timezone");
-    const dataHoraAtual = moment.tz("America/Sao_Paulo").format();
-
+    const dataHoraAtual = moment.tz("America/Sao_Paulo").toISOString();
     const meds = formatarMedicamentos();
     try {
       const response = await fetcher({
