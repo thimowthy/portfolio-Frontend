@@ -20,7 +20,7 @@ interface PrescricaoFormProps {
 }
 
 const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
-  const [prescricao, setPrescricao] = useState<Prescricao>();
+  const [prescricao, setPrescricao] = useState<Prescricao>({ cuidados: [], medicacoes: [] });
 
   const [internamento, setInternamento] = useState<Internacao>();
 
@@ -163,17 +163,17 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
   };
 
   const formatarMedicamentos = () => {
-    if (prescricao?.medicacoes) {
-      const medicamentosFormatados = prescricao.medicacoes?.map((item) => {
+    if (prescricao.medicacoes) {
+      const medicamentosFormatados = prescricao.medicacoes.map((item) => {
         return {
           intervaloTempo: IntervaloTempoMapping[item.intervaloTempo],
           unidadeDosagem: dosagemNumericaMapping[item.unidadeDosagem],
           intervalo: item.intervalo,
           dose: item.dose,
-          idMedicamento: item.medicamento ? item.medicamento.id : 0,
+          idMedicamento: item!.medicamento,
         };
       });
-      return medicamentosFormatados;
+      return medicamentosFormatados || [];
     }
   };
 
@@ -182,28 +182,34 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
 
     const moment = require("moment-timezone");
     const dataHoraAtual = moment.tz("America/Sao_Paulo").toISOString();
-    const meds = formatarMedicamentos();
-    try {
-      const response = await fetcher({
-        rota: "/Prescricao/CadastrarPrescricao",
-        metodo: "POST",
-        body: {
-          dataSolicitacao: dataHoraAtual,
-          itensCuidado: prescricao?.cuidados,
-          itensMedicamento: meds,
-          urgente: true,
-          idInternamento: internamento?.id,
-        },
-      });
-      setCuidados([]);
-      setMedicacoes([]);
-      setPrescricao({
-        medicacoes: medicacoes,
-        cuidados: cuidados,
-      });
-    } catch (error) {
-      console.error(error);
+    const meds = formatarMedicamentos() || [];
+
+    console.log(prescricao.cuidados.length > 0 || meds.length > 0);
+
+    if (prescricao.cuidados.length > 0 || meds.length > 0) {
+      try {
+        const response = await fetcher({
+          rota: "/Prescricao/CadastrarPrescricao",
+          metodo: "POST",
+          body: {
+            dataSolicitacao: dataHoraAtual,
+            itensCuidado: prescricao?.cuidados,
+            itensMedicamento: meds,
+            urgente: true,
+            idInternamento: internamento?.id,
+          },
+        });
+        setCuidados([]);
+        setMedicacoes([]);
+        setPrescricao({
+          medicacoes: medicacoes,
+          cuidados: cuidados,
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
+
     const filePath = `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Prescricao/GetPrescricaoMedica?pacienteId=${id}`;
     fetch(filePath)
       .then((res) => {
