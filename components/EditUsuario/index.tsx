@@ -143,7 +143,7 @@ export default function EditUsuario({
               </div>
               {cargoAtual?.toUpperCase() !== "ADMINISTRADOR" && (
                 <div className="flex flex-col p-2 rounded-lg w-full">
-                  <label htmlFor="cagos">Selecione o cargo desejado</label>
+                  <label htmlFor="cagos">Cargo</label>
                   <select
                     name="cargos"
                     id="cargos"
@@ -178,24 +178,6 @@ export default function EditUsuario({
                   onChange={(e) => setCertificado(e.target.value)}
                 />
               </div>
-              {/* <div className="flex flex-col p-2 rounded-lg w-full">
-                <label htmlFor="cpf" className="ml-1">
-                  Senha
-                </label>
-                <input
-                  type="password"
-                  name="senha"
-                  id="senha"
-                  placeholder="Senha"
-                  className={"bg-gray-200 p-2 border-2 outline-none rounded-lg "}
-                  value={"ttt"}
-                  minLength={11}
-                  maxLength={14}
-                  onChange={(e) => setCpf(e.target.value)}
-                  onBlur={() => setCpfOk(validateCPF(cpf))}
-                  required
-                />
-              </div> */}
             </div>
           </div>
           <div className="flex w-full items-center mt-3">
