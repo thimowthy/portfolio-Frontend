@@ -39,19 +39,23 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
   const [idMedico, setIdMedico] = useState<number>();
   const [cpfMedicoFormated, setCpfMedicoFormated] = useState("");
   const [cpfMedico, setCpfMedico] = useState(exame?.cpfSolicitante || "");
-  const [solicitadoPor, setSolicitadoPor] = useState(exame?.nomeSolicitante || "");
+  const [solicitadoPor, setSolicitadoPor] = useState(
+    exame?.nomeSolicitante || ""
+  );
 
   const [dataSolicitacao, setDataSolicitacao] = useState("");
   const [dataSolicitacaoFormated, setDataSolicitacaoFormated] = useState("");
   const [dataResultado, setDataResultado] = useState(currentDate);
   const [dataResultadoFormated, setDataResultadoFormated] = useState("");
   const [tipoExame, setTipoExame] = useState<TiposExame>(
-    TiposExame.HEMORAGRAMA,
+    TiposExame.HEMORAGRAMA
   );
 
   const [pacienteNaoEncontrado, setPacienteNaoEncontrado] = useState(false);
   const [medicoNaoEncontrado, setMedicoNaoEncontrado] = useState(false);
-  const [neutrofilos, setNeutrofilos] = useState<number>(exame?.neutrofilos || 0);
+  const [neutrofilos, setNeutrofilos] = useState<number>(
+    exame?.neutrofilos || 0
+  );
 
   const [idInternacao, setIdInternacao] = useState<number>();
   const [permissaoLab, setPermissaoLab] = useState<boolean>(false);
@@ -79,7 +83,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
     };
     fetchPacientes();
   }, []);
-  
+
   useEffect(() => {
     const fetchMedicos = async () => {
       if (permissaoLab) {
@@ -132,18 +136,15 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
   useEffect(() => {
     if (!exame) {
       cleanUseStates();
-    }
-    else {
+    } else {
       setCpfMedico(exame.cpfSolicitante);
       setSolicitadoPor(exame.nomeSolicitante);
     }
   }, [exame]);
 
   useEffect(() => {
-    if (dataResultado)
-      setDataResultadoFormated(dataResultado);//convertDateFormat(dataResultado, "yyyy-mm-dd"));
-    if (dataSolicitacao)
-      setDataSolicitacaoFormated(dataSolicitacao);//convertDateFormat(dataSolicitacao, "yyyy-mm-dd"));
+    if (dataResultado) setDataResultadoFormated(dataResultado); //convertDateFormat(dataResultado, "yyyy-mm-dd"));
+    if (dataSolicitacao) setDataSolicitacaoFormated(dataSolicitacao); //convertDateFormat(dataSolicitacao, "yyyy-mm-dd"));
   }, [dataSolicitacao, dataResultado]);
 
   useEffect(() => {
@@ -253,7 +254,9 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
   useEffect(() => {
     if (exame) {
       fetchPacienteData();
-      setDataSolicitacao(convertDateFormat(exame.dataSolicitacao, "yyyy-mm-dd"));
+      setDataSolicitacao(
+        convertDateFormat(exame.dataSolicitacao, "yyyy-mm-dd")
+      );
       setDataResultado(convertDateFormat(exame.dataResultado, "yyyy-mm-dd"));
       setNeutrofilos(exame.neutrofilos);
     } else {
@@ -262,11 +265,10 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
   }, [exame]);
 
   const autoFillPacienteInputs = () => {
-    
     const pacienteEncontrado = pacientes.find(
-      (paciente) => paciente.numeroProntuario === numProntuario,
-    );  
-    
+      (paciente) => paciente.numeroProntuario === numProntuario
+    );
+
     const internamento = pacienteEncontrado?.internacao;
 
     if (pacienteEncontrado && internamento) {
@@ -353,7 +355,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
         </div>
         <div className="flex mb-8">
           <div className="w-full">
-            <label>Nome</label>
+            <label>Paciente</label>
             <input
               className="w-full"
               type="text"

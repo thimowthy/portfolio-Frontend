@@ -14,7 +14,6 @@ export default function FormUsuario({
   setListUsers,
   setLoading,
 }: any) {
-
   const [nome, setNome] = useState("");
   const [cpfFormated, setCpfFormated] = useState("");
   const [cpf, setCpf] = useState("");
@@ -38,7 +37,6 @@ export default function FormUsuario({
   useEffect(() => {
     setSenhaOK(confirmar === senha);
   }, [confirmar, senha]);
-
 
   const removeMask = (str: string) => {
     return str.replace(/[-.]/g, "");
@@ -65,7 +63,7 @@ export default function FormUsuario({
           const response = await fetcher({
             metodo: "POST",
             body: formData,
-            rota: "/Usuario/Create"
+            rota: "/Usuario/Create",
           });
 
           if (response.id) {
@@ -81,7 +79,6 @@ export default function FormUsuario({
         setSenha("");
         setUserName("");
         setCertificado("");
-
       } catch (error) {
         console.error(error);
         alert("Erro ao criar usuário");
@@ -115,14 +112,14 @@ export default function FormUsuario({
         <div className="flexbox px-8 py-4 gap-4">
           <div className="flex flex-col gap-y-1 mb-2 rounded-lg">
             <label htmlFor="nome" className="ml-1">
-              Nome
+              Nome Completo
             </label>
             <input
               className="bg-gray-200 p-2 outline-none rounded w-full"
               type="text"
               name="nome"
               id="nome"
-              placeholder="Nome"
+              placeholder="Nome Completo"
               value={nome}
               minLength={6}
               onChange={(e) => setNome(e.target.value)}
@@ -154,7 +151,9 @@ export default function FormUsuario({
                 name="cpf"
                 id="cpf"
                 placeholder="CPF"
-                className={`bg-gray-200 p-2 border-2 outline-none rounded ${cpfOk === false ? "border-red-500 " : ""}`}
+                className={`bg-gray-200 p-2 border-2 outline-none rounded ${
+                  cpfOk === false ? "border-red-500 " : ""
+                }`}
                 value={cpfFormated}
                 minLength={11}
                 maxLength={14}
@@ -162,9 +161,9 @@ export default function FormUsuario({
                 onBlur={() => setCpfOk(validateCPF(cpf))}
                 required
               />
-              {!cpfOk && (<span className="text-red-500 font-bold">
-                CPF Inválido
-              </span>)}
+              {!cpfOk && (
+                <span className="text-red-500 font-bold">CPF Inválido</span>
+              )}
             </div>
           </div>
           <div className="flex flex-col w-full mb-2 gap-y-1 rounded">
@@ -207,7 +206,9 @@ export default function FormUsuario({
               name="senha"
               id="confirmar"
               placeholder="Senha"
-              className={`bg-gray-200 p-2 border-2 rounded ${senhaOk === false ? "border-red-500 " : ""}`}
+              className={`bg-gray-200 p-2 border-2 rounded ${
+                senhaOk === false ? "border-red-500 " : ""
+              }`}
               value={confirmar}
               onChange={(e) => setConfirmar(e.target.value)}
               required

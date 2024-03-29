@@ -87,14 +87,14 @@ export default function EditUsuario({
             <div className="flex items-center w-full">
               <div className="flex flex-col p-2 rounded-lg w-[50%]">
                 <label htmlFor="nome" className="ml-1">
-                  Nome
+                  Nome Completo
                 </label>
                 <input
                   className="bg-gray-200 p-2 outline-none rounded-lg w-full"
                   type="text"
                   name="nome"
                   id="nome"
-                  placeholder="Nome"
+                  placeholder="Nome Completo"
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
                   required
@@ -127,8 +127,9 @@ export default function EditUsuario({
                   name="cpf"
                   id="cpf"
                   placeholder="CPF"
-                  className={`bg-gray-200 p-2 border-2 outline-none rounded-lg ${cpfOk === false ? "border-red-500 " : ""
-                    }`}
+                  className={`bg-gray-200 p-2 border-2 outline-none rounded-lg ${
+                    cpfOk === false ? "border-red-500 " : ""
+                  }`}
                   value={cpfFormated}
                   minLength={11}
                   maxLength={14}
