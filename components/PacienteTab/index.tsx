@@ -65,13 +65,13 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
       return Swal.fire(
         "Sucesso!",
         "Temperatura registrada com sucesso!",
-        "success",
+        "success"
       );
     } catch (error) {
       return Swal.fire(
         "Erro!",
         "Aconteceu algum erro ao tentar atualizar a temperatura",
-        "error",
+        "error"
       );
     }
   };
@@ -180,7 +180,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                 <p className="my-1">
                   Data internação:{" "}
                   {moment(paciente?.internacao?.dataAdmissao).format(
-                    "DD/MM/YYYY h:mm:ss",
+                    "DD/MM/YYYY h:mm:ss"
                   )}
                 </p>
                 {/* <p>Unidade: {paciente.unidade}</p> */}
@@ -203,7 +203,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                               {comorbidade?.nome}
                             </p>
                           );
-                        },
+                        }
                       )}
                     </div>
                   )}
@@ -249,7 +249,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                   className="text-xl flex"
                   title=">38,3°C medida única, OU >38°C por mais de 1h"
                 >
-                  Temperatura (°C){" "}
+                  Temperatura (°C)
                 </h1>
                 <div className="flex mt-2 items-center">
                   <input
@@ -257,7 +257,13 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                     maxLength={3}
                     value={temperatura}
                     onChange={(e) => {
-                      setTemperatura(parseFloat(e.target.value));
+                      // Validate input before setting state
+                      const newValue = parseFloat(
+                        e.target.value.replace(/[^0-9.]/g, "")
+                      );
+                      if (newValue >= 30 && newValue <= 45) {
+                        setTemperatura(newValue);
+                      }
                     }}
                     type="number"
                     step={0.1}
@@ -272,6 +278,9 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                   <button
                     onClick={() => submitTemperatura(paciente.id)}
                     className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 rounded px-4"
+                    disabled={
+                      isNaN(temperatura) || temperatura < 30 || temperatura > 45
+                    }
                   >
                     Enviar
                   </button>
@@ -288,7 +297,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                       key={`tab-${paciente.id}-${item.id}`}
                       href={`tab-${paciente.id}-${item.id}`}
                       liClassName={`basis-1/5 ${tabColorMap.get(
-                        index,
+                        index
                       )} py-2 pl-2 ${
                         index === 0 ? "rounded-bl-full rounded-tl-full" : ""
                       } ${
@@ -298,7 +307,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                     >
                       <p className="text-white">
                         {moment(item?.dataVerificacao).format(
-                          "DD/MM/YYYY h:mm:ss",
+                          "DD/MM/YYYY h:mm:ss"
                         )}
                       </p>
                     </TabItem>
@@ -318,7 +327,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                           <p>
                             Data de verificação:{" "}
                             {moment(
-                              item?.situacaoDiagnostico?.dataVerificacao,
+                              item?.situacaoDiagnostico?.dataVerificacao
                             ).format("DD/MM/YYYY h:mm:ss")}
                           </p>
                           <p>
@@ -337,14 +346,10 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                               <div className="flex justify-center">
                                 <div
                                   className={selectLabelNeutrofilos(
-                                    item?.situacaoDiagnostico?.neutrofilos || 0,
+                                    item?.situacaoDiagnostico?.neutrofilos || 0
                                   )}
                                 ></div>
                               </div>
-
-                              <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
-                                Acessar +exames
-                              </button>
                             </div>
                           </div>
                         </div>
