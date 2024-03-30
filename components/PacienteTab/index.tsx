@@ -15,6 +15,7 @@ import { setColor } from "@/utils/colorTransition";
 import fetcher from "@/api/fetcher";
 import Swal from "sweetalert2";
 import { getUserCargo } from "@/utils/getCargo";
+import { set } from "date-fns";
 
 export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   const selectLabelNeutrofilos = (quantidadeNeutrofilos: number) => {
@@ -37,6 +38,8 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   const [sucessDischarge, setSucessDischarge] = useState(false);
   const [temperatura, setTemperatura] = useState<number>(36.5);
   const [pacienteIcon, setPacienteIcon] = useState<any>();
+  const [hasTemperaturaError, setTemperaturaError] = useState<boolean>(false);
+
   /**
    * Seta alta no paciente
    * @param {Number} pacienteId - Id do paciente
@@ -54,6 +57,14 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   };
 
   const submitTemperatura = async (pacienteId: number) => {
+    if (hasTemperaturaError) {
+      return Swal.fire(
+        "Erro!",
+        "A temperatura deve ser um valor entre 30 e 45 graus.",
+        "error"
+      );
+    }
+
     try {
       await fetcher({
         rota: `/Internacao/CadastrarTemperatura/${pacienteId}`,
@@ -65,13 +76,13 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
       return Swal.fire(
         "Sucesso!",
         "Temperatura registrada com sucesso!",
-        "success",
+        "success"
       );
     } catch (error) {
       return Swal.fire(
         "Erro!",
         "Aconteceu algum erro ao tentar atualizar a temperatura",
-        "error",
+        "error"
       );
     }
   };
@@ -180,10 +191,9 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                 <p className="my-1">
                   Data internação:{" "}
                   {moment(paciente?.internacao?.dataAdmissao).format(
-                    "DD/MM/YYYY h:mm:ss",
+                    "DD/MM/YYYY h:mm:ss"
                   )}
                 </p>
-                {/* <p>Unidade: {paciente.unidade}</p> */}
               </div>
             </div>
 
@@ -203,7 +213,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                               {comorbidade?.nome}
                             </p>
                           );
-                        },
+                        }
                       )}
                     </div>
                   )}
@@ -217,23 +227,6 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                     );
                   })}
                 </div>
-                {/* <div className="py-1">
-            <p className="text-lg pl-2">
-              Última prescrição: {paciente.prescricao?.data}
-            </p>
-            {paciente.prescricao?.medicamentos.map(
-              (prescricao: any) => (
-                <p
-                  key={prescricao.numeroProntuario}
-                  className="text-sm pl-4"
-                >
-                  {prescricao.medicacao +
-                    prescricao.dosagem +
-                    prescricao.periodo}
-                </p>
-              ),
-            )}
-          </div> */}
                 <div className="flex justify-end">
                   <a
                     href="#"
@@ -249,7 +242,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                   className="text-xl flex"
                   title=">38,3°C medida única, OU >38°C por mais de 1h"
                 >
-                  Temperatura (°C){" "}
+                  Temperatura (°C)
                 </h1>
                 <div className="flex mt-2 items-center">
                   <input
@@ -258,6 +251,11 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                     value={temperatura}
                     onChange={(e) => {
                       setTemperatura(parseFloat(e.target.value));
+                      setTemperaturaError(
+                        isNaN(parseFloat(e.target.value)) ||
+                          parseFloat(e.target.value) < 30 ||
+                          parseFloat(e.target.value) > 45
+                      );
                     }}
                     type="number"
                     step={0.1}
@@ -272,15 +270,21 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                   <button
                     onClick={() => submitTemperatura(paciente.id)}
                     className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 rounded px-4"
+                    disabled={
+                      isNaN(temperatura) || temperatura < 30 || temperatura > 45
+                    }
                   >
                     Enviar
                   </button>
                 </div>
+                {hasTemperaturaError && (
+                  <p className="text-red-500 text-sm mt-2">
+                    A temperatura deve ser um valor entre 30 e 45 graus.
+                  </p>
+                )}
               </div>
               <div className="pt-2">
                 <h1 className="text-2xl">Progresso do tratamento</h1>
-
-                {/* TODO: for (paciente.situacoesPaciente as situacao) */}
 
                 <TabList className="flex flex-row rounded-full bg-white mt-4">
                   {situacoesPacienteCopy?.map((item: any, index: any) => (
@@ -288,7 +292,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                       key={`tab-${paciente.id}-${item.id}`}
                       href={`tab-${paciente.id}-${item.id}`}
                       liClassName={`basis-1/5 ${tabColorMap.get(
-                        index,
+                        index
                       )} py-2 pl-2 ${
                         index === 0 ? "rounded-bl-full rounded-tl-full" : ""
                       } ${
@@ -298,7 +302,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                     >
                       <p className="text-white">
                         {moment(item?.dataVerificacao).format(
-                          "DD/MM/YYYY h:mm:ss",
+                          "DD/MM/YYYY h:mm:ss"
                         )}
                       </p>
                     </TabItem>
@@ -318,7 +322,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                           <p>
                             Data de verificação:{" "}
                             {moment(
-                              item?.situacaoDiagnostico?.dataVerificacao,
+                              item?.situacaoDiagnostico?.dataVerificacao
                             ).format("DD/MM/YYYY h:mm:ss")}
                           </p>
                           <p>
@@ -337,14 +341,10 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                               <div className="flex justify-center">
                                 <div
                                   className={selectLabelNeutrofilos(
-                                    item?.situacaoDiagnostico?.neutrofilos || 0,
+                                    item?.situacaoDiagnostico?.neutrofilos || 0
                                   )}
                                 ></div>
                               </div>
-
-                              <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
-                                Acessar +exames
-                              </button>
                             </div>
                           </div>
                         </div>

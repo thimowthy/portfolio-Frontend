@@ -52,7 +52,7 @@ export default function ListUsuarios({
           ) : (
             <>
               <section className="bg-[#dddddd] w-full rounded-lg flex justify-around items-center px-7 py-3">
-                <p style={{ width: "20%" }}>Nome</p>
+                <p style={{ width: "20%" }}>Nome Completo</p>
                 <p style={{ width: "15%" }}>Nome de usuário</p>
                 <p style={{ width: "15%" }}>CPF</p>
                 <p style={{ width: "15%" }}>Cargo</p>

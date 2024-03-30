@@ -6,9 +6,6 @@ import SeoConfig from "@/components/SeoConfig";
 import Loader from "@/components/Loader";
 import fetcher from "@/api/fetcher";
 
-const SelectCargos = dynamic(() => import("../components/SelectUsuario"), {
-  ssr: false,
-});
 const FormUsuario = dynamic(() => import("../components/FormUsuario"), {
   ssr: false,
 });
@@ -86,15 +83,8 @@ const CrudUsuario = () => {
         />
       )}
       {createUser && (
-        <SelectCargos
-          cargoSelecionado={selectedRole}
-          cargos={cargos}
-          setSelectedRole={setSelectedRole}
-        />
-      )}
-      {createUser && (
         <FormUsuario
-          cargo={selectedRole}
+          cargos={cargos}
           setListUsers={setListUsers}
           setCreateUser={setCreateUser}
           setLoading={setLoading}
