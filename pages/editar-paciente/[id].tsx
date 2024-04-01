@@ -55,7 +55,7 @@ export default function EditUserPage() {
   useEffect(() => {
     setCpfFormated(formatCPF(formData.cpf));
   }, [formData.cpf]);
-  
+
   const handleInput = (e: any) => {
     const fieldName = e.target.name;
     const fieldValue = e.target.value;
@@ -88,9 +88,7 @@ export default function EditUserPage() {
       setLoading(true);
       try {
         const result = await fetcher({
-          rota:
-            "/Paciente/EditPaciente?pacienteId=" +
-            id,
+          rota: "/Paciente/EditPaciente?pacienteId=" + id,
           metodo: "PUT",
           body: formDataClone,
         });
@@ -186,20 +184,20 @@ export default function EditUserPage() {
               <h1 className="text-2xl text-center font-bold">
                 Adicionar paciente
               </h1>
-              <div className="border-b border-gray-200 my-4 mx-12"/>
+              <div className="border-b border-gray-200 my-4 mx-12" />
               <div className="flex flex-wrap -mx-3">
                 <div className="w-full px-3 my-3">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                     htmlFor="grid-last-name"
                   >
-                    Nome
+                    Nome Completo
                   </label>
                   <input
                     className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="grid-last-name"
                     type="text"
-                    placeholder="Nome"
+                    placeholder="Nome Completo"
                     name="nome"
                     required
                     onChange={handleInput}
@@ -226,9 +224,9 @@ export default function EditUserPage() {
                     value={cpfFormated}
                     onBlur={() => setCpfOk(validateCPF(formData.cpf))}
                   />
-                  { !cpfOk && (<span className="text-red-500 font-bold">
-                    CPF Inválido
-                  </span> )}
+                  {!cpfOk && (
+                    <span className="text-red-500 font-bold">CPF Inválido</span>
+                  )}
                 </div>
               </div>
               <div className="flex flex-wrap -mx-3">
@@ -320,10 +318,7 @@ export default function EditUserPage() {
                       value={formData.tipoSanguineo}
                     >
                       {TiposSanguineos.map((tipo) => (
-                        <option
-                          key={tipo.id}
-                          value={tipo.id}
-                        >
+                        <option key={tipo.id} value={tipo.id}>
                           {tipo.nome}
                         </option>
                       ))}

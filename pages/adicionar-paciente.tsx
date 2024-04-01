@@ -70,7 +70,7 @@ const AdicionarPaciente = () => {
           cpf: paciente.cpf,
           prontuario: paciente.numeroProntuario,
           cartaoSus: paciente.cns,
-          leito: formData.leito
+          leito: formData.leito,
         },
       });
     }
@@ -106,7 +106,7 @@ const AdicionarPaciente = () => {
 
   const autoFillPacienteInputs = () => {
     const pacienteEncontrado = pacientesCadastrados.find(
-      (paciente) => paciente.numeroProntuario === formData.numeroProntuario,
+      (paciente) => paciente.numeroProntuario === formData.numeroProntuario
     );
 
     if (pacienteEncontrado) {
@@ -357,9 +357,9 @@ const AdicionarPaciente = () => {
                   onBlur={() => setCpfOk(validateCPF(formData.cpf))}
                   disabled={Boolean(paciente)}
                 />
-                {!cpfOk && (<span className="text-red-500 font-bold">
-                  CPF Inválido
-                </span>)}
+                {!cpfOk && (
+                  <span className="text-red-500 font-bold">CPF Inválido</span>
+                )}
               </div>
             </div>
             <div className="flex flex-wrap -mx-3">
@@ -368,13 +368,13 @@ const AdicionarPaciente = () => {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-last-name"
                 >
-                  Nome *
+                  Nome Completo *
                 </label>
                 <input
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="grid-last-name"
                   type="text"
-                  placeholder="Nome"
+                  placeholder="Nome Completo"
                   name="nome"
                   required
                   onChange={handleInput}
@@ -467,7 +467,7 @@ const AdicionarPaciente = () => {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-last-name"
                 >
-                  Leito
+                  Leito {!paciente ? "" : "*"}
                 </label>
                 <input
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
