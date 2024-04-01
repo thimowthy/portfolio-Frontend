@@ -15,6 +15,7 @@ import { setColor } from "@/utils/colorTransition";
 import fetcher from "@/api/fetcher";
 import Swal from "sweetalert2";
 import { getUserCargo } from "@/utils/getCargo";
+import { formatCPF } from "@/utils/formatCPF";
 
 export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   const selectLabelNeutrofilos = (quantidadeNeutrofilos: number) => {
@@ -163,7 +164,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
             </div>
             <div className="flex gap-x-4 pt-4 pb-2">
               <div>
-                <p className="my-1">CPF: {paciente.cpf}</p>
+                <p className="my-1">CPF: {formatCPF(paciente.cpf || "")}</p>
                 <p className="my-1">
                   Data de nascimento:{" "}
                   {paciente?.dataNascimento

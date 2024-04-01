@@ -216,12 +216,12 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
               cabecalho: { "Content-Type": "application/json" },
               body: JSON.stringify(hemogramaData),
             });
+            window.location.reload();
           } catch (error) {
             console.error("Error occurred during request:", error);
           }
         }
       }
-      window.location.reload();
     }
   };
 
@@ -287,9 +287,14 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
       cleanPacienteUseStates();
     }
   };
+  
+  const removeMask = (str: string) => {
+    return str.replace(/[-.]/g, "");
+  };
 
   const autoFillMedicoInputs = () => {
     const medicoEncontrado = medicos.find((medico) => medico.cpf === cpfMedico);
+
     if (medicoEncontrado) {
       setMedicoNaoEncontrado(false);
       setIdMedico(medicoEncontrado.id);
@@ -374,10 +379,9 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
             className="w-40"
             type="text"
             value={cpfMedicoFormated}
-            maxLength={11}
             required
             onChange={(e) => {
-              setCpfMedico(e.target.value);
+              setCpfMedico(removeMask(e.target.value));
             }}
             onBlur={autoFillMedicoInputs}
             disabled={Boolean(exame)}
