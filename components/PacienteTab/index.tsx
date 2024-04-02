@@ -15,6 +15,8 @@ import { setColor } from "@/utils/colorTransition";
 import fetcher from "@/api/fetcher";
 import Swal from "sweetalert2";
 import { getUserCargo } from "@/utils/getCargo";
+import { set } from "date-fns";
+import { formatCPF } from "@/utils/formatCPF";
 
 export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   const selectLabelNeutrofilos = (quantidadeNeutrofilos: number) => {
@@ -37,6 +39,8 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   const [sucessDischarge, setSucessDischarge] = useState(false);
   const [temperatura, setTemperatura] = useState<number>(36.5);
   const [pacienteIcon, setPacienteIcon] = useState<any>();
+  const [hasTemperaturaError, setTemperaturaError] = useState<boolean>(false);
+
   /**
    * Seta alta no paciente
    * @param {Number} pacienteId - Id do paciente
@@ -54,6 +58,14 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   };
 
   const submitTemperatura = async (pacienteId: number) => {
+    if (hasTemperaturaError) {
+      return Swal.fire(
+        "Erro!",
+        "A temperatura deve ser um valor entre 30 e 45 graus.",
+        "error",
+      );
+    }
+
     try {
       await fetcher({
         rota: `/Internacao/CadastrarTemperatura/${pacienteId}`,
@@ -76,6 +88,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
     }
   };
   const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
+  const situacoesOrdenadas = [...situacoesPaciente];
   let situacoesPacienteCopy = [...situacoesPaciente];
   const situacaoAtual = situacoesPacienteCopy?.pop();
   const situacaoPaciente = paciente?.internacao?.situacoesPaciente || [];
@@ -89,7 +102,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
     const cargoFromStorage = getUserCargo();
     setPermissaoMedico(cargoFromStorage === "MEDICO");
     setPermissaoEnfermeiro(cargoFromStorage === "ENFERMEIRO");
-  }, []);
+  }, [paciente]);
 
   return (
     <>
@@ -163,7 +176,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
             </div>
             <div className="flex gap-x-4 pt-4 pb-2">
               <div>
-                <p className="my-1">CPF: {paciente.cpf}</p>
+                <p className="my-1">CPF: {formatCPF(paciente.cpf || "")}</p>
                 <p className="my-1">
                   Data de nascimento:{" "}
                   {paciente?.dataNascimento
@@ -180,10 +193,9 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                 <p className="my-1">
                   Data internação:{" "}
                   {moment(paciente?.internacao?.dataAdmissao).format(
-                    "DD/MM/YYYY h:mm:ss",
+                    "DD/MM/YYYY HH:mm:ss",
                   )}
                 </p>
-                {/* <p>Unidade: {paciente.unidade}</p> */}
               </div>
             </div>
 
@@ -217,23 +229,6 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                     );
                   })}
                 </div>
-                {/* <div className="py-1">
-            <p className="text-lg pl-2">
-              Última prescrição: {paciente.prescricao?.data}
-            </p>
-            {paciente.prescricao?.medicamentos.map(
-              (prescricao: any) => (
-                <p
-                  key={prescricao.numeroProntuario}
-                  className="text-sm pl-4"
-                >
-                  {prescricao.medicacao +
-                    prescricao.dosagem +
-                    prescricao.periodo}
-                </p>
-              ),
-            )}
-          </div> */}
                 <div className="flex justify-end">
                   <a
                     href="#"
@@ -249,7 +244,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                   className="text-xl flex"
                   title=">38,3°C medida única, OU >38°C por mais de 1h"
                 >
-                  Temperatura (°C){" "}
+                  Temperatura (°C)
                 </h1>
                 <div className="flex mt-2 items-center">
                   <input
@@ -258,6 +253,11 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                     value={temperatura}
                     onChange={(e) => {
                       setTemperatura(parseFloat(e.target.value));
+                      setTemperaturaError(
+                        isNaN(parseFloat(e.target.value)) ||
+                          parseFloat(e.target.value) < 30 ||
+                          parseFloat(e.target.value) > 45,
+                      );
                     }}
                     type="number"
                     step={0.1}
@@ -272,18 +272,24 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                   <button
                     onClick={() => submitTemperatura(paciente.id)}
                     className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 rounded px-4"
+                    disabled={
+                      isNaN(temperatura) || temperatura < 30 || temperatura > 45
+                    }
                   >
                     Enviar
                   </button>
                 </div>
+                {hasTemperaturaError && (
+                  <p className="text-red-500 text-sm mt-2">
+                    A temperatura deve ser um valor entre 30 e 45 graus.
+                  </p>
+                )}
               </div>
               <div className="pt-2">
                 <h1 className="text-2xl">Progresso do tratamento</h1>
 
-                {/* TODO: for (paciente.situacoesPaciente as situacao) */}
-
                 <TabList className="flex flex-row rounded-full bg-white mt-4">
-                  {situacoesPacienteCopy?.map((item: any, index: any) => (
+                  {situacoesOrdenadas?.map((item: any, index: any) => (
                     <TabItem
                       key={`tab-${paciente.id}-${item.id}`}
                       href={`tab-${paciente.id}-${item.id}`}
@@ -294,24 +300,24 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                       } ${
                         index === 4 ? "rounded-br-full rounded-tr-full" : ""
                       }`}
-                      selected={index === situacoesPacienteCopy.length - 1}
+                      selected={
+                        index === situacoesOrdenadas.length - 1 || false
+                      }
                     >
                       <p className="text-white">
                         {moment(item?.dataVerificacao).format(
-                          "DD/MM/YYYY h:mm:ss",
+                          "DD/MM/YYYY HH:mm:ss",
                         )}
                       </p>
                     </TabItem>
                   ))}
                 </TabList>
-                {situacoesPacienteCopy?.map((item: any, index: any) => {
+                {situacoesOrdenadas?.map((item: any, index: any) => {
                   return (
                     <TabContents
                       key={`tab-${paciente.id}-${item.id}`}
                       tabId={`tab-${paciente.id}-${item.id}`}
-                      active={
-                        index === situacoesPacienteCopy.length - 1 || false
-                      }
+                      active={index === situacoesOrdenadas.length - 1 || false}
                     >
                       <div className="pt-2 flex flex-row gap-x-2">
                         <div className="basis-1/2">
@@ -319,7 +325,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                             Data de verificação:{" "}
                             {moment(
                               item?.situacaoDiagnostico?.dataVerificacao,
-                            ).format("DD/MM/YYYY h:mm:ss")}
+                            ).format("DD/MM/YYYY HH:mm:ss")}
                           </p>
                           <p>
                             Temperatura:{" "}
@@ -341,10 +347,6 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                                   )}
                                 ></div>
                               </div>
-
-                              <button className="bg-white hover:bg-grery-700 text-grey font-bold py-2 px-4 rounded mt-3 drop-shadow-md">
-                                Acessar +exames
-                              </button>
                             </div>
                           </div>
                         </div>

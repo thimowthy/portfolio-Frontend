@@ -10,19 +10,13 @@ interface ExameListProps {
 }
 const ExamesList: React.FC<ExameListProps> = ({ id, setExame }) => {
   const [exames, setExames] = useState<Hemograma[]>([]);
-  
-  useEffect(() => {
-    console.log(exames);
-  }, [exames]);
 
   useEffect(() => {
     const fetchExames = async () => {
       if (id) {
         try {
           const response = await fetcher({
-            rota:
-              "/Exame/GetHemogramasFromPaciente?pacienteId=" +
-              id,
+            rota: "/Exame/GetHemogramasFromPaciente?pacienteId=" + id,
             metodo: "GET",
           });
           setExames(response);
