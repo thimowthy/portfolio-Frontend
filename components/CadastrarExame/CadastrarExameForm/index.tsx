@@ -39,7 +39,9 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
   const [idMedico, setIdMedico] = useState<number>();
   const [cpfMedicoFormated, setCpfMedicoFormated] = useState("");
   const [cpfMedico, setCpfMedico] = useState(exame?.cpfSolicitante || "");
-  const [solicitadoPor, setSolicitadoPor] = useState(exame?.nomeSolicitante || "");
+  const [solicitadoPor, setSolicitadoPor] = useState(
+    exame?.nomeSolicitante || "",
+  );
 
   const [dataSolicitacao, setDataSolicitacao] = useState("");
   const [dataSolicitacaoFormated, setDataSolicitacaoFormated] = useState("");
@@ -51,7 +53,9 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
 
   const [pacienteNaoEncontrado, setPacienteNaoEncontrado] = useState(false);
   const [medicoNaoEncontrado, setMedicoNaoEncontrado] = useState(false);
-  const [neutrofilos, setNeutrofilos] = useState<number>(exame?.neutrofilos || 0);
+  const [neutrofilos, setNeutrofilos] = useState<number>(
+    exame?.neutrofilos || 0,
+  );
 
   const [idInternacao, setIdInternacao] = useState<number>();
   const [permissaoLab, setPermissaoLab] = useState<boolean>(false);
@@ -79,7 +83,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
     };
     fetchPacientes();
   }, []);
-  
+
   useEffect(() => {
     const fetchMedicos = async () => {
       if (permissaoLab) {
@@ -132,18 +136,15 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
   useEffect(() => {
     if (!exame) {
       cleanUseStates();
-    }
-    else {
+    } else {
       setCpfMedico(exame.cpfSolicitante);
       setSolicitadoPor(exame.nomeSolicitante);
     }
   }, [exame]);
 
   useEffect(() => {
-    if (dataResultado)
-      setDataResultadoFormated(dataResultado);//convertDateFormat(dataResultado, "yyyy-mm-dd"));
-    if (dataSolicitacao)
-      setDataSolicitacaoFormated(dataSolicitacao);//convertDateFormat(dataSolicitacao, "yyyy-mm-dd"));
+    if (dataResultado) setDataResultadoFormated(dataResultado); //convertDateFormat(dataResultado, "yyyy-mm-dd"));
+    if (dataSolicitacao) setDataSolicitacaoFormated(dataSolicitacao); //convertDateFormat(dataSolicitacao, "yyyy-mm-dd"));
   }, [dataSolicitacao, dataResultado]);
 
   useEffect(() => {
@@ -216,12 +217,12 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
               cabecalho: { "Content-Type": "application/json" },
               body: JSON.stringify(hemogramaData),
             });
+            window.location.reload();
           } catch (error) {
             console.error("Error occurred during request:", error);
           }
         }
       }
-      window.location.reload();
     }
   };
 
@@ -253,7 +254,9 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
   useEffect(() => {
     if (exame) {
       fetchPacienteData();
-      setDataSolicitacao(convertDateFormat(exame.dataSolicitacao, "yyyy-mm-dd"));
+      setDataSolicitacao(
+        convertDateFormat(exame.dataSolicitacao, "yyyy-mm-dd"),
+      );
       setDataResultado(convertDateFormat(exame.dataResultado, "yyyy-mm-dd"));
       setNeutrofilos(exame.neutrofilos);
     } else {
@@ -262,11 +265,10 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
   }, [exame]);
 
   const autoFillPacienteInputs = () => {
-    
     const pacienteEncontrado = pacientes.find(
       (paciente) => paciente.numeroProntuario === numProntuario,
-    );  
-    
+    );
+
     const internamento = pacienteEncontrado?.internacao;
 
     if (pacienteEncontrado && internamento) {
@@ -288,8 +290,13 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
     }
   };
 
+  const removeMask = (str: string) => {
+    return str.replace(/[-.]/g, "");
+  };
+
   const autoFillMedicoInputs = () => {
     const medicoEncontrado = medicos.find((medico) => medico.cpf === cpfMedico);
+
     if (medicoEncontrado) {
       setMedicoNaoEncontrado(false);
       setIdMedico(medicoEncontrado.id);
@@ -353,7 +360,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
         </div>
         <div className="flex mb-8">
           <div className="w-full">
-            <label>Nome</label>
+            <label>Paciente</label>
             <input
               className="w-full"
               type="text"
@@ -374,10 +381,9 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
             className="w-40"
             type="text"
             value={cpfMedicoFormated}
-            maxLength={11}
             required
             onChange={(e) => {
-              setCpfMedico(e.target.value);
+              setCpfMedico(removeMask(e.target.value));
             }}
             onBlur={autoFillMedicoInputs}
             disabled={Boolean(exame)}

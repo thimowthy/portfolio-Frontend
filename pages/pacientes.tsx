@@ -47,7 +47,7 @@ export default function Pacientes({
   useEffect(() => {
     loadPacientes();
   }, []);
-  
+
   const handleFilterPacientes = (busca: string) => {
     if (busca !== "") {
       let filtrados;
@@ -121,7 +121,7 @@ export default function Pacientes({
                     onChange={(e) => handleFilterPacientes(e.target.value)}
                   />
                 </div>
-                {!pacientesFiltrados || (pacientesFiltrados?.length <= 0) ? (
+                {!pacientesFiltrados || pacientesFiltrados?.length <= 0 ? (
                   <RowLoading />
                 ) : (
                   <table className="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -129,7 +129,7 @@ export default function Pacientes({
                       <tr>
                         <th scope="col" className="px-6 py-3"></th>
                         <th scope="col" className="px-6 py-3">
-                          Nome
+                          Nome Completo
                         </th>
                         <th scope="col" className="px-6 py-3">
                           CNS
