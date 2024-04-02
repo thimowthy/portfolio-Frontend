@@ -106,7 +106,7 @@ const AdicionarPaciente = () => {
 
   const autoFillPacienteInputs = () => {
     const pacienteEncontrado = pacientesCadastrados.find(
-      (paciente) => paciente.numeroProntuario === formData.numeroProntuario
+      (paciente) => paciente.numeroProntuario === formData.numeroProntuario,
     );
 
     if (pacienteEncontrado) {

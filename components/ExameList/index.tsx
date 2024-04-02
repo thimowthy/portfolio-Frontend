@@ -16,9 +16,7 @@ const ExamesList: React.FC<ExameListProps> = ({ id, setExame }) => {
       if (id) {
         try {
           const response = await fetcher({
-            rota:
-              "/Exame/GetHemogramasFromPaciente?pacienteId=" +
-              id,
+            rota: "/Exame/GetHemogramasFromPaciente?pacienteId=" + id,
             metodo: "GET",
           });
           setExames(response);

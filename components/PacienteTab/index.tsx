@@ -62,7 +62,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
       return Swal.fire(
         "Erro!",
         "A temperatura deve ser um valor entre 30 e 45 graus.",
-        "error"
+        "error",
       );
     }
 
@@ -77,17 +77,18 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
       return Swal.fire(
         "Sucesso!",
         "Temperatura registrada com sucesso!",
-        "success"
+        "success",
       );
     } catch (error) {
       return Swal.fire(
         "Erro!",
         "Aconteceu algum erro ao tentar atualizar a temperatura",
-        "error"
+        "error",
       );
     }
   };
   const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
+  const situacoesOrdenadas = [...situacoesPaciente];
   let situacoesPacienteCopy = [...situacoesPaciente];
   const situacaoAtual = situacoesPacienteCopy?.pop();
   const situacaoPaciente = paciente?.internacao?.situacoesPaciente || [];
@@ -101,7 +102,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
     const cargoFromStorage = getUserCargo();
     setPermissaoMedico(cargoFromStorage === "MEDICO");
     setPermissaoEnfermeiro(cargoFromStorage === "ENFERMEIRO");
-  }, []);
+  }, [paciente]);
 
   return (
     <>
@@ -192,7 +193,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                 <p className="my-1">
                   Data internação:{" "}
                   {moment(paciente?.internacao?.dataAdmissao).format(
-                    "DD/MM/YYYY h:mm:ss"
+                    "DD/MM/YYYY HH:mm:ss",
                   )}
                 </p>
               </div>
@@ -214,7 +215,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                               {comorbidade?.nome}
                             </p>
                           );
-                        }
+                        },
                       )}
                     </div>
                   )}
@@ -255,7 +256,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                       setTemperaturaError(
                         isNaN(parseFloat(e.target.value)) ||
                           parseFloat(e.target.value) < 30 ||
-                          parseFloat(e.target.value) > 45
+                          parseFloat(e.target.value) > 45,
                       );
                     }}
                     type="number"
@@ -288,43 +289,43 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                 <h1 className="text-2xl">Progresso do tratamento</h1>
 
                 <TabList className="flex flex-row rounded-full bg-white mt-4">
-                  {situacoesPacienteCopy?.map((item: any, index: any) => (
+                  {situacoesOrdenadas?.map((item: any, index: any) => (
                     <TabItem
                       key={`tab-${paciente.id}-${item.id}`}
                       href={`tab-${paciente.id}-${item.id}`}
                       liClassName={`basis-1/5 ${tabColorMap.get(
-                        index
+                        index,
                       )} py-2 pl-2 ${
                         index === 0 ? "rounded-bl-full rounded-tl-full" : ""
                       } ${
                         index === 4 ? "rounded-br-full rounded-tr-full" : ""
                       }`}
-                      selected={index === situacoesPacienteCopy.length - 1}
+                      selected={
+                        index === situacoesOrdenadas.length - 1 || false
+                      }
                     >
                       <p className="text-white">
                         {moment(item?.dataVerificacao).format(
-                          "DD/MM/YYYY h:mm:ss"
+                          "DD/MM/YYYY HH:mm:ss",
                         )}
                       </p>
                     </TabItem>
                   ))}
                 </TabList>
-                {situacoesPacienteCopy?.map((item: any, index: any) => {
+                {situacoesOrdenadas?.map((item: any, index: any) => {
                   return (
                     <TabContents
                       key={`tab-${paciente.id}-${item.id}`}
                       tabId={`tab-${paciente.id}-${item.id}`}
-                      active={
-                        index === situacoesPacienteCopy.length - 1 || false
-                      }
+                      active={index === situacoesOrdenadas.length - 1 || false}
                     >
                       <div className="pt-2 flex flex-row gap-x-2">
                         <div className="basis-1/2">
                           <p>
                             Data de verificação:{" "}
                             {moment(
-                              item?.situacaoDiagnostico?.dataVerificacao
-                            ).format("DD/MM/YYYY h:mm:ss")}
+                              item?.situacaoDiagnostico?.dataVerificacao,
+                            ).format("DD/MM/YYYY HH:mm:ss")}
                           </p>
                           <p>
                             Temperatura:{" "}
@@ -342,7 +343,7 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
                               <div className="flex justify-center">
                                 <div
                                   className={selectLabelNeutrofilos(
-                                    item?.situacaoDiagnostico?.neutrofilos || 0
+                                    item?.situacaoDiagnostico?.neutrofilos || 0,
                                   )}
                                 ></div>
                               </div>

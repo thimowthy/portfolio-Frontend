@@ -57,7 +57,7 @@ export default function Pacientes({
         filtrados = pacientesCopy.filter(
           (paciente: Paciente) =>
             paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
-            paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca)
+            paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca),
         );
         return setPacientesFiltrados(filtrados);
       }
@@ -199,7 +199,7 @@ export default function Pacientes({
                             </tr>
                             <tr className="h-3"></tr>
                           </>
-                        )
+                        ),
                       )}
                     </tbody>
                   </table>

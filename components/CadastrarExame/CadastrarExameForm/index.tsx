@@ -40,7 +40,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
   const [cpfMedicoFormated, setCpfMedicoFormated] = useState("");
   const [cpfMedico, setCpfMedico] = useState(exame?.cpfSolicitante || "");
   const [solicitadoPor, setSolicitadoPor] = useState(
-    exame?.nomeSolicitante || ""
+    exame?.nomeSolicitante || "",
   );
 
   const [dataSolicitacao, setDataSolicitacao] = useState("");
@@ -48,13 +48,13 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
   const [dataResultado, setDataResultado] = useState(currentDate);
   const [dataResultadoFormated, setDataResultadoFormated] = useState("");
   const [tipoExame, setTipoExame] = useState<TiposExame>(
-    TiposExame.HEMORAGRAMA
+    TiposExame.HEMORAGRAMA,
   );
 
   const [pacienteNaoEncontrado, setPacienteNaoEncontrado] = useState(false);
   const [medicoNaoEncontrado, setMedicoNaoEncontrado] = useState(false);
   const [neutrofilos, setNeutrofilos] = useState<number>(
-    exame?.neutrofilos || 0
+    exame?.neutrofilos || 0,
   );
 
   const [idInternacao, setIdInternacao] = useState<number>();
@@ -255,7 +255,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
     if (exame) {
       fetchPacienteData();
       setDataSolicitacao(
-        convertDateFormat(exame.dataSolicitacao, "yyyy-mm-dd")
+        convertDateFormat(exame.dataSolicitacao, "yyyy-mm-dd"),
       );
       setDataResultado(convertDateFormat(exame.dataResultado, "yyyy-mm-dd"));
       setNeutrofilos(exame.neutrofilos);
@@ -266,7 +266,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
 
   const autoFillPacienteInputs = () => {
     const pacienteEncontrado = pacientes.find(
-      (paciente) => paciente.numeroProntuario === numProntuario
+      (paciente) => paciente.numeroProntuario === numProntuario,
     );
 
     const internamento = pacienteEncontrado?.internacao;
@@ -289,7 +289,7 @@ const ExameForm: React.FC<CrudExameProps> = ({ exame }) => {
       cleanPacienteUseStates();
     }
   };
-  
+
   const removeMask = (str: string) => {
     return str.replace(/[-.]/g, "");
   };
