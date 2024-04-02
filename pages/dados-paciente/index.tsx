@@ -67,10 +67,10 @@ const DadosPacientePage = () => {
         return -1;
       }
       if (tipoNeutropenia1 == tipoNeutropenia2) {
-        if (internacao1 < internacao2) {
+        if (internacao1?.risco < internacao2?.risco) {
           return 1;
         }
-        if (internacao1 > internacao2) {
+        if (internacao1?.risco > internacao2?.risco) {
           return -1;
         }
         return 0;

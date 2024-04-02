@@ -36,7 +36,7 @@ const useServerityIcon = (paciente: Paciente) => {
       tipo = veryBad;
       break;
     default:
-      tipo = neutral;
+      tipo = very_good;
       break;
   }
   return tipo;

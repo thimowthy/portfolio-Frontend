@@ -7,15 +7,24 @@ import medicamento from "../public/medicamento.png";
  * @returns {string} string com a URL da imagem.
  */
 const useIcon = (paciente: Paciente) => {
-  const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
-  let situacoesPacienteCopy = [...situacoesPaciente];
-  const situacaoAtual = situacoesPacienteCopy?.pop();
+  const orderSituacoes = (a: any, b: any) => {
+    const dataVerificacao1 = a?.situacaoDiagnostico.dataVerificacao;
+    const dataVerificacao2 = b?.situacaoDiagnostico.dataVerificacao;
+
+    if (dataVerificacao1 > dataVerificacao2) {
+      return 1;
+    }
+    if (dataVerificacao1 < dataVerificacao2) {
+      return -1;
+    }
+    return 0;
+  };
 
   const isNeutropenico = (paciente: Paciente) => {
     const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
-    let situacoesPacienteCopy = [...situacoesPaciente.reverse()];
+    let situacoesPacienteCopy = [...situacoesPaciente];
+    situacoesPacienteCopy.sort(orderSituacoes);
     const situacaoAtual = situacoesPacienteCopy?.pop();
-
     if (situacaoAtual?.situacaoDiagnostico?.neutropenia) {
       return true;
     }
@@ -23,7 +32,8 @@ const useIcon = (paciente: Paciente) => {
   };
   const febre = (paciente: Paciente) => {
     const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
-    let situacoesPacienteCopy = [...situacoesPaciente.reverse()];
+    let situacoesPacienteCopy = [...situacoesPaciente];
+    situacoesPacienteCopy.sort(orderSituacoes);
     const situacaoAtual = situacoesPacienteCopy?.pop();
     if (situacaoAtual?.situacaoDiagnostico?.febre) {
       return true;

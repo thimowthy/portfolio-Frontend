@@ -89,6 +89,20 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   };
   const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
   const situacoesOrdenadas = [...situacoesPaciente];
+  const orderSituacoes = (a: any, b: any) => {
+    const dataVerificacao1 = a?.situacaoDiagnostico.dataVerificacao;
+    const dataVerificacao2 = b?.situacaoDiagnostico.dataVerificacao;
+
+    if (dataVerificacao1 > dataVerificacao2) {
+      return 1;
+    }
+    if (dataVerificacao1 < dataVerificacao2) {
+      return -1;
+    }
+    return 0;
+  };
+  situacoesOrdenadas.sort(orderSituacoes);
+
   let situacoesPacienteCopy = [...situacoesPaciente];
   const situacaoAtual = situacoesPacienteCopy?.pop();
   const situacaoPaciente = paciente?.internacao?.situacoesPaciente || [];
@@ -162,16 +176,18 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
             <div className="pt-2">
               <h1 className="text-2xl">
                 Dados do paciente{" "}
-                {situacaoAtual && situacaoAtual?.situacaoDiagnostico?.febre && (
-                  <span className="float-right text-danger flex">
-                    Neutropenia Febril{" "}
-                    <Image
-                      className="w-4 ml-4"
-                      src={febreImg}
-                      alt="Termômetro - Febre"
-                    />
-                  </span>
-                )}
+                {situacaoAtual &&
+                  situacaoAtual?.situacaoDiagnostico?.febre &&
+                  situacaoAtual?.situacaoDiagnostico?.neutropenia && (
+                    <span className="float-right text-danger flex">
+                      Neutropenia Febril{" "}
+                      <Image
+                        className="w-4 ml-4"
+                        src={febreImg}
+                        alt="Termômetro - Febre"
+                      />
+                    </span>
+                  )}
               </h1>
             </div>
             <div className="flex gap-x-4 pt-4 pb-2">
