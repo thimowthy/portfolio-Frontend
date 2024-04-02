@@ -3,7 +3,6 @@ import good from "../public/good.png";
 import neutral from "../public/neutral.png";
 import bad from "../public/bad.png";
 import veryBad from "../public/very_bad.png";
-import { useState } from "react";
 /**
  * Seleciona a URL da imagem de acordo com o estado do paciente em uma escala com 4 níveis.
  * @param {Paciente} paciente - Paciente.
@@ -19,28 +18,28 @@ const useServerityIcon = (paciente: Paciente) => {
   const tipoNeutropenia = situacaoDiagnostico?.tipoNeutropenia;
   switch (tipoNeutropenia) {
     case 0:
-      tipo = neutral;
-      break;
-    case 1:
       tipo = very_good;
       break;
-    case 2:
+    case 1:
       tipo = good;
       break;
-    case 3:
+    case 2:
       tipo = neutral;
+      break;
+    case 3:
+      tipo = bad;
       break;
     case 4:
       tipo = veryBad;
       break;
     case 5:
-      tipo = bad;
+      tipo = veryBad;
       break;
     default:
-      tipo = good;
+      tipo = neutral;
       break;
   }
-  return tipo || "";
+  return tipo;
 };
 
 export default useServerityIcon;
