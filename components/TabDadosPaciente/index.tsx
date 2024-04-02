@@ -49,8 +49,10 @@ export default function TabDadosPaciente({
         : listaPacientes.filter(
             (paciente: Paciente) =>
               paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
-              paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca)
-          )
+              paciente?.numeroProntuario
+                ?.toLowerCase()
+                .includes(sanitizedBusca),
+          ),
     );
   };
 
@@ -62,13 +64,15 @@ export default function TabDadosPaciente({
         : listaNf?.filter(
             (paciente: Paciente) =>
               paciente?.nome?.toLowerCase().includes(sanitizedBusca) ||
-              paciente?.numeroProntuario?.toLowerCase().includes(sanitizedBusca)
-          )
+              paciente?.numeroProntuario
+                ?.toLowerCase()
+                .includes(sanitizedBusca),
+          ),
     );
   };
 
-  const onRefresh = () => {
-    loadPacientes;
+  const onRefresh = (e: any) => {
+    loadPacientes(e);
     setNf(listaNf);
     setPacientes(listaPacientes);
     inputPacienteRef.current && (inputPacienteRef.current.value = "");
