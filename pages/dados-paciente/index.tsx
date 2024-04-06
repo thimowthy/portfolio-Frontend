@@ -6,6 +6,7 @@ import SeoConfig from "../../components/SeoConfig/index";
 import DetalhesPaciente from "../../components/DetalhesPaciente";
 import Header from "@/components/Header";
 import { useAuthRole } from "@/hooks/useAuthRole";
+import { orderByDataVerificacao } from "@/utils/ordering";
 
 const DynamicTabComponent = dynamic(
   () => import("../../components/TabDadosPaciente"),
@@ -17,17 +18,18 @@ const DynamicTabComponent = dynamic(
 const isNeutropenico = (paciente: Paciente) => {
   const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
   let situacoesPacienteCopy = [...situacoesPaciente];
-  situacoesPacienteCopy.reverse();
+  situacoesPacienteCopy.sort(orderByDataVerificacao);
   const situacaoAtual = situacoesPacienteCopy?.pop();
   if (situacaoAtual?.situacaoDiagnostico?.neutropenia) {
     return true;
   }
   return false;
 };
+
 const febre = (paciente: Paciente) => {
   const situacoesPaciente = paciente?.internacao?.situacoesPaciente || [];
   let situacoesPacienteCopy = [...situacoesPaciente];
-  situacoesPacienteCopy.reverse();
+  situacoesPacienteCopy.sort(orderByDataVerificacao);
   const situacaoAtual = situacoesPacienteCopy?.pop();
   if (situacaoAtual?.situacaoDiagnostico?.febre) {
     return true;
@@ -46,20 +48,29 @@ const DadosPacientePage = () => {
       metodo: "GET",
       rota: "/Paciente/GetListPatientsSemAlta",
     });
-    const sortByTipoNeutropenia = (a: any, b: any) => {
+
+    const orderByTipoNeutropenia = (a: any, b: any) => {
       const situacoesPaciente1 = a?.internacao?.situacoesPaciente || [];
       const internacao1 = a?.internacao;
       let situacoesPacienteCopy1 = [...situacoesPaciente1];
+      situacoesPacienteCopy1.sort(orderByDataVerificacao);
       const situacaoAtual1 = situacoesPacienteCopy1?.pop();
 
       const situacoesPaciente2 = b?.internacao?.situacoesPaciente || [];
       const internacao2 = b?.internacao;
       let situacoesPacienteCopy2 = [...situacoesPaciente2];
+      situacoesPacienteCopy2.sort(orderByDataVerificacao);
       const situacaoAtual2 = situacoesPacienteCopy2?.pop();
       const tipoNeutropenia1 =
-        situacaoAtual1?.situacaoDiagnostico?.tipoNeutropenia || 0;
+        situacaoAtual1?.situacaoDiagnostico?.tipoNeutropenia || null;
       const tipoNeutropenia2 =
-        situacaoAtual2?.situacaoDiagnostico?.tipoNeutropenia || 0;
+        situacaoAtual2?.situacaoDiagnostico?.tipoNeutropenia || null;
+      if (!tipoNeutropenia1 && tipoNeutropenia2) {
+        return 1;
+      }
+      if (!tipoNeutropenia2 && tipoNeutropenia1) {
+        return -1;
+      }
       if (tipoNeutropenia1 < tipoNeutropenia2) {
         return 1;
       }
@@ -77,9 +88,7 @@ const DadosPacientePage = () => {
       }
       return 0;
     };
-
-    data.sort(sortByTipoNeutropenia);
-
+    data.sort(orderByTipoNeutropenia);
     data.map((paciente: any) => {
       let nfIdArr;
       const neutropenico: boolean = isNeutropenico(paciente);
@@ -102,6 +111,10 @@ const DadosPacientePage = () => {
 
   useEffect(() => {
     loadPacientes();
+
+    // return function cleanup() {
+    //   setPacientes([]);
+    // };
   }, []);
 
   useEffect(() => {
