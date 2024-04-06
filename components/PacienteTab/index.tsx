@@ -15,7 +15,6 @@ import { setColor } from "@/utils/colorTransition";
 import fetcher from "@/api/fetcher";
 import Swal from "sweetalert2";
 import { getUserCargo } from "@/utils/getCargo";
-import { set } from "date-fns";
 import { formatCPF } from "@/utils/formatCPF";
 
 export default function PacienteTab({ paciente }: { paciente: Paciente }) {
@@ -103,9 +102,8 @@ export default function PacienteTab({ paciente }: { paciente: Paciente }) {
   };
   situacoesOrdenadas.sort(orderSituacoes);
 
-  let situacoesPacienteCopy = [...situacoesPaciente];
+  let situacoesPacienteCopy = [...situacoesOrdenadas];
   const situacaoAtual = situacoesPacienteCopy?.pop();
-  const situacaoPaciente = paciente?.internacao?.situacoesPaciente || [];
 
   const [permissaoMedico, setPermissaoMedico] = useState<boolean>(false);
   const [permissaoEnfermeiro, setPermissaoEnfermeiro] =
