@@ -12,7 +12,7 @@ async function fetcher({
   cabecalho?: any;
   body?: any;
 }) {
-  const baseURL = "https://oncocaresystem-d7da4ba420ce.herokuapp.com/";
+  const baseURL = "https://oncocaresystem-d7da4ba420ce.herokuapp.com";
   // const baseURL = "http://localhost:5130";
   const token =
     typeof window != "undefined"
