@@ -1,7 +1,6 @@
 export async function getEnums(): Promise<any> {
   const url =
-    "https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Auxilio/GetEnuns";
-
+    "https://oncocaresystem-d7da4ba420ce.herokuapp.com/Auxilio/GetEnuns";
   try {
     const response = await fetch(url);
 

@@ -208,7 +208,7 @@ const PrescricaoForm: React.FC<PrescricaoFormProps> = ({ id }) => {
         }
       }
 
-    const filePath = `https://dev-oncocaresystem-d5b03f00e4f3.herokuapp.com/Prescricao/GetPrescricaoMedica?pacienteId=${id}`;
+    const filePath = `https://oncocaresystem-d7da4ba420ce.herokuapp.com/Prescricao/GetPrescricaoMedica?pacienteId=${id}`;
     fetch(filePath)
       .then((res) => {
         res.arrayBuffer().then((bytes) => {
